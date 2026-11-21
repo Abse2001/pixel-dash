@@ -7,6 +7,7 @@ import sys
 from pathlib import Path
 from build_retained import build
 from clip_channel import restrict_ground
+from wide_layout import apply_wide_layout
 
 root = Path(__file__).resolve().parent
 board = build()
@@ -133,4 +134,5 @@ for bit in range(16):
 for e in board:
     if e["type"]=="source_board":
         e["title"]="Pixel Dash AM3354 handheld"
+apply_wide_layout(board)
 Path(sys.argv[2]).write_text(json.dumps(board,separators=(",",":")))

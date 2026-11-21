@@ -13,7 +13,7 @@ import {
 
 import routes from "./connectivity-paths.json";
 import type { TraceProps } from "@tscircuit/props";
-import placement from "./outline.json";
+import placement from "../production/wide-outline.json";
 
 import { AM3354BZCZD80 } from "./imports/AM3354BZCZD80";
 import { MT41K512M16VRP_107_IT_P } from "./imports/MT41K512M16VRP_107_IT_P";
@@ -35,7 +35,7 @@ export default function MemoryChannel({ pcbOffsetX = 0, children }: {
 		<board
 			schAutoLayoutEnabled={false}
 			routeRemaining={false}
-			width={144.5}
+			width={placement.width}
 			height={82}
 			layers={4}
 			thickness={1.6}

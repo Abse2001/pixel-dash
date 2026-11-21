@@ -1,5 +1,16 @@
 # Pixel Dash
 
+## Wide handheld checkpoint
+
+This branch builds a **232 × 82 mm single four-layer PCB** for the wider handheld. The d-pad, face buttons, shoulders and joystick connectors moved into the fixed side grips. Start and Select sit below the main controls. Nine modeled controls clear the centered 164.9 × 100.0 mm bare BuyDisplay ER-TFT070A2-6 panel envelope in plan view. The full display assembly, cover lens, bezel, FPC bend and replacement rear shell still require integration. The native display circuit still describes the earlier panel. The 7-inch panel needs an RGB raster interface and a constant-current backlight driver.
+
+The placement pass removes 20 displaced control traces and records each as an open. DDR copper and component centers stay fixed. The all-layer Gerber shorts check passes and the independent via clearance count is 25. The smaller case, battery tub and running design history are preserved on [am3354-production](https://github.com/Abse2001/pixel-dash/tree/am3354-production). No fabrication release has been made.
+
+The [runtime budget](power/runtime-budget.md) sizes candidate packs at 75% backlight PWM. The keyed PCB battery header uses contact 1 for BAT and 2 for GND. A battery-specific mating check is required once a supplier is selected. [BuyDisplay panel](https://www.buydisplay.com/7-inch-1024x600-ips-tft-lcd-display-high-brightness-full-viewing-angle)
+
+## Earlier compact design checkpoints
+
+
 AM3354 handheld with a 1 GiB Micron DDR3L, four-layer HDI board and the existing LiPo tub. Engineering development only.
 
 The retained handheld was extracted from checkpoint `5b7d96d`. The coupled DDR channel starts at `611f7d9`. The original dual-RP2350 hardware and historical routing branches are separate fallbacks.
