@@ -29,3 +29,48 @@ toward_cable = complex(insertion["x"],insertion["y"]) - (pos+neg)/2
 assert (toward_cable.conjugate() * (pos-neg)).imag < 0
 assert math.isclose(abs(pos-neg),2.0,abs_tol=0.001)
 print("J_LIPO keyed header: contact 1 battery positive, contact 2 ground, 2 mm pitch.")
+
+# Match the three polarity strokes to their numbered lands and to the actual
+# top legend artwork. Keep the ordinary netlist-only invocation available.
+if len(sys.argv) > 2:
+    import re
+    from zipfile import ZipFile
+
+    with ZipFile(sys.argv[2]) as package:
+        artwork = package.read("F_SilkScreen.gbr").decode()
+    assert "%FSLAX46Y46*%" in artwork and "%MOMM*%" in artwork
+    widths = {code: float(diameter) for code, diameter in
+              re.findall(r"%ADD(\d+)C,([\d.]+)\*%", artwork)}
+    segments = set()
+    aperture = previous = None
+    for line in artwork.splitlines():
+        select = re.fullmatch(r"D(\d+)\*", line)
+        if select:
+            aperture = select[1]
+        command = re.fullmatch(r"X(-?\d+)Y(-?\d+)D0([12])\*", line)
+        if command:
+            point = (int(command[1]), int(command[2]))
+            if command[3] == "1" and previous and aperture in widths:
+                segments.add((frozenset((previous, point)), widths[aperture]))
+            previous = point
+
+    marks = {"+": [], "-": []}
+    for e in a:
+        if e["type"] != "pcb_silkscreen_path" or e.get("pcb_component_id") != foot["pcb_component_id"]:
+            continue
+        label = e["pcb_silkscreen_path_id"]
+        if not label.startswith("ntc_verified_mark_J_LIPO_"):
+            continue
+        polarity = label.split("_")[-2]
+        p, q = (complex(pt["x"], pt["y"]) for pt in e["route"])
+        midpoint = (p + q) / 2
+        correct, opposite = (pos, neg) if polarity == "+" else (neg, pos)
+        assert abs(midpoint - correct) < abs(midpoint - opposite)
+        vertices = frozenset((round(z.real * 1e6), round(z.imag * 1e6)) for z in (p, q))
+        assert e["layer"] == "top" and (vertices, e["stroke_width"]) in segments, label
+        marks[polarity].append((p, q))
+    assert len(marks["+"]) == 2 and len(marks["-"]) == 1
+    from shapely.geometry import LineString
+    strokes = [LineString([(p.real, p.imag), (q.real, q.imag)]) for p, q in marks["+"]]
+    assert strokes[0].crosses(strokes[1])
+    print("Exported top legend has the plus cross beside BAT and the minus stroke beside GND.")
