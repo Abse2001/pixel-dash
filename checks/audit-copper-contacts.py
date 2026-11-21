@@ -2,6 +2,7 @@
 import argparse
 import csv
 import json
+import math
 import sys
 from collections import defaultdict
 from pathlib import Path
@@ -96,7 +97,11 @@ def copper(elements):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("circuit", type=Path)
+    parser.add_argument("--clearance-mm", type=float, help="Report unrelated copper closer than this distance")
     args = parser.parse_args()
+    if args.clearance_mm is not None and not (math.isfinite(args.clearance_mm) and args.clearance_mm > 0):
+        parser.error("Clearance must be finite and positive")
+    limit = args.clearance_mm if args.clearance_mm is not None else 0.0001
     layers = copper(json.loads(args.circuit.read_text()))
     failures = []
     for layer, items in layers.items():
@@ -104,14 +109,20 @@ def main():
         tree = STRtree(shapes)
         for i, (element, key, shape) in enumerate(items):
             # 0.0001 mm covers polygon approximation at rounded lands and trace caps.
-            for j in tree.query(shape, predicate="dwithin", distance=0.0001):
+            for j in tree.query(shape, predicate="dwithin", distance=limit):
                 if j <= i or items[j][1] == key:
                     continue
-                failures.append((layer, element, items[j][0], round(shape.distance(shapes[j]), 7)))
+                gap = shape.distance(shapes[j])
+                if args.clearance_mm is not None and gap >= limit - 1e-8:
+                    continue
+                failures.append((layer, element, items[j][0], round(gap, 7)))
     writer = csv.writer(sys.stdout)
     writer.writerow(("layer", "copper_a", "copper_b", "copper_gap_mm"))
     writer.writerows(sorted(failures))
-    print(f"{len(failures)} unrelated copper contacts or gaps within 0.0001 mm", file=sys.stderr)
+    if args.clearance_mm is None:
+        print(f"{len(failures)} unrelated copper contacts or gaps within 0.0001 mm", file=sys.stderr)
+    else:
+        print(f"{len(failures)} unrelated copper pairs below {limit:g} mm", file=sys.stderr)
     sys.exit(bool(failures))
 
 
