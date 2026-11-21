@@ -7,7 +7,7 @@ from shapely import STRtree, affinity, unary_union
 from shapely.geometry import LineString, Point, Polygon, box
 
 
-def verify(elements, check_ddr_power=False, check_ddr_signals=False):
+def verify(elements, check_ddr_power=False, check_ddr_signals=False, check_system_io=False):
     names = {e["source_component_id"]: e.get("name") for e in elements if e["type"] == "source_component"}
     pins = {e["source_port_id"]: f"{names.get(e['source_component_id'])}.{e['name']}"
             for e in elements if e["type"] == "source_port"}
@@ -163,6 +163,24 @@ def verify(elements, check_ddr_power=False, check_ddr_signals=False):
             raise ValueError("No continuous pad-to-pad copper on " + ", ".join(sorted(opens)))
         print("All 50 DDR signal ball pairs have continuous copper and occupy distinct electrical nodes.")
 
+    if check_system_io:
+        system = [e for e in elements if e["type"] == "source_trace" and e["source_trace_id"].startswith("system_")]
+        if not system:
+            raise ValueError("No handheld system connections in this build")
+        opens = []
+        for trace in sorted(system, key=lambda e: e["source_trace_id"]):
+            ends = [pins[port_id] for port_id in trace["connected_source_port_ids"]]
+            if len(ends) < 2:
+                raise ValueError(f"Expected at least two system terminals on {trace['source_trace_id']}")
+            nodes = {root(i) for end in ends for i in labels[end]}
+            if any(not labels[end] for end in ends) or len(nodes) != 1:
+                opens.append((trace["source_trace_id"], ends))
+        for signal, ends in opens:
+            print(f"{signal}: open between {', '.join(ends)}")
+        print(f"{len(system)-len(opens)} of {len(system)} handheld system connections have physical continuity.")
+        if opens:
+            raise SystemExit(1)
+
     print("CPU J4, RAM H1 and RAM M8 each reach their local bypass. All three bypass grounds reach L2.")
     print("Divider ends reach L3 VDDS_DDR and L2 GND. R_VREF_CA separates the two reference copper nets.")
 
@@ -173,5 +191,6 @@ if __name__ == "__main__":
     parser.add_argument("circuit", type=Path)
     parser.add_argument("--ddr-power", action="store_true")
     parser.add_argument("--ddr-signals", action="store_true")
+    parser.add_argument("--system-io", action="store_true")
     args = parser.parse_args()
-    verify(json.loads(args.circuit.read_text()), args.ddr_power, args.ddr_signals)
+    verify(json.loads(args.circuit.read_text()), args.ddr_power, args.ddr_signals, args.system_io)
