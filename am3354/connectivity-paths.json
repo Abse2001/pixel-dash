@@ -3537,7 +3537,7 @@
     {"x": -18.815, "y": 9.675},
     {"x": -23.99, "y": 6.705},
     {"x": -24.125, "y": 6.57},
-    {"x": -25.25, "y": 4.23, "via": true, "fromLayer": "top", "toLayer": "bottom"},
+    {"x": -25.225, "y": 4.26, "via": true, "fromLayer": "top", "toLayer": "bottom"},
     {"x": -25.25, "y": 3.645},
     {"x": -25.16, "y": 3.51},
     {"x": -24.845, "y": 2.475, "via": true, "fromLayer": "bottom", "toLayer": "top"},
