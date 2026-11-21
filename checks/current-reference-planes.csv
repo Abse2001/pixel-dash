@@ -21,7 +21,7 @@ DDR_CKn,bottom,inner2,0.1069
 DDR_D12,top,inner1,0.4859
 DDR_D13,top,inner1,0.3484
 DDR_D15,bottom,inner2,0.0075
-DDR_D5,bottom,inner2,0.0123
+DDR_D5,top,inner1,0.7014
 DDR_D6,top,inner1,0.7558
 DDR_D7,bottom,inner2,0.0027
 DDR_D7,top,inner1,0.0113
