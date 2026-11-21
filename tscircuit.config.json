@@ -1,0 +1,1 @@
+{"mainEntrypoint":"dist/index.circuit.json","buildCommand":"bun run build","alwaysUseLatestTscircuitOnCloud":false}

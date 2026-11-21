@@ -1,0 +1,24 @@
+{
+  "name": "pixel-dash-am3354",
+  "version": "0.0.1",
+  "private": true,
+  "main": "dist/index.circuit.json",
+  "scripts": {
+    "build": "bun production/render-channel.tsx && python production/assemble.py dist/channel.circuit.json dist/index.circuit.json"
+  },
+  "dependencies": {
+    "@tscircuit/copper-pour-solver": "0.0.74",
+    "@tscircuit/core": "0.0.2328",
+    "@tscircuit/infer-cable-insertion-point": "0.0.5",
+    "@tscircuit/miniflex": "0.0.4",
+    "@tscircuit/props": "0.0.724",
+    "@tscircuit/soup-util": "0.0.41",
+    "calculate-elbow": "0.0.12",
+    "circuit-json-to-gltf": "0.0.164",
+    "circuit-to-svg": "0.0.457",
+    "debug": "4.3.6",
+    "minicssgrid": "0.0.9",
+    "react": "^19.0.0",
+    "spicey": "0.0.14"
+  }
+}

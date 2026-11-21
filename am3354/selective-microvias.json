@@ -1,0 +1,112 @@
+[
+	{
+		"chip": "U1",
+		"ball": "A1",
+		"net": "GND",
+		"x": -6.600088,
+		"y": 21.950088
+	},
+	{
+		"chip": "U1",
+		"ball": "L5",
+		"net": "VDDS_DDR",
+		"x": -3.399942,
+		"y": 13.950104,
+		"buriedX": -3.105493,
+		"buriedY": 14.120104
+	},
+	{
+		"chip": "U_DDR",
+		"ball": "A1",
+		"net": "VDDS_DDR",
+		"x": -16.800108,
+		"y": 9.150012,
+		"buriedX": -16.480613,
+		"buriedY": 9.033725
+	},
+	{
+		"chip": "U_DDR",
+		"ball": "B1",
+		"net": "GND",
+		"x": -16.800108,
+		"y": 9.950112
+	},
+	{
+		"chip": "U_DDR",
+		"ball": "G1",
+		"net": "GND",
+		"x": -16.800108,
+		"y": 13.950104
+	},
+	{
+		"chip": "U_DDR",
+		"ball": "N1",
+		"net": "VDDS_DDR",
+		"x": -16.800108,
+		"y": 18.749942,
+		"buriedX": -16.460108,
+		"buriedY": 18.749942
+	},
+	{
+		"chip": "U_DDR",
+		"ball": "R1",
+		"net": "VDDS_DDR",
+		"x": -16.320556,
+		"y": 20.329165,
+		"buriedX": -16.709242,
+		"buriedY": 20.234703,
+		"usesStub": true
+	},
+	{
+		"chip": "U_DDR",
+		"ball": "B2",
+		"net": "VDDS_DDR",
+		"x": -18.067884,
+		"y": 10.257751,
+		"buriedX": -17.743391,
+		"buriedY": 10.15624,
+		"usesStub": true
+	},
+	{
+		"chip": "U_DDR",
+		"ball": "D2",
+		"net": "VDDS_DDR",
+		"x": -17.599954,
+		"y": 11.550058,
+		"buriedX": -17.399954,
+		"buriedY": 11.896468
+	},
+	{
+		"chip": "U_DDR",
+		"ball": "H2",
+		"net": "VDDS_DDR",
+		"x": -18.012894,
+		"y": 15.128209,
+		"buriedX": -17.725404,
+		"buriedY": 14.946689,
+		"usesStub": true
+	},
+	{
+		"chip": "U_DDR",
+		"ball": "J2",
+		"net": "GND",
+		"x": -17.599954,
+		"y": 15.55005
+	},
+	{
+		"chip": "U_DDR",
+		"ball": "B3",
+		"net": "GND",
+		"x": -18.400054,
+		"y": 9.950112
+	},
+	{
+		"chip": "U_DDR",
+		"ball": "A8",
+		"net": "VDDS_DDR",
+		"x": -22.400046,
+		"y": 9.150012,
+		"buriedX": -22.341006,
+		"buriedY": 9.484847
+	}
+]
