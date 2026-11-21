@@ -9,6 +9,9 @@ const supplyOutline = [
 	{ x: -27, y: 29 },
 ];
 
+// These top-side ground escapes terminate at the adjacent solid reference plane.
+const localGroundReturns = new Set(["V_U1_H6", "V_U1_H7", "V_U1_G8", "V_U_DDR_D8", "V_U_DDR_T1"]);
+
 const assigned = new Set(fanout.map(({ chip, ball }) => chip + "." + ball));
 for (const { chip, ball } of microvias) assigned.add(chip + "." + ball);
 const pending = packages.flatMap(({ name, balls }) =>
@@ -105,6 +108,7 @@ export function ReferencePlanes({ pcbOffsetX }: { pcbOffsetX: number }) {
 			))}
 			{fanout.map(({ chip, ball, net, x, y, path, width, shareWith }) => {
 				const via = "V_" + chip + "_" + (shareWith ?? ball);
+				const localGround = net === "GND" && localGroundReturns.has(via);
 				const pin = "." + chip + " > ." + ball;
 				const route = path
 					?.slice()
@@ -117,8 +121,10 @@ export function ReferencePlanes({ pcbOffsetX }: { pcbOffsetX: number }) {
 							name={via}
 							pcbX={x}
 							pcbY={y}
-							holeDiameter={0.254}
-							outerDiameter={0.4572}
+							fromLayer={localGround ? "top" : undefined}
+							toLayer={localGround ? "inner1" : undefined}
+							holeDiameter={localGround ? 0.125 : 0.254}
+							outerDiameter={localGround ? 0.28 : 0.4572}
 							connectsTo={"net." + net}
 						/>
 					),

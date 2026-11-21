@@ -22,6 +22,7 @@ export function DdrBypass() {
 					/>,
 					...["VDDS_DDR", "GND"].flatMap((net, p) => {
 						const pin = p + 1;
+						const localGround = name === "C_DDR12" && side === "top" && net === "GND";
 						const via = "V_" + name + "_" + pin;
 						const offset =
 							(p === 0 ? -viaDistance : viaDistance) *
@@ -32,8 +33,10 @@ export function DdrBypass() {
 								name={via}
 								pcbX={x + (rotation === 0 ? offset : 0)}
 								pcbY={y + (rotation === 90 ? offset : 0)}
-								holeDiameter={0.254}
-								outerDiameter={0.4572}
+								fromLayer={localGround ? "top" : undefined}
+								toLayer={localGround ? "inner1" : undefined}
+								holeDiameter={localGround ? 0.125 : 0.254}
+								outerDiameter={localGround ? 0.28 : 0.4572}
 								connectsTo={"net." + net}
 							/>,
 							<trace
