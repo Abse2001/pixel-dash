@@ -40,6 +40,13 @@ def verify(elements):
 
     net_names = {e["source_net_id"]: e["name"] for e in elements if e["type"] == "source_net"}
     xy = lambda p: (p["x"], p["y"])
+    def pill(w, h):
+        r = min(w,h)/2
+        if w == h:
+            return Point(0,0).buffer(r)
+        dx, dy = (w/2-r), (h/2-r)
+        return LineString([(-dx,-dy),(dx,dy)]).buffer(r)
+
     for e in elements:
         kind = e["type"]
         if kind == "pcb_smtpad":
@@ -47,12 +54,35 @@ def verify(elements):
                 g = Point(xy(e)).buffer(e["radius"])
             elif e["shape"] == "polygon":
                 g = Polygon([xy(p) for p in e["points"]])
+            elif e["shape"] in ("pill", "rotated_pill"):
+                g = affinity.translate(affinity.rotate(pill(e["width"], e["height"]), e.get("ccw_rotation",0), origin=(0,0)), *xy(e))
             elif e["shape"] in ("rect", "rotated_rect"):
                 w, h = e["width"]/2, e["height"]/2
                 g = affinity.translate(affinity.rotate(box(-w, -h, w, h), e.get("ccw_rotation", 0)), *xy(e))
             else:
                 raise ValueError(f"Unsupported channel pad shape {e['shape']}")
             metal([e["layer"]], g, pads.get(e.get("pcb_port_id")))
+        elif kind == "pcb_plated_hole":
+            if e["shape"] == "circle":
+                g = Point(0,0).buffer(e["outer_diameter"]/2)
+            elif e["shape"] == "pill":
+                g = pill(e["outer_width"],e["outer_height"])
+            elif e.get("pad_shape") == "rect":
+                w,h = e["rect_pad_width"]/2,e["rect_pad_height"]/2
+                g = box(-w,-h,w,h)
+            else:
+                raise ValueError(f"Unsupported plated hole {e['shape']}")
+            g = affinity.translate(affinity.rotate(g,e.get("rect_ccw_rotation",e.get("ccw_rotation",0)),origin=(0,0)),*xy(e))
+            # Use the full land on the surface layers. An inner-layer connection
+            # needs the actual plated barrel, which is smaller than the land.
+            layer_set = set(e["layers"])
+            outer = layer_set & {"top","bottom"}
+            metal(outer, g, pads.get(e.get("pcb_port_id")))
+            if "hole_diameter" in e:
+                barrel = Point(xy(e)).buffer(e["hole_diameter"]/2)
+            else:
+                barrel = affinity.translate(affinity.rotate(pill(e["hole_width"],e["hole_height"]),e.get("hole_ccw_rotation",e.get("ccw_rotation",0)),origin=(0,0)),*xy(e))
+            metal(layer_set,barrel)
         elif kind == "pcb_trace":
             groups = defaultdict(list)
             for a, b in zip(e["route"], e["route"][1:]):
