@@ -105,3 +105,5 @@ The 7-inch bare panel and the previous display use incompatible connector assign
 The physical connectivity audit accepts `--system-io` to walk the handheld interface and SYSBOOT connections between their actual lands. At the start of peripheral routing, all 66 have schematic assignments and none has a complete copper path. The individual terminal pairs are printed on failure.
 
 Four SYSBOOT sense lines now have saved top-layer copper from the AM3354 balls to their strap resistors. The physical system audit verifies four of the 66 system connections. On the combined board all 50 DDR links remain isolated, the 0.102 mm copper and 0.1524 mm via-edge clearance checks pass, and the all-layer Gerber shorts check passes.
+
+MMC0 clock and DAT1 now reach the microSD connector on top copper. The complete interface and SYSBOOT continuity count is six of 66. The clock measures 84.83 mm and DAT1 measures 103.67 mm in this first placement. The other card contacts, matching, return paths and SD clock operating margin are open. Both clearance checks and the all-layer Gerber shorts check pass with these traces installed.
