@@ -12,7 +12,6 @@ DDR_A6,bottom,inner2,0.0410
 DDR_A6,top,inner1,0.0134
 DDR_A9,bottom,inner2,0.0134
 DDR_A9,top,inner1,0.0186
-DDR_BA1,top,inner1,0.1211
 DDR_BA2,top,inner1,0.0257
 DDR_CK,bottom,inner2,0.1737
 DDR_CKn,bottom,inner2,0.0745

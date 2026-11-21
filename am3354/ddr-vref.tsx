@@ -20,10 +20,10 @@ export function DdrVref() {
 			<trace from=".R_VREF_CA > .pin2" to="net.DDR_VREF" />
 			<via
 				name="V_RAM_VREF_CA"
-				pcbX={-22.280046}
-				pcbY={18.270096}
+				pcbX={-22.335046}
+				pcbY={18.215096}
 				connectsTo="net.DDR_VREF_CA"
-				outerDiameter={0.3}
+				outerDiameter={0.35}
 				holeDiameter={0.2}
 				tented={true}
 			/>
@@ -46,7 +46,7 @@ export function DdrVref() {
 				from=".V_RAM_VREF_CA > .bottom"
 				to=".V_REF_LINK_CA0 > .bottom"
 				thickness={0.102}
-				pcbPath={[{ x: -0.457454, y: -0.432596 }]}
+				pcbPath={[{ x: -0.402454, y: -0.377596 }]}
 			/>
 			<trace
 				from=".V_REF_LINK_CA0 > .top"

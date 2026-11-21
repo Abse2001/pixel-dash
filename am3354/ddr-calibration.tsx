@@ -13,10 +13,10 @@ export function DdrCalibration() {
 			/>
 			<via
 				name="V_VTP"
-				pcbX={-4.999888}
-				pcbY={15.55005}
+				pcbX={-4.879888}
+				pcbY={15.65505}
 				holeDiameter={0.2}
-				outerDiameter={0.36}
+				outerDiameter={0.35}
 				connectsTo="net.DDR_VTP"
 			/>
 			<trace
