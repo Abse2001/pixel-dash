@@ -3,6 +3,7 @@ import { TPS65218D0PHPR } from "../imports/TPS65218D0PHPR"
 import { A_0603WAF1003T5E as Pull100k } from "../imports/A_0603WAF1003T5E"
 import { A_0402WGF1002TCE as Pull10k } from "../imports/A_0402WGF1002TCE"
 
+import processorBalls from "../am3354/processor-balls.json"
 import { FRC0402J222_TS as I2cPullup } from "../imports/FRC0402J222_TS"
 
 export function PowerControl() {
@@ -36,6 +37,9 @@ export function PowerControl() {
     <trace from=".U_PMIC > .SDA" to=".R_PMIC_SDA > .pin1" thickness={0.15} pcbStraightLine/>
     <trace from=".R_PMIC_SDA > .pin2" to=".R_PMIC_SCL > .pin2" thickness={0.2} pcbStraightLine/>
     <trace from=".R_PMIC_SDA > .pin2" to="net.VDD_IO_3V3_SEQ"/>
+    {Object.entries(processorBalls).filter(([, supply]) => supply === "VDDSHV6").map(([ball]) => (
+      <trace key={ball} from={".U1 > ." + ball} to="net.VDD_IO_3V3_SEQ"/>
+    ))}
     <trace from=".U_PMIC > .EP" to="net.GND"/>
   </>
 }

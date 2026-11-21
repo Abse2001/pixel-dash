@@ -66,3 +66,9 @@ for ref_a, pin_a, ref_b, pin_b in (
     else:
         raise ValueError(f"Missing copper between {ref_a}.{pin_a} and {ref_b}.{pin_b}")
 print("PMIC I2C0 pull-ups connect to the sequenced I/O net and have three local top-copper traces.")
+
+ball_map = json.loads((Path(__file__).resolve().parents[1] / "am3354/processor-balls.json").read_text())
+bank = {ball for ball, signal in ball_map.items() if signal == "VDDSHV6"}
+assert len(bank) == 9
+assert all(key("U1", ball) == nets["VDD_IO_3V3_SEQ"] for ball in bank)
+print("All nine VDDSHV6 lands share the I2C0 pull-up supply in the source netlist.")
