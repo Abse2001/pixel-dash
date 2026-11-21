@@ -7,6 +7,10 @@ from pathlib import Path
 
 elements = json.loads(Path(sys.argv[1]).read_text())
 names = {e["source_trace_id"]: e.get("name", "") for e in elements if e["type"] == "source_trace"}
+source_traces = {e["source_trace_id"]: e for e in elements if e["type"] == "source_trace"}
+pcb_ports = {e["pcb_port_id"]: e for e in elements if e["type"] == "pcb_port"}
+ball_pads = {e["pcb_port_id"]: e for e in elements if e["type"] == "pcb_smtpad"
+             and e["shape"] == "circle" and e.get("pcb_port_id")}
 rows = {}
 for trace in elements:
     if trace["type"] != "pcb_trace":
@@ -20,6 +24,17 @@ for trace in elements:
     a, b = path[0], path[-1]
     if not a.get("start_pcb_port_id") or not b.get("end_pcb_port_id"):
         raise ValueError(f"{name} has an unconnected endpoint")
+    endpoints = ((a, a["start_pcb_port_id"]), (b, b["end_pcb_port_id"]))
+    landed = set()
+    for vertex, port_id in endpoints:
+        pad = ball_pads.get(port_id)
+        if pad is None or pad["layer"] != vertex.get("layer"):
+            raise ValueError(f"{name} endpoint has no BGA land on its signal layer")
+        if math.hypot(vertex["x"] - pad["x"], vertex["y"] - pad["y"]) > pad["radius"]:
+            raise ValueError(f"{name} trace endpoint falls outside its BGA land")
+        landed.add(pcb_ports[port_id]["source_port_id"])
+    if landed != set(source_traces[trace["source_trace_id"]]["connected_source_port_ids"]):
+        raise ValueError(f"{name} copper lands on different ports from its schematic")
     length = sum(math.hypot(v["x"] - u["x"], v["y"] - u["y"]) for u, v in zip(path, path[1:]))
     direct = abs(a["x"] - b["x"]) + abs(a["y"] - b["y"])
     rows[name] = length, direct, sum(v["route_type"] == "via" for v in path)
