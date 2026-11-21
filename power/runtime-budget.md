@@ -30,6 +30,7 @@ The power target is independent of branding. US one-unit prices below exclude ta
 
 | Pack | Source | Observations |
 |---|---|---|
+| YELUFT, 10 Ah advertised | [Amazon B0GTLW7SFW](https://www.amazon.com/dp/B0GTLW7SFW), $17.99 in the supplied listing | 37 Wh nominal. A buyer reports 9.786 Ah at 0.5 A down to 3 V. Another reports opposite plug polarity to their device. Neither identifies a guaranteed keyed pinout for Pixel Dash. Before selecting the pack, verify the supplier drawing, maximum dimensions and continuous-current rating, then meter a sample against the numbered PCB connector contacts before mating. |
 | MakerFocus 9065115, 10 Ah | Amazon ASIN B093WS6C66 | MakerFocus lists $20.79 direct for one flat pack, nominal 112 × 65 × 8.8 mm. Current Amazon checkout price and keyed plug polarity unverified. Manufacturer lists 3 A maximum working current and a 1.8–2.1 A protection threshold. Resolve that discrepancy against low-state-of-charge gaming peaks. |
 | Adafruit 5035 / PKCELL, 10.05 Ah typical | DigiKey 1528-5035-ND, $29.95 | Manufacturer minimum 9.5 Ah, maximum envelope 69 × 56.5 × 19 mm, 3 A continuous discharge. The vendor confirms compatibility with its charger wiring. The BQ24074 reference board connects BATT contact 1 to VLIPO and 2 to GND. |
 | PiJuice PIS-1129, 12 Ah | DigiKey, $47.28 | Listed 135 × 68 × 9 mm. Different connector/harness requires its own drawing and PCB pin-map verification. |
