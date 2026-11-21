@@ -7,7 +7,7 @@ from shapely import STRtree, affinity, unary_union
 from shapely.geometry import LineString, Point, Polygon, box
 
 
-def verify(elements, check_ddr_power=False):
+def verify(elements, check_ddr_power=False, check_ddr_signals=False):
     names = {e["source_component_id"]: e.get("name") for e in elements if e["type"] == "source_component"}
     pins = {e["source_port_id"]: f"{names.get(e['source_component_id'])}.{e['name']}"
             for e in elements if e["type"] == "source_port"}
@@ -141,6 +141,28 @@ def verify(elements, check_ddr_power=False):
         components.extend(roots)
     if len(set(components)) != len(required):
         raise ValueError("Short between reference, supply, ground or opposite sides of R_VREF_CA")
+    if check_ddr_signals:
+        signal_roots = {}
+        opens = []
+        signals = [e for e in elements if e["type"] == "source_trace" and (e.get("name") or "").startswith("DDR_")]
+        if len({e["name"] for e in signals}) != 50 or len(signals) != 50:
+            raise ValueError("Expected 50 individually named DDR signal connections")
+        for trace in signals:
+            ends = [pins[port_id] for port_id in trace["connected_source_port_ids"]]
+            if len(ends) != 2 or {label.split(".")[0] for label in ends} != {"U1", "U_DDR"}:
+                raise ValueError(f"Unexpected terminals for {trace['name']}: {ends}")
+            connected = {root(i) for label in ends for i in labels[label]}
+            if not all(labels[label] for label in ends) or len(connected) != 1:
+                opens.append(trace["name"])
+                continue
+            node, = connected
+            if node in components or node in signal_roots:
+                raise ValueError(f"{trace['name']} shares copper with {signal_roots.get(node, 'a DDR rail or reference')}")
+            signal_roots[node] = trace["name"]
+        if opens:
+            raise ValueError("No continuous pad-to-pad copper on " + ", ".join(sorted(opens)))
+        print("All 50 DDR signal ball pairs have continuous copper and occupy distinct electrical nodes.")
+
     print("CPU J4, RAM H1 and RAM M8 each reach their local bypass. All three bypass grounds reach L2.")
     print("Divider ends reach L3 VDDS_DDR and L2 GND. R_VREF_CA separates the two reference copper nets.")
 
@@ -150,5 +172,6 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("circuit", type=Path)
     parser.add_argument("--ddr-power", action="store_true")
+    parser.add_argument("--ddr-signals", action="store_true")
     args = parser.parse_args()
-    verify(json.loads(args.circuit.read_text()), args.ddr_power)
+    verify(json.loads(args.circuit.read_text()), args.ddr_power, args.ddr_signals)
