@@ -72,3 +72,9 @@ bank = {ball for ball, signal in ball_map.items() if signal == "VDDSHV6"}
 assert len(bank) == 9
 assert all(key("U1", ball) == nets["VDD_IO_3V3_SEQ"] for ball in bank)
 print("All nine VDDSHV6 lands share the I2C0 pull-up supply in the source netlist.")
+assert components["R_DDR_VSEL"]["resistance"] == 12100
+assert components["R_DDR_VSEL"]["supplier_part_numbers"]["jlcpcb"] == ["C281773"]
+assert key("R_DDR_VSEL","pin1") == key("U_PMIC","DC34_SEL")
+assert key("R_DDR_VSEL","pin1") != nets["GND"]
+assert key("R_DDR_VSEL","pin2") == nets["GND"]
+print("DC34_SEL has a 12.1 kΩ pull-down for the 1.35 V DDR3L startup setting.")

@@ -3,6 +3,7 @@ import { TPS65218D0PHPR } from "../imports/TPS65218D0PHPR"
 import { A_0603WAF1003T5E as Pull100k } from "../imports/A_0603WAF1003T5E"
 import { A_0402WGF1002TCE as Pull10k } from "../imports/A_0402WGF1002TCE"
 
+import { RT0402BRD0712K1L as DdrSelect } from "../imports/RT0402BRD0712K1L"
 import processorBalls from "../am3354/processor-balls.json"
 import { FRC0402J222_TS as I2cPullup } from "../imports/FRC0402J222_TS"
 
@@ -40,6 +41,9 @@ export function PowerControl() {
     {Object.entries(processorBalls).filter(([, supply]) => supply === "VDDSHV6").map(([ball]) => (
       <trace key={ball} from={".U1 > ." + ball} to="net.VDD_IO_3V3_SEQ"/>
     ))}
+    <DdrSelect name="R_DDR_VSEL" pcbX={-14.4} pcbY={24.25}/>
+    <trace from=".U_PMIC > .DC34_SEL" to=".R_DDR_VSEL > .pin1" pcbStraightLine thickness={0.15}/>
+    <trace from=".R_DDR_VSEL > .pin2" to="net.GND"/>
     <trace from=".U_PMIC > .EP" to="net.GND"/>
   </>
 }
