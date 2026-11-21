@@ -10,22 +10,12 @@ from shapely.geometry import LineString, Point
 from shapely.strtree import STRtree
 
 
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "production"))
+from connectivity import trace_net_keys
+
+
 def audit(elements):
-    sources = {e["source_trace_id"]: e for e in elements if e["type"] == "source_trace"}
-    keys = {i: s["subcircuit_connectivity_map_key"] for i, s in sources.items()
-            if s.get("subcircuit_connectivity_map_key")}
-    net_keys = {e["source_net_id"]: e["subcircuit_connectivity_map_key"] for e in elements
-                if e["type"] == "source_net" and e.get("subcircuit_connectivity_map_key")}
-    port_keys = defaultdict(set)
-    for i, key in keys.items():
-        for port in sources[i]["connected_source_port_ids"]:
-            port_keys[port].add(key)
-    for i in sources.keys() - keys.keys():
-        candidates = set().union(*(port_keys[p] for p in sources[i]["connected_source_port_ids"]))
-        candidates.update(net_keys[n] for n in sources[i]["connected_source_net_ids"] if n in net_keys)
-        if len(candidates) != 1:
-            raise ValueError(f"Ambiguous connectivity for {i}")
-        keys[i] = candidates.pop()
+    sources, keys = trace_net_keys(elements)
 
     layers = defaultdict(list)
     inline_nets = defaultdict(set)

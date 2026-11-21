@@ -52,4 +52,4 @@ for ref, terminal in [("U1","H6"),("U1","H7"),("U1","G8"),("U_DDR","D8"),
     assert plane.covers(Point(*xy(via)).buffer(via["outer_diameter"]/2)), (ref, terminal)
     locations.add(xy(via))
 assert len(locations)==6
-print("Seven DDR ground terminals reach the clipped L2 plane through six 0.125 mm laser holes.")
+print("Seven DDR ground terminals reach the L2 ground plane through six 0.125 mm laser holes.")

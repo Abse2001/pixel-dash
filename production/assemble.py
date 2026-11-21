@@ -86,7 +86,6 @@ def panel_name(value):
         return {k:panel_name(v) for k,v in value.items()}
     return value
 board = panel_name(board)
-restrict_ground(board,ground(board)["source_net_id"])
 pins = { (p["source_component_id"],hint):p for p in board if p["type"]=="source_port"
          for hint in [p["name"],*p.get("port_hints",[])] }
 parts = {e["name"]:e for e in board if e["type"]=="source_component"}
@@ -135,4 +134,5 @@ for e in board:
     if e["type"]=="source_board":
         e["title"]="Pixel Dash AM3354 handheld"
 apply_wide_layout(board)
+restrict_ground(board,ground(board)["source_net_id"])
 Path(sys.argv[2]).write_text(json.dumps(board,separators=(",",":")))
