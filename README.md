@@ -4,7 +4,9 @@
 
 This branch builds a **232 × 82 mm single four-layer PCB** for the wider handheld. The d-pad, face buttons, shoulders and joystick connectors moved into the fixed side grips. Start and Select sit below the main controls. Nine modeled controls clear the centered 164.9 × 100.0 mm bare BuyDisplay ER-TFT070A2-6 panel envelope in plan view. The full display assembly, cover lens, bezel, FPC bend and replacement rear shell still require integration. The native display circuit still describes the earlier panel. The 7-inch panel needs an RGB raster interface and a constant-current backlight driver.
 
-The placement pass removes 20 displaced control traces and records each as an open. DDR copper and component centers stay fixed. The all-layer Gerber shorts check passes and the independent via clearance count is 25. The smaller case, battery tub and running design history are preserved on [am3354-production](https://github.com/Abse2001/pixel-dash/tree/am3354-production). No fabrication release has been made.
+The placement pass removes 20 displaced control traces and records each as an open. DDR copper and component centers stay fixed. The all-layer Gerber shorts check passes and the placement-stage via clearance count was 25. The smaller case, battery tub and running design history are preserved on [am3354-production](https://github.com/Abse2001/pixel-dash/tree/am3354-production). No fabrication release has been made.
+
+The DDR address-reference route now clears four more vias at its original 0.4 mm width. The integrated 6 mil audit lists 21 remaining findings. The VREF bypass and all-layer Gerber shorts checks pass.
 
 The [runtime budget](power/runtime-budget.md) sizes candidate packs at 75% backlight PWM. The keyed PCB battery header uses contact 1 for BAT and 2 for GND. A battery-specific mating check is required once a supplier is selected. [BuyDisplay panel](https://www.buydisplay.com/7-inch-1024x600-ips-tft-lcd-display-high-brightness-full-viewing-angle)
 
