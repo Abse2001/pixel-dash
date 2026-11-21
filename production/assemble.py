@@ -134,5 +134,20 @@ for e in board:
     if e["type"]=="source_board":
         e["title"]="Pixel Dash AM3354 handheld"
 apply_wide_layout(board)
+# System routes are saved in assembled-board coordinates. Verify both ends so a
+# later control or processor move cannot silently leave copper on the wrong pad.
+top_paths = json.loads((root / "system-top-paths.json").read_text())
+for sid, vertices in top_paths.items():
+    source = one(board, "source_trace", source_trace_id=sid)
+    start, end = [one(board, "pcb_port", source_port_id=pid) for pid in source["connected_source_port_ids"]]
+    if len(vertices) < 2 or any("top" not in pad["layers"] or
+            dist(point, (pad["x"], pad["y"])) > 1e-5 for point, pad in ((vertices[0], start), (vertices[-1], end))):
+        raise ValueError(f"Saved top route no longer lands on both terminals of {sid}")
+    route = [dict(route_type="wire", layer="top", width=0.102, x=x, y=y) for x, y in vertices]
+    route[0]["start_pcb_port_id"] = start["pcb_port_id"]
+    route[-1]["end_pcb_port_id"] = end["pcb_port_id"]
+    board.append(dict(type="pcb_trace", pcb_trace_id="pcb_" + sid, source_trace_id=sid,
+                      subcircuit_connectivity_map_key=source["subcircuit_connectivity_map_key"], route=route))
+    board.remove(one(board, "pcb_trace_missing_error", pcb_trace_missing_error_id="open_" + sid))
 restrict_ground(board,ground(board)["source_net_id"])
 Path(sys.argv[2]).write_text(json.dumps(board,separators=(",",":")))
