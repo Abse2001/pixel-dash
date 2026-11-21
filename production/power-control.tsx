@@ -38,8 +38,8 @@ export function PowerControl() {
     <trace from=".R_PMIC_IRQ > .pin2" to="net.VDD_IO_3V3_SEQ"/>
     <trace name="PMIC_I2C_SCL" from=".U_PMIC > .SCL" to=".U1 > .C16"/>
     <trace name="PMIC_I2C_SDA" from=".U_PMIC > .SDA" to=".U1 > .C17"/>
-    <I2cPullup name="R_PMIC_SCL" pcbX={-21.8} pcbY={17.85} pcbRotation={-90}/>
-    <I2cPullup name="R_PMIC_SDA" pcbX={-23.2} pcbY={17.85} pcbRotation={-90}/>
+    <I2cPullup name="R_PMIC_SCL" pcbX={-21.8} pcbY={18.55} pcbRotation={-90}/>
+    <I2cPullup name="R_PMIC_SDA" pcbX={-23.2} pcbY={18.55} pcbRotation={-90}/>
     <trace from=".U_PMIC > .SCL" to=".R_PMIC_SCL > .pin1" thickness={0.15} pcbPath={[{x:-1.75006,y:-5.1}]}/>
     <trace from=".U_PMIC > .SDA" to=".R_PMIC_SDA > .pin1" thickness={0.15} pcbPath={[{x:-2.249932,y:-5.1}]}/>
     <trace from=".R_PMIC_SDA > .pin2" to=".R_PMIC_SCL > .pin2" thickness={0.2} pcbStraightLine/>
