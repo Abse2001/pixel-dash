@@ -78,3 +78,33 @@ assert key("R_DDR_VSEL","pin1") == key("U_PMIC","DC34_SEL")
 assert key("R_DDR_VSEL","pin1") != nets["GND"]
 assert key("R_DDR_VSEL","pin2") == nets["GND"]
 print("DC34_SEL has a 12.1 kΩ pull-down for the 1.35 V DDR3L startup setting.")
+
+# Check finished copper where the PMIC exposed pad and DDR selector meet L2.
+from shapely.geometry import Point, Polygon
+
+ground_pour, = [p for p in elements if p["type"] == "pcb_copper_pour" and p["layer"] == "inner1"
+                and p["source_net_id"] == next(n["source_net_id"] for n in elements if n["type"] == "source_net" and n["name"] == "GND")]
+ring = lambda r: [(p["x"], p["y"]) for p in r["vertices"]]
+shape = ground_pour["brep_shape"]
+plane = Polygon(ring(shape["outer_ring"]), [ring(r) for r in shape["inner_rings"]])
+
+def ground_vias_in_pad(ref, terminal, span):
+    port = pcb_port(ref, terminal)
+    pad, = [p for p in elements if p["type"] == "pcb_smtpad" and p.get("pcb_port_id") == port["pcb_port_id"]]
+    result = []
+    for v in elements:
+        if v["type"] != "pcb_via" or v.get("subcircuit_connectivity_map_key") != nets["GND"] or set(v["layers"]) != span:
+            continue
+        radius = v["outer_diameter"]/2
+        if (abs(v["x"] - pad["x"]) + radius <= pad["width"]/2 and
+                abs(v["y"] - pad["y"]) + radius <= pad["height"]/2):
+            assert plane.covers(Point(v["x"], v["y"])), v["pcb_via_id"]
+            result.append(v)
+    return result
+
+thermal = ground_vias_in_pad("U_PMIC", "EP", {"top","inner1","inner2","bottom"})
+assert len({(v["x"], v["y"]) for v in thermal}) >= 25
+assert all(v["hole_diameter"] == 0.254 for v in thermal)
+selector, = ground_vias_in_pad("R_DDR_VSEL", "pin2", {"top","inner1"})
+assert selector["hole_diameter"] == 0.125
+print(f"PMIC exposed pad has {len(thermal)} plated ground vias. DDR selector return lands on L2.")

@@ -7,6 +7,12 @@ import { RT0402BRD0712K1L as DdrSelect } from "../imports/RT0402BRD0712K1L"
 import processorBalls from "../am3354/processor-balls.json"
 import { FRC0402J222_TS as I2cPullup } from "../imports/FRC0402J222_TS"
 
+// 0.6 mm pitch under the exposed pad. Omitted sites clear the retained bottom VBUS trace.
+const thermalColumns = [
+  [-3, 2, 3], [-3, -2, 3], [-3, -2, -1], [-3, -2, -1, 0],
+  [-3, -2, -1, 0, 1], [-3, -2, -1, 2], [-3, 0, 3],
+]
+
 export function PowerControl() {
   return <>
     <TPS65218D0PHPR name="U_PMIC" pcbX={-20.5} pcbY={25}/>
@@ -44,6 +50,13 @@ export function PowerControl() {
     <DdrSelect name="R_DDR_VSEL" pcbX={-14.4} pcbY={24.25}/>
     <trace from=".U_PMIC > .DC34_SEL" to=".R_DDR_VSEL > .pin1" pcbStraightLine thickness={0.15}/>
     <trace from=".R_DDR_VSEL > .pin2" to="net.GND"/>
+    <via name="V_DDR_VSEL_GND" pcbX={-13.967184} pcbY={24.25} fromLayer="top" toLayer="inner1"
+      holeDiameter={0.125} outerDiameter={0.28} connectsTo={[".R_DDR_VSEL > .pin2", "net.GND"]}/>
+    {thermalColumns.flatMap((columns, row) => columns.map(column => (
+      <via key={row + "_" + column} name={`V_PMIC_EP_${row}_${column + 3}`}
+        pcbX={-20.5 + column * 0.6} pcbY={25 + (row - 3) * 0.6}
+        holeDiameter={0.254} outerDiameter={0.4572} connectsTo="net.GND"/>
+    )))}
     <trace from=".U_PMIC > .EP" to="net.GND"/>
   </>
 }
