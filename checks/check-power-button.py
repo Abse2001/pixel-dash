@@ -108,3 +108,25 @@ assert all(v["hole_diameter"] == 0.254 for v in thermal)
 selector, = ground_vias_in_pad("R_DDR_VSEL", "pin2", {"top","inner1"})
 assert selector["hole_diameter"] == 0.125
 print(f"PMIC exposed pad has {len(thermal)} plated ground vias. DDR selector return lands on L2.")
+
+for pin in ("pin1", "pin3"):
+    contact = pcb_port("SW_POWER", pin)
+    pads = [p for p in elements if p["type"] == "pcb_smtpad" and p.get("pcb_port_id") == contact["pcb_port_id"]]
+    pad, = pads
+    vias = [v for v in elements if v["type"] == "pcb_via" and set(v["layers"]) == {"top", "inner1"}
+            and v.get("subcircuit_connectivity_map_key") == nets["GND"]]
+    connected = []
+    for t in elements:
+        if t["type"] != "pcb_trace":
+            continue
+        route = t["route"]
+        if route[0].get("start_pcb_port_id") != contact["pcb_port_id"]:
+            continue
+        assert all(p["route_type"] == "wire" and p["layer"] == "top" for p in route)
+        start, end = route[0], route[-1]
+        assert abs(start["x"] - pad["x"]) <= pad["width"]/2 + 1e-6
+        assert abs(start["y"] - pad["y"]) <= pad["height"]/2 + 1e-6
+        connected.extend(v for v in vias if math.hypot(v["x"]-end["x"], v["y"]-end["y"]) < v["outer_diameter"]/2)
+    via, = connected
+    assert plane.covers(Point(via["x"], via["y"]).buffer(via["outer_diameter"]/2))
+print("Both momentary-key ground contacts reach the finished L2 plane through their top traces and blind vias.")

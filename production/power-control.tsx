@@ -26,8 +26,15 @@ export function PowerControl() {
       pcbPath={[{x:-5.05,y:-0.60},{x:-5.20,y:-0.45},{x:-5.20,y:2.35}]}/>
     <trace name="POWER_KEY_BIAS" from=".SW_POWER > .pin2" to=".R_POWER_PB > .pin1" thickness={0.15} pcbStraightLine/>
     <trace from=".R_POWER_PB > .pin2" to="net.VSYS"/>
-    <trace from=".SW_POWER > .pin1" to="net.GND"/>
-    <trace from=".SW_POWER > .pin3" to="net.GND"/>
+    {[[1, -24.125], [3, -26.575]].map(([pin, x]) => (
+      <>
+        <via name={`V_POWER_KEY_GND_${pin}`} pcbX={x} pcbY={36.75} fromLayer="top" toLayer="inner1"
+          holeDiameter={0.125} outerDiameter={0.28} connectsTo="net.GND"/>
+        <trace from={`.SW_POWER > .pin${pin}`} to={`.V_POWER_KEY_GND_${pin} > .top`}
+          thickness={0.2} pcbStraightLine/>
+        <trace from={`.SW_POWER > .pin${pin}`} to="net.GND"/>
+      </>
+    ))}
     <trace name="PMIC_INPUT" from=".U_PMIC > .IN_BIAS" to="net.VSYS"/>
     <trace name="RTC_POWER_HOLD" from=".U1 > .C6" to=".U_PMIC > .PWR_EN"/>
     <trace name="RTC_WAKE" from=".U_PMIC > .nWAKEUP" to=".U1 > .C5"/>
@@ -38,11 +45,12 @@ export function PowerControl() {
     <trace from=".R_PMIC_IRQ > .pin2" to="net.VDD_IO_3V3_SEQ"/>
     <trace name="PMIC_I2C_SCL" from=".U_PMIC > .SCL" to=".U1 > .C16"/>
     <trace name="PMIC_I2C_SDA" from=".U_PMIC > .SDA" to=".U1 > .C17"/>
-    <I2cPullup name="R_PMIC_SCL" pcbX={-21.8} pcbY={18.55} pcbRotation={-90}/>
-    <I2cPullup name="R_PMIC_SDA" pcbX={-23.2} pcbY={18.55} pcbRotation={-90}/>
+    <I2cPullup name="R_PMIC_SCL" pcbX={-21.25} pcbY={19.03}/>
+    <I2cPullup name="R_PMIC_SDA" pcbX={-23.75} pcbY={19.03} pcbRotation={180}/>
     <trace from=".U_PMIC > .SCL" to=".R_PMIC_SCL > .pin1" thickness={0.15} pcbPath={[{x:-1.75006,y:-5.1}]}/>
     <trace from=".U_PMIC > .SDA" to=".R_PMIC_SDA > .pin1" thickness={0.15} pcbPath={[{x:-2.249932,y:-5.1}]}/>
-    <trace from=".R_PMIC_SDA > .pin2" to=".R_PMIC_SCL > .pin2" thickness={0.2} pcbStraightLine/>
+    <trace from=".R_PMIC_SCL > .pin2" to=".R_PMIC_SDA > .pin2" thickness={0.2}
+      pcbPath={[{x:0.432816,y:-0.63},{x:-2.932816,y:-0.63}]}/>
     <trace from=".R_PMIC_SDA > .pin2" to="net.VDD_IO_3V3_SEQ"/>
     {Object.entries(processorBalls).filter(([, supply]) => supply === "VDDSHV6").map(([ball]) => (
       <trace key={ball} from={".U1 > ." + ball} to="net.VDD_IO_3V3_SEQ"/>
