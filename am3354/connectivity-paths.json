@@ -3868,7 +3868,7 @@
     {"x": -24.265, "y": -3.715, "via": true, "fromLayer": "bottom", "toLayer": "top"},
     {"x": -24.405, "y": -2.63},
     {"x": -24.09, "y": -1.335},
-    {"x": -24.02, "y": -1.265, "via": true, "fromLayer": "top", "toLayer": "bottom"},
+    {"x": -24.065, "y": -1.24, "via": true, "fromLayer": "top", "toLayer": "bottom"},
     {"x": -21.185, "y": -1.23},
     {"x": -21.01, "y": -1.405},
     {"x": -20.975, "y": -1.58},
