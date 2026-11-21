@@ -38,17 +38,17 @@ export function PowerControl() {
     <trace from=".R_PMIC_IRQ > .pin2" to="net.VDD_IO_3V3_SEQ"/>
     <trace name="PMIC_I2C_SCL" from=".U_PMIC > .SCL" to=".U1 > .C16"/>
     <trace name="PMIC_I2C_SDA" from=".U_PMIC > .SDA" to=".U1 > .C17"/>
-    <I2cPullup name="R_PMIC_SCL" pcbX={-21.8} pcbY={18.85} pcbRotation={-90}/>
-    <I2cPullup name="R_PMIC_SDA" pcbX={-23.2} pcbY={18.85} pcbRotation={-90}/>
-    <trace from=".U_PMIC > .SCL" to=".R_PMIC_SCL > .pin1" thickness={0.15} pcbStraightLine/>
-    <trace from=".U_PMIC > .SDA" to=".R_PMIC_SDA > .pin1" thickness={0.15} pcbStraightLine/>
+    <I2cPullup name="R_PMIC_SCL" pcbX={-21.8} pcbY={17.85} pcbRotation={-90}/>
+    <I2cPullup name="R_PMIC_SDA" pcbX={-23.2} pcbY={17.85} pcbRotation={-90}/>
+    <trace from=".U_PMIC > .SCL" to=".R_PMIC_SCL > .pin1" thickness={0.15} pcbPath={[{x:0,y:-0.85}]}/>
+    <trace from=".U_PMIC > .SDA" to=".R_PMIC_SDA > .pin1" thickness={0.15} pcbPath={[{x:0,y:-0.85}]}/>
     <trace from=".R_PMIC_SDA > .pin2" to=".R_PMIC_SCL > .pin2" thickness={0.2} pcbStraightLine/>
     <trace from=".R_PMIC_SDA > .pin2" to="net.VDD_IO_3V3_SEQ"/>
     {Object.entries(processorBalls).filter(([, supply]) => supply === "VDDSHV6").map(([ball]) => (
       <trace key={ball} from={".U1 > ." + ball} to="net.VDD_IO_3V3_SEQ"/>
     ))}
     <DdrSelect name="R_DDR_VSEL" pcbX={-14.4} pcbY={24.25}/>
-    <trace from=".U_PMIC > .DC34_SEL" to=".R_DDR_VSEL > .pin1" pcbStraightLine thickness={0.15}/>
+    <trace from=".U_PMIC > .DC34_SEL" to=".R_DDR_VSEL > .pin1" pcbPath={[{x:0.6,y:0}]} thickness={0.15}/>
     <trace from=".R_DDR_VSEL > .pin2" to="net.GND"/>
     <via name="V_DDR_VSEL_GND" pcbX={-13.967184} pcbY={24.25} fromLayer="top" toLayer="inner1"
       holeDiameter={0.125} outerDiameter={0.28} connectsTo={[".R_DDR_VSEL > .pin2", "net.GND"]}/>
