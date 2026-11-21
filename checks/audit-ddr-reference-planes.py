@@ -19,10 +19,10 @@ def polygon(pour):
     return Polygon(outer, holes)
 
 
-def audit(board):
+def audit(board, microsd=False):
     nets = {e["source_net_id"]: e["name"] for e in board if e["type"] == "source_net"}
     names = {e["source_trace_id"]: e.get("name", "") for e in board if e["type"] == "source_trace"}
-    ref = {"top": ("inner1", "GND"), "bottom": ("inner2", "VDDS_DDR")}
+    ref = {"top": ("inner1", "GND"), "bottom": ("inner2", "GND" if microsd else "VDDS_DDR")}
     pours = [e for e in board if e["type"] == "pcb_copper_pour"]
     vias = {xy(e): e for e in board if e["type"] == "pcb_via"}
     planes = {}
@@ -37,7 +37,10 @@ def audit(board):
         if trace["type"] != "pcb_trace":
             continue
         name = names[trace["source_trace_id"]]
-        if not name.startswith("DDR_"):
+        if microsd:
+            if not trace["source_trace_id"].startswith("system_SD_"):
+                continue
+        elif not name.startswith("DDR_"):
             continue
         gaps_by_layer = {layer: [] for layer in ref}
         section = [trace["route"][0]]
@@ -69,7 +72,7 @@ def audit(board):
 
 
 if __name__ == "__main__":
-    failures = sorted(audit(json.loads(Path(sys.argv[1]).read_text())))
+    failures = sorted(audit(json.loads(Path(sys.argv[1]).read_text()), "--micro-sd" in sys.argv[2:]))
     out = csv.writer(sys.stdout)
     out.writerow(("signal", "signal_layer", "reference_layer", "uncovered_centerline_mm"))
     for name, layer, ref, length in failures:
