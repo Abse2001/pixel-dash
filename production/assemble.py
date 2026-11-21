@@ -168,6 +168,13 @@ for sid, sections in paths.items():
     board.append(dict(type="pcb_trace", pcb_trace_id=trace_id, source_trace_id=sid,
                       subcircuit_connectivity_map_key=key, route=route))
     board.remove(one(board, "pcb_trace_missing_error", pcb_trace_missing_error_id="open_" + sid))
-restrict_ground(board,ground(board)["source_net_id"])
+gnd = ground(board)
+for index, (x, y) in enumerate(json.loads((root / "system-ground-stitches.json").read_text())):
+    board.append(dict(type="pcb_via", pcb_via_id=f"pcb_mmc0_return_{index}",
+                      source_net_id=gnd["source_net_id"],
+                      subcircuit_connectivity_map_key=gnd["subcircuit_connectivity_map_key"],
+                      x=x, y=y, from_layer="top", to_layer="bottom", layers=list(layers),
+                      hole_diameter=0.20, outer_diameter=0.40))
+restrict_ground(board, gnd["source_net_id"])
 add_inner2_ground(board, ground(board)["source_net_id"])
 Path(sys.argv[2]).write_text(json.dumps(board,separators=(",",":")))

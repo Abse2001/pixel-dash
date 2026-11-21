@@ -1,5 +1,6 @@
 """Check the integrated L2 ground surface, NTC isolation and retained through-via clearances."""
 import json
+from math import dist
 import sys
 from pathlib import Path
 
@@ -71,8 +72,22 @@ if "--both" in sys.argv[2:]:
             continue
         land = Point(via["x"], via["y"]).buffer(via["outer_diameter"] / 2)
         if plane.covers(land) and lower_ground.covers(land):
-            stitches.append(via["pcb_via_id"])
+            stitches.append((via["x"], via["y"]))
     if not stitches:
         raise ValueError("No plated ground connection between L2 and L3")
     print(f"L3 ground covers {lower_ground.area:.1f} mm² and joins L2 through {len(stitches)} complete via lands. "
           f"Clearance to the DDR supply island is {gap:.3f} mm.")
+
+    if "--mmc0" in sys.argv[2:]:
+        transitions = [e for e in board if e["type"] == "pcb_via" and
+                       e.get("source_trace_id", "").startswith("system_SD_")]
+        if not transitions:
+            raise ValueError("No MMC0 signal transitions found")
+        distances = {via["pcb_via_id"]: min(dist((via["x"], via["y"]), stitch)
+                     for stitch in stitches) for via in transitions}
+        worst = max(distances, key=distances.get)
+        print(f"{len(transitions)} MMC0 layer changes. Farthest plated ground return is "
+              f"{distances[worst]:.3f} mm from {worst}.")
+        # Layout target for this design, measured between via centers.
+        if distances[worst] > 1.5:
+            raise ValueError("MMC0 transition exceeds the 1.5 mm local return target")
