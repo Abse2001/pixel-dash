@@ -4,8 +4,8 @@ import fanout from "./reference-fanout.json";
 
 const supplyOutline = [
 	{ x: -27, y: 5 },
-	{ x: 10, y: 5 },
-	{ x: 10, y: 29 },
+	{ x: 6.2, y: 5 },
+	{ x: 6.2, y: 29 },
 	{ x: -27, y: 29 },
 ];
 

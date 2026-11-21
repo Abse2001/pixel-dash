@@ -6,7 +6,7 @@ import re
 import sys
 from pathlib import Path
 from build_retained import build
-from clip_channel import restrict_ground
+from clip_channel import add_inner2_ground, restrict_ground
 from wide_layout import apply_wide_layout
 
 root = Path(__file__).resolve().parent
@@ -150,4 +150,5 @@ for sid, vertices in top_paths.items():
                       subcircuit_connectivity_map_key=source["subcircuit_connectivity_map_key"], route=route))
     board.remove(one(board, "pcb_trace_missing_error", pcb_trace_missing_error_id="open_" + sid))
 restrict_ground(board,ground(board)["source_net_id"])
+add_inner2_ground(board, ground(board)["source_net_id"])
 Path(sys.argv[2]).write_text(json.dumps(board,separators=(",",":")))
