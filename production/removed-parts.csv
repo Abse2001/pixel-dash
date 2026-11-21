@@ -47,10 +47,18 @@ C_VREG_AVDD,CL05A475MP5NRNC,C23733,on-chip regulator and bypass
 C_VREG_IN,CL10A106KP8NNNC,C19702,on-chip regulator and bypass
 C_XIN,0402CG150J500NT,C1548,oscillator
 C_XOUT,0402CG150J500NT,C1548,oscillator
+D_CONTROL_AA,1N4148WS,C2128,retired battery hard-off control
+D_CONTROL_LIPO,1N4148WS,C2128,retired battery hard-off control
+J_PWR_SW,SK_12E12_G5,C136720,retired battery hard-off control
+J_PWR_SW_actuator,,,retired battery hard-off control
+J_PWR_SW_body,,,retired battery hard-off control
 L_GPU_AUX,MWSA0402S-1R0MT,C408332,second processor and dedicated support
 L_GPU_CORE,AOTA_B201610S3R3_101_T,C42411119,second processor and dedicated support
+Q_AA_OFF,AO3400A,C20917,retired battery hard-off control
+Q_LIPO_OFF,AO3400A,C20917,retired battery hard-off control
 R_BOOT,0402WGF1002TCE,C25744,processor reset and programming
 R_BOOTSEL,0402WGF1001TCE,C11702,processor reset and programming
+R_CONTROL_PULLUP,A_0603WAF1003T5E,C25803,retired battery hard-off control
 R_GPU_AUX_EN,0402WGF4701TCE,C25900,second processor and dedicated support
 R_GPU_BOOT,0402WGF1001TCE,C11702,second processor and dedicated support
 R_GPU_FB_BOTTOM_A,RT0402BRD0716K5L,C852559,second processor and dedicated support

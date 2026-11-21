@@ -1,0 +1,33 @@
+import { SKRTLAE010 } from "../imports/SKRTLAE010"
+import { TPS65218D0PHPR } from "../imports/TPS65218D0PHPR"
+import { A_0603WAF1003T5E as Pull100k } from "../imports/A_0603WAF1003T5E"
+import { A_0402WGF1002TCE as Pull10k } from "../imports/A_0402WGF1002TCE"
+
+export function PowerControl() {
+  return <>
+    <TPS65218D0PHPR name="U_PMIC" pcbX={-20.5} pcbY={25}/>
+    <SKRTLAE010 name="SW_POWER" pcbX={-25.35} pcbY={38.85} pcbRotation={180}
+      internallyConnectedPins={[["pin1","pin3"]]}/>
+    <Pull100k name="R_POWER_PB" pcbX={-25.35} pcbY={35.9}/>
+    <Pull100k name="R_PMIC_WAKE" pcbX={-28} pcbY={25}/>
+    <Pull10k name="R_PMIC_IRQ" pcbX={-27} pcbY={27}/>
+    <net name="VSYS"/><net name="VDDS_RTC_1V8"/>
+    <trace name="POWER_KEY" from=".U_PMIC > .PB" to=".SW_POWER > .pin2" thickness={0.15}
+      pcbPath={[{x:-5.05,y:-0.60},{x:-5.20,y:-0.45},{x:-5.20,y:2.35}]}/>
+    <trace name="POWER_KEY_BIAS" from=".SW_POWER > .pin2" to=".R_POWER_PB > .pin1" thickness={0.15} pcbStraightLine/>
+    <trace from=".R_POWER_PB > .pin2" to="net.VSYS"/>
+    <trace from=".SW_POWER > .pin1" to="net.GND"/>
+    <trace from=".SW_POWER > .pin3" to="net.GND"/>
+    <trace name="PMIC_INPUT" from=".U_PMIC > .IN_BIAS" to="net.VSYS"/>
+    <trace name="RTC_POWER_HOLD" from=".U1 > .C6" to=".U_PMIC > .PWR_EN"/>
+    <trace name="RTC_WAKE" from=".U_PMIC > .nWAKEUP" to=".U1 > .C5"/>
+    <trace from=".R_PMIC_WAKE > .pin1" to=".U_PMIC > .nWAKEUP"/>
+    <trace from=".R_PMIC_WAKE > .pin2" to="net.VDDS_RTC_1V8"/>
+    <trace name="PMIC_IRQ" from=".U_PMIC > .nINT" to=".U1 > .T14"/>
+    <trace from=".R_PMIC_IRQ > .pin1" to=".U_PMIC > .nINT"/>
+    <trace from=".R_PMIC_IRQ > .pin2" to="net.VDD_IO_3V3_SEQ"/>
+    <trace name="PMIC_I2C_SCL" from=".U_PMIC > .SCL" to=".U1 > .C16"/>
+    <trace name="PMIC_I2C_SDA" from=".U_PMIC > .SDA" to=".U1 > .C17"/>
+    <trace from=".U_PMIC > .EP" to="net.GND"/>
+  </>
+}

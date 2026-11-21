@@ -22,6 +22,7 @@ def eid(e):
     return e.get(e["type"] + "_id")
 retired_parts = {}
 manual = {
+    "retired battery hard-off control": "J_PWR_SW J_PWR_SW_body J_PWR_SW_actuator Q_AA_OFF Q_LIPO_OFF D_CONTROL_AA D_CONTROL_LIPO R_CONTROL_PULLUP",
     "compute and memory": "U1 U2 U_PSRAM R_PSRAM_CE C_FLASH C_PSRAM C_PSRAM_BULK C_QSPI_USB",
     "oscillator": "U_XTAL C_XIN C_XOUT R_XOUT",
     "processor reset and programming": "U_BOOTSEL U_RUN R_RUN R_BOOT R_BOOTSEL TP_SWDIO TP_SWCLK",
@@ -46,7 +47,7 @@ with (root/"removed-parts.csv").open("w") as f:
         writer.writerow([name, e.get("manufacturer_part_number"), " ".join(e.get("supplier_part_numbers", {}).get("jlcpcb", [])), reason])
 
 dead = {eid(parts[n]) for n in retired_parts}
-old_net = re.compile(r"^(?:V1V1$|GPU_|GRAPHICS_|THROUGH_(?:QSPI|PSRAM|SWD|SWCLK|BOOTSEL|RUN_PULLUP))")
+old_net = re.compile(r"^(?:V1V1$|BAT_OFF_GATE$|BAT_CONTROL_OR$|GPU_|GRAPHICS_|THROUGH_(?:QSPI|PSRAM|SWD|SWCLK|BOOTSEL|RUN_PULLUP))")
 dead.update(eid(e) for e in items("source_net") if old_net.search(e["name"]))
 dead.update(eid(e) for e in items("source_bus") if not e["name"].startswith("BAT_"))
 retired_sheets = {"processor", "core-power", "flash", "psram", "gpu", "gpu-power", "gpu-memory"}

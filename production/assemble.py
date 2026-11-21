@@ -45,14 +45,19 @@ for ref, expected in (("U1", (-44.8,15.15)), ("U_DDR", (-65.0,15.15))):
         raise ValueError(f"{ref} placement moved from {expected} to {center}")
 
 # Prefix the imported channel's IDs, including keys referenced in nested routes.
-# The one shared net at this stage is the actual GND electrical domain.
+# GND and the protected system input are shared across both source designs.
 mapping = {}
 for e in channel:
     for key in (e["type"] + "_id", "subcircuit_id", "subcircuit_connectivity_map_key"):
         if e.get(key):
             mapping[e[key]] = "channel_" + e[key]
-for k in ("source_net_id", "subcircuit_connectivity_map_key"):
-    mapping[ground(channel)[k]] = ground(board)[k]
+shared_supplies = {}
+for name in ("GND", "VSYS"):
+    new = one(channel, "source_net", name=name)
+    retained = one(board, "source_net", name=name)
+    shared_supplies[identity(new)] = retained
+    for k in ("source_net_id", "subcircuit_connectivity_map_key"):
+        mapping[new[k]] = retained[k]
 for kind in ("source_board", "pcb_board"):
     mapping[identity(one(channel, kind))] = identity(one(board, kind))
 board_spec = one(board, "pcb_board")
@@ -64,7 +69,7 @@ if any(spec["num_layers"] != 4 for spec in (channel_spec, board_spec)):
 for k in ("allow_blind_and_buried_vias","is_via_in_pad_allowed","min_via_hole_diameter","min_via_pad_diameter"):
     board_spec[k] = channel_spec[k]
 for e in channel:
-    if e["type"] in {"source_board", "pcb_board", "source_project_metadata"} or e is ground(channel):
+    if e["type"] in {"source_board", "pcb_board", "source_project_metadata"} or identity(e) in shared_supplies:
         continue
     board.append(rename(e,mapping))
 
