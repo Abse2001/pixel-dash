@@ -1,4 +1,3 @@
 signal,signal_layer,reference_layer,uncovered_centerline_mm
 DDR_A1,bottom,inner2,0.5754
-DDR_D0,top,inner1,0.6600
 DDR_DQM1,bottom,inner2,0.8795
