@@ -8,7 +8,7 @@ from pathlib import Path
 
 from shapely import STRtree
 from shapely.geometry import LineString
-from shapely.ops import unary_union
+
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "production"))
 from connectivity import trace_net_keys
@@ -26,6 +26,22 @@ def net_class(name):
     if re.fullmatch(r"DDR_(A\d+|BA[012]|CKE|CSn0|RASn|CASn|WEn|ODT)", name):
         return "ADDR_CTRL"
     return ""
+
+
+def covered_length(line, intersections):
+    # Normalize to distances on the measured segment. Floating-point overlays
+    # can represent coincident portions as slightly different parallel lines.
+    intervals = []
+    for shape in intersections:
+        if shape.geom_type != "LineString" or shape.is_empty:
+            continue
+        a, b = shape.boundary.geoms
+        intervals.append(sorted((line.project(a), line.project(b))))
+    end = total = 0.0
+    for a, b in sorted(intervals):
+        total += max(0, b - max(a, end))
+        end = max(b, end)
+    return total
 
 
 def main(board):
@@ -70,8 +86,8 @@ def main(board):
                     relaxed.append(line.intersection(seg.buffer(limit, quad_segs=32)))
                 if line.distance(seg) < width - 1e-7:
                     below.append(line.intersection(seg.buffer(width, quad_segs=32)))
-            restricted[name] += unary_union(relaxed).length if relaxed else 0
-            below_minimum[name] += unary_union(below).length if below else 0
+            restricted[name] += covered_length(line, relaxed)
+            below_minimum[name] += covered_length(line, below)
     if len(restricted) != 49:
         raise ValueError(f"Expected 49 signals subject to the class spacing tables, found {len(restricted)}")
     out = csv.writer(sys.stdout)
