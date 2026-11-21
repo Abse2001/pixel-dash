@@ -1,6 +1,7 @@
 """Build the single-board engineering candidate from the retained subsystems and routed DDR."""
 import csv
 import json
+from math import dist
 import re
 import sys
 from pathlib import Path
@@ -34,6 +35,14 @@ def ground(elements):
     return one(elements, "source_net", name="GND")
 def identity(e):
     return e.get(e["type"] + "_id")
+
+# Route checkpoints use fixed world coordinates. A layout pass that moves this
+# group invalidates both its stored copper and the enclosure clearance review.
+for ref, expected in (("U1", (-44.8,15.15)), ("U_DDR", (-65.0,15.15))):
+    package = one(channel, "source_component", name=ref)
+    center = one(channel, "pcb_component", source_component_id=identity(package))["center"]
+    if dist((center["x"],center["y"]),expected)>1e-4:
+        raise ValueError(f"{ref} placement moved from {expected} to {center}")
 
 # Prefix the imported channel's IDs, including keys referenced in nested routes.
 # The one shared net at this stage is the actual GND electrical domain.
@@ -98,6 +107,24 @@ with (root/"interface.csv").open() as f:
         board.append(dict(type="pcb_trace_missing_error",error_type="pcb_trace_missing_error",
           pcb_trace_missing_error_id="open_"+sid,source_trace_id=sid,
           message=f'Handheld interface {row["Signal"]} requires PCB copper'))
+# Each LCD_DATA terminal samples its matching SYSBOOT resistor on reset.
+# Tie its open resistor terminal to the actual data net after the two source
+# namespaces have been joined; preserve both the LCD and MMC assignments.
+for bit in range(16):
+    signal = f"LCD_D{bit}"
+    target = one(board, "source_trace", source_trace_id="system_" + signal)
+    resistor = port(f"R_SYSBOOT{bit}", "pin2")
+    key = target["subcircuit_connectivity_map_key"]
+    binding = "system_boot_tap_" + str(bit)
+    assert not resistor.get("subcircuit_connectivity_map_key"), resistor
+    resistor["subcircuit_connectivity_map_key"] = key
+    board.append(dict(type="source_trace", source_trace_id=binding,
+        name=f"SYSBOOT{bit}_SENSE", connected_source_net_ids=target["connected_source_net_ids"],
+        connected_source_port_ids=[target["connected_source_port_ids"][0],resistor["source_port_id"]],
+        subcircuit_connectivity_map_key=key))
+    board.append(dict(type="pcb_trace_missing_error", error_type="pcb_trace_missing_error",
+        pcb_trace_missing_error_id="open_" + binding, source_trace_id=binding,
+        message=f"R_SYSBOOT{bit} requires copper to {signal}"))
 for e in board:
     if e["type"]=="source_board":
         e["title"]="Pixel Dash AM3354 handheld"

@@ -27,7 +27,10 @@ function processorPin(signal: string) {
 	return ".U1 > ." + connection.cpuBall;
 }
 
-export default function MemoryChannel({ pcbOffsetX = 0 }: { pcbOffsetX?: number } = {}) {
+export default function MemoryChannel({ pcbOffsetX = 0, children }: {
+    pcbOffsetX?: number
+    children?: import("react").ReactNode
+} = {}) {
 	return (
 		<board
 			schAutoLayoutEnabled={false}
@@ -46,7 +49,7 @@ export default function MemoryChannel({ pcbOffsetX = 0 }: { pcbOffsetX?: number 
 			isViaInPadAllowed={true}
 			title="AM3354 DDR3L channel development"
 		>
-			<group pcbX={pcbOffsetX}>
+			<group pcbX={pcbOffsetX} pcbY={0}>
 				<AM3354BZCZD80
 					name={cpu.name}
 					pcbX={cpu.x}
@@ -105,6 +108,7 @@ export default function MemoryChannel({ pcbOffsetX = 0 }: { pcbOffsetX?: number 
 				<DdrCalibration />
 				<DdrVref />
 			</group>
+		{children}
 		</board>
 	);
 }
