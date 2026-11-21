@@ -6,7 +6,7 @@ This branch builds a **232 × 82 mm single four-layer PCB** for the wider handhe
 
 The placement pass removes 20 displaced control traces and records each as an open. DDR copper and component centers stay fixed. The all-layer Gerber shorts check passes and the placement-stage via clearance count was 25. The smaller case, battery tub and running design history are preserved on [am3354-production](https://github.com/Abse2001/pixel-dash/tree/am3354-production). No fabrication release has been made.
 
-The DDR address-reference route now clears four more vias at its original 0.4 mm width. The integrated 6 mil audit lists 21 remaining findings. The VREF bypass and all-layer Gerber shorts checks pass.
+The DDR address-reference route now clears four more vias at its original 0.4 mm width. Moving the C_DDR34 bulk bypass 0.10 mm clears the adjacent D12 trace. A four-via chip-select route brings the DDR channel to 40 of 50 signals connected. The integrated 6 mil audit lists 20 remaining findings. The VREF bypass and all-layer Gerber shorts checks pass.
 
 The [runtime budget](power/runtime-budget.md) sizes candidate packs at 75% backlight PWM. The keyed PCB battery header uses contact 1 for BAT and 2 for GND. A battery-specific mating check is required once a supplier is selected. [BuyDisplay panel](https://www.buydisplay.com/7-inch-1024x600-ips-tft-lcd-display-high-brightness-full-viewing-angle)
 

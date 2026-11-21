@@ -32,7 +32,7 @@
   {"chip": "U1", "x": 3.8, "y": 21.55, "rotation": 0, "layer": "bottom", "kind": "highSpeed"},
   {"chip": "U1", "x": -3.0, "y": 24.35, "rotation": 0, "layer": "bottom", "kind": "highSpeed"},
   {"chip": "U_DDR", "x": -22.2, "y": 6.75, "rotation": 0, "layer": "top", "kind": "bulk"},
-  {"chip": "U_DDR", "x": -17.4, "y": 6.75, "rotation": 0, "layer": "bottom", "kind": "bulk"},
+  {"chip": "U_DDR", "x": -17.4, "y": 6.65, "rotation": 0, "layer": "bottom", "kind": "bulk"},
   {"chip": "U1", "x": 3.4, "y": 23.55, "rotation": 0, "layer": "bottom", "kind": "bulk"},
   {"chip": "U1", "x": -1.0, "y": 7.55, "rotation": 0, "layer": "bottom", "kind": "bulk"}
 ]
