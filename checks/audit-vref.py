@@ -1,6 +1,5 @@
 """Check physical DDR reference and bypass connectivity in native circuit JSON (Shapely 2)."""
 import json
-import sys
 from collections import defaultdict
 from pathlib import Path
 
@@ -8,7 +7,7 @@ from shapely import STRtree, affinity, unary_union
 from shapely.geometry import LineString, Point, Polygon, box
 
 
-def verify(elements):
+def verify(elements, check_ddr_power=False):
     names = {e["source_component_id"]: e.get("name") for e in elements if e["type"] == "source_component"}
     pins = {e["source_port_id"]: f"{names.get(e['source_component_id'])}.{e['name']}"
             for e in elements if e["type"] == "source_port"}
@@ -108,6 +107,29 @@ def verify(elements):
             for k in tree.query(g, predicate="intersects"):
                 parent[root(members[k][1])] = root(i)
 
+    if check_ddr_power:
+        base = Path(__file__).resolve().parents[1] / "am3354"
+        supply = ["plane.inner2.VDDS_DDR"]
+        ground = ["plane.inner1.GND"]
+        for ref, filename in (("U1", "processor-balls.json"), ("U_DDR", "memory-balls.json")):
+            balls = json.loads((base / filename).read_text())
+            for ball, signal in balls.items():
+                if signal in ({"VDDS_DDR"} if ref == "U1" else {"VDD", "VDDQ"}):
+                    supply.append(f"{ref}.{ball}")
+                if signal in {"VSS", "VSSQ"}:
+                    ground.append(f"{ref}.{ball}")
+        bypass = json.loads((base / "bypass-placement.json").read_text())
+        supply.extend(f"C_DDR{i}.pin1" for i in range(1, len(bypass)+1))
+        ground.extend(f"C_DDR{i}.pin2" for i in range(1, len(bypass)+1))
+        for group in (supply, ground):
+            plane, *terminals = group
+            plane_id, = labels[plane]
+            disconnected = [label for label in terminals
+                            if not labels[label] or any(root(i) != root(plane_id) for i in labels[label])]
+            if disconnected:
+                raise ValueError(f"{len(disconnected)} terminals disconnected from {plane}: {', '.join(disconnected)}")
+            print(f"{len(terminals)} BGA and bypass terminals physically reach {plane}.")
+
     components = []
     for group in required:
         for label in group:
@@ -124,4 +146,9 @@ def verify(elements):
 
 
 if __name__ == "__main__":
-    verify(json.loads(Path(sys.argv[1]).read_text()))
+    import argparse
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("circuit", type=Path)
+    parser.add_argument("--ddr-power", action="store_true")
+    args = parser.parse_args()
+    verify(json.loads(args.circuit.read_text()), args.ddr_power)
