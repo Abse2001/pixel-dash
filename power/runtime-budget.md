@@ -26,7 +26,7 @@ A nominal 10 Ah pack projects 7.7 or 5.9 hours across these scenarios. A 12 Ah p
 
 ## Sourcing comparisons
 
-The power target is independent of branding. US one-unit prices below exclude tax and shipping. The battery supplier and connector have not been frozen.
+The wide handheld now targets a single nominal 3.7 V, 10,000 mAh pack. The working candidate is the YELUFT listing below. Its mechanical envelope, discharge rating and mating polarity still need confirmation. US one-unit prices below exclude tax and shipping. The battery supplier and connector have not been frozen.
 
 | Pack | Source | Observations |
 |---|---|---|
