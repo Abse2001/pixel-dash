@@ -1,10 +1,10 @@
 [
 	{ "chip": "U1", "ball": "V1", "net": "GND", "x": -6.9801, "y": 7.9499 },
-	{ "chip": "U1", "ball": "F5", "net": "VDDS_DDR", "x": -2.9799, "y": 17.5301 },
+	{ "chip": "U1", "ball": "F5", "net": "VDDS_DDR", "x": -2.9199, "y": 17.5501 },
 	{ "chip": "U1", "ball": "G5", "net": "VDDS_DDR", "x": -3.0199, "y": 16.73 },
 	{ "chip": "U1", "ball": "H5", "net": "VDDS_DDR", "x": -3.0199, "y": 15.9299 },
 	{ "chip": "U1", "ball": "J5", "net": "VDDS_DDR", "x": -3.8199, "y": 15.9301 },
-	{ "chip": "U1", "ball": "K5", "net": "VDDS_DDR", "x": -3.0199, "y": 15.13 },
+	{ "chip": "U1", "ball": "K5", "net": "VDDS_DDR", "x": -3.0699, "y": 15.15 },
 	{ "chip": "U1", "ball": "H6", "net": "GND", "x": -2.1801, "y": 15.9299 },
 	{ "chip": "U1", "ball": "J6", "net": "GND", "x": -2.1801, "y": 15.1301 },
 	{ "chip": "U1", "ball": "M6", "net": "GND", "x": -2.1801, "y": 12.73 },
