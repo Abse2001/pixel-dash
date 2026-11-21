@@ -134,20 +134,39 @@ for e in board:
     if e["type"]=="source_board":
         e["title"]="Pixel Dash AM3354 handheld"
 apply_wide_layout(board)
-# System routes are saved in assembled-board coordinates. Verify both ends so a
-# later control or processor move cannot silently leave copper on the wrong pad.
-top_paths = json.loads((root / "system-top-paths.json").read_text())
-for sid, vertices in top_paths.items():
+# The saved sections alternate between top and bottom in assembled-board coordinates.
+# Check their endpoints before reusing them after a placement change.
+paths = json.loads((root / "system-paths.json").read_text())
+layers = ("top", "inner1", "inner2", "bottom")
+for sid, sections in paths.items():
     source = one(board, "source_trace", source_trace_id=sid)
     start, end = [one(board, "pcb_port", source_port_id=pid) for pid in source["connected_source_port_ids"]]
-    if len(vertices) < 2 or any("top" not in pad["layers"] or
-            dist(point, (pad["x"], pad["y"])) > 1e-5 for point, pad in ((vertices[0], start), (vertices[-1], end))):
-        raise ValueError(f"Saved top route no longer lands on both terminals of {sid}")
-    route = [dict(route_type="wire", layer="top", width=0.102, x=x, y=y) for x, y in vertices]
+    if not sections or any(len(section) < 2 for section in sections):
+        raise ValueError(f"Empty route section on {sid}")
+    last_layer = layers[-1] if len(sections) % 2 == 0 else layers[0]
+    for pad, point, layer in ((start, sections[0][0], "top"), (end, sections[-1][-1], last_layer)):
+        if layer not in pad["layers"] or dist(point, (pad["x"], pad["y"])) > 1e-5:
+            raise ValueError(f"Saved route no longer lands on a terminal of {sid}")
+    route = []
+    trace_id = "pcb_" + sid
+    key = source["subcircuit_connectivity_map_key"]
+    for index, section in enumerate(sections):
+        layer = "bottom" if index % 2 else "top"
+        if index:
+            x, y = section[0]
+            if dist((x, y), sections[index-1][-1]) > 1e-7:
+                raise ValueError(f"Mismatch at via {index} on {sid}")
+            previous = "top" if index % 2 else "bottom"
+            route.append(dict(route_type="via", x=x, y=y, from_layer=previous, to_layer=layer))
+            board.append(dict(type="pcb_via", pcb_via_id=f"{trace_id}_via_{index}", pcb_trace_id=trace_id,
+                              source_trace_id=sid, subcircuit_connectivity_map_key=key, x=x, y=y,
+                              from_layer=previous, to_layer=layer, layers=list(layers),
+                              hole_diameter=0.15, outer_diameter=0.30))
+        route.extend(dict(route_type="wire", layer=layer, width=0.102, x=x, y=y) for x, y in section)
     route[0]["start_pcb_port_id"] = start["pcb_port_id"]
     route[-1]["end_pcb_port_id"] = end["pcb_port_id"]
-    board.append(dict(type="pcb_trace", pcb_trace_id="pcb_" + sid, source_trace_id=sid,
-                      subcircuit_connectivity_map_key=source["subcircuit_connectivity_map_key"], route=route))
+    board.append(dict(type="pcb_trace", pcb_trace_id=trace_id, source_trace_id=sid,
+                      subcircuit_connectivity_map_key=key, route=route))
     board.remove(one(board, "pcb_trace_missing_error", pcb_trace_missing_error_id="open_" + sid))
 restrict_ground(board,ground(board)["source_net_id"])
 add_inner2_ground(board, ground(board)["source_net_id"])

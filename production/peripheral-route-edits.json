@@ -1482,5 +1482,121 @@
       "x": -18.199894,
       "y": 32
     }
+  ],
+  "pcb_trace_1488": [
+    {
+      "route_type": "wire",
+      "width": 0.1,
+      "start_pcb_port_id": "pcb_port_293",
+      "layer": "top",
+      "x": 32.267184,
+      "y": -21.5
+    },
+    {
+      "route_type": "wire",
+      "width": 0.1,
+      "layer": "top",
+      "x": 32.24999999999612,
+      "y": -21.50000000000111
+    },
+    {
+      "route_type": "wire",
+      "width": 0.1,
+      "layer": "top",
+      "x": 32.24999999999612,
+      "y": -23.350000000001003
+    },
+    {
+      "route_type": "wire",
+      "width": 0.1,
+      "layer": "top",
+      "x": 32.400000000000006,
+      "y": -23.5
+    },
+    {
+      "route_type": "via",
+      "from_layer": "top",
+      "to_layer": "inner1",
+      "x": 32.400000000000006,
+      "y": -23.5
+    },
+    {
+      "route_type": "wire",
+      "width": 0.1,
+      "layer": "inner1",
+      "x": 32.400000000000006,
+      "y": -23.5
+    },
+    {
+      "route_type": "wire",
+      "width": 0.1,
+      "layer": "inner1",
+      "x": 32.39999999999817,
+      "y": -26
+    },
+    {
+      "route_type": "wire",
+      "layer": "inner1",
+      "width": 0.1,
+      "x": 32.4,
+      "y": -26.7
+    },
+    {
+      "route_type": "wire",
+      "layer": "inner1",
+      "width": 0.1,
+      "x": 33.1,
+      "y": -27.4
+    },
+    {
+      "route_type": "wire",
+      "layer": "inner1",
+      "width": 0.1,
+      "x": 33.1,
+      "y": -29.3
+    },
+    {
+      "route_type": "wire",
+      "width": 0.1,
+      "layer": "inner1",
+      "x": 32.5,
+      "y": -29.9
+    },
+    {
+      "route_type": "via",
+      "from_layer": "inner1",
+      "to_layer": "top",
+      "x": 32.5,
+      "y": -29.9
+    },
+    {
+      "route_type": "wire",
+      "width": 0.1,
+      "layer": "top",
+      "x": 32.5,
+      "y": -29.9
+    },
+    {
+      "route_type": "wire",
+      "width": 0.1,
+      "layer": "top",
+      "x": 32.499999999996106,
+      "y": -29.100000000000733
+    },
+    {
+      "route_type": "wire",
+      "width": 0.1,
+      "layer": "top",
+      "x": 32.24999999999612,
+      "y": -28.850000000000747
+    },
+    {
+      "route_type": "wire",
+      "width": 0.1,
+      "end_pcb_port_id": "pcb_port_270",
+      "layer": "top",
+      "x": 32.2400133,
+      "y": -28.857916600000003
+    }
   ]
 }
