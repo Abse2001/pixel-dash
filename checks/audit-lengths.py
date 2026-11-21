@@ -1,11 +1,18 @@
 """Measure saved copper from a rendered tscircuit circuit JSON. Units are mm."""
+import argparse
 import csv
 import json
 import math
 import sys
 from pathlib import Path
 
-elements = json.loads(Path(sys.argv[1]).read_text())
+parser = argparse.ArgumentParser(description=__doc__)
+parser.add_argument("circuit", type=Path)
+parser.add_argument("--through-span-mm", type=float, help="Estimate barrel contribution using the L1–L4 copper separation")
+args = parser.parse_args()
+if args.through_span_mm is not None and not (math.isfinite(args.through_span_mm) and args.through_span_mm > 0):
+    parser.error("The through span must be finite and positive")
+elements = json.loads(args.circuit.read_text())
 names = {e["source_trace_id"]: e.get("name", "") for e in elements if e["type"] == "source_trace"}
 source_traces = {e["source_trace_id"]: e for e in elements if e["type"] == "source_trace"}
 pcb_ports = {e["pcb_port_id"]: e for e in elements if e["type"] == "pcb_port"}
@@ -37,7 +44,11 @@ for trace in elements:
         raise ValueError(f"{name} copper lands on different ports from its schematic")
     length = sum(math.hypot(v["x"] - u["x"], v["y"] - u["y"]) for u, v in zip(path, path[1:]))
     direct = abs(a["x"] - b["x"]) + abs(a["y"] - b["y"])
-    rows[name] = length, direct, sum(v["route_type"] == "via" for v in path)
+    transitions = [v for v in path if v["route_type"] == "via"]
+    if args.through_span_mm is not None and any({v["from_layer"], v["to_layer"]} != {"top", "bottom"}
+                                                 for v in transitions):
+        raise ValueError(f"{name} has a partial-depth via. Its barrel requires the actual layer span.")
+    rows[name] = length, direct, len(transitions)
 
 lanes = [{f"DDR_D{i}" for i in range(8 * n, 8 * n + 8)} |
          {f"DDR_{p}{n}" for p in ("DQM", "DQS", "DQSn")} for n in range(2)]
@@ -78,6 +89,10 @@ for label, nets, limit in [
     skew = max(lengths) - min(lengths)
     print(f"{label} skew across {len(lengths)}/{len(nets)} signals {skew:.3f} mm, limit {limit:.3f}", file=sys.stderr)
     failed |= skew > limit
+    if args.through_span_mm is not None:
+        physical = [rows[n][0] + rows[n][2] * args.through_span_mm for n in nets if n in rows]
+        print(f"{label} geometric spread including {args.through_span_mm:g} mm per traversal: "
+              f"{max(physical)-min(physical):.3f} mm", file=sys.stderr)
 
 out = csv.writer(sys.stdout)
 out.writerow(["Signal", "Planar length (mm)", "Through vias"])
