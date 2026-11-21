@@ -1,0 +1,37 @@
+# Pixel Dash gameplay energy budget
+
+This estimate sets the battery search range for the single-PCB wide handheld. The design point is a representative game at 800 MHz, 75% backlight PWM and the built-in speaker. Ambient temperature, speaker volume, workload and converter efficiency affect the result. The two columns are design allowances, pending battery-side measurements.
+
+| Average load | Representative game | Heavier game and louder audio |
+|---|---:|---:|
+| 7-inch ER-TFT070A2-6 backlight, 9.6 V × 180 mA × 0.75 | 1.30 W | 1.30 W |
+| AM3354, memory and associated I/O | 1.35 W | 1.70 W |
+| Panel logic, analog rails and touch allowance | 0.35 W | 0.55 W |
+| Audio | 0.45 W | 0.80 W |
+| microSD, controls and other board loads | 0.25 W | 0.30 W |
+| Total at the loads | 3.70 W | 4.65 W |
+| Assumed aggregate conversion efficiency | 86% | 83% |
+| **Average at the battery** | **4.30 W** | **5.60 W** |
+
+BuyDisplay specifies 180 mA at a typical 9.6 V for the bare panel backlight. Actual luminance at 75% PWM depends on the driver and optics. TI's AM335x reference measurements give 0.953 W total at 800 MHz under Dhrystone. This is a bench reference for the processor allowance. The table includes an additional allowance for the Pixel Dash memory and graphics workload. [BuyDisplay panel datasheet](https://www.buydisplay.com/download/manual/ER-TFT070A2-6_Datasheet.pdf) · [TI AM335x power measurements](https://e2e.ti.com/cfs-file/__key/communityserver-discussions-components-files/791/AM335x-Power-Consumption-Summary-_2D00_-Texas-Instruments-Wiki.pdf)
+
+At 3.7 V nominal and 90% usable nameplate energy, required capacity in Ah is average battery watts × hours / (3.7 × 0.90). The usable-energy allowance covers cutoff and capacity variation for a new pack. Aging requires a separate margin.
+
+| Goal | Representative | Heavier |
+|---|---:|---:|
+| 6 hours | 7.75 Ah / 28.7 Wh | 10.09 Ah / 37.3 Wh |
+| 8 hours | 10.33 Ah / 38.2 Wh | 13.45 Ah / 49.8 Wh |
+
+A nominal 10 Ah pack projects 7.7 or 5.9 hours across these scenarios. A 12 Ah pack projects 9.3 or 7.1 hours. A 13.5 Ah minimum capacity targets eight hours at the heavier design point. At 85% backlight the LEDs add 0.173 W before conversion, or about 0.5 Ah extra over eight hours. Qualify by integrating battery voltage and current during sustained representative gameplay at the agreed brightness and volume, from full charge to normal shutdown.
+
+## Sourcing comparisons
+
+The power target is independent of branding. US one-unit prices below exclude tax and shipping. The battery supplier and connector have not been frozen.
+
+| Pack | Source | Observations |
+|---|---|---|
+| MakerFocus 9065115, 10 Ah | Amazon ASIN B093WS6C66 | Flat pack, seller nominal 112 × 65 × 8.8 mm. Current Amazon checkout price and keyed plug polarity unverified. Manufacturer lists 3 A maximum working current and a 1.8–2.1 A protection threshold. Resolve that discrepancy against low-state-of-charge gaming peaks. |
+| Adafruit 5035 / PKCELL, 10.05 Ah typical | DigiKey 1528-5035-ND, $29.95 | Manufacturer minimum 9.5 Ah, maximum envelope 69 × 56.5 × 19 mm, 3 A continuous discharge. The vendor confirms compatibility with its charger wiring. The BQ24074 reference board connects BATT contact 1 to VLIPO and 2 to GND. |
+| PiJuice PIS-1129, 12 Ah | DigiKey, $47.28 | Listed 135 × 68 × 9 mm. Different connector/harness requires its own drawing and PCB pin-map verification. |
+
+[MakerFocus specifications](https://www.makerfocus.com/collections/battery) · [Amazon listing](https://www.amazon.com/dp/B093WS6C66) · [DigiKey 5035](https://www.digikey.com/en/products/detail/adafruit-industries-llc/5035/14625568) · [PKCELL pack drawing, p. 8](https://cdn-shop.adafruit.com/product-files/5035/5035_10050mAh_3.7V_A1____20210511.pdf) · [Adafruit charger board](https://github.com/adafruit/Adafruit-BQ24074-PCB/blob/844404b10e1a87820ee9cb9024d85f67f4bc4bfd/Adafruit_BQ24074.brd) · [DigiKey PiJuice battery listings](https://www.digikey.com/en/products/filter/batteries-rechargeable-secondary/maker-emporium-ltd/91)
