@@ -1,0 +1,10 @@
+via,layer,unrelated_net,edge_gap_mm,via_x_mm,via_y_mm,trace
+pcb_via_116,top,unnamedsubcircuitsubcircuit_source_group_0_connectivity_net46,0.1250000,-33.9,-28.95,BAT_BUCKBOOST_L1
+pcb_via_500,top,unnamedsubcircuitsubcircuit_source_group_0_connectivity_net73,0.1346627,-44.300000000001575,-23.65000000000093,.C_AMP_IN_COUPLE > .pin2 to .R_SPK_LIMIT > .pin1
+pcb_via_67,inner1,unnamedsubcircuitsubcircuit_source_group_0_connectivity_net54,0.1349454,-17.659755,-26.049039,USB_VALID_TO_BASE_RESISTOR
+pcb_via_704,top,unnamedsubcircuitsubcircuit_source_group_0_connectivity_net135,0.1399776,14.199999999995086,-15.850000000001643,JOY_RY_RAW
+pcb_via_116,top,unnamedsubcircuitsubcircuit_source_group_0_connectivity_net42,0.1444732,-33.9,-28.95,BAT_INPUT_CAP_A
+pcb_via_23,top,unnamedsubcircuitsubcircuit_source_group_0_connectivity_net79,0.1446393,-41,-12.364999999999998,.U_SPK_AMP > .OUT_L_NEG to .FB_SPK_NEG > .pin1
+pcb_via_157,top,unnamedsubcircuitsubcircuit_source_group_0_connectivity_net31,0.1484581,-1.8,35.75,VBUS_A
+pcb_via_384,inner1,unnamedsubcircuitsubcircuit_source_group_0_connectivity_net119,0.1500000,43.149999999999366,5.14999999999997,TOUCH_SDA_PULLUP
+pcb_via_384,bottom,unnamedsubcircuitsubcircuit_source_group_0_connectivity_net114,0.1500000,43.149999999999366,5.14999999999997,TOUCH_RESET

@@ -1,0 +1,92 @@
+Former designator,Manufacturer part,JLCPCB part,Function removed
+C_ADC,CL05B104KO5NNNC,C1525,on-chip regulator and bypass
+C_CORE,CL10A475KO8NNNC,C19666,on-chip regulator and bypass
+C_DVDD1,CL05B104KO5NNNC,C1525,processor supply bypass
+C_DVDD2,CL05B104KO5NNNC,C1525,processor supply bypass
+C_DVDD2_BULK,CL05A475MP5NRNC,C23733,processor supply bypass
+C_DVDD3,CL05B104KO5NNNC,C1525,processor supply bypass
+C_FLASH,CL05B104KO5NNNC,C1525,compute and memory
+C_GPU_ADC,CL05B104KO5NNNC,C1525,second processor and dedicated support
+C_GPU_AUX_HF,CL05B104KO5NNNC,C1525,second processor and dedicated support
+C_GPU_AUX_IN,CL10A106KP8NNNC,C19702,second processor and dedicated support
+C_GPU_AUX_OUT_A,CL05B104KO5NNNC,C1525,second processor and dedicated support
+C_GPU_AUX_OUT_B,CL21A226MAQNNNE,C45783,second processor and dedicated support
+C_GPU_AVDD,CL05A475MP5NRNC,C23733,second processor and dedicated support
+C_GPU_CORE_BULK,CL05A475MP5NRNC,C23733,second processor and dedicated support
+C_GPU_DVDD1,CL05B104KO5NNNC,C1525,second processor and dedicated support
+C_GPU_DVDD2,CL05B104KO5NNNC,C1525,second processor and dedicated support
+C_GPU_DVDD3,CL05B104KO5NNNC,C1525,second processor and dedicated support
+C_GPU_FLASH,CL05B104KO5NNNC,C1525,second processor and dedicated support
+C_GPU_IOVDD1,CL05B104KO5NNNC,C1525,second processor and dedicated support
+C_GPU_IOVDD2,CL05B104KO5NNNC,C1525,second processor and dedicated support
+C_GPU_IOVDD3,CL05B104KO5NNNC,C1525,second processor and dedicated support
+C_GPU_IOVDD4,CL05B104KO5NNNC,C1525,second processor and dedicated support
+C_GPU_IOVDD5,CL05B104KO5NNNC,C1525,second processor and dedicated support
+C_GPU_IOVDD6,CL05B104KO5NNNC,C1525,second processor and dedicated support
+C_GPU_IOVDD7,CL05B104KO5NNNC,C1525,second processor and dedicated support
+C_GPU_IOVDD8,CL05B104KO5NNNC,C1525,second processor and dedicated support
+C_GPU_QSPI,CL05B104KO5NNNC,C1525,second processor and dedicated support
+C_GPU_RAM,CL05B104KO5NNNC,C1525,second processor and dedicated support
+C_GPU_RAM_BULK,CL05A105KA5NQNC,C52923,second processor and dedicated support
+C_GPU_VREG_IN,CL10A106KP8NNNC,C19702,second processor and dedicated support
+C_GPU_VREG_OUT,CL10A475KO8NNNC,C19666,second processor and dedicated support
+C_GPU_XIN,0402CG150J500NT,C1548,second processor and dedicated support
+C_GPU_XOUT,0402CG150J500NT,C1548,second processor and dedicated support
+C_IOVDD1,CL05B104KO5NNNC,C1525,processor supply bypass
+C_IOVDD2,CL05B104KO5NNNC,C1525,processor supply bypass
+C_IOVDD3,CL05B104KO5NNNC,C1525,processor supply bypass
+C_IOVDD4,CL05B104KO5NNNC,C1525,processor supply bypass
+C_IOVDD5,CL05B104KO5NNNC,C1525,processor supply bypass
+C_IOVDD6,CL05B104KO5NNNC,C1525,processor supply bypass
+C_IOVDD7,CL05B104KO5NNNC,C1525,processor supply bypass
+C_IOVDD8,CL05B104KO5NNNC,C1525,processor supply bypass
+C_PSRAM,CL05B104KO5NNNC,C1525,compute and memory
+C_PSRAM_BULK,CL05A105KA5NQNC,C52923,compute and memory
+C_QSPI_USB,CL05B104KO5NNNC,C1525,compute and memory
+C_VREG_AVDD,CL05A475MP5NRNC,C23733,on-chip regulator and bypass
+C_VREG_IN,CL10A106KP8NNNC,C19702,on-chip regulator and bypass
+C_XIN,0402CG150J500NT,C1548,oscillator
+C_XOUT,0402CG150J500NT,C1548,oscillator
+L_GPU_AUX,MWSA0402S-1R0MT,C408332,second processor and dedicated support
+L_GPU_CORE,AOTA_B201610S3R3_101_T,C42411119,second processor and dedicated support
+R_BOOT,0402WGF1002TCE,C25744,processor reset and programming
+R_BOOTSEL,0402WGF1001TCE,C11702,processor reset and programming
+R_GPU_AUX_EN,0402WGF4701TCE,C25900,second processor and dedicated support
+R_GPU_BOOT,0402WGF1001TCE,C11702,second processor and dedicated support
+R_GPU_FB_BOTTOM_A,RT0402BRD0716K5L,C852559,second processor and dedicated support
+R_GPU_FB_BOTTOM_B,RT0402BRD0716K5L,C852559,second processor and dedicated support
+R_GPU_FB_BOTTOM_C,RT0402BRD0716K5L,C852559,second processor and dedicated support
+R_GPU_FB_TOP,RT0402BRD0749K9L,C852808,second processor and dedicated support
+R_GPU_FEED,0603WAF0000T5E,C21189,second processor and dedicated support
+R_GPU_FLASH_CS,0402WGF1002TCE,C25744,second processor and dedicated support
+R_GPU_RAM_CS,0402WGF1002TCE,C25744,second processor and dedicated support
+R_GPU_READY,0402WGF4701TCE,C25900,second processor and dedicated support
+R_GPU_RUN,0402WGF1002TCE,C25744,second processor and dedicated support
+R_GPU_VREG_FILTER,0402WGF330JTCE,C25105,second processor and dedicated support
+R_GPU_XOUT,0402WGF1001TCE,C11702,second processor and dedicated support
+R_PSRAM_CE,0402WGF1001TCE,C11702,compute and memory
+R_RUN,0402WGF1002TCE,C25744,processor reset and programming
+R_USB_DM,0402WGF270JTCE,C25100,USB transceiver series termination
+R_USB_DP,0402WGF270JTCE,C25100,USB transceiver series termination
+R_VREG_AVDD,BLM15PD121SN1D,C76891,on-chip regulator and bypass
+R_XOUT,0402WGF1001TCE,C11702,oscillator
+TP_GPU_BOOT,,,second processor and dedicated support
+TP_GPU_GND,,,second processor and dedicated support
+TP_GPU_RUN,,,second processor and dedicated support
+TP_GPU_SWCLK,,,second processor and dedicated support
+TP_GPU_SWDIO,,,second processor and dedicated support
+TP_GPU_VDD,,,second processor and dedicated support
+TP_SWCLK,,,processor reset and programming
+TP_SWDIO,,,processor reset and programming
+U1,RP2350B,C42415655,compute and memory
+U2,W25Q256JVFIQ,C779876,compute and memory
+U_BOOTSEL,SKRPACE010,C139797,processor reset and programming
+U_CORE_INDUCTOR,AOTA_B201610S3R3_101_T,C42411119,on-chip regulator and bypass
+U_GPU,RP2350B,C42415655,second processor and dedicated support
+U_GPU_AUX,TPS62A02PDDCR,C22445521,second processor and dedicated support
+U_GPU_FLASH,W25Q32JVSSIQ,C179173,second processor and dedicated support
+U_GPU_RAM,APS6404L-3SQR-ZR,C3040877,second processor and dedicated support
+U_PSRAM,APS6404L-3SQR-ZR,C3040877,compute and memory
+U_RUN,SKRPACE010,C139797,processor reset and programming
+U_XTAL,ABM8-272-T3,C20625731,oscillator
+Y_GPU,ABM8-272-T3,C20625731,second processor and dedicated support
