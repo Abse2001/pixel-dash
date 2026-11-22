@@ -41,9 +41,31 @@ def pad_shape(p):
     return affinity.translate(affinity.rotate(land, angle, origin=(0, 0)), *center)
 
 
+def verify_source_groups(traces, keys):
+    # Reconstruct the schematic nodes without relying on CAD connectivity labels.
+    parents = {}
+    def root(terminal):
+        parents.setdefault(terminal, terminal)
+        while parents[terminal] != terminal:
+            parents[terminal] = parents[parents[terminal]]
+            terminal = parents[terminal]
+        return terminal
+
+    for trace_id, trace in traces.items():
+        for terminal in trace["connected_source_port_ids"] + trace["connected_source_net_ids"]:
+            parents[root(terminal)] = root(trace_id)
+    group_keys = {}
+    key_groups = {}
+    for trace_id, key in keys.items():
+        node = root(trace_id)
+        if group_keys.setdefault(node, key) != key or key_groups.setdefault(key, node) != node:
+            raise ValueError(f"Schematic connectivity disagrees with net label on {trace_id}")
+
+
 def copper(elements):
     by_id = {e[e["type"]+"_id"]: e for e in elements if e["type"]+"_id" in e}
     traces, keys = trace_net_keys(elements)
+    verify_source_groups(traces, keys)
     port_nets = {}
     for trace_id, trace in traces.items():
         for source_port_id in trace["connected_source_port_ids"]:
@@ -60,6 +82,9 @@ def copper(elements):
     for e in elements:
         kind = e["type"]
         if kind == "pcb_trace":
+            net = keys[e["source_trace_id"]]
+            if e.get("subcircuit_connectivity_map_key", net) != net:
+                raise ValueError(f"PCB trace has the wrong net assignment: {e['pcb_trace_id']}")
             strokes = defaultdict(list)
             for a, b in zip(e["route"], e["route"][1:]):
                 if xy(a) == xy(b):
@@ -70,15 +95,21 @@ def copper(elements):
                 width = a["width"] if "width" in a else b["width"]
                 strokes[layer].append(LineString([xy(a), xy(b)]).buffer(width/2, quad_segs=64))
             for layer, pieces in strokes.items():
-                add(layer, e["pcb_trace_id"], keys[e["source_trace_id"]], unary_union(pieces))
+                add(layer, e["pcb_trace_id"], net, unary_union(pieces))
         elif kind in ("pcb_smtpad", "pcb_plated_hole", "pcb_via"):
             element_id = e[kind+"_id"]
             port = by_id.get(e.get("pcb_port_id"), {})
             source = by_id.get(port.get("source_port_id"), {})
             trace = by_id.get(e.get("pcb_trace_id"), {})
-            key = (e.get("subcircuit_connectivity_map_key") or source.get("subcircuit_connectivity_map_key")
-                   or port_nets.get(source.get("source_port_id"))
-                   or keys.get(e.get("source_trace_id", trace.get("source_trace_id"))))
+            source_net = by_id.get(e.get("source_net_id"), {})
+            assignments = {value for value in (
+                e.get("subcircuit_connectivity_map_key"), source.get("subcircuit_connectivity_map_key"),
+                port_nets.get(source.get("source_port_id")), source_net.get("subcircuit_connectivity_map_key"),
+                keys.get(e.get("source_trace_id")), keys.get(trace.get("source_trace_id"))
+            ) if value}
+            if len(assignments) > 1:
+                raise ValueError(f"Conflicting schematic and copper net assignments for {element_id}")
+            key = next(iter(assignments), None)
             # An unconnected land remains conductive and must be tested against every other net.
             key = key or port.get("pcb_port_id") or element_id
             shape = Point(xy(e)).buffer(e["outer_diameter"]/2, quad_segs=64) if kind == "pcb_via" else pad_shape(e)

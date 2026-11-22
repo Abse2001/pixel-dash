@@ -173,3 +173,5 @@ Four restored blind ground vias connect the retained joystick filter capacitors 
 Seven restored L1–L2 ground vias connect the speaker amplifier bulk return, PGND2, speaker connector ground, converter input capacitor and the two retained ground-side resistors to the main plane. The physical copper walk with `--retained-returns` verifies all six terminals. After these repairs 23 inherited transitions still lack matching plated spans.
 
 Two detached tracks, pcb_trace_1161 and pcb_trace_1437, touched no surviving trace, via, component land or plane. Removing them drops the inherited missing-transition count to 19. The processor-to-amplifier PWM signal has its own saved route. The export now matches 7,212 strokes from 540 PCB traces.
+
+The independent copper check reconstructs schematic nodes from connected source ports and named nets, then cross-checks PCB trace, pad and via net assignments. This catches inconsistent labels that could make two unrelated conductors appear to share a net. Deliberately merging two source net labels and mislabeling a routed via in separate test copies both triggered errors.
