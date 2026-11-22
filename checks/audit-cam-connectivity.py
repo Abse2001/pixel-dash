@@ -197,6 +197,9 @@ def main():
         print("UART0 RX, TX and ground reach three distinct probe networks.")
     if args.pmic_controls:
         for start, end in (
+            ("U_PMIC.L4A", "L_PMIC_IO.pin1"), ("U_PMIC.L4B", "L_PMIC_IO.pin2"),
+            ("U_PMIC.DCDC4", "C_PMIC_IO_A.pin1"), ("U_PMIC.DCDC4", "C_PMIC_IO_B.pin1"),
+            ("TP_UART_GND.pin1", "C_PMIC_IO_A.pin2"), ("TP_UART_GND.pin1", "C_PMIC_IO_B.pin2"),
             ("C_PMIC_DDR.pin1", "U_PMIC.IN_LS1"),
             ("U_PMIC.nWAKEUP", "R_PMIC_WAKE.pin1"),
             ("U_PMIC.nINT", "U1.T14"),
@@ -205,6 +208,8 @@ def main():
             if terminals[start] != terminals[end]:
                 raise ValueError(f"PMIC connection open between {start} and {end}")
             print(f"PMIC copper verified between {start} and {end}.")
+        if len({terminals["U_PMIC." + name] for name in ("L4A", "L4B", "DCDC4", "IN_DCDC4", "EP")}) != 5:
+            raise ValueError("Exported DCDC4 switch, output, input or ground nodes are shorted")
     if args.handheld_ground:
         ground, = (e for e in board if e["type"] == "source_net" and e["name"] == "GND")
         ground_nodes = nodes_by_net[ground["subcircuit_connectivity_map_key"]]

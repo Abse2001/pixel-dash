@@ -213,5 +213,31 @@ export function PowerControl() {
     {Object.entries(processorBalls).filter(([, rail]) => rail === "VDDA3P3V_USB0" || rail === "VDDA3P3V_USB1").map(([ball]) => (
       <trace key={ball} from={".U1 > ." + ball} to="net.VDD_IO_3V3_SEQ"/>
     ))}
+    <MainInductor name="L_PMIC_IO" layer="bottom" pcbX={-16.4} pcbY={22.6} pcbRotation={270}/>
+    <via name="V_DCDC4_A" pcbX={-16.30011} pcbY={22.249942} outerDiameter={0.40} holeDiameter={0.20}
+      connectsTo={[".U_PMIC > .L4A", "net.DCDC4_SW_A"]}/>
+    <via name="V_DCDC4_B" pcbX={-16.50011} pcbY={22.750068} outerDiameter={0.40} holeDiameter={0.20}
+      connectsTo="net.DCDC4_SW_B"/>
+    <trace from=".U_PMIC > .L4B" to=".V_DCDC4_B > .top" thickness={0.26} pcbStraightLine/>
+    <trace from=".V_DCDC4_A > .bottom" to=".L_PMIC_IO > .pin1" thickness={0.36} pcbStraightLine/>
+    <trace from=".V_DCDC4_B > .bottom" to=".L_PMIC_IO > .pin2" thickness={0.36} pcbStraightLine/>
+    <via name="V_DCDC4_OUT" pcbX={-15.10011} pcbY={23.18994} outerDiameter={0.40} holeDiameter={0.20}
+      connectsTo="net.VDD_IO_3V3_SEQ"/>
+    <trace from=".U_PMIC > .DCDC4" to=".V_DCDC4_OUT > .top" thickness={0.34} pcbStraightLine/>
+    {[
+      { name: "C_PMIC_IO_A", x: -13.3, y: 21.5, rotation: 90, groundY: 19.90742 },
+      { name: "C_PMIC_IO_B", x: -10.9, y: 24.2, rotation: 270, groundY: 25.79258 },
+    ].map(({ name, x, y, rotation, groundY }) => (
+      <Fragment key={name}>
+        <BackupOutputCapacitor name={name} layer="bottom" pcbX={x} pcbY={y} pcbRotation={rotation}/>
+        <trace from=".V_DCDC4_OUT > .bottom" to={`.${name} > .pin1`} thickness={0.34} pcbStraightLine/>
+        <trace from={`.${name} > .pin2`} to="net.GND"/>
+        {[-0.27, 0.27].flatMap(dx => [-0.27, 0.27].map(dy => (
+          <via key={dx + "/" + dy} name={`V_${name}_${dx < 0 ? 0 : 1}${dy < 0 ? 0 : 1}`}
+            pcbX={x + dx} pcbY={groundY + dy} fromLayer="bottom" toLayer="inner2"
+            outerDiameter={0.28} holeDiameter={0.125} connectsTo={[`.${name} > .pin2`, "net.GND"]}/>
+        )))}
+      </Fragment>
+    ))}
   </>
 }

@@ -177,7 +177,18 @@ apply_wide_layout(board)
 paths = json.loads((root / "system-paths.json").read_text())
 layers = ("top", "inner1", "inner2", "bottom")
 for saved_name, plan in paths.items():
-    if saved_name.startswith(("system_", "rail_")):
+    if isinstance(plan, dict) and "rail_terminals" in plan:
+        rail = one(board, "source_net", name=plan["rail"])
+        terminals = [port(*label.split(".")) for label in plan["rail_terminals"]]
+        if len(terminals) != 2 or any(p.get("subcircuit_connectivity_map_key") !=
+                                       rail["subcircuit_connectivity_map_key"] for p in terminals):
+            raise ValueError(f"Incorrect physical rail endpoints on {saved_name}")
+        source = dict(type="source_trace", source_trace_id=saved_name, name=saved_name,
+                      connected_source_port_ids=[p["source_port_id"] for p in terminals],
+                      connected_source_net_ids=[rail["source_net_id"]],
+                      subcircuit_connectivity_map_key=rail["subcircuit_connectivity_map_key"])
+        board.append(source)
+    elif saved_name.startswith(("system_", "rail_")):
         source = one(board, "source_trace", source_trace_id=saved_name)
     else:
         source = one(board, "source_trace", display_name=saved_name)
