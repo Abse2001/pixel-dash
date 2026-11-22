@@ -340,6 +340,12 @@ for index, (x, y) in enumerate(json.loads((root / "system-ground-stitches.json")
                       subcircuit_connectivity_map_key=gnd["subcircuit_connectivity_map_key"],
                       x=x, y=y, from_layer="top", to_layer="bottom", layers=list(layers),
                       hole_diameter=0.20, outer_diameter=0.40))
+# Bare probe lands need exposed copper without stencil apertures.
+probe_parts = {e["source_component_id"] for e in board
+               if e["type"] == "source_component" and e.get("ftype") == "simple_test_point"}
+probe_footprints = {e["pcb_component_id"] for e in board
+                    if e["type"] == "pcb_component" and e.get("source_component_id") in probe_parts}
+board = [e for e in board if e["type"] != "pcb_solder_paste" or e.get("pcb_component_id") not in probe_footprints]
 restrict_ground(board, gnd["source_net_id"])
 add_inner2_ground(board, ground(board)["source_net_id"])
 Path(sys.argv[2]).write_text(json.dumps(board,separators=(",",":")))

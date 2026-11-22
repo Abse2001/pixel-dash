@@ -1,0 +1,58 @@
+drill_npth.drl matches 19 round hits and 0 slots
+drill-L1-L4.drl matches 552 round hits and 6 slots
+drill-L1-L2.drl matches 134 round hits and 0 slots
+drill-L2-L3.drl matches 11 round hits and 0 slots
+drill-L3-L4.drl matches 36 round hits and 0 slots
+50 distinct DDR ball pairs connected. 739 plated barrels checked. No shorts between mapped land nets.
+UART0 RX, TX and ground reach three distinct probe networks.
+OPEN channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net62 has 2 separate CAM networks: U1.C6 | U_PMIC.PWR_EN
+OPEN channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net63 has 3 separate CAM networks: R_PMIC_WAKE.pin1 | U1.C5 | U_PMIC.nWAKEUP
+OPEN channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net65 has 2 separate CAM networks: U1.T14 | R_PMIC_IRQ.pin1, U_PMIC.nINT
+OPEN channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net73 has 2 separate CAM networks: C_PMIC_DDR.pin1, L_PMIC_DDR.pin2, U_PMIC.FB3 | U_PMIC.IN_LS1
+OPEN channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net75 has 3 separate CAM networks: U1.D6 | U1.B4 | C_PMIC_RTC_CORE.pin1, L_PMIC_RTC_CORE.pin2, U_PMIC.FB5
+OPEN channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net77 has 3 separate CAM networks: R_PMIC_WAKE.pin2 | U1.D7 | C_PMIC_RTC_IO.pin1, L_PMIC_RTC_IO.pin2, U_PMIC.FB6
+OPEN channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net78 has 3 separate CAM networks: R_PMIC_POR.pin1 | U1.B15 | U_PMIC.PGOOD
+OPEN channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net80 has 2 separate CAM networks: U1.B5 | U_PMIC.PGOOD_BU
+OPEN channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net83 has 21 separate CAM networks: U1.L6 | U1.F6 | U1.N8 | U1.N9 | U1.L7 | U1.L8 | U1.L9 | U1.K8 | U1.K6 | U1.G6 | U1.G7 | U1.F7 | U1.N13 | U1.N12 | U1.M13 | U1.M11 | U1.K12 | U1.J12 | U1.H11 | U1.G10 | C_PMIC_CORE.pin1, L_PMIC_CORE.pin2, U_PMIC.FB1
+OPEN channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net85 has 8 separate CAM networks: U1.F10 | U1.J13 | U1.H13 | U1.G13 | U1.F13 | U1.F11 | U1.F12 | C_PMIC_MPU.pin1, L_PMIC_MPU.pin2, U_PMIC.FB2
+OPEN channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net86 has 19 separate CAM networks: R_PMIC_IRQ.pin2, R_PMIC_POR.pin2 | U1.P5 | U1.N5 | U1.P6 | U1.E10 | U1.P13 | U1.P12 | U1.E12 | U1.E13 | U1.E11 | U1.L14 | U1.K14 | U1.G14 | U1.F14 | R_PMIC_SCL.pin2, R_PMIC_SDA.pin2, R_SYSBOOT0.pin1 | C_JOY_ADC.pin1, U_JOY_ADC.VDD | R_TOUCH_IRQ.pin2 | R_TOUCH_SDA.pin2 | R_TOUCH_SCL.pin2
+OPEN raster_LCD_LED_A has 2 separate CAM networks: J_LCD.pin2 | J_LCD.pin1
+OPEN raster_LCD_LED_K has 2 separate CAM networks: J_LCD.pin4 | J_LCD.pin3
+OPEN raster_LCD_VCOM has 2 separate CAM networks: J_LCD.pin46 | J_LCD.pin6
+OPEN system_LCD_D0 has 3 separate CAM networks: U1.R1 | R_SYSBOOT0.pin2 | J_LCD.pin32
+OPEN system_LCD_D1 has 3 separate CAM networks: U1.R2 | R_SYSBOOT1.pin2 | J_LCD.pin31
+OPEN system_LCD_D10 has 3 separate CAM networks: U1.U3 | R_SYSBOOT10.pin2 | J_LCD.pin20
+OPEN system_LCD_D12 has 3 separate CAM networks: U1.V2 | R_SYSBOOT12.pin2 | J_LCD.pin15
+OPEN system_LCD_D16 has 2 separate CAM networks: U1.U13 | J_LCD.pin33
+OPEN system_LCD_D17 has 2 separate CAM networks: U1.V13 | J_LCD.pin17
+OPEN system_LCD_D18 has 2 separate CAM networks: U1.R12 | J_LCD.pin34
+OPEN system_LCD_D19 has 2 separate CAM networks: U1.T12 | J_LCD.pin26
+OPEN system_LCD_D2 has 3 separate CAM networks: U1.R3 | R_SYSBOOT2.pin2 | J_LCD.pin30
+OPEN system_LCD_D20 has 2 separate CAM networks: U1.U12 | J_LCD.pin18
+OPEN system_LCD_D21 has 2 separate CAM networks: U1.T11 | J_LCD.pin35
+OPEN system_LCD_D22 has 2 separate CAM networks: U1.T10 | J_LCD.pin27
+OPEN system_LCD_D23 has 2 separate CAM networks: U1.U10 | J_LCD.pin19
+OPEN system_LCD_D3 has 3 separate CAM networks: U1.R4 | R_SYSBOOT3.pin2 | J_LCD.pin29
+OPEN system_LCD_D4 has 3 separate CAM networks: U1.T1 | R_SYSBOOT4.pin2 | J_LCD.pin28
+OPEN system_LCD_D5 has 3 separate CAM networks: U1.T2 | R_SYSBOOT5.pin2 | J_LCD.pin25
+OPEN system_LCD_D6 has 3 separate CAM networks: U1.T3 | R_SYSBOOT6.pin2 | J_LCD.pin24
+OPEN system_LCD_D7 has 3 separate CAM networks: U1.T4 | R_SYSBOOT7.pin2 | J_LCD.pin23
+OPEN system_LCD_D8 has 3 separate CAM networks: U1.U1 | R_SYSBOOT8.pin2 | J_LCD.pin22
+OPEN system_LCD_D9 has 3 separate CAM networks: U1.U2 | R_SYSBOOT9.pin2 | J_LCD.pin21
+OPEN system_LCD_DE has 2 separate CAM networks: U1.R6 | J_LCD.pin9
+OPEN system_LCD_HSYNC has 2 separate CAM networks: U1.R5 | J_LCD.pin11
+OPEN system_LCD_RESET has 2 separate CAM networks: U1.R13 | J_LCD.pin44
+OPEN system_LCD_VSYNC has 2 separate CAM networks: U1.U5 | J_LCD.pin10
+OPEN system_TOUCH_IRQ has 2 separate CAM networks: U1.V14 | R_TOUCH_IRQ.pin1
+OPEN system_TOUCH_SCL has 2 separate CAM networks: U1.D15 | R_TOUCH_SCL.pin1
+OPEN system_TOUCH_SDA has 2 separate CAM networks: U1.D16 | R_TOUCH_SDA.pin1
+OPEN unnamedsubcircuitsubcircuit_source_group_0_connectivity_net124 has 2 separate CAM networks: U1.C18 | Q_LCD_BL.pin1, R_LCD_BL_PULLDOWN.pin1
+OPEN unnamedsubcircuitsubcircuit_source_group_0_connectivity_net137 has 2 separate CAM networks: J_JOY_L.pin3, U1.V17 | R_JOY_L_CLICK.pin1
+OPEN unnamedsubcircuitsubcircuit_source_group_0_connectivity_net139 has 2 separate CAM networks: R_JOY_R_CLICK.pin1 | J_JOY_R.pin3, U1.D18
+OPEN unnamedsubcircuitsubcircuit_source_group_0_connectivity_net140 has 14 separate CAM networks: C_JOY_L_BULK.pin1 | C_JOY_L_VDD.pin1 | J_JOY_L.pin5 | U_SPK_AMP.MUTE | U_SPK_AMP.SHND | C_3V3_OUT_A.pin1, C_3V3_OUT_B.pin1, L_3V3.pin2 | TP_3V3.pin1 | R_JOY_R_CLICK.pin2 | R_JOY_L_CLICK.pin2 | C_SD.pin1, C_SD_BULK.pin1, J_SD.VDD | R_SD_CS.pin2, R_SD_DAT1.pin2, R_SD_DAT2.pin2 | C_JOY_R_VDD.pin1 | C_JOY_R_BULK.pin1 | J_JOY_R.pin5
+OPEN unnamedsubcircuitsubcircuit_source_group_0_connectivity_net189 has 56 separate CAM networks: SW_SELECT.pin4 | SW_DOWN.pin4 | SW_RIGHT.pin4 | SW_LEFT.pin4 | SW_UP.pin4 | C_JOY_L_VDD.pin2 | C_JOY_L_BULK.pin2 | J_JOY_L.pin2 | C_AMP_PWM_FILTER.pin2 | C_SPK_EMI_NEG.pin2 | C_AMP_VREF.pin2 | C_AMP_VDD.pin2 | C_SPK_EMI_POS.pin2 | U_SPK_AMP.PGND1 | R_BAT_FB_BOTTOM.pin2 | R_BAT_REVERSE_GATE.pin2 | C_BAT_IN_BULK_B.pin2 | U_BAT_BUCKBOOST.GND, U_BAT_BUCKBOOST.PGND | U_BAT_BUCKBOOST.VSEL | C_BAT_IN_LOCAL.pin2 | C_BAT_IN_BULK_A.pin2 | U_SPK_AMP.INR | U_SPK_AMP.GND | C_BAT_OUT_BULK_C.pin2 | C_BAT_VAUX.pin2 | C_BAT_OUT_LOCAL.pin2 | C_BAT_OUT_BULK_A.pin2 | R_BAT_EN_BOTTOM.pin2 | C_USB_VALID.pin2 | C_BAT_OUT_BULK_B.pin2 | Q_USB_BOOST_OFF.emitter | C_3V3_OUT_B.pin2 | U_USB_VALID.GND | R_USB_BOOST_OFF_PULLDOWN.pin2 | C_3V3_OUT_A.pin2 | U_3V3.GND | C_3V3_IN.pin2, C_AMP_VDD_BULK.pin2, C_CPU_VREF.pin2 | Q_LCD_BL.pin2 | TP_GND.pin1 | R_CC2.pin2 | C_VBUS.pin2 | D_USB_PRESENT.cathode | J_SD.SHIELD4 | J_SD.SHIELD1 | C_SD.pin2 | J_SD.SHIELD3 | J_SD.SHIELD2 | SW_START.pin4 | Q_LIPO_USB_OFF.pin2 | C_JOY_R_VDD.pin2 | C_JOY_R_BULK.pin2 | J_JOY_R.pin2 | SW_A.pin4 | SW_X.pin4 | SW_B.pin4 | SW_Y.pin4
+OPEN unnamedsubcircuitsubcircuit_source_group_0_connectivity_net191 has 10 separate CAM networks: U_PMIC.IN_DCDC2 | U_PMIC.IN_DCDC3 | C_3V3_IN.pin1, C_AMP_VDD.pin1, C_AMP_VDD_BULK.pin1 | U_PMIC.IN_DCDC1 | U_PMIC.IN_BIAS | R_POWER_PB.pin2 | C_PMIC_IN_BU.pin1, U_PMIC.IN_BU | via only | via only | C_LIPO_BOOST_OUT.pin1, C_LIPO_BOOST_OUT_B.pin1, R_LIPO_FB_TOP.pin1
+OPEN unnamedsubcircuitsubcircuit_source_group_0_connectivity_net193 has 2 separate CAM networks: Q_LIPO_USB_OFF.pin3 | R_LIPO_ENABLE.pin2, U_LIPO_BOOST.EN, U_LIPO_UVLO.N_RESET
+OPEN unnamedsubcircuitsubcircuit_source_group_0_connectivity_net32 has 2 separate CAM networks: U1.N18 | J_USB.A7, J_USB.B7
+OPEN unnamedsubcircuitsubcircuit_source_group_0_connectivity_net34 has 2 separate CAM networks: U1.N17 | J_USB.A6, J_USB.B6
+50 mapped land nets have multiple physical networks.
