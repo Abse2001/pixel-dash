@@ -275,6 +275,10 @@ def panel_and_storage(terminals):
         if terminals[f"R_SYSBOOT{bit}.pin2"] == terminals["J_LCD." + row["Pin"]]:
             panel_taps.append(bit)
     print(f"Raster data connector to strap sense pads: {len(panel_taps)}/16; bits {panel_taps}.")
+    touch_bias = [pin for pin in ("SDA", "SCL", "IRQ")
+                  if terminals[f"R_TOUCH_{pin}.pin2"] == terminals["U_PMIC.DCDC4"]]
+    print(f"Touch pull-ups on sequenced DCDC4: {len(touch_bias)}/3 ({', '.join(touch_bias)}).")
+    failed |= len(touch_bias) != 3
     adc_supply = terminals["U_PMIC.DCDC4"] == terminals["U_JOY_ADC.VDD"] == terminals["C_JOY_ADC.pin1"]
     adc_return = terminals["U_JOY_ADC.GND"] == terminals["C_JOY_ADC.pin2"] == terminals["TP_UART_GND.pin1"]
     print("Joystick ADC supply and bypass return:", "PASS" if adc_supply and adc_return else "OPEN")

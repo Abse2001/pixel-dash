@@ -2,6 +2,8 @@
 
 The [unrouted handheld example](examples/unrouted-handheld) contains the populated board and a full-board input for testing the Bus Lanes autorouter.
 
+The three touch pull-up supply lands now reach sequenced DCDC4 through the card bulk-capacitor rail land. Drilled CAM verifies all three and the seven MMC0 links. The processor I/O bank balls N5 and P5 still require feeds. The touch signal connections and external touch interface remain open. [Physical rail and endpoint checks](checks/current-raster-taps-cam.txt)
+
 Five panel branches now join J_LCD to the SYSBOOT sense resistors on LCD_D1, D2, D8, D9 and D10. Drilled CAM reaches 10/16 connector-to-resistor taps, 4/16 CPU-to-resistor straps and 6/29 CPU-to-panel signals. The five added branches use 10–12 through-vias each. Panel launch timing, return transfers and receiver margin remain open. All 50 DDR signal geometries match the previous checkpoint exactly. Gerber full-width DDR, MMC0 and routed raster reference screens passed, along with copper and drill spacing, the 6 mil via-edge audit, and all 7,995 exported trace strokes. [Drilled endpoint results](checks/current-raster-taps-cam.txt)
 
 

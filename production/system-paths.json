@@ -1652,5 +1652,8 @@
       [[39.2, 15.075], [41.3, 17.175]],
       [[41.3, 17.175], [41.3038191, 17.151965]]
     ]
-  }
+  },
+  "touch_bias_irq_sda": {"rail": "VDD_IO_3V3_SEQ", "rail_terminals": ["R_TOUCH_IRQ.pin2", "R_TOUCH_SDA.pin2"], "width": 0.2, "sections": [[[49.246636, 1.6], [49.246636, 3.4]]]},
+  "touch_bias_sda_scl": {"rail": "VDD_IO_3V3_SEQ", "rail_terminals": ["R_TOUCH_SDA.pin2", "R_TOUCH_SCL.pin2"], "width": 0.2, "sections": [[[49.246636, 3.4], [50.753364, 5.2]]]},
+  "touch_bias_supply": {"rail": "VDD_IO_3V3_SEQ", "rail_terminals": ["C_SD_BULK.pin1", "R_TOUCH_IRQ.pin2"], "width": 0.2, "sections": [[[28.55, -24.220116], [29.045, -23.725], [29.54, -21.97], [32.15, -19.27], [35.21, -13.42], [38.225, -10.405]], [[38.225, -10.405], [39.665, -8.965]], [[39.665, -8.965], [49.246636, 1.6]]]}
 }
