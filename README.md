@@ -4,6 +4,8 @@ The [unrouted handheld example](examples/unrouted-handheld) contains the populat
 
 ## Current electrical checkpoint
 
+The battery buck-boost inductor C5349662 now uses the 4.05588 mm terminal pitch and 1.40 × 2.12 mm lands from its JLCPCB library footprint. The AP63200 3.3 V buck C2071868 now uses 2.70002 mm between pad rows and 1.10 × 0.60 mm lands. Drilled Gerbers verify both inductor switch nodes and all six regulator terminals, including feedback, bootstrap and switch. All 236 placements match the exported BOM. The volume control and two shoulder switches still have supplier footprint differences. [Supplier placement comparison](checks/current-assembly-angles.csv)
+
 A6 now meets the 28.550–31.090 mm placement-derived address/command window. Moving A4 and A6 together reduced A6 from four to two full-depth transitions. Both nets remain distinct in the drilled Gerbers. The estimates use the 1.491 mm reference stack.
 
 | Net | Prior → current planar length (mm) | Prior → current total barrel depth (mm) | Prior → current estimated flight (ps) | Prior → current signed skew to CK (ps) | Current length-window error (mm) |

@@ -28,6 +28,43 @@ def correct_shoulder_terminals(board):
                                for h in e["port_hints"]]
 
 
+def align_power_lands(board):
+    # JLCPCB C5349662 and C2071868, top-view copper from their EasyEDA packages.
+    # Both installed patterns have horizontal rows in the retained board coordinates.
+    patterns = {"L_BAT_BUCKBOOST": ("C5349662", 2.02794, 1.4000, 2.1200, 2),
+                "U_3V3": ("C2071868", 1.35001, 1.1000, 0.6000, 6)}
+    parts = {e["name"]: e for e in board if e["type"] == "source_component"}
+    ports = {e["pcb_port_id"]: e for e in board if e["type"] == "pcb_port"}
+    moved = {}
+    for name, (code, half_pitch, width, height, count) in patterns.items():
+        part = parts[name]
+        if part["supplier_part_numbers"]["jlcpcb"] != [code]:
+            raise ValueError(f"Unexpected supplier footprint for {name}")
+        footprint, = (e for e in board if e["type"] == "pcb_component"
+                      and e["source_component_id"] == part["source_component_id"])
+        pads = [e for e in board if e["type"] == "pcb_smtpad"
+                and e["pcb_component_id"] == footprint["pcb_component_id"]]
+        if len(pads) != count or footprint["rotation"] not in (0, 180):
+            raise ValueError(f"Unexpected land orientation or count for {name}")
+        cx = footprint["center"]["x"]
+        for pad in pads:
+            new_x = cx + (half_pitch if pad["x"] > cx else -half_pitch)
+            port = ports[pad["pcb_port_id"]]
+            moved[pad["pcb_port_id"]] = (port["x"], port["y"], new_x)
+            port["x"] = pad["x"] = new_x
+            pad["width"], pad["height"] = width, height
+
+    for trace in board:
+        if trace["type"] != "pcb_trace":
+            continue
+        for index, field in ((0, "start_pcb_port_id"), (-1, "end_pcb_port_id")):
+            point = trace["route"][index]
+            if point.get(field) in moved:
+                old_x, old_y, new_x = moved[point[field]]
+                if abs(point["x"] - old_x) < 1e-5 and abs(point["y"] - old_y) < 1e-5:
+                    point["x"] = new_x
+
+
 def build():
     root = Path(__file__).parent
     board = json.loads(gzip.decompress((root / "retained.circuit.json.gz").read_bytes()))
@@ -44,6 +81,7 @@ def build():
             element["route"] = route
     if edits:
         raise ValueError(f"Unapplied route edits: {list(edits)}")
+    align_power_lands(board)
     correct_shoulder_terminals(board)
     return clear_dbi_interface(board)
 

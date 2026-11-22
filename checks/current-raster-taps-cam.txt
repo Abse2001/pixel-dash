@@ -5,6 +5,7 @@ drill-L2-L3.drl matches 10 round hits and 0 slots
 drill-L3-L4.drl matches 23 round hits and 0 slots
 50 distinct DDR ball pairs connected. 1083 plated barrels checked. No shorts between mapped land nets.
 UART0 RX, TX and ground reach three distinct probe networks.
+Battery inductor and 3.3 V regulator: all eight lands reach the intended external copper.
 PMIC copper verified between U_PMIC.L4A and L_PMIC_IO.pin1.
 PMIC copper verified between U_PMIC.L4B and L_PMIC_IO.pin2.
 PMIC copper verified between U_PMIC.DCDC4 and C_PMIC_IO_A.pin1.

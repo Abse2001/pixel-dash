@@ -441,6 +441,23 @@ def main():
         if len(networks) != 3 or any(terminals[a] != terminals[b] for a, b in probes):
             raise ValueError("UART probe pads have a short or an open")
         print("UART0 RX, TX and ground reach three distinct probe networks.")
+    if args.cpu_power:
+        converters = {
+            "U_BAT_BUCKBOOST.L1": ["L_BAT_BUCKBOOST.pin1"],
+            "U_BAT_BUCKBOOST.L2": ["L_BAT_BUCKBOOST.pin2"],
+            "U_3V3.VIN": ["U_3V3.EN", "C_3V3_IN.pin1"],
+            "U_3V3.GND": ["TP_UART_GND.pin1"],
+            "U_3V3.SW": ["L_3V3.pin1", "C_3V3_BST.pin2"],
+            "U_3V3.BST": ["C_3V3_BST.pin1"],
+            "U_3V3.FB": ["R_LOGIC_FB_TOP.pin2", "R_LOGIC_FB_BOTTOM.pin1"],
+        }
+        if len({terminals[anchor] for anchor in converters}) != len(converters):
+            raise ValueError("Battery or 3.3 V converter terminals share unrelated CAM copper")
+        for anchor, lands in converters.items():
+            for land in lands:
+                if terminals[land] != terminals[anchor]:
+                    raise ValueError(f"Converter connection open between {anchor} and {land}")
+        print("Battery inductor and 3.3 V regulator: all eight lands reach the intended external copper.")
     if args.pmic_controls:
         for start, end in (
             ("U_PMIC.L4A", "L_PMIC_IO.pin1"), ("U_PMIC.L4B", "L_PMIC_IO.pin2"),

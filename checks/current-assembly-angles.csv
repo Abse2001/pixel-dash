@@ -8,7 +8,7 @@ F_BAT,C439873,top,0.0,0.0,0.0,2,matches
 Q_BAT_REVERSE,C347476,top,0.0,0.0,0.0,3,matches
 R_BAT_REVERSE_GATE,C25803,top,0.0,0.0,0.0,2,matches
 U_BAT_BUCKBOOST,C109322,top,0.0,0.0,0.0,13,matches
-L_BAT_BUCKBOOST,C5349662,top,180.0,180.0,0.1779,2,geometry_differs
+L_BAT_BUCKBOOST,C5349662,top,180.0,180.0,0.0,2,matches
 C_BAT_IN_LOCAL,C386081,top,180.0,180.0,0.0,2,matches
 C_BAT_IN_BULK_A,C15850,top,90.0,90.0,0.0,2,matches
 C_BAT_IN_BULK_B,C15850,top,90.0,90.0,0.0,2,matches
@@ -37,7 +37,7 @@ R_SD_DAT1,C25744,top,0.0,0.0,0.0,2,matches
 R_SD_DAT2,C25744,top,0.0,0.0,0.0,2,matches
 C_SD_BULK,C52923,top,90.0,90.0,0.0,2,matches
 D_USB_POWER,C8678,top,0.0,0.0,0.0,2,matches
-U_3V3,C2071868,top,0.0,0.0,0.1501,6,geometry_differs
+U_3V3,C2071868,top,0.0,0.0,0.0,6,matches
 L_3V3,C19947652,top,270.0,270.0,0.0,2,matches
 C_3V3_IN,C19702,top,90.0,90.0,0.0,2,matches
 C_3V3_BST,C1525,top,180.0,180.0,0.0,2,matches
