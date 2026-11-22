@@ -337,3 +337,13 @@ the CPU and memory ground returns, and full-width reference coverage.
 The single-net and 6 mil spacing checks passed. The Gerber short check
 passed and 7,436 strokes matched. Whole-board CAM still flags 40 open nets,
 including the partially distributed LDO1 rail.
+
+Six additional 0.13 mm branches with L1–L2 microvias complete the LDO1
+distribution to E14, H15, N16, P14, P9 and R16. Four-layer CAM now finds
+**16/16 LDO1 loads** on the capacitor's supply node, with input and ground
+isolated. The short, clearance, independent 6 mil, return and reference
+checks passed. CAM verified 960 plated barrels, 50 distinct DDR pairs and
+7,466 matching trace strokes. The 39 remaining disconnected mapped nets
+include boot straps and raster signals. B4, B5, C5, N5 and P5 still lack
+their required feeds. Voltage tolerance, local decoupling and analog noise
+at the LDO1 loads remain separate outstanding checks.
