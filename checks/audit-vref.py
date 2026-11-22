@@ -7,7 +7,7 @@ from shapely import STRtree, affinity, unary_union
 from shapely.geometry import LineString, Point, Polygon, box
 
 
-def verify(elements, check_ddr_power=False, check_ddr_signals=False, check_system_io=False, check_pmic_hold=False, check_pmic_backup=False):
+def verify(elements, check_ddr_power=False, check_ddr_signals=False, check_system_io=False, check_pmic_hold=False, check_pmic_backup=False, check_rtc_filters=False):
     names = {e["source_component_id"]: e.get("name") for e in elements if e["type"] == "source_component"}
     pins = {e["source_port_id"]: f"{names.get(e['source_component_id'])}.{e['name']}"
             for e in elements if e["type"] == "source_port"}
@@ -19,7 +19,7 @@ def verify(elements, check_ddr_power=False, check_ddr_signals=False, check_syste
         ["plane.inner1.GND", "R_VREF_LOW.pin2", "C_CPU_VREF.pin2", "C_VREF_DQ.pin2", "C_VREF_CA.pin2"],
         ["plane.inner2.VDDS_DDR", "R_VREF_HIGH.pin2"],
     ]
-    if check_pmic_hold or check_pmic_backup:
+    if check_pmic_hold or check_pmic_backup or check_rtc_filters:
         def pmic_pin(name):
             pin, = [e for e in elements if e["type"] == "source_port" and
                     names.get(e["source_component_id"]) == "U_PMIC" and
@@ -42,6 +42,16 @@ def verify(elements, check_ddr_power=False, check_ddr_signals=False, check_syste
             vsys, = [e for e in elements if e["type"] == "source_net" and e["name"] == "VSYS"]
             if pmic_pin("IN_BU")["subcircuit_connectivity_map_key"] != vsys["subcircuit_connectivity_map_key"]:
                 raise ValueError("PMIC backup input has the wrong system supply assignment")
+        if check_rtc_filters:
+            for rail, index in (("CORE", 5), ("IO", 6)):
+                cap = f"C_PMIC_RTC_{rail}"
+                coil = f"L_PMIC_RTC_{rail}"
+                bypass(cap, f"FB{index}", 47e-6, "C96123")
+                required[-1].append(f"{coil}.pin2")
+                required.append([pins[pmic_pin(f"L{index}")["source_port_id"]], f"{coil}.pin1"])
+                part, = [e for e in elements if e["type"] == "source_component" and e.get("name") == coil]
+                if part.get("supplier_part_numbers", {}).get("jlcpcb") != ["C162582"]:
+                    raise ValueError(f"Unexpected RTC inductor for {rail}")
     labels = defaultdict(list)
     copper = defaultdict(list)
     parent = []
@@ -168,6 +178,8 @@ def verify(elements, check_ddr_power=False, check_ddr_signals=False, check_syste
         print("PMIC INT_LDO reaches its 1 µF hold-up capacitor and the opposite land reaches L2 ground.")
     if check_pmic_backup:
         print("IN_BU and SYS_BU reach distinct local capacitors. Both returns and CC reach L2 ground.")
+    if check_rtc_filters:
+        print("Both RTC switch nodes reach their inductors. Each output reaches its own capacitor and feedback pin, with its return on L2.")
     if check_ddr_signals:
         signal_roots = {}
         opens = []
@@ -221,5 +233,6 @@ if __name__ == "__main__":
     parser.add_argument("--system-io", action="store_true")
     parser.add_argument("--pmic-hold", action="store_true")
     parser.add_argument("--pmic-backup", action="store_true")
+    parser.add_argument("--rtc-filters", action="store_true")
     args = parser.parse_args()
-    verify(json.loads(args.circuit.read_text()), args.ddr_power, args.ddr_signals, args.system_io, args.pmic_hold, args.pmic_backup)
+    verify(json.loads(args.circuit.read_text()), args.ddr_power, args.ddr_signals, args.system_io, args.pmic_hold, args.pmic_backup, args.rtc_filters)
