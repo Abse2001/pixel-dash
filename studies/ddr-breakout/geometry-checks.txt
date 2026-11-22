@@ -1,13 +1,13 @@
-Native populated 45-link DDR study
-Study reference coverage screened 45 routed DDR signals. Open signals: DDR_D0, DDR_D3, DDR_D4, DDR_D8, DDR_D9.
+Native populated 46-link DDR study
+Study reference coverage screened 46 routed DDR signals. Open signals: DDR_D0, DDR_D3, DDR_D4, DDR_D9.
 0 signal/layer reference-coverage findings
 0 unrelated copper pairs below 0.102 mm
 0 via/layer/unrelated-net pairs below 0.1524 mm
 0 via drill-spacing findings
 No shorts detected in index.circuit.json
-Verified 8691 strokes from 628 PCB traces against all four copper Gerbers.
-inner1 GND: envelope 386.1492 mm², uncovered 40.7996 mm², uncovered outside nominal via antipads 0.000000003 mm².
-inner2 VDDS_DDR: envelope 386.1492 mm², uncovered 32.8054 mm², uncovered outside nominal via antipads 0.000000003 mm².
+Verified 9070 strokes from 629 PCB traces against all four copper Gerbers.
+inner1 GND: envelope 386.1492 mm², uncovered 41.3996 mm², uncovered outside nominal via antipads 0.000000003 mm².
+inner2 VDDS_DDR: envelope 386.1492 mm², uncovered 33.4054 mm², uncovered outside nominal via antipads 0.000000003 mm².
 0 findings across signal and reference layers in the conservative envelope screen.
 0 signal/layer reference-coverage findings
 Screened 12 routed raster signals.
