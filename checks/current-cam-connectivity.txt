@@ -10,6 +10,14 @@ PMIC copper verified between U_PMIC.nWAKEUP and R_PMIC_WAKE.pin1.
 PMIC copper verified between U_PMIC.nINT and U1.T14.
 PMIC copper verified between U_PMIC.PGOOD and U1.B15.
 All mapped handheld ground lands and barrels join the UART ground probe.
+Processor supply/return to TP_UART_GND.pin1: 39/43 balls connected. Open A5, E8, M14, N14
+Processor supply/return to C_PMIC_CORE.pin1: 0/20 balls connected. Open F6, F7, G10, G6, G7, H11, J12, K12, K6, K8, L6, L7, L8, L9, M11, M13, N12, N13, N8, N9
+Processor supply/return to C_PMIC_MPU.pin1: 0/7 balls connected. Open F10, F11, F12, F13, G13, H13, J13
+Processor supply/return to C_PMIC_RTC_CORE.pin1: 0/1 balls connected. Open D6
+Processor supply/return to C_PMIC_RTC_IO.pin1: 0/1 balls connected. Open D7
+Processor supply/return to U_PMIC.LS1: 0/7 balls connected. Open E5, F5, G5, H5, J5, K5, L5
+Processor supply/return to U_PMIC.DCDC4: 0/15 balls connected. Open E10, E11, E12, E13, F14, G14, K14, L14, N15, N5, P12, P13, P5, P6, R15
+Processor supply/return to U_PMIC.LDO1: 0/16 balls connected. Open D10, D8, E14, E6, E7, E9, F9, H15, K13, N16, N6, P14, P9, R10, R11, R16
 OPEN channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net62 has 2 separate CAM networks: U1.C6 | U_PMIC.PWR_EN
 OPEN channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net63 has 2 separate CAM networks: U1.C5 | R_PMIC_WAKE.pin1, U_PMIC.nWAKEUP
 OPEN channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net75 has 3 separate CAM networks: U1.D6 | U1.B4 | C_PMIC_RTC_CORE.pin1, L_PMIC_RTC_CORE.pin2, U_PMIC.FB5

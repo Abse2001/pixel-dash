@@ -19,12 +19,38 @@ MEMBERS = ("F_Cu.gbr", "In1_Cu.gbr", "In2_Cu.gbr", "B_Cu.gbr")
 CHECKS = Path(__file__).parent
 
 
+def processor_power(terminals):
+    """Compare package balls with the intended power sources in TI SLVUAA9B Table 1."""
+    balls = json.loads((CHECKS.parent / "am3354/processor-balls.json").read_text())
+    groups = {
+        "TP_UART_GND.pin1": {"VSS", "VSS_OSC", "VSS_RTC", "VSSA_USB", "VSSA_ADC"},
+        "C_PMIC_CORE.pin1": {"VDD_CORE"},
+        "C_PMIC_MPU.pin1": {"VDD_MPU"},
+        "C_PMIC_RTC_CORE.pin1": {"CAP_VDD_RTC"},
+        "C_PMIC_RTC_IO.pin1": {"VDDS_RTC"},
+        "U_PMIC.LS1": {"VDDS_DDR"},
+        "U_PMIC.DCDC4": {"VDDSHV3", "VDDSHV5", "VDDSHV6", "VDDA3P3V_USB0", "VDDA3P3V_USB1"},
+        "U_PMIC.LDO1": {"VDDS", "VDDS_PLL_DDR", "VDDS_PLL_MPU", "VDDS_PLL_CORE_LCD",
+                        "VDDS_OSC", "VDDS_SRAM_CORE_BG", "VDDS_SRAM_MPU_BB",
+                        "VDDA_ADC", "VDDA1P8V_USB0", "VDDA1P8V_USB1"},
+    }
+    failed = False
+    for anchor, labels in groups.items():
+        expected = sorted(ball for ball, label in balls.items() if label in labels)
+        missing = [b for b in expected if terminals["U1." + b] != terminals[anchor]]
+        print(f"Processor supply/return to {anchor}: {len(expected) - len(missing)}/{len(expected)} balls connected."
+              + (" Open " + ", ".join(missing) if missing else ""))
+        failed |= bool(missing)
+    return failed
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("circuit", type=Path)
     parser.add_argument("gerbers", type=Path)
     parser.add_argument("--pmic-controls", action="store_true", help="require routed PMIC supply, wake pull-up, interrupt and cold-reset connections")
     parser.add_argument("--handheld-ground", action="store_true", help="require all mapped ground lands and barrels to share the UART ground network")
+    parser.add_argument("--cpu-power", action="store_true", help="check assigned CPU supply domains and returns against their physical sources")
     args = parser.parse_args()
     board = json.loads(args.circuit.read_text())
     drill = runpy.run_path(str(CHECKS / "audit-channel-drills.py"))
@@ -140,12 +166,13 @@ def main():
         if ground_nodes != {terminals["TP_UART_GND.pin1"]}:
             raise ValueError(f"Handheld ground has {len(ground_nodes)} separate CAM networks")
         print("All mapped handheld ground lands and barrels join the UART ground probe.")
+    power_failed = args.cpu_power and processor_power(terminals)
     opens = {k: len(v) for k, v in nodes_by_net.items() if len(v) > 1}
     for key, count in sorted(opens.items()):
         examples = [", ".join(sorted(members[key][node])[:3]) or "via only" for node in sorted(nodes_by_net[key])]
         print(f"OPEN {key} has {count} separate CAM networks: " + " | ".join(examples))
     print(f"{len(opens)} mapped land nets have multiple physical networks.")
-    return bool(opens)
+    return bool(opens) or power_failed
 
 
 if __name__ == "__main__":
