@@ -125,3 +125,5 @@ Sixteen new ground vias link the two ground planes near the MMC0 signal layer ch
 Left joystick click now connects AM3354 T12 to J_JOY_L contact 3 through two plated transitions. Twelve of 66 system connections have verified continuity. All seven card connections and all 50 DDR connections remain continuous, and whole-board clearance and Gerber shorts checks pass.
 
 Run `python checks/audit-copper-outline.py dist/index.circuit.json --clearance-mm .20` to measure copper against the routed perimeter and internal cutouts, including the battery tub geometry represented by those cuts. All four copper layers clear the 0.20 mm screening distance and stay within the substrate. This screen measures nominal CAD geometry before router tolerance.
+
+The PWM audio path now runs from AM3354 A17 to the input resistor of the retained amplifier. The populated board passes the 0.102 mm copper and 6 mil via-edge audits, and the Gerber shorts check. Thirteen of the 66 system links have pad-to-pad copper. Audio output level, filtering, grounding under load and speaker operation still require verification.
