@@ -1,4 +1,4 @@
-"""Materialize the isolated reserved-corridor study against the c9be947 handheld export."""
+"""Materialize the isolated reserved-corridor study against the specified handheld export."""
 import argparse
 import json
 from pathlib import Path
@@ -9,11 +9,16 @@ parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument("baseline", type=Path)
 parser.add_argument("output", type=Path)
 parser.add_argument("--pair-first", action="store_true", help="reproduce the D8/D9-only stage with D15 open")
+parser.add_argument("--d14-south", action="store_true", help="replay the rejected D14 experiment against the complete 66b9fc9 export")
 args = parser.parse_args()
+if args.pair_first and args.d14_south:
+    parser.error("Select one study")
 board = json.loads(args.baseline.read_text())
 here = Path(__file__).parent
 if args.pair_first:
     here = here / "pair-first"
+if args.d14_south:
+    here = here / "d14-south"
 paths = json.loads((here/"paths.json").read_text())
 opened = set(json.loads((here/"open.json").read_text()))
 if opened.intersection(paths):

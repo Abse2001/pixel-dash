@@ -1,0 +1,54 @@
+Detected 17 shorts in index.circuit.json
+1. top/gerber short at x=-49.597mm y=13.605mm
+   U1.L3, U_DDR.A2, channel_pcb_trace_0, channel_pcb_via_236, channel_pcb_via_237 <-> U1.L4, U_DDR.B8, channel_pcb_trace_4, zoned_DDR_D14_1, zoned_DDR_D14_2
+   pixels=36
+2. bottom/gerber short at x=-58.909mm y=6.901mm
+   channel_pcb_trace_21, channel_pcb_via_286, channel_pcb_via_287 <-> channel_pcb_trace_4, zoned_DDR_D14_1, zoned_DDR_D14_2
+   pixels=110
+3. bottom/gerber short at x=-50.728mm y=11.332mm
+   channel_pcb_trace_8, channel_pcb_via_252, channel_pcb_via_253 <-> channel_pcb_trace_4, zoned_DDR_D14_1, zoned_DDR_D14_2
+   pixels=108
+4. bottom/gerber short at x=-56.349mm y=7.351mm
+   channel_pcb_trace_5, channel_pcb_via_246, channel_pcb_via_247 <-> channel_pcb_trace_4, zoned_DDR_D14_1, zoned_DDR_D14_2
+   pixels=103
+5. bottom/gerber short at x=-51.622mm y=9.429mm
+   channel_pcb_trace_5, channel_pcb_via_246, channel_pcb_via_247 <-> channel_pcb_trace_4, zoned_DDR_D14_1, zoned_DDR_D14_2
+   pixels=39
+6. bottom/gerber short at x=-51.847mm y=8.965mm
+   channel_pcb_trace_21, channel_pcb_via_286, channel_pcb_via_287 <-> channel_pcb_trace_4, zoned_DDR_D14_1, zoned_DDR_D14_2
+   pixels=39
+7. bottom/gerber short at x=-53.046mm y=7.960mm
+   channel_pcb_trace_21, channel_pcb_via_286, channel_pcb_via_287 <-> channel_pcb_trace_4, zoned_DDR_D14_1, zoned_DDR_D14_2
+   pixels=34
+8. bottom/gerber short at x=-54.424mm y=7.710mm
+   channel_pcb_trace_5, channel_pcb_via_246, channel_pcb_via_247 <-> channel_pcb_trace_4, zoned_DDR_D14_1, zoned_DDR_D14_2
+   pixels=28
+9. bottom/gerber short at x=-51.252mm y=10.188mm
+   channel_pcb_trace_0, channel_pcb_via_236, channel_pcb_via_237 <-> channel_pcb_trace_4, zoned_DDR_D14_1, zoned_DDR_D14_2
+   pixels=28
+10. bottom/gerber short at x=-49.598mm y=13.555mm
+   channel_pcb_trace_5, channel_pcb_via_246, channel_pcb_via_247 <-> channel_pcb_trace_4, zoned_DDR_D14_1, zoned_DDR_D14_2
+   pixels=25
+11. bottom/gerber short at x=-53.370mm y=7.920mm
+   channel_pcb_trace_5, channel_pcb_via_246, channel_pcb_via_247 <-> channel_pcb_trace_4, zoned_DDR_D14_1, zoned_DDR_D14_2
+   pixels=16
+12. bottom/gerber short at x=-51.502mm y=9.733mm
+   channel_pcb_trace_0, channel_pcb_via_236, channel_pcb_via_237 <-> channel_pcb_trace_4, zoned_DDR_D14_1, zoned_DDR_D14_2
+   pixels=15
+13. bottom/gerber short at x=-50.365mm y=12.008mm
+   channel_pcb_trace_0, channel_pcb_via_236, channel_pcb_via_237 <-> channel_pcb_trace_4, zoned_DDR_D14_1, zoned_DDR_D14_2
+   pixels=5
+14. bottom/gerber short at x=-57.974mm y=7.017mm
+   channel_pcb_trace_21, channel_pcb_via_286, channel_pcb_via_287 <-> channel_pcb_trace_4, zoned_DDR_D14_1, zoned_DDR_D14_2
+   pixels=3
+15. bottom/gerber short at x=-50.274mm y=12.372mm
+   channel_pcb_trace_8, channel_pcb_via_252, channel_pcb_via_253 <-> channel_pcb_trace_4, zoned_DDR_D14_1, zoned_DDR_D14_2
+   pixels=1
+16. bottom/gerber short at x=-50.309mm y=12.302mm
+   channel_pcb_trace_8, channel_pcb_via_252, channel_pcb_via_253 <-> channel_pcb_trace_4, zoned_DDR_D14_1, zoned_DDR_D14_2
+   pixels=1
+17. bottom/gerber short at x=-51.079mm y=10.482mm
+   channel_pcb_trace_0, channel_pcb_via_236, channel_pcb_via_237 <-> channel_pcb_trace_4, zoned_DDR_D14_1, zoned_DDR_D14_2
+   pixels=1
+Short debug artifact written to /workspace/scratch/pixel-dash-wide/reserved-ddr-study/checks/check-shorts/bitmap.png
+Short debug artifact written to /workspace/scratch/pixel-dash-wide/reserved-ddr-study/checks/check-shorts/pcb.svg

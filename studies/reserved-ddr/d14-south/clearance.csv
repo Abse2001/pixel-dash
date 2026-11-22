@@ -1,0 +1,9 @@
+layer,first_object,first_signal,second_object,second_signal,edge_gap_mm
+bottom,channel_pcb_trace_0,DDR_D13,channel_pcb_trace_4,DDR_D14,0.0
+bottom,channel_pcb_trace_21,DDR_D5,channel_pcb_trace_4,DDR_D14,0.0
+bottom,channel_pcb_trace_21,DDR_D5,zoned_DDR_D14_2,DDR_D14,0.0
+bottom,channel_pcb_trace_5,DDR_D11,channel_pcb_trace_4,DDR_D14,0.0
+bottom,channel_pcb_trace_5,DDR_D11,zoned_DDR_D14_1,DDR_D14,0.0
+bottom,channel_pcb_trace_8,DDR_D10,channel_pcb_trace_4,DDR_D14,0.0
+top,channel_pcb_trace_0,DDR_D13,channel_pcb_trace_4,DDR_D14,0.0
+top,channel_pcb_trace_0,DDR_D13,zoned_DDR_D14_1,DDR_D14,0.0

@@ -1,0 +1,4 @@
+via,layer,unrelated_net,edge_gap_mm,via_x_mm,via_y_mm,trace
+zoned_DDR_D14_2,bottom,channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net21,-0.1273720,-59.30226219999909,6.7978821,DDR_D5
+zoned_DDR_D14_1,bottom,channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net5,-0.0855240,-49.65100000000002,13.511999999999983,DDR_D11
+zoned_DDR_D14_1,top,channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net0,-0.0430602,-49.65100000000002,13.511999999999983,DDR_D13
