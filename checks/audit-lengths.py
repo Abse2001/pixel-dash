@@ -74,6 +74,10 @@ for group, nets in enumerate([*lanes, control]):
     outside = sorted(n for n in nets & rows.keys() if not lo <= rows[n][0] <= hi)
     print(f"{['BYTE0','BYTE1','ADDR_CTRL_CK'][group]} [{lo:.3f}, {hi:.3f}] mm: "
           f"{len(outside)}/{len(nets & rows.keys())} routed outside ({', '.join(outside)})", file=sys.stderr)
+    for name in outside:
+        length = rows[name][0]
+        correction = f"shorten by {length-hi:.3f}" if length > hi else f"lengthen by {lo-length:.3f}"
+        print(f"  {name} {length:.3f} mm, {correction} mm to reach the window", file=sys.stderr)
     failed |= bool(outside)
 
 for label, nets, limit in [
@@ -91,8 +95,10 @@ for label, nets, limit in [
     failed |= skew > limit
     if args.through_span_mm is not None:
         physical = [rows[n][0] + rows[n][2] * args.through_span_mm for n in nets if n in rows]
+        estimated_skew = max(physical) - min(physical)
         print(f"{label} geometric spread including {args.through_span_mm:g} mm per traversal: "
-              f"{max(physical)-min(physical):.3f} mm", file=sys.stderr)
+              f"{estimated_skew:.3f} mm, limit {limit:.3f}", file=sys.stderr)
+        failed |= estimated_skew > limit
 
 # TI SPRS717L Table 7-69 separates intra-DQ and DQ-to-strobe matching.
 # Report the actual limiting pins so routing edits can target the right path.
