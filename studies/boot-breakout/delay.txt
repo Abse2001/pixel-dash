@@ -1,0 +1,7 @@
+DDR_A10 vias 2 target_ps 179.391 baseline_ps 245.071 trial_ps 181.938
+DDR_A14 vias 2 target_ps 179.391 baseline_ps 160.351 trial_ps 179.33
+DDR_A6 vias 4 target_ps 179.391 baseline_ps 170.549 trial_ps 179.352
+DDR_A8 vias 2 target_ps 179.391 baseline_ps 184.422 trial_ps 179.399
+DDR_D1 vias 2 target_ps 132.038 baseline_ps 155.846 trial_ps 134.758
+DDR_D12 vias 2 target_ps 145.435 baseline_ps 156.295 trial_ps 145.925
+DDR_D14 vias 2 target_ps 145.435 baseline_ps 154.082 trial_ps 145.912

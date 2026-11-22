@@ -1,6 +1,25 @@
 # Pixel Dash
 
-## Wide handheld checkpoint
+## B5 and N5 coordinated breakout study
+
+The parent is production 9d79e24. This seven-net trial reserves both boot launch half-planes before moving A14/A6/A8 and A10/D1/D12/D14. The length objective moves both D1 vias and compares data to their byte strobe and commands to the clock pair. It uses 1.420 mm for each through barrel on the nominal 1.491 mm build. Flight times use the parent’s line-rate assumptions. The optimization omits obstacles to test the timing and corridor targets together. It produces an infeasible seed.
+
+| Export or routing check | Parent | Trial |
+| --- | ---: | ---: |
+| B5 maximum pad-edge distance from DDR envelope | 0.0259 mm | 0.5150 mm |
+| N5 maximum pad-edge distance from DDR envelope | 0.0574 mm | 0.6755 mm |
+| D1 modeled flight time | 155.846 ps | 134.758 ps |
+| A10 delay relative to CK pair | +65.681 ps | +2.547 ps |
+| Unrelated copper below 0.102 mm | 0 | 103 |
+| Via edge to unrelated track below 0.1524 mm | 0 | 46 |
+| Drill spacing findings | 0 | 1 |
+| Full-width DDR reference findings | 0 | 27 |
+
+The Gerber connectivity walk detects a multi-net short on L1. The resulting board fails the 50-distinct-endpoint gate. Both saved DQS pairs retain their routes, and D7 and D8 still set the byte-group maxima (39.729 ps and 22.556 ps). CKE remains 53.327 ps behind CK. B5 and N5 have an envelope opening but no completed boot connection. This branch is for recovering and comparing the trial only.
+
+[Seven-net modeled delays](studies/boot-breakout/delay.txt) · [Gerber reference findings](studies/boot-breakout/reference.csv)
+
+## Parent wide handheld checkpoint
 
 **Fabrication is on hold.** DCDC4 supplies 19/21 assigned 3.3 V CPU/USB
 lands, including both supply balls of VDDSHV1, VDDSHV2 and VDDSHV4.
