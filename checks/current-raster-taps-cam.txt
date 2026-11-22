@@ -105,6 +105,7 @@ Joystick L click input, separate switch and sequenced pull-up: PASS
 Joystick L sequenced ADC supply to connector and both bypasses, and ground returns: PASS
 Joystick R click input, separate switch and sequenced pull-up: PASS
 Joystick R sequenced ADC supply to connector and both bypasses, and ground returns: PASS
+Legacy 3.3 V output capacitors to isolated bring-up probe: PASS
 Joystick ADC supply and bypass return: PASS
 MMC0 rail isolation (DCDC4, GND, legacy regulator, VSYS): PASS
 MMC0 U1.H14 PASS
@@ -152,7 +153,7 @@ OPEN system_TOUCH_IRQ has 2 separate CAM networks: U1.V14 | R_TOUCH_IRQ.pin1
 OPEN system_TOUCH_SCL has 2 separate CAM networks: U1.D15 | R_TOUCH_SCL.pin1
 OPEN system_TOUCH_SDA has 2 separate CAM networks: U1.D16 | R_TOUCH_SDA.pin1
 OPEN unnamedsubcircuitsubcircuit_source_group_0_connectivity_net124 has 2 separate CAM networks: U1.C18 | Q_LCD_BL.pin1, R_LCD_BL_PULLDOWN.pin1
-OPEN unnamedsubcircuitsubcircuit_source_group_0_connectivity_net140 has 4 separate CAM networks: U_SPK_AMP.MUTE | U_SPK_AMP.SHND | C_3V3_OUT_A.pin1, C_3V3_OUT_B.pin1, L_3V3.pin2 | TP_3V3.pin1
+OPEN unnamedsubcircuitsubcircuit_source_group_0_connectivity_net140 has 3 separate CAM networks: U_SPK_AMP.MUTE | U_SPK_AMP.SHND | C_3V3_OUT_A.pin1, C_3V3_OUT_B.pin1, L_3V3.pin2
 OPEN unnamedsubcircuitsubcircuit_source_group_0_connectivity_net193 has 2 separate CAM networks: R_LIPO_ENABLE.pin2, U_LIPO_BOOST.EN, U_LIPO_UVLO.N_RESET | Q_LIPO_USB_OFF.pin3
 OPEN unnamedsubcircuitsubcircuit_source_group_0_connectivity_net32 has 2 separate CAM networks: U1.N18 | J_USB.A7, J_USB.B7
 OPEN unnamedsubcircuitsubcircuit_source_group_0_connectivity_net34 has 2 separate CAM networks: U1.N17 | J_USB.A6, J_USB.B6

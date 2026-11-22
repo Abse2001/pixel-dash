@@ -179,6 +179,12 @@ for trace in board:
 # The two click GPIOs use DCDC4-powered banks. Pull them up only when the
 # processor I/O is powered, including during startup and shutdown.
 legacy_3v3 = one(board, "source_net", name="V3V3")
+probe = one(board, "source_trace", name="T_TP_3V3")
+if (probe["connected_source_port_ids"] != [port("TP_3V3", "pin1")["source_port_id"]] or
+        probe["connected_source_net_ids"] != [legacy_3v3["source_net_id"]]):
+    raise ValueError("Unexpected regulator test point supply")
+probe["display_name"] = ".TP_3V3 > .pin1 to net.V3V3"
+
 for side in ("L", "R"):
     name = f"R_JOY_{side}_CLICK"
     contact = port(name, "pin2")

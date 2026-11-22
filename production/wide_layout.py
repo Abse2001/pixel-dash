@@ -6,7 +6,8 @@ offsets = {}
 for sign, refs in ((-1,"SW_UP SW_DOWN SW_LEFT SW_RIGHT SW_L J_JOY_L C_JOY_L_VDD C_JOY_L_BULK"),
                    (1,"SW_A SW_B SW_X SW_Y SW_R J_JOY_R C_JOY_R_VDD C_JOY_R_BULK")):
     offsets.update(dict.fromkeys(refs.split(),sign*43.75))
-offsets.update(SW_SELECT=-88, SW_START=88)
+offsets.update(SW_SELECT=-88, SW_START=88, TP_3V3=-0.7)
+vertical_offsets = {"SW_SELECT": -6.4, "SW_START": -6.4, "TP_3V3": -32.9}
 
 def apply_wide_layout(board):
     outline = json.loads(Path(__file__).with_name("wide-outline.json").read_text())
@@ -38,8 +39,10 @@ def apply_wide_layout(board):
               if e["type"]=="source_component" and e["name"] in offsets}
     owners = {e["pcb_component_id"]:source[e["source_component_id"]] for e in board
               if e["type"]=="pcb_component" and e.get("source_component_id") in source}
-    lowered = {e["source_component_id"] for e in board if e["type"]=="source_component" and e["name"] in ("SW_SELECT","SW_START")}
-    lower_owners = {e["pcb_component_id"] for e in board if e["type"]=="pcb_component" and e.get("source_component_id") in lowered}
+    vertical_sources = {e["source_component_id"]: vertical_offsets[e["name"]] for e in board
+                        if e["type"] == "source_component" and e["name"] in vertical_offsets}
+    vertical_owners = {e["pcb_component_id"]: vertical_sources[e["source_component_id"]] for e in board
+                       if e["type"] == "pcb_component" and e.get("source_component_id") in vertical_sources}
     ports = {e["pcb_port_id"]:owners[e["pcb_component_id"]] for e in board
              if e["type"]=="pcb_port" and e.get("pcb_component_id") in owners}
     assert len(source) == len(offsets)
@@ -48,7 +51,7 @@ def apply_wide_layout(board):
     for e in board:
         shift = owners.get(e.get("pcb_component_id"))
         if shift is not None:
-            dy = -6.4 if e.get("pcb_component_id") in lower_owners else 0
+            dy = vertical_owners.get(e.get("pcb_component_id"), 0)
             if "x" in e:
                 e["x"] += shift
                 e["y"] += dy

@@ -297,6 +297,12 @@ def panel_and_storage(terminals):
         print(f"Joystick {side} sequenced ADC supply to connector and both bypasses, and ground returns: "
               f"{'PASS' if bypass_ok else 'OPEN'}")
         failed |= not bypass_ok
+    legacy_probe = terminals["TP_3V3.pin1"]
+    probe_output = legacy_probe == terminals["C_3V3_OUT_A.pin1"] == terminals["C_3V3_OUT_B.pin1"]
+    probe_isolated = legacy_probe not in (terminals["U_PMIC.DCDC4"], terminals["TP_UART_GND.pin1"])
+    print("Legacy 3.3 V output capacitors to isolated bring-up probe:",
+          "PASS" if probe_output and probe_isolated else "OPEN")
+    failed |= not (probe_output and probe_isolated)
     adc_supply = terminals["U_PMIC.DCDC4"] == terminals["U_JOY_ADC.VDD"] == terminals["C_JOY_ADC.pin1"]
     adc_return = terminals["U_JOY_ADC.GND"] == terminals["C_JOY_ADC.pin2"] == terminals["TP_UART_GND.pin1"]
     print("Joystick ADC supply and bypass return:", "PASS" if adc_supply and adc_return else "OPEN")
