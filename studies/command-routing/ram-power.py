@@ -29,8 +29,8 @@ for ball, feed in spec.items():
         sources = [e for e in board if e['type']=='source_trace' and source['source_port_id'] in e['connected_source_port_ids'] and e['subcircuit_connectivity_map_key']==key]
         board.append(dict(type='pcb_trace',pcb_trace_id=via_id+'_stub',source_trace_id=sources[0]['source_trace_id'],
                           subcircuit_connectivity_map_key=key,route=[
-                             dict(route_type='wire',x=start[0],y=start[1],layer='top',width=.13,start_pcb_port_id=land['pcb_port_id']),
-                             dict(route_type='wire',x=x,y=y,layer='top',width=.13)]))
+                             dict(route_type='wire',x=start[0],y=start[1],layer='top',width=feed.get("width", .13),start_pcb_port_id=land['pcb_port_id']),
+                             dict(route_type='wire',x=x,y=y,layer='top',width=feed.get("width", .13))]))
     reliefs.append((rail['source_net_id'],layers,Point(x,y).buffer(feed['diameter']/2+.16,quad_segs=192)))
 for p in board:
     if p['type']!='pcb_copper_pour':continue

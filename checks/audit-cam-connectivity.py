@@ -57,6 +57,12 @@ def processor_power(terminals):
     print(f"DDR memory supply to DCDC3 output capacitor: {direct}/{len(dram_balls)} VDD/VDDQ balls connected.")
     print(f"DDR memory supply isolation from CPU VDDS_DDR: {'PASS' if separate else 'SHORT between the two domains'}.")
     failed |= direct != len(dram_balls) or not separate
+    ground_balls = sorted(b for b, name in memory.items() if name in {"VSS", "VSSQ"})
+    ground_node = terminals["TP_UART_GND.pin1"]
+    missing_ground = [b for b in ground_balls if terminals["U_DDR." + b] != ground_node]
+    print(f"DDR memory return to main ground: {len(ground_balls) - len(missing_ground)}/{len(ground_balls)} VSS/VSSQ balls connected."
+          + (" Open " + ", ".join(missing_ground) if missing_ground else ""))
+    failed |= not ground_balls or bool(missing_ground)
     bypass = json.loads((CHECKS.parent / "am3354/bypass-placement.json").read_text())
     for ref, anchor, wrong in (("U1", cpu_ddr, dram_nodes), ("U_DDR", "C_PMIC_DDR.pin1", cpu_nodes)):
         caps = [f"C_DDR{i}.pin1" for i, cap in enumerate(bypass, 1) if cap["chip"] == ref]
