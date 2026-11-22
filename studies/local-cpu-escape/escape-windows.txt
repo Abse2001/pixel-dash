@@ -1,0 +1,4 @@
+U1.J4: edge of search 9.4651 mm away; candidate via-center area 0.00252849 mm²; with full-width L2 return 0.00084562 mm²
+U1.F1: edge of search 8.0692 mm away; candidate via-center area 0.00348194 mm²; with full-width L2 return 0.00047373 mm²
+U1.G2: edge of search 9.4919 mm away; candidate via-center area 0.00382619 mm²; with full-width L2 return 0.00188628 mm²
+U1.J3: edge of search 8.4822 mm away; candidate via-center area 0.02183909 mm²; with full-width L2 return 0.01131703 mm²
