@@ -1,5 +1,9 @@
 # Pixel Dash
 
+## RAM-offset engineering study
+
+The RAM center has moved 1.5 mm west and 1.0 mm north from 99ad681. The 50 saved signal paths have been translated through the space between the BGAs. Native regeneration and the board-wide 0.102 mm copper screen found 25 failing shape pairs, including physical intersections with retained controls and reference-bias components. This layout is an unfinished routing study. Its local results are in [ram-offset-clearance.csv](checks/ram-offset-clearance.csv). The following measurements describe the parent checkpoint.
+
 ## Wide handheld checkpoint
 
 All 50 AM3354-to-DDR3L signals reach their intended balls on 50 distinct electrical nodes. The adjacent plane covers the full trace width for all 50 signals outside their own via launch antipads. The board-wide 0.102 mm unrelated-copper, 0.1524 mm via-edge and drill-spacing checks pass. Each of the 7,306 routed strokes matches the copper Gerbers, and all five drill files match the board.

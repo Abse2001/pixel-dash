@@ -39,15 +39,15 @@ export function DdrCalibration() {
 			/>
 			<RC0201FR_07240RL
 				name="R_ZQ"
-				pcbX={-22.138492}
-				pcbY={16.919996}
+				pcbX={-23.638492}
+				pcbY={17.919996}
 				pcbRotation={180}
 				layer="bottom"
 			/>
 			<via
 				name="V_ZQ"
-				pcbX={-22.400046}
-				pcbY={17.149996}
+				pcbX={-23.900046}
+				pcbY={18.149996}
 				holeDiameter={0.2}
 				outerDiameter={0.36}
 				connectsTo="net.DDR_ZQ"
@@ -66,8 +66,8 @@ export function DdrCalibration() {
 			/>
 			<via
 				name="V_RZQ_GND"
-				pcbX={-21.896938}
-				pcbY={16.919996}
+				pcbX={-23.396938}
+				pcbY={17.919996}
 				fromLayer="bottom"
 				toLayer="inner2"
 				holeDiameter={0.125}
@@ -76,8 +76,8 @@ export function DdrCalibration() {
 			/>
 			<via
 				name="V_RZQ_BURIED"
-				pcbX={-22.076938}
-				pcbY={16.60822685}
+				pcbX={-23.576938}
+				pcbY={17.60822685}
 				fromLayer="inner2"
 				toLayer="inner1"
 				holeDiameter={0.2}
