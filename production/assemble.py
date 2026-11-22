@@ -211,6 +211,19 @@ def add_ground_return(trace, point, via_id):
                       x=point["x"], y=point["y"], from_layer="top", to_layer="inner1",
                       layers=["top", "inner1"], hole_diameter=0.125, outer_diameter=0.28))
 
+# The microSD bulk capacitor now returns directly to L2 at its ground pad.
+sd_cap_ground = port("C_SD_BULK", "pin2")
+sd_land = one(board, "pcb_port", source_port_id=sd_cap_ground["source_port_id"])
+sd_return = one(board, "source_trace", name="SD_BULK_GND")
+if (sd_return["connected_source_port_ids"] != [sd_cap_ground["source_port_id"]]
+        or sd_return["connected_source_net_ids"] != [gnd["source_net_id"]]):
+    raise ValueError("Unexpected microSD bulk return assignment")
+board.append(dict(type="pcb_via", pcb_via_id="pcb_sd_bulk_ground",
+                  source_trace_id=sd_return["source_trace_id"], source_net_id=gnd["source_net_id"],
+                  subcircuit_connectivity_map_key=gnd["subcircuit_connectivity_map_key"],
+                  x=sd_land["x"], y=sd_land["y"], from_layer="top", to_layer="inner1",
+                  layers=["top", "inner1"], hole_diameter=0.125, outer_diameter=0.28))
+
 # These filter returns ended at vias owned by the removed processor circuitry.
 # Terminate each retained top trace in a blind via to the L2 ground plane.
 for number in (1265, 1266, 1267, 1322):
