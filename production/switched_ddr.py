@@ -54,7 +54,7 @@ def add_switched_ddr_pours(board):
     ram_body, = (e['pcb_component_id'] for e in board if e['type']=='pcb_component' and e['source_component_id']==ram['source_component_id'])
     region = unary_union([g for l in ('top','bottom') for oid,n,g in copper[l]
                           if n in signals or ids[oid].get('pcb_component_id')==ram_body]).convex_hull
-    window = box(-55,3,-17,31)
+    window = box(-55,3,-17,35)
     relief = [g.buffer(.16,quad_segs=48) for oid,n,g in copper['bottom'] if n!=key and g.intersects(window)]
     area = window.difference(unary_union([region.buffer(.409),*relief]))
     parts = [p for p in area.geoms if any(p.intersection(g).area>.02 for oid,n,g in copper['bottom']

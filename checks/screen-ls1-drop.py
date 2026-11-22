@@ -67,6 +67,20 @@ for inner in (.035, .0175):
             drop = load * (rin + rout)
             remaining = 1000 * (1.350 * .98 - 1.283) - load * 110 - drop - load * via_mohm * scale
             print(f"{inner*1000:g},{temp},{rin:.3f},{rout:.3f},{load*1000:.0f},{drop:.3f},{load * via_mohm * scale:.3f},{remaining:.3f}")
+cpu = parts["U1"]["source_component_id"]
+ball_ids = {e["name"]: e["source_port_id"] for e in board if e["type"] == "source_port"
+            and e["source_component_id"] == cpu}
+order = ["E5", "F5", "G5", "H5", "J5", "K5", "L5"]
+even_load = farthest_load = 0
+for index, (a, b) in enumerate(zip(order, order[1:]), 1):
+    branch, = (e for e in board if e["type"] == "source_trace" and
+               set(e["connected_source_port_ids"]) == {ball_ids[a], ball_ids[b]})
+    copper, = (e for e in traces if e["source_trace_id"] == branch["source_trace_id"])
+    resistance = trace_mohm([copper], .035)
+    even_load += resistance * index / len(order)
+    farthest_load += resistance
+print(f"L5 to E5 at 20 C and 35 um top copper: additional {even_load * .300:.3f} mV with "
+      f"300 mA split equally across seven balls; {farthest_load * .300:.3f} mV if all current enters E5.")
 print("Sensitivity to a 100 mA step lasting 1 us, before regulator response, ESR and ESL:")
 for retention in (.5, .75, 1.):
     effective = nominal * retention

@@ -241,6 +241,7 @@ for saved_name, plan in paths.items():
         if layer not in pad["layers"] or dist(point, (pad["x"], pad["y"])) > 1e-5:
             raise ValueError(f"Saved route no longer lands on a terminal of {sid}")
     width = plan.get("width", 0.102) if isinstance(plan, dict) else 0.102
+    via_drill, via_land = (plan.get("via_drill", 0.15), plan.get("via_land", 0.30)) if isinstance(plan, dict) else (0.15, 0.30)
     route = []
     trace_id = "pcb_" + sid
     key = source["subcircuit_connectivity_map_key"]
@@ -255,7 +256,7 @@ for saved_name, plan in paths.items():
             board.append(dict(type="pcb_via", pcb_via_id=f"{trace_id}_via_{index}", pcb_trace_id=trace_id,
                               source_trace_id=sid, subcircuit_connectivity_map_key=key, x=x, y=y,
                               from_layer="top", to_layer="bottom", layers=list(layers),
-                              hole_diameter=0.15, outer_diameter=0.30))
+                              hole_diameter=via_drill, outer_diameter=via_land))
         route.extend(dict(route_type="wire", layer=layer, width=width, x=x, y=y) for x, y in section)
     route[0]["start_pcb_port_id"] = start["pcb_port_id"]
     route[-1]["end_pcb_port_id"] = end["pcb_port_id"]

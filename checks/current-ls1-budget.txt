@@ -14,6 +14,7 @@ inner_um,temp_C,input_mOhm,output_mOhm,load_mA,trace_drop_mV,barrel_drop_mV,rema
 17.5,80,22.865,38.203,150,9.160,1.729,12.611
 17.5,80,22.865,38.203,225,13.740,2.594,-1.084
 17.5,80,22.865,38.203,300,18.320,3.458,-14.779
+L5 to E5 at 20 C and 35 um top copper: additional 0.595 mV with 300 mA split equally across seven balls; 1.290 mV if all current enters E5.
 Sensitivity to a 100 mA step lasting 1 us, before regulator response, ESR and ESL:
   50% effective: 23.00 uF, ideal capacitive droop 4.35 mV
   75% effective: 34.50 uF, ideal capacitive droop 2.90 mV
