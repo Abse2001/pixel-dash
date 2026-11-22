@@ -158,23 +158,38 @@ for touch in ("SCL", "SDA", "IRQ"):
     bind_supply("R_TOUCH_" + touch, "pin2", one(board, "source_net", name="VDD_IO_3V3_SEQ"))
 
 # Keep card power and open-drain pull-ups on the same sequenced domain as VDDSHV4.
-card_rail = one(board, "source_net", name="VDD_IO_3V3_SEQ")
+io_rail = one(board, "source_net", name="VDD_IO_3V3_SEQ")
 card_ports = [port("J_SD", "VDD"), port("C_SD", "pin1"), port("C_SD_BULK", "pin1")]
 card_ports.extend(port("R_SD_" + suffix, "pin2") for suffix in ("CMD", "CS", "DAT0", "DAT1", "DAT2"))
 card_ids = {p["source_port_id"] for p in card_ports}
 old_key = port("J_SD", "VDD")["subcircuit_connectivity_map_key"]
 for item in card_ports:
     assert item["subcircuit_connectivity_map_key"] == old_key
-    item["subcircuit_connectivity_map_key"] = card_rail["subcircuit_connectivity_map_key"]
+    item["subcircuit_connectivity_map_key"] = io_rail["subcircuit_connectivity_map_key"]
 for trace in board:
     if trace["type"] != "source_trace" or not card_ids.intersection(trace["connected_source_port_ids"]):
         continue
     assert set(trace["connected_source_port_ids"]) <= card_ids
     assert trace["subcircuit_connectivity_map_key"] == old_key
-    trace["subcircuit_connectivity_map_key"] = card_rail["subcircuit_connectivity_map_key"]
+    trace["subcircuit_connectivity_map_key"] = io_rail["subcircuit_connectivity_map_key"]
     if trace["connected_source_net_ids"]:
-        trace["connected_source_net_ids"] = [card_rail["source_net_id"]]
+        trace["connected_source_net_ids"] = [io_rail["source_net_id"]]
     trace["display_name"] = "MMC0 card supply " + trace["name"]
+
+# The two click GPIOs use DCDC4-powered banks. Pull them up only when the
+# processor I/O is powered, including during startup and shutdown.
+legacy_3v3 = one(board, "source_net", name="V3V3")
+for side in ("L", "R"):
+    name = f"R_JOY_{side}_CLICK"
+    contact = port(name, "pin2")
+    trace = one(board, "source_trace", name=f"JOY_{side}_CLICK_VDD")
+    if (trace["connected_source_port_ids"] != [contact["source_port_id"]] or
+            trace["connected_source_net_ids"] != [legacy_3v3["source_net_id"]]):
+        raise ValueError(f"Unexpected joystick click pull-up on {name}")
+    contact["subcircuit_connectivity_map_key"] = io_rail["subcircuit_connectivity_map_key"]
+    trace.update(connected_source_net_ids=[io_rail["source_net_id"]],
+                 subcircuit_connectivity_map_key=io_rail["subcircuit_connectivity_map_key"],
+                 display_name=f".{name} > .pin2 to net.VDD_IO_3V3_SEQ")
 
 for index, axis in enumerate(("LX", "LY", "RX", "RY")):
     interface_trace("ADC_" + axis, "U_JOY_ADC", f"AIN{index}", "C_JOY_" + axis, "pin1")

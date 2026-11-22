@@ -279,6 +279,15 @@ def panel_and_storage(terminals):
                   if terminals[f"R_TOUCH_{pin}.pin2"] == terminals["U_PMIC.DCDC4"]]
     print(f"Touch pull-ups on sequenced DCDC4: {len(touch_bias)}/3 ({', '.join(touch_bias)}).")
     failed |= len(touch_bias) != 3
+    for side, ball in (("L", "V17"), ("R", "D18")):
+        sense = terminals[f"U1.{ball}"]
+        bias = terminals[f"R_JOY_{side}_CLICK.pin2"]
+        reaches_switch = sense == terminals[f"J_JOY_{side}.pin3"] == terminals[f"R_JOY_{side}_CLICK.pin1"]
+        sequenced = bias == terminals["U_PMIC.DCDC4"]
+        isolated = len({sense, bias, terminals["TP_UART_GND.pin1"], terminals["C_3V3_OUT_A.pin1"]}) == 4
+        click_ok = reaches_switch and sequenced and isolated
+        print(f"Joystick {side} click input, separate switch and sequenced pull-up: {'PASS' if click_ok else 'OPEN'}")
+        failed |= not click_ok
     adc_supply = terminals["U_PMIC.DCDC4"] == terminals["U_JOY_ADC.VDD"] == terminals["C_JOY_ADC.pin1"]
     adc_return = terminals["U_JOY_ADC.GND"] == terminals["C_JOY_ADC.pin2"] == terminals["TP_UART_GND.pin1"]
     print("Joystick ADC supply and bypass return:", "PASS" if adc_supply and adc_return else "OPEN")
