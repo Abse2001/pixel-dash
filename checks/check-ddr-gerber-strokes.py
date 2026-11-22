@@ -1,4 +1,4 @@
-"""Verify every DDR signal stroke against its manufacturing-layer Gerber draw."""
+"""Verify DDR or whole-board routed copper strokes against manufacturing-layer Gerber draws."""
 import argparse
 import json
 import re
@@ -45,19 +45,23 @@ def main():
     args = argparse.ArgumentParser(description=__doc__)
     args.add_argument("circuit", type=Path)
     args.add_argument("archive", type=Path)
+    args.add_argument("--all-traces", action="store_true", help="Check every routed trace on all four layers")
     files = args.parse_args()
     board = json.loads(files.circuit.read_text())
     names = {e["source_trace_id"]: e.get("name") or "" for e in board if e["type"] == "source_trace"}
     with ZipFile(files.archive) as archive:
         layers = {layer: draws(archive.read(member).decode()) for layer, member in
-                  (("top", "F_Cu.gbr"), ("bottom", "B_Cu.gbr"))}
+                  (("top", "F_Cu.gbr"), ("inner1", "In1_Cu.gbr"),
+                   ("inner2", "In2_Cu.gbr"), ("bottom", "B_Cu.gbr"))}
     tested = Counter()
     for trace in board:
         if trace["type"] != "pcb_trace":
             continue
         name = names[trace["source_trace_id"]]
-        if not name.startswith("DDR_"):
+        if not files.all_traces and not name.startswith("DDR_"):
             continue
+        if files.all_traces:
+            name = trace["pcb_trace_id"]
         for a, b in zip(trace["route"], trace["route"][1:]):
             p, q = gerber_point(a), gerber_point(b)
             if p == q:
@@ -66,7 +70,7 @@ def main():
             width = a["width"] if "width" in a else b["width"]
             key = segment(p, q, round(width * 1e6))
             if layer not in layers or layer != b.get("layer", b.get("from_layer")):
-                raise ValueError(f"Invalid DDR stroke layer on {name}")
+                raise ValueError(f"Invalid stroke layer on {name}")
             # The exporter rounds half-grid ties differently. One Gerber unit is 1 nm.
             if layers[layer][key] < 1:
                 for ax, ay, bx, by in product((-1, 0, 1), repeat=4):
@@ -78,6 +82,11 @@ def main():
                 raise ValueError(f"Missing {name} stroke on {layer} at {p} to {q}, width {width} mm")
             layers[layer][key] -= 1
             tested[name] += 1
+    if files.all_traces:
+        if not tested:
+            raise ValueError("No routed copper strokes tested")
+        print(f"Verified {sum(tested.values())} strokes from {len(tested)} PCB traces against all four copper Gerbers.")
+        return
     if len(tested) != 50:
         raise ValueError(f"Expected 50 exported DDR signals, found {len(tested)}")
     print(f"Verified {sum(tested.values())} DDR strokes on {len(tested)} signals against Gerber coordinates and widths.")
