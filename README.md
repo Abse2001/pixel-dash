@@ -10,8 +10,8 @@ The byte-1 nominal length ceiling is 23.000 mm. TI limits the mismatch between e
 |---|---:|---:|---:|---:|---:|---:|
 | D8 | 18.992 → 19.315 | 5.680 | 148.916 | +3.031 | 0.000 | 2.775 |
 | D9 | 18.995 → 19.316 | 5.680 | 148.922 | +3.037 | 0.000 | 2.774 |
-| D12 | 23.843 → 23.843 | 2.840 | 156.296 | +10.411 | 6.747 | 0.573 |
-| D14 | 23.459 → 23.459 | 2.840 | 154.082 | +8.197 | 4.534 | 0.190 |
+| D12 | 23.843 → 23.808 | 2.840 | 156.090 | +10.205 | 6.542 | 0.538 |
+| D14 | 23.459 → 23.373 | 2.840 | 153.582 | +7.697 | 4.034 | 0.103 |
 | D10 | 22.581 → 22.581 | 2.840 | 149.013 | +3.128 | 0.000 | 0.000 |
 | D11 | 22.578 → 22.578 | 2.840 | 148.997 | +3.112 | 0.000 | 0.000 |
 | D13 | 22.586 → 22.586 | 2.840 | 149.044 | +3.159 | 0.000 | 0.000 |
@@ -19,6 +19,18 @@ The byte-1 nominal length ceiling is 23.000 mm. TI limits the mismatch between e
 | DQM1 | 22.568 → 22.568 | 2.840 | 148.937 | +3.052 | 0.000 | 0.000 |
 
 The separate breakout trials reserved byte 0 and the populated handheld while generating byte-1 options. Two-via D8 occupied the DQM1 route. Two-via D9 occupied both DQS1 routes. The shorter D12 and D14 escapes shared the southern channel with D5. In the byte-0 group, the two-via D7 escape blocked D3, D4 and both DQS0 legs. The alternative CKE route blocked A6 and A13. A finite selection across the tried full-net routes could not retain 50 mutually clear links with an improved transition topology. These trials establish conflicts in the tested corridors only.
+
+Command progress in this pass includes the following measured paths. The placement gives a TI nominal window of 28.550–31.090 mm. The signed skew is the board-flight difference from the clock-pair mean.
+
+| Net | Previous → current length mm | Barrel mm | Flight ps | Signed skew ps | TI nominal excess mm |
+|---|---:|---:|---:|---:|---:|
+| A10 | 39.232 → 39.131 | 2.840 | 244.490 | +64.650 | 8.041 |
+| CKE | 33.841 → 33.673 | 5.680 | 231.748 | +51.908 | 2.583 |
+| A13 | 23.573 → 28.680 | 2.840 | 184.199 | +4.359 | 0.000 |
+| A14 | 27.916 → 28.590 | 2.840 | 183.680 | +3.840 | 0.000 |
+| A6 | 25.350 → 25.350 | 5.680 | 183.732 | +3.892 | 3.200 |
+
+With the current coupled strobe geometry, a two-full-via byte-1 data route must fall between 22.090 and 22.674 mm to satisfy the nominal limit, both strobe-leg length limits and all three flight scenarios. At four full vias, the TI strobe rule requires at least 22.090 mm but the flight screen allows at most 19.425 mm. Each proposed route still needs the separate data-to-data test. [Rejected copper-corridor trials](studies/ddr-breakout/README.md)
 
 The native Gerbers and drills retain 50 distinct DDR pairs, full-width reference coverage, the MMC0 supply and signals, zero detected shorts, 0.102 mm copper spacing and 0.1524 mm via-edge clearance. Fabrication remains on hold.
 

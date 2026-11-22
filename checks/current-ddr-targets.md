@@ -41,20 +41,20 @@ With the present mixed-mode strobe times, the common data-flight target is 143.2
 | D9 | 19.316 / 23.000 | 4 | 148.922 | 3.409 | 2.484 | 3.037 | strobe length; data length vs D10, D11, D12, D13, D14, D15, DQM1 |
 | D10 | 22.581 / 23.000 | 2 | 149.013 | 0.144 | 2.575 | 3.128 | data length vs D8, D9, D12, D14 |
 | D11 | 22.578 / 23.000 | 2 | 148.997 | 0.147 | 2.559 | 3.112 | data length vs D8, D9, D12, D14 |
-| D12 | 23.843 / 23.000 | 2 | 156.295 | 1.208 | 9.858 | 10.411 | nominal; strobe length; modeled skew; data length vs D8, D9, D10, D11, D13, D15, DQM1 |
+| D12 | 23.808 / 23.000 | 2 | 156.090 | 1.173 | 9.652 | 10.205 | nominal; strobe length; modeled skew; data length vs D8, D9, D10, D11, D13, D15, DQM1 |
 | D13 | 22.586 / 23.000 | 2 | 149.044 | 0.139 | 2.606 | 3.159 | data length vs D8, D9, D12, D14 |
-| D14 | 23.459 / 23.000 | 2 | 154.082 | 0.824 | 7.644 | 8.197 | nominal; strobe length; modeled skew; data length vs D8, D9, D10, D11, D13, D15, DQM1 |
+| D14 | 23.373 / 23.000 | 2 | 153.582 | 0.738 | 7.144 | 7.697 | nominal; strobe length; modeled skew; data length vs D8, D9, D10, D11, D13, D15, DQM1 |
 | D15 | 22.564 / 23.000 | 2 | 148.917 | 0.161 | 2.479 | 3.032 | data length vs D8, D9, D12, D14 |
 | DQM1 | 22.568 / 23.000 | 2 | 148.937 | 0.157 | 2.499 | 3.052 | data length vs D8, D9, D12, D14 |
 
 - DQS1 measures 22.635 mm with 2 vias and 146.438 ps of mixed-mode flight.
 - DQSn1 measures 22.725 mm with 2 vias and 146.886 ps of mixed-mode flight.
 - Strobe pair mismatch is 0.090 mm against 0.127 mm. Mixed flight difference is 0.448 ps.
-- Data-to-data board flight spread is 7.379 ps (D12, D8) against the 3.663 ps model screen.
-- Data-to-data planar mismatch is 4.528 mm (D8, D12) against 0.635 mm.
-- Data-to-data including barrel depth mismatch is 1.688 mm (D8, D12) against 0.635 mm.
+- Data-to-data board flight spread is 7.174 ps (D12, D8) against the 3.663 ps model screen.
+- Data-to-data planar mismatch is 4.493 mm (D8, D12) against 0.635 mm.
+- Data-to-data including barrel depth mismatch is 1.653 mm (D8, D12) against 0.635 mm.
 - Data-to-strobe planar mismatch is 3.410 mm (D8, DQSn1) against 0.635 mm.
-- Data-to-strobe including barrel depth mismatch is 1.208 mm (D12, DQS1) against 0.635 mm.
+- Data-to-strobe including barrel depth mismatch is 1.173 mm (D12, DQS1) against 0.635 mm.
 
 ## Address, control and clock
 
@@ -64,11 +64,11 @@ The longest Manhattan distance plus 7.620 mm gives CACLM = 29.820 mm. Target ran
 |---|---|---|---|---|---|---|
 | A0 | 28.632 | 2 | 183.919 | 183.449–198.102 | +4.079 | pass |
 | A1 | 28.721 | 4 | 203.179 | 202.193–216.846 | +23.339 | pass |
-| A10 | 39.232 | 2 | 245.071 | 183.449–198.102 | +65.231 | -8.142 mm needed |
+| A10 | 39.131 | 2 | 244.490 | 183.449–198.102 | +64.650 | -8.041 mm needed |
 | A11 | 28.592 | 4 | 202.435 | 202.193–216.846 | +22.595 | pass |
 | A12 | 28.660 | 2 | 184.086 | 183.449–198.102 | +4.246 | pass |
-| A13 | 23.573 | 2 | 154.737 | 183.449–198.102 | -25.103 | +4.977 mm needed |
-| A14 | 27.916 | 2 | 179.794 | 183.449–198.102 | -0.046 | +0.634 mm needed |
+| A13 | 28.680 | 2 | 184.199 | 183.449–198.102 | +4.359 | pass |
+| A14 | 28.590 | 2 | 183.680 | 183.449–198.102 | +3.840 | pass |
 | A15 | 28.580 | 2 | 183.621 | 183.449–198.102 | +3.781 | pass |
 | A2 | 28.660 | 2 | 184.084 | 183.449–198.102 | +4.244 | pass |
 | A3 | 28.650 | 2 | 184.025 | 183.449–198.102 | +4.185 | pass |
@@ -83,7 +83,7 @@ The longest Manhattan distance plus 7.620 mm gives CACLM = 29.820 mm. Target ran
 | BA2 | 29.791 | 2 | 190.610 | 183.449–198.102 | +10.771 | pass |
 | CASn | 28.707 | 2 | 184.356 | 183.449–198.102 | +4.516 | pass |
 | CK | 28.648 | 2 | 184.012 | 183.449–198.102 | +0.249 | pass |
-| CKE | 33.841 | 4 | 232.718 | 202.193–216.846 | +52.878 | -2.751 mm needed |
+| CKE | 33.673 | 4 | 231.748 | 202.193–216.846 | +51.908 | -2.583 mm needed |
 | CKn | 28.553 | 2 | 183.464 | 183.449–198.102 | -0.249 | pass |
 | CSn0 | 28.690 | 2 | 184.257 | 183.449–198.102 | +4.417 | pass |
 | ODT | 28.575 | 2 | 183.591 | 183.449–198.102 | +3.751 | pass |
