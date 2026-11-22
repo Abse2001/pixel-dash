@@ -143,3 +143,5 @@ Relocating the PMIC backup input capacitor to the bottom and moving the hold-up 
 Use `python checks/check-ddr-gerber-strokes.py dist/index.circuit.json <export.zip> --all-traces` to compare each routed segment, layer and width against draws in the four manufacturing copper files. This complements the independent filled-copper contact and clearance audits, the drill comparison and the Gerber shorts check.
 
 The four D-pad directions now reach their switch lands from V16/GPIO1_24, U16/GPIO1_25, C12/GPIO3_17 and D17/GPIO0_13. The copper walk finds 22 of 66 assigned system connections complete. The assembly export has 6,870 matching routed strokes, zero Gerber shorts and zero 6 mil via-edge findings. Extending the Up trace to the neighboring switch land in a disposable negative control produced a 0 mm unrelated-copper finding at that land.
+
+Face button A connects through AM3354 V15 (GPMC_A5 in mode 7) to SW_A. The physical audit measures 23 of 66 system links connected. All four copper Gerbers and the board-wide copper clearance and via-edge checks pass on this revision.
