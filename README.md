@@ -33,11 +33,11 @@ DDR timing, hot LS1 margin and supplier acceptance remain open.
 The IN_LS1 supply uses two L1–L2 blind vias and a wide L2 trace.
 The LS1 output escape and L5 CPU feed flare into available copper.
 Two additional PMIC exposed-pad microvias share the L2 ground return.
-At 250 mA and 80 °C the modeled headroom is **+0.895 mV** including
+At 250 mA and 80 °C the modeled headroom is **+0.535 mV** including
 the three screened EP returns, up from **−4.186 mV** at 9d79e24.
 The shared-sheet solve uses 30 µm finished copper, 20 µm assumed via walls
 and a single A1 CPU return. Both 0.075 mm and 0.050 mm return meshes
-were checked. At 300 mA the forward margin is −5.258 mV before return loss. The 100 mA/1 µs transient adds 2.17–4.35 mV of ideal cap droop.
+were checked. At 300 mA the forward margin is −4.854 mV before return loss. The 100 mA/1 µs transient adds 2.17–4.35 mV of ideal cap droop.
 CAM confirms the separate CPU and memory rails, unchanged DDR reference
 coverage, clean drill spacing and no unrelated copper or 6 mil violations.
 [Hot-load screen](checks/current-ls1-budget.txt) · [Return calculation](checks/current-ls1-pours.txt)
@@ -45,6 +45,37 @@ coverage, clean drill spacing and no unrelated copper or 6 mil violations.
 The [coordinated seven-net trial](https://github.com/Abse2001/pixel-dash/tree/214365f)
 opened both the B5 and N5 corridors and shortened D1 and A10, but the trial
 copper shorts nets together and loses full-width reference. It stays separate.
+
+### AM3354 SRAM and back-bias capacitors
+
+The four copper layers and plated drills verify these five dedicated connections.
+Each capacitor has an L1–L2 microvia inside its ground land. The three internal
+outputs are electrically separate from each other and from PMIC LDO1. D10 and
+E9 draw from LDO1 and each has its own 10 µF capacitor.
+
+| ZCZ ball | Function | Fitted capacitor | Planar path | Modeled forward copper and barrel resistance at 20 °C |
+| --- | --- | --- | ---: | ---: |
+| C10 | CAP_VBB_MPU | C_VBB_MPU, 1 µF | 6.05 mm | 15.69 mΩ |
+| D9 | CAP_VDD_SRAM_CORE | C_SRAM_CORE, 1 µF | 7.36 mm | 25.38 mΩ |
+| D11 | CAP_VDD_SRAM_MPU | C_SRAM_MPU, 1 µF | 6.31 mm | 19.70 mΩ |
+| D10 | VDDS_SRAM_MPU_BB | C_SRAM_MPU_IN, 10 µF | 9.78 mm | 20.99 mΩ |
+| E9 | VDDS_SRAM_CORE_BG | C_SRAM_CORE_IN, 10 µF | 10.41 mm | 22.76 mΩ |
+
+The two input paths widen from 0.20 to 0.65 mm where clearance permits.
+The 1 µF and 10 µF parts carry JLCPCB codes C15849 and C19702 respectively.
+The estimates use the engineering cross section and exclude capacitor
+derating, ESR, loop inductance and package drop. Dynamic bypass impedance,
+regulator stability and SRAM inrush remain unverified. The 1 mm L3 supply
+bridge retains the direct DCDC3 feed to all 18 DRAM supply balls and
+preserves full-width signal reference. All 227 fitted placements and 7,698
+routed copper strokes match the engineering export.
+[TI SPRS717L §5.9, Tables 5-14 and 5-15](https://www.ti.com/lit/ds/symlink/am3354.pdf)
+
+Of the twelve open SYSBOOT lands, eleven have maximum pad-edge distance
+below the 0.408 mm saved DDR setback. V2 (bit 12) has 0.0272 mm excess
+at its farthest edge. The sampled blind-via escape search did not find
+a legal launch. The full set of sixteen straps is still a fabrication gate.
+[Physical strap envelope](checks/current-sysboot-envelope.csv)
 
 ### Pending cold-boot bench test
 

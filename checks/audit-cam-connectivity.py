@@ -14,6 +14,7 @@ from shapely.geometry import Point, LineString
 from shapely.ops import unary_union
 
 from ddr_cam import artwork
+from hdi_build import WURTH
 
 
 LAYERS = ("top", "inner1", "inner2", "bottom")
@@ -89,7 +90,16 @@ def internal_bypass(board, terminals, labels):
     components = {e.get("name"): e for e in board if e["type"] == "source_component"}
     locations = {labels[p["pcb_port_id"]]: (p["x"], p["y"]) for p in board
                  if p["type"] == "pcb_port" and p["pcb_port_id"] in labels}
+    paths = {t["source_trace_id"]: t for t in board if t["type"] == "pcb_trace"}
+    local = {s["name"]: paths.get(s["source_trace_id"]) for s in board
+             if s["type"] == "source_trace" and (s.get("name") or "").startswith("LOCAL_BYPASS_")}
     ground, supply = terminals["TP_UART_GND.pin1"], terminals["U_PMIC.LDO1"]
+    stack = WURTH
+    depths = dict(top=0, inner1=stack.outer_to_inner,
+                  inner2=stack.outer_to_outer-stack.outer_to_inner, bottom=stack.outer_to_outer)
+    via_index = {(round(v["x"], 5), round(v["y"], 5)): v for v in board if v["type"] == "pcb_via"}
+    ground_key = next(e["subcircuit_connectivity_map_key"] for e in board
+                      if e["type"] == "source_net" and e["name"] == "GND")
     outputs = {terminals["U1." + ball] for ball in ("C10", "D9", "D11")}
     isolated = len(outputs | {ground, supply}) == 5
     print("Internal regulator output separation from one another, LDO1 and GND:", "PASS" if isolated else "FAIL")
@@ -112,7 +122,32 @@ def internal_bypass(board, terminals, labels):
         print(f"{ball_name} {nominal} uF {ref}: {'CONNECTED' if ok else 'MISSING'}; "
               + (f"nearest qualifying {nearest[1]} at {nearest[0]:.3f} mm land-center distance"
                  if nearest else "no fitted capacitor of this value across the ball and ground"))
-        passed &= ok
+        trace = local.get("LOCAL_BYPASS_" + ball)
+        if trace:
+            route = trace["route"]
+            ends = [labels.get(route[0].get("start_pcb_port_id")), labels.get(route[-1].get("end_pcb_port_id"))]
+            widths = [p["width"] for p in route if p["route_type"] == "wire"]
+            length = sum(math.hypot(a["x"]-b["x"], a["y"]-b["y"]) for a,b in zip(route,route[1:]))
+            vias = [p for p in route if p["route_type"] == "via"]
+            print(f"  Dedicated path {ends}: {length:.3f} mm planar, {len(vias)} transitions, "
+                  f"{min(widths):.3f} mm minimum width.")
+            ok &= set(ends) == {ball_name, ref + ".pin1"}
+            squares = sum(math.hypot(a["x"]-b["x"], a["y"]-b["y"])/a["width"]
+                          for a,b in zip(route, route[1:]) if a["route_type"] == b["route_type"] == "wire")
+            resistance = squares * .01724 / stack.foil
+            for change in vias:
+                v = via_index[round(change["x"], 5), round(change["y"], 5)]
+                traversal = abs(depths[change["from_layer"]] - depths[change["to_layer"]])
+                resistance += .01724*traversal/(math.pi*stack.wall*(v["hole_diameter"]+stack.wall))
+            xy = tuple(round(value, 5) for value in locations[ref + ".pin2"])
+            ret = via_index.get(xy, {})
+            local_return = (set(ret.get("layers", ())) == {"top", "inner1"} and
+                            ret.get("subcircuit_connectivity_map_key") == ground_key and
+                            terminals[ref + ".pin2"] == ground)
+            ok &= local_return
+            print(f"  Forward line and contacted barrel resistance at 20 C: {resistance:.2f} mOhm; "
+                  f"L1–L2 ground via in capacitor return land: {local_return}.")
+        passed &= ok and trace is not None
     return not passed
 
 

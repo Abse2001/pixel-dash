@@ -1,9 +1,9 @@
 drill_npth.drl matches 19 round hits and 0 slots
-drill-L1-L4.drl matches 675 round hits and 6 slots
-drill-L1-L2.drl matches 253 round hits and 0 slots
+drill-L1-L4.drl matches 681 round hits and 6 slots
+drill-L1-L2.drl matches 266 round hits and 0 slots
 drill-L2-L3.drl matches 9 round hits and 0 slots
 drill-L3-L4.drl matches 23 round hits and 0 slots
-50 distinct DDR ball pairs connected. 966 plated barrels checked. No shorts between mapped land nets.
+50 distinct DDR ball pairs connected. 985 plated barrels checked. No shorts between mapped land nets.
 UART0 RX, TX and ground reach three distinct probe networks.
 PMIC copper verified between U_PMIC.L4A and L_PMIC_IO.pin1.
 PMIC copper verified between U_PMIC.L4B and L_PMIC_IO.pin2.
@@ -76,11 +76,21 @@ SYSBOOT14 bias=1 CPU_to_resistor=True sense_isolated=True
 SYSBOOT15 bias=0 CPU_to_resistor=True sense_isolated=True
 Physical SYSBOOT[15:0] 010?0???????????, expected 0100000000010111.
 Internal regulator output separation from one another, LDO1 and GND: PASS
-U1.C10 1 uF C_VBB_MPU: MISSING; no fitted capacitor of this value across the ball and ground
-U1.D9 1 uF C_SRAM_CORE: MISSING; no fitted capacitor of this value across the ball and ground
-U1.D11 1 uF C_SRAM_MPU: MISSING; no fitted capacitor of this value across the ball and ground
-U1.D10 10 uF C_SRAM_MPU_IN: MISSING; no fitted capacitor of this value across the ball and ground
-U1.E9 10 uF C_SRAM_CORE_IN: MISSING; no fitted capacitor of this value across the ball and ground
+U1.C10 1 uF C_VBB_MPU: CONNECTED; nearest qualifying C_VBB_MPU at 5.308 mm land-center distance
+  Dedicated path ['U1.C10', 'C_VBB_MPU.pin1']: 6.047 mm planar, 2 transitions, 0.110 mm minimum width.
+  Forward line and contacted barrel resistance at 20 C: 15.69 mOhm; L1–L2 ground via in capacitor return land: True.
+U1.D9 1 uF C_SRAM_CORE: CONNECTED; nearest qualifying C_SRAM_CORE at 6.152 mm land-center distance
+  Dedicated path ['U1.D9', 'C_SRAM_CORE.pin1']: 7.398 mm planar, 4 transitions, 0.105 mm minimum width.
+  Forward line and contacted barrel resistance at 20 C: 25.38 mOhm; L1–L2 ground via in capacitor return land: True.
+U1.D11 1 uF C_SRAM_MPU: CONNECTED; nearest qualifying C_SRAM_MPU at 6.150 mm land-center distance
+  Dedicated path ['U1.D11', 'C_SRAM_MPU.pin1']: 6.305 mm planar, 3 transitions, 0.105 mm minimum width.
+  Forward line and contacted barrel resistance at 20 C: 19.70 mOhm; L1–L2 ground via in capacitor return land: True.
+U1.D10 10 uF C_SRAM_MPU_IN: CONNECTED; nearest qualifying C_SRAM_MPU_IN at 7.069 mm land-center distance
+  Dedicated path ['U1.D10', 'C_SRAM_MPU_IN.pin1']: 9.778 mm planar, 4 transitions, 0.200 mm minimum width.
+  Forward line and contacted barrel resistance at 20 C: 20.99 mOhm; L1–L2 ground via in capacitor return land: True.
+U1.E9 10 uF C_SRAM_CORE_IN: CONNECTED; nearest qualifying C_SRAM_MPU_IN at 7.661 mm land-center distance
+  Dedicated path ['U1.E9', 'C_SRAM_CORE_IN.pin1']: 10.410 mm planar, 4 transitions, 0.200 mm minimum width.
+  Forward line and contacted barrel resistance at 20 C: 22.76 mOhm; L1–L2 ground via in capacitor return land: True.
 LCD CPU-to-connector copper 5/29. Reached LCD_D11, LCD_D13, LCD_D14, LCD_D15, LCD_PCLK. Open LCD_D0, LCD_D1, LCD_D10, LCD_D12, LCD_D16, LCD_D17, LCD_D18, LCD_D19, LCD_D2, LCD_D20, LCD_D21, LCD_D22, LCD_D23, LCD_D3, LCD_D4, LCD_D5, LCD_D6, LCD_D7, LCD_D8, LCD_D9, LCD_DE, LCD_HSYNC, LCD_RESET, LCD_VSYNC.
 SD CPU-to-connector copper 7/7. Reached SD_CLK, SD_CMD, SD_DAT0, SD_DAT1, SD_DAT2, SD_DAT3, SD_DETECT. Open none.
 OPEN channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net65 has 2 separate CAM networks: U1.C5 | R_PMIC_WAKE.pin1, U_PMIC.nWAKEUP
@@ -117,9 +127,9 @@ OPEN system_TOUCH_SDA has 2 separate CAM networks: U1.D16 | R_TOUCH_SDA.pin1
 OPEN unnamedsubcircuitsubcircuit_source_group_0_connectivity_net124 has 2 separate CAM networks: U1.C18 | Q_LCD_BL.pin1, R_LCD_BL_PULLDOWN.pin1
 OPEN unnamedsubcircuitsubcircuit_source_group_0_connectivity_net137 has 2 separate CAM networks: J_JOY_L.pin3, U1.V17 | R_JOY_L_CLICK.pin1
 OPEN unnamedsubcircuitsubcircuit_source_group_0_connectivity_net139 has 2 separate CAM networks: R_JOY_R_CLICK.pin1 | J_JOY_R.pin3, U1.D18
-OPEN unnamedsubcircuitsubcircuit_source_group_0_connectivity_net140 has 14 separate CAM networks: C_JOY_L_VDD.pin1 | C_JOY_L_BULK.pin1 | J_JOY_L.pin5 | U_SPK_AMP.MUTE | U_SPK_AMP.SHND | C_3V3_OUT_A.pin1, C_3V3_OUT_B.pin1, L_3V3.pin2 | TP_3V3.pin1 | R_JOY_L_CLICK.pin2 | R_JOY_R_CLICK.pin2 | C_SD.pin1, C_SD_BULK.pin1, J_SD.VDD | R_SD_CS.pin2, R_SD_DAT1.pin2, R_SD_DAT2.pin2 | C_JOY_R_VDD.pin1 | C_JOY_R_BULK.pin1 | J_JOY_R.pin5
+OPEN unnamedsubcircuitsubcircuit_source_group_0_connectivity_net140 has 14 separate CAM networks: C_JOY_L_VDD.pin1 | C_JOY_L_BULK.pin1 | J_JOY_L.pin5 | U_SPK_AMP.MUTE | U_SPK_AMP.SHND | C_3V3_OUT_A.pin1, C_3V3_OUT_B.pin1, L_3V3.pin2 | TP_3V3.pin1 | R_JOY_R_CLICK.pin2 | R_JOY_L_CLICK.pin2 | C_SD.pin1, C_SD_BULK.pin1, J_SD.VDD | R_SD_CS.pin2, R_SD_DAT1.pin2, R_SD_DAT2.pin2 | C_JOY_R_BULK.pin1 | C_JOY_R_VDD.pin1 | J_JOY_R.pin5
 OPEN unnamedsubcircuitsubcircuit_source_group_0_connectivity_net191 has 3 separate CAM networks: C_3V3_IN.pin1, C_AMP_VDD.pin1, C_AMP_VDD_BULK.pin1 | via only | via only
-OPEN unnamedsubcircuitsubcircuit_source_group_0_connectivity_net193 has 2 separate CAM networks: Q_LIPO_USB_OFF.pin3 | R_LIPO_ENABLE.pin2, U_LIPO_BOOST.EN, U_LIPO_UVLO.N_RESET
+OPEN unnamedsubcircuitsubcircuit_source_group_0_connectivity_net193 has 2 separate CAM networks: R_LIPO_ENABLE.pin2, U_LIPO_BOOST.EN, U_LIPO_UVLO.N_RESET | Q_LIPO_USB_OFF.pin3
 OPEN unnamedsubcircuitsubcircuit_source_group_0_connectivity_net32 has 2 separate CAM networks: U1.N18 | J_USB.A7, J_USB.B7
 OPEN unnamedsubcircuitsubcircuit_source_group_0_connectivity_net34 has 2 separate CAM networks: U1.N17 | J_USB.A6, J_USB.B6
 39 mapped land nets have multiple physical networks.

@@ -12,8 +12,8 @@ inner_um,temp_C,input_mOhm,output_mOhm,load_mA,trace_drop_mV,barrel_drop_mV,rema
 30,80,4.635,26.672,300,9.392,1.666,-4.058
 L5 to E5 at 20 C and 30 um top copper: additional 0.694 mV with 300 mA split equally across seven balls; 1.505 mV if all current enters E5.
 Both physical feeds with their shared copper counted once, 30 um outer foil, equal ball loads:
-  inner 30 um, 20 C, grid 0.025 mm: 33.064 mOhm; remaining at 250 mA 4.234 mV, at 300 mA -2.919 mV before return and transient losses.
-  inner 30 um, 80 C, grid 0.025 mm: 40.860 mOhm; remaining at 250 mA 2.285 mV, at 300 mA -5.258 mV before return and transient losses.
+  inner 30 um, 20 C, grid 0.025 mm: 31.973 mOhm; remaining at 250 mA 4.507 mV, at 300 mA -2.592 mV before return and transient losses.
+  inner 30 um, 80 C, grid 0.025 mm: 39.512 mOhm; remaining at 250 mA 2.622 mV, at 300 mA -4.854 mV before return and transient losses.
 Sensitivity to a 100 mA step lasting 1 us, before regulator response, ESR and ESL:
   50% effective: 23.00 uF, ideal capacitive droop 4.35 mV
   75% effective: 34.50 uF, ideal capacitive droop 2.90 mV

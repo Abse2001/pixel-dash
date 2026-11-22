@@ -88,6 +88,10 @@ def clear_handheld_copper_from_ddr(board):
     def coords(ring):
         return [(p["x"], p["y"]) for p in ring["vertices"]]
     original = Polygon(coords(shape["outer_ring"]), [coords(r) for r in shape["inner_rings"]])
+    # A 1 mm L3 bridge joins the direct DCDC3 feed at the east edge to
+    # the RAM reference copper. It crosses no bottom-layer track.
+    bridge = LineString([(-43.5, 27.4), (-46.0, 27.4)]).buffer(.5)
+    original = original.union(bridge)
     supply, = (e for e in board if e.get("source_net_id") == island["source_net_id"] and e["type"] == "source_net")
     antipads = []
     for via in board:
@@ -112,6 +116,26 @@ def clear_handheld_copper_from_ddr(board):
                 antipads.append(relief)
     if antipads:
         result = original.difference(unary_union(antipads))
+        if result.geom_type == "MultiPolygon":
+            # Keep the common component at the direct feed and reject loss
+            # of any powered contact or of the DDR routing envelope.
+            feed = Point(-39.395, 25.395)
+            main, = [piece for piece in result.geoms if piece.covers(feed)]
+            discarded = result.difference(main)
+            signal_ids = {e["source_trace_id"] for e in board if e["type"] == "source_trace"
+                          and (e.get("name") or "").startswith("DDR_")}
+            routes = [LineString([(v["x"], v["y"]) for v in e["route"]]).buffer(.20)
+                      for e in board if e["type"] == "pcb_trace" and e["source_trace_id"] in signal_ids]
+            if len(routes) != 50 or unary_union(routes).convex_hull.intersects(discarded):
+                raise ValueError("An isolated L3 fragment overlaps the routed DDR region")
+            for v in board:
+                if (v["type"] == "pcb_via" and "inner2" in v["layers"] and
+                    (v.get("source_net_id") == supply["source_net_id"] or
+                     v.get("subcircuit_connectivity_map_key") == supply["subcircuit_connectivity_map_key"])):
+                    land = Point(v["x"], v["y"]).buffer(v["outer_diameter"]/2)
+                    if discarded.intersects(land):
+                        raise ValueError(f"Isolated DDR supply land {v['pcb_via_id']}")
+            result = main
         if result.geom_type != "Polygon" or not result.is_valid:
             raise ValueError("Handheld copper divides the DDR supply island")
         def ring(boundary):
