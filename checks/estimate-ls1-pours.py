@@ -120,6 +120,32 @@ if "via_ddr_supply_output" not in via and any(e.get("name") == "U_DDR_SWITCH" fo
         resistance = squares(row, last, terminal, pitch) * .01724 / stack.foil
         print(f"  CPU row mesh {pitch:g} mm: {resistance:.4f} mOhm at 20 C")
 
+    # The source cap has a via in its land. Excite its drilled annulus and
+    # solve to one finite contact entirely inside VIN1.
+    def pin_contact(part, pin, diameter):
+        component, = (e["source_component_id"] for e in board if e["type"]=="source_component" and e.get("name")==part)
+        port, = (e["source_port_id"] for e in board if e["type"]=="source_port" and e.get("source_component_id")==component and e["name"]==pin)
+        land, = (e for e in board if e["type"]=="pcb_port" and e.get("source_port_id")==port)
+        return dict(x=land["x"], y=land["y"], outer_diameter=diameter)
+    cap = pin_contact("C_PMIC_DDR", "pin1", .45)
+    vin = pin_contact("U_DDR_SWITCH", "VIN1", .16)
+    crop = box(min(cap["x"],vin["x"])-4, min(cap["y"],vin["y"])-3,
+               max(cap["x"],vin["x"])+4, max(cap["y"],vin["y"])+4)
+    top = artwork(archive, "F_Cu.gbr").intersection(crop)
+    bores = []
+    for member, expected in drill["expected_drills"](board).items():
+        if "L1" not in member and "npth" not in member:
+            continue
+        for diameter, points in expected:
+            center = Point(points[0]) if len(points)==1 else LineString(points)
+            if center.distance(crop) <= diameter/2:
+                bores.append(center.buffer(diameter/2, quad_segs=48))
+    top = top.difference(unary_union(bores))
+    feed, = (g for g in top.geoms if all(g.intersection(land(v)).area > .002 for v in (cap,vin)))
+    for pitch in (.035,.025,.020,.015):
+        resistance = squares(feed, cap, vin, pitch) * .01724 / stack.foil
+        print(f"  switch input mesh {pitch:g} mm: {resistance:.4f} mOhm at 20 C")
+
 else:
     pairs = [("upper", "bridge_upper"), ("bridge_lower", "balls")]
     islands = []

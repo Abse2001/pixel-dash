@@ -93,3 +93,23 @@ def add_switched_ddr_pours(board):
         board.append(dict(type='pcb_copper_pour', pcb_copper_pour_id=f'cpu_ddr_row_{i}',
                           source_net_id=rail['source_net_id'], layer='top', shape='brep', covered_with_solder_mask=True,
                           brep_shape={'outer_ring':ring(part.exterior),'inner_rings':[ring(r) for r in part.interiors]}))
+
+    # Spread the DCDC3 feed on its own net between the regulator capacitor
+    # and the switch input. Keep the load side and all other copper isolated.
+    dcdc3, = (e for e in board if e['type'] == 'source_net' and e['name'] == 'VDDS_DDR')
+    input_key = dcdc3['subcircuit_connectivity_map_key']
+    feeds = [ids['pcb_ddr_switch_input_' + suffix] for suffix in ('trunk', 'local')]
+    if any(t['subcircuit_connectivity_map_key'] != input_key for t in feeds):
+        raise ValueError('Unexpected switch input net')
+    spine = unary_union([LineString([(p['x'], p['y']) for p in t['route']]) for t in feeds])
+    window = spine.buffer(2.4, quad_segs=48)
+    relief = [shape.buffer(.410 if net in signals else .155 if ids[oid]['type'] == 'pcb_via' else .110,
+                           quad_segs=48)
+              for oid, net, shape in copper['top'] if net != input_key and shape.distance(window) < .42]
+    usable = window.difference(unary_union(relief)).buffer(-.12, quad_segs=32).buffer(.12, quad_segs=32)
+    for i, part in enumerate(getattr(usable, 'geoms', (usable,))):
+        if not part.intersects(spine) or part.area < .1:
+            continue
+        board.append(dict(type='pcb_copper_pour', pcb_copper_pour_id=f'ddr_switch_input_{i}',
+                          source_net_id=dcdc3['source_net_id'], layer='top', shape='brep', covered_with_solder_mask=True,
+                          brep_shape={'outer_ring':ring(part.exterior),'inner_rings':[ring(r) for r in part.interiors]}))
