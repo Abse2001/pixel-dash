@@ -1,24 +1,22 @@
-# Zoned CPU escape study
+# Byte-lane breakout trial
 
-Starting at e6b5c4c, reserve the power and reset routes, ground returns and
-fixed-package DDR region before admitting outer-layer DDR tracks. Keep
-this partial build on the study branch. The production branch still
-carries all 50 DDR links. Build with the normal `bun run build` entry point.
+This study reserves the clock pair, both DQS pairs, B4, B5, C5, N5,
+P5, three new SYSBOOT sense traces and the capacitor returns before
+placing any data or command lines. The production board and the
+forty-link RTC study remain on their own branches.
 
-The first pass admitted 39 original DDR routes outside the four boot
-corridors. The L2 slots disconnected the returns of C_DDR23 and C_DDR29.
-Two L4 ground traces now join those pads to nearby verified ground pads.
-The next pass routes BA2 on five sections with four plated traversals.
-The originating package lands, old vias and replacement vias are checked
-during assembly. Interior voids from lifted vias are refilled while
-retaining relief for active copper and new plated holes.
+Six newly routed data signals give 12/50 verified ball pairs. The
+drilled export retains RTC regulator isolation, seven physical SYSBOOT
+straps, 21/21 DCDC4 CPU and USB loads, the ground network and the
+seven MMC0 connections. All twelve DDR signals pass full-width reference.
+The conservative DDR envelope, routed LCD and SD references, 0.102 mm
+copper, 0.1524 mm via-edge, drill spacing and native Gerber shorts pass.
 
-The drilled export verifies 40/50 DDR links, B5 to PGOOD_BU, C5 to
-nWAKEUP and 21/21 DCDC4 CPU/USB supply lands including N5 and P5.
-All ground lands reach the ground probe. No unrelated copper falls
-below 0.102 mm or the separate 0.1524 mm via-edge rule. Drill spacing,
-Gerber shorts, all routed DDR full-width references, the DDR envelope,
-six raster and seven MMC0 full-width references pass. The full-board
-connectivity and DDR timing gates remain open. B4 and twelve SYSBOOT
-straps remain open. See the explicitly deferred nets, endpoint report
-and incomplete timing screen in this directory.
+D5 now measures 20.018 mm with two traversals, down from 26.383 mm
+with two traversals in production. D0 and D3 use reserved length for
+19.927 and 19.912 mm with two traversals each. D2 is still early.
+D1 and D7 exceed their planar windows. Across the populated part of
+byte 0, the worst odd-mode-strobe delay difference is 20.792 ps.
+The independent isolated-strobe estimate is 23.866 ps. Both exclude
+package and launch delay. The unpopulated links are listed in
+`deferred.json`. This partial layout is unsuitable for fabrication.
