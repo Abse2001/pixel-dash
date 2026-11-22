@@ -51,10 +51,14 @@ const controls: Record<string, string> = {
 	UDQS: "DQS1",
 	"UDQS#": "DQSn1",
 };
+// The AM335x allows data bit swaps inside a byte. Both pins use LDQS/LDM.
+// Memory ball labels stay as marked on the Micron package.
+const cpuBitForRamBit: Readonly<Record<string, number>> = { DQ3: 7, DQ7: 3 };
+
 function memoryNet(signal: string) {
 	const pin = signal.split("/")[0];
 	if (/^(BA|A)\d+$/.test(pin)) return "DDR_" + pin;
-	if (/^DQ\d+$/.test(pin)) return "DDR_D" + pin.slice(2);
+	if (/^DQ\d+$/.test(pin)) return "DDR_D" + (cpuBitForRamBit[pin] ?? pin.slice(2));
 	if (controls[pin]) return "DDR_" + controls[pin];
 }
 export const signals = Object.entries(memoryBalls).flatMap(
