@@ -1,3 +1,4 @@
+import { CL10A475KO8NNNC as BackupInputCapacitor } from "../imports/CL10A475KO8NNNC"
 import { CL10A105KB8NNNC as HoldUpCapacitor } from "../imports/CL10A105KB8NNNC"
 import { SKRTLAE010 } from "../imports/SKRTLAE010"
 import { TPS65218D0PHPR } from "../imports/TPS65218D0PHPR"
@@ -67,6 +68,25 @@ export function PowerControl() {
         holeDiameter={0.254} outerDiameter={0.4572} connectsTo="net.GND"/>
     )))}
     <trace from=".U_PMIC > .EP" to="net.GND"/>
+    <BackupInputCapacitor name="C_PMIC_IN_BU" pcbX={-16.74994} pcbY={29.719866} pcbRotation={270}/>
+    <trace name="PMIC_BACKUP_INPUT" from=".U_PMIC > .IN_BU" to=".C_PMIC_IN_BU > .pin1"
+      thickness={0.20} pcbPath={[{x:1.75006,y:5.19989}]}/>
+    <trace from=".C_PMIC_IN_BU > .pin1" to="net.VSYS"/>
+    <trace from=".C_PMIC_IN_BU > .pin2" to="net.GND"/>
+    <via name="V_PMIC_IN_BU_RETURN" pcbX={-16.74994} pcbY={29.019842}
+      fromLayer="top" toLayer="inner1" holeDiameter={0.125} outerDiameter={0.28}
+      connectsTo={[".C_PMIC_IN_BU > .pin2", "net.GND"]}/>
+    <HoldUpCapacitor name="C_PMIC_SYS_BU" pcbX={-14.000086} pcbY={27.750058}/>
+    <trace name="PMIC_BACKUP_SYSTEM" from=".U_PMIC > .SYS_BU" to=".C_PMIC_SYS_BU > .pin1"
+      thickness={0.20} pcbStraightLine/>
+    <trace from=".C_PMIC_SYS_BU > .pin2" to="net.GND"/>
+    <via name="V_PMIC_SYS_BU_RETURN" pcbX={-13.300062} pcbY={27.750058}
+      fromLayer="top" toLayer="inner1" holeDiameter={0.125} outerDiameter={0.28}
+      connectsTo={[".C_PMIC_SYS_BU > .pin2", "net.GND"]}/>
+    <trace from=".U_PMIC > .CC" to="net.GND"/>
+    <via name="V_PMIC_CC_GND" pcbX={-17.749942} pcbY={29.19989}
+      fromLayer="top" toLayer="inner1" holeDiameter={0.125} outerDiameter={0.28}
+      connectsTo={[".U_PMIC > .CC", "net.GND"]}/>
     <HoldUpCapacitor name="C_PMIC_INT_LDO" pcbX={-22.049908} pcbY={30.79989}/>
     <trace name="PMIC_INTERNAL_LDO" from=".U_PMIC > .INT_LDO" to=".C_PMIC_INT_LDO > .pin1"
       thickness={0.20} pcbStraightLine/>
