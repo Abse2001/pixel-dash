@@ -1,5 +1,7 @@
 # Populated DDR breakout trials
 
+The exported copper and plated barrels connect all 15 designated reference bypass capacitors to direct DCDC3 and ground. At the ODT transition the farther via of the nearest verified capacitor pair is 9.504 mm away. This geometric distance does not establish return inductance or receiver margin. [Distance at every DDR layer change](transition-returns.csv)
+
 The input was the native assembled handheld at c28dc8c. Each path uses board coordinates in millimetres. The first section runs on L1. Successive sections alternate between L4 and L1, with a full-depth via at their shared endpoint. These alternatives are isolated from the board generator.
 
 The byte-1 trials protected the original byte-0 escape and the handheld components, signals and reference planes. Routing orders started with either D8/D9 or the strobe pair. The byte-0 trials reserved a separate set of paths for D7, D5, D3, D4, D2 and both strobe legs. The southern and command trials included A10 and CKE. A separate pin-and-repair pass tried to restore the conductors displaced by promising escapes. The finite pool produced no jointly clear 50-link alternative with a better via topology. Both byte-1 strobe legs also lacked a straight opposite-layer excursion with two legal new via sites in the tested fixed-copper corridor.

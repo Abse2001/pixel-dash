@@ -47,6 +47,7 @@ DDR memory supply to DCDC3 output capacitor: 18/18 VDD/VDDQ balls connected.
 DDR memory supply isolation from CPU VDDS_DDR: PASS.
 U1 DDR bypass to U_DDR_SWITCH.VOUT1: 22/22 supplied, 0 on copper shared with the other load domain.
 U_DDR DDR bypass to C_PMIC_DDR.pin1: 14/14 supplied, 0 on copper shared with the other load domain.
+DDR reference bypasses with both DCDC3 and ground lands connected: 15/15.
 DDR switch C_PMIC_DDR.pin1 all terminals connected
 DDR switch U_PMIC.LS1 all terminals connected
 DDR switch U_DDR_SWITCH.VOUT1 all terminals connected
