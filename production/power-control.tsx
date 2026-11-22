@@ -107,7 +107,7 @@ export function PowerControl() {
     <trace from=".U_PMIC > .L3" to=".L_PMIC_DDR > .pin1" thickness={0.36}
       pcbPath={[{x:-5.09989,y:2.249932}]}/>
     <trace from=".L_PMIC_DDR > .pin2" to=".C_PMIC_DDR > .pin1" thickness={0.60} pcbStraightLine/>
-    <trace from=".U_PMIC > .FB3" to=".C_PMIC_DDR > .pin1" thickness={0.15} pcbStraightLine/>
+    <trace from=".U_PMIC > .FB3" to=".C_PMIC_DDR > .pin1" thickness={0.15} pcbPath={[{x:-4.5998892,y:1.80721214}]}/>
     <trace from=".C_PMIC_DDR > .pin1" to="net.DCDC3_1V35"/>
     <trace from=".U_PMIC > .IN_LS1" to="net.DCDC3_1V35"/>
     <trace from=".U_PMIC > .IN_DCDC3" to="net.VSYS"/>
@@ -125,7 +125,7 @@ export function PowerControl() {
     <trace from=".L_PMIC_RTC_CORE > .pin2" to=".C_PMIC_RTC_CORE > .pin1" thickness={0.28} pcbStraightLine/>
     <BackupInductor name="L_PMIC_RTC_IO" pcbX={-11.05011} pcbY={27.249932} pcbRotation={90}/>
     <BackupOutputCapacitor name="C_PMIC_RTC_IO" pcbX={-7.25011} pcbY={28.249932}/>
-    <trace from=".U_PMIC > .L6" to=".L_PMIC_RTC_IO > .pin1" thickness={0.23} pcbStraightLine/>
+    <trace from=".U_PMIC > .L6" to=".L_PMIC_RTC_IO > .pin1" thickness={0.23} pcbPath={[{x:4.58025278,y:2.1799296}]}/>
     <trace from=".L_PMIC_RTC_IO > .pin2" to=".C_PMIC_RTC_IO > .pin1" thickness={0.28} pcbStraightLine/>
     <Pull10k name="R_PMIC_POR" pcbX={-26.9} pcbY={28.05} layer="bottom"/>
     <trace name="CPU_COLD_RESET" from=".U_PMIC > .PGOOD" to=".U1 > .B15"/>
@@ -159,7 +159,7 @@ export function PowerControl() {
     <BackupOutputCapacitor name="C_PMIC_CORE" pcbX={-32.499890} pcbY={19.949942} pcbRotation={270}/>
     <trace from=".U_PMIC > .L1" to=".L_PMIC_CORE > .pin1" thickness={0.36} pcbStraightLine/>
     <trace from=".L_PMIC_CORE > .pin2" to=".C_PMIC_CORE > .pin1" thickness={0.60} pcbStraightLine/>
-    <trace from=".U_PMIC > .FB1" to=".C_PMIC_CORE > .pin1" thickness={0.15} pcbStraightLine/>
+    <trace from=".U_PMIC > .FB1" to=".C_PMIC_CORE > .pin1" thickness={0.15} pcbPath={[{x:-4.5998892,y:-2.31185731}]}/>
     <trace from=".C_PMIC_CORE > .pin1" to="net.VDD_CORE"/>
     <trace from=".C_PMIC_CORE > .pin2" to="net.GND"/>
     <trace from=".U_PMIC > .IN_DCDC1" to="net.VSYS"/>

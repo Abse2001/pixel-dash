@@ -4,7 +4,7 @@ import { CL05B104KO5NNNC } from "../imports/CL05B104KO5NNNC"
 export function JoystickAdc() {
   return <>
     <ADS1115IDGSR name="U_JOY_ADC" pcbX={-2.5} pcbY={15.75} />
-    <CL05B104KO5NNNC name="C_JOY_ADC" pcbX={-2.07} pcbY={19.57}/>
+    <CL05B104KO5NNNC name="C_JOY_ADC" pcbX={-2.079884} pcbY={19.57}/>
     <trace from=".U_JOY_ADC > .ADDR" to="net.GND"/>
     <trace from=".U_JOY_ADC > .GND" to="net.GND"/>
     <trace from=".U_JOY_ADC > .VDD" to=".C_JOY_ADC > .pin1" thickness={0.20} pcbStraightLine/>
@@ -18,7 +18,7 @@ export function JoystickAdc() {
     <via name="V_JOY_ADC_ADDR" pcbX={-3.499998} pcbY={13.640022}
       fromLayer="top" toLayer="inner1" holeDiameter={0.125} outerDiameter={0.28}
       connectsTo={[".U_JOY_ADC > .ADDR", "net.GND"]}/>
-    <via name="V_JOY_ADC_RETURN" pcbX={-1.649884} pcbY={19.57}
+    <via name="V_JOY_ADC_RETURN" pcbX={-1.659768} pcbY={19.57}
       fromLayer="top" toLayer="inner1" holeDiameter={0.125} outerDiameter={0.28}
       connectsTo={[".C_JOY_ADC > .pin2", "net.GND"]}/>
   </>
