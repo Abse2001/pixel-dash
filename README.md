@@ -1,5 +1,11 @@
 # Pixel Dash
 
+## DDR timing study on the 50-link layout
+
+D8 and D9 now measure 18.9920 and 18.9946 mm of planar copper, respectively. Each still traverses four full-depth vias, totaling 5.680 mm in the reference stack. DQS1 and DQSn1 each traverse 2.840 mm. The production checkpoint used 22.5778 and 22.5769 mm on D8 and D9. The shorter traces reduce the worst byte-1 data-to-strobe difference from 22.556 to 11.113 ps in the uniform odd-mode sensitivity. D12 sets that maximum. In the mixed estimate D8 and D9 are within 1.332 ps of either strobe leg. The byte still fails the TI nominal length and skew screens, including the planar DQ spread. Byte 0, A10 and CKE also remain open timing gates.
+
+Native drilled CAM retains all 50 distinct CPU-to-RAM links, the full-width DDR references and MMC0 card power. Copper and drill spacing and the independent 6 mil via-edge screen pass. The flight report uses each actual layer transition and estimates coupled length from the mate’s same-layer centerline. It excludes package and launch delays. [Measured timing](checks/current-timing.txt) · [Per-net flight estimates](checks/current-ddr-flight.csv)
+
 ## Wide handheld checkpoint
 
 **Fabrication is on hold.** DCDC4 supplies 19/21 assigned 3.3 V CPU/USB
