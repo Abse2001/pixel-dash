@@ -64,7 +64,7 @@ def processor_power(terminals):
     supply = "C_LIPO_BOOST_OUT.pin1"
     for label in ("C_3V3_IN.pin1", "C_AMP_VDD.pin1", "R_POWER_PB.pin2", "U_PMIC.IN_BU",
                   "U_PMIC.IN_BIAS", "U_PMIC.IN_DCDC1", "U_PMIC.IN_DCDC2", "U_PMIC.IN_DCDC3", "U_PMIC.IN_DCDC4",
-                  "U_PMIC.IN_LDO1"):
+                  "U_PMIC.IN_LDO1", "U_PMIC.AC_DET"):
         connected = terminals[label] == terminals[supply]
         print(f"System supply copper {'PASS' if connected else 'OPEN'} {supply} to {label}.")
         failed |= not connected

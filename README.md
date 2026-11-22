@@ -359,3 +359,23 @@ the finer mesh adds 1.421 mV to the drop, taking the modeled DC margin to
 ideal capacitive term before ESR, ESL and regulation. A measured transient
 waveform and actual via plating are still unavailable. Use --return-path on
 the Würth sheet solve to reproduce the single-return case.
+
+### Push-button enable and retained raster routing
+
+AC_DET now reaches IN_BIAS on VSYS. TI SLDS234B §5.3.1.16 documents this
+connection for PB/PWR_EN control. Plugging in a charger can supply the board
+independently of issuing a PMIC wake request. Charger power sharing and
+switch-over behavior still need whole-system validation. Exported CAM shows
+IN_BU, IN_BIAS, all four main buck inputs, IN_LDO1 and AC_DET on VSYS;
+IN_LS1 is on DCDC3. Cold reset, warm reset and C6 power hold pass.
+The RTC mode, backup reset and CPU wake checks still fail at B4, B5 and C5.
+The latest four-layer check covers 962 plated barrels and 7,472 trace
+strokes. The board remains on fabrication hold.
+
+A raster search over X = −58 to 65 mm and Y = −40 to 40.4 mm found no
+additional complete exterior-layer routes with existing copper and the
+current continuous ground reference. At a 0.07 mm search grid D16, D17,
+DE and HSYNC each have zero legal through-via sites reachable within the
+CPU-side L1 region screened by this router. The display-side regions for
+all four have via candidates. A wider search around the display does not
+resolve these CPU escapes. Five existing raster paths remain in the layout.

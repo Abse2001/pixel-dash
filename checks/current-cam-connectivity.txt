@@ -1,9 +1,9 @@
 drill_npth.drl matches 19 round hits and 0 slots
-drill-L1-L4.drl matches 675 round hits and 6 slots
+drill-L1-L4.drl matches 677 round hits and 6 slots
 drill-L1-L2.drl matches 247 round hits and 0 slots
 drill-L2-L3.drl matches 9 round hits and 0 slots
 drill-L3-L4.drl matches 23 round hits and 0 slots
-50 distinct DDR ball pairs connected. 960 plated barrels checked. No shorts between mapped land nets.
+50 distinct DDR ball pairs connected. 962 plated barrels checked. No shorts between mapped land nets.
 UART0 RX, TX and ground reach three distinct probe networks.
 PMIC copper verified between U_PMIC.L4A and L_PMIC_IO.pin1.
 PMIC copper verified between U_PMIC.L4B and L_PMIC_IO.pin2.
@@ -56,6 +56,7 @@ System supply copper PASS C_LIPO_BOOST_OUT.pin1 to U_PMIC.IN_DCDC2.
 System supply copper PASS C_LIPO_BOOST_OUT.pin1 to U_PMIC.IN_DCDC3.
 System supply copper PASS C_LIPO_BOOST_OUT.pin1 to U_PMIC.IN_DCDC4.
 System supply copper PASS C_LIPO_BOOST_OUT.pin1 to U_PMIC.IN_LDO1.
+System supply copper PASS C_LIPO_BOOST_OUT.pin1 to U_PMIC.AC_DET.
 LDO1 output capacitor, ground and input isolation: PASS.
 SYSBOOT00 bias=1 CPU_to_resistor=False sense_isolated=True
 SYSBOOT01 bias=1 CPU_to_resistor=False sense_isolated=True
@@ -108,9 +109,9 @@ OPEN system_TOUCH_SDA has 2 separate CAM networks: U1.D16 | R_TOUCH_SDA.pin1
 OPEN unnamedsubcircuitsubcircuit_source_group_0_connectivity_net124 has 2 separate CAM networks: U1.C18 | Q_LCD_BL.pin1, R_LCD_BL_PULLDOWN.pin1
 OPEN unnamedsubcircuitsubcircuit_source_group_0_connectivity_net137 has 2 separate CAM networks: J_JOY_L.pin3, U1.V17 | R_JOY_L_CLICK.pin1
 OPEN unnamedsubcircuitsubcircuit_source_group_0_connectivity_net139 has 2 separate CAM networks: R_JOY_R_CLICK.pin1 | J_JOY_R.pin3, U1.D18
-OPEN unnamedsubcircuitsubcircuit_source_group_0_connectivity_net140 has 14 separate CAM networks: C_JOY_L_VDD.pin1 | C_JOY_L_BULK.pin1 | J_JOY_L.pin5 | U_SPK_AMP.MUTE | U_SPK_AMP.SHND | C_3V3_OUT_A.pin1, C_3V3_OUT_B.pin1, L_3V3.pin2 | TP_3V3.pin1 | R_JOY_L_CLICK.pin2 | R_JOY_R_CLICK.pin2 | C_SD.pin1, C_SD_BULK.pin1, J_SD.VDD | R_SD_CS.pin2, R_SD_DAT1.pin2, R_SD_DAT2.pin2 | C_JOY_R_VDD.pin1 | C_JOY_R_BULK.pin1 | J_JOY_R.pin5
+OPEN unnamedsubcircuitsubcircuit_source_group_0_connectivity_net140 has 14 separate CAM networks: C_JOY_L_VDD.pin1 | C_JOY_L_BULK.pin1 | J_JOY_L.pin5 | U_SPK_AMP.MUTE | U_SPK_AMP.SHND | C_3V3_OUT_A.pin1, C_3V3_OUT_B.pin1, L_3V3.pin2 | TP_3V3.pin1 | R_JOY_R_CLICK.pin2 | R_JOY_L_CLICK.pin2 | C_SD.pin1, C_SD_BULK.pin1, J_SD.VDD | R_SD_CS.pin2, R_SD_DAT1.pin2, R_SD_DAT2.pin2 | C_JOY_R_VDD.pin1 | C_JOY_R_BULK.pin1 | J_JOY_R.pin5
 OPEN unnamedsubcircuitsubcircuit_source_group_0_connectivity_net191 has 3 separate CAM networks: C_3V3_IN.pin1, C_AMP_VDD.pin1, C_AMP_VDD_BULK.pin1 | via only | via only
-OPEN unnamedsubcircuitsubcircuit_source_group_0_connectivity_net193 has 2 separate CAM networks: Q_LIPO_USB_OFF.pin3 | R_LIPO_ENABLE.pin2, U_LIPO_BOOST.EN, U_LIPO_UVLO.N_RESET
+OPEN unnamedsubcircuitsubcircuit_source_group_0_connectivity_net193 has 2 separate CAM networks: R_LIPO_ENABLE.pin2, U_LIPO_BOOST.EN, U_LIPO_UVLO.N_RESET | Q_LIPO_USB_OFF.pin3
 OPEN unnamedsubcircuitsubcircuit_source_group_0_connectivity_net32 has 2 separate CAM networks: U1.N18 | J_USB.A7, J_USB.B7
 OPEN unnamedsubcircuitsubcircuit_source_group_0_connectivity_net34 has 2 separate CAM networks: U1.N17 | J_USB.A6, J_USB.B6
 39 mapped land nets have multiple physical networks.

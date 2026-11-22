@@ -56,6 +56,7 @@ export function PowerControl() {
     ].includes(supply)).map(([ball]) => (
       <trace key={ball} from={".U1 > ." + ball} to="net.VDD_LDO1_1V8"/>
     ))}
+    <trace from=".U_PMIC > .AC_DET" to="net.VSYS"/>
     <trace from=".U_PMIC > .IN_LDO1" to="net.VSYS"/>
     <trace name="PMIC_INPUT" from=".U_PMIC > .IN_BIAS" to="net.VSYS"/>
     <trace name="RTC_POWER_HOLD" from=".U1 > .C6" to=".U_PMIC > .PWR_EN"/>
