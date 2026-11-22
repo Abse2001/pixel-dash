@@ -25,7 +25,9 @@ for bit in range(16):
         word |= 1 << bit
     ball, = [p for p, signal in balls.items() if signal == f"LCD_DATA{bit}"]
     cpu = pin(parts["U1"], ball)
-    panel = pin(parts["J_LCD"], f"pin{32-bit}")
+    # RGB888 Figure 2 assigns the low word to R[7:3], G[7:2], B[7:3].
+    panel_contact = (32,31,30,29,28,25,24,23,22,21,20,16,15,14,13,12)[bit]
+    panel = pin(parts["J_LCD"], f"pin{panel_contact}")
     tap, = [t for t in traces if {cpu,b}.issubset(t["connected_source_port_ids"])]
     bus, = [t for t in traces if {cpu,panel}.issubset(t["connected_source_port_ids"])]
     key = bus["subcircuit_connectivity_map_key"]

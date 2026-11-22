@@ -74,18 +74,6 @@ for e in channel:
         continue
     board.append(rename(e,mapping))
 
-# Give panel passives functional designators and preserve pin/net identities.
-panel_names = {"R_GPU_LCD_WR":"R_LCD_WR","R_GPU_LCD_RD":"R_LCD_RD"}
-def panel_name(value):
-    if isinstance(value, str):
-        for k, v in panel_names.items():
-            value=value.replace(k,v)
-    elif isinstance(value, list):
-        return [panel_name(v) for v in value]
-    elif isinstance(value, dict):
-        return {k:panel_name(v) for k,v in value.items()}
-    return value
-board = panel_name(board)
 pins = { (p["source_component_id"],hint):p for p in board if p["type"]=="source_port"
          for hint in [p["name"],*p.get("port_hints",[])] }
 parts = {e["name"]:e for e in board if e["type"]=="source_component"}
@@ -115,6 +103,45 @@ with (root/"interface.csv").open() as f:
         if balls[ball] != row["Pad"]:
             raise ValueError(f"Wrong processor ball {row}")
         interface_trace(row["Signal"], "U1", ball, row["Peripheral"], row["Pin"])
+
+# The bare raster panel has independent analog rails and a floating LED string.
+# Bind the physical contacts independently of the pending bias and LED drivers.
+panel_rails = {"GND": (5, 36, 38, 48), "LCD_VCOM": (6, 46), "LCD_DVDD": (7,),
+               "LCD_VGH": (41,), "LCD_VGL": (42,), "LCD_AVDD": (43,),
+               "LCD_LED_A": (1, 2), "LCD_LED_K": (3, 4)}
+def bind_supply(ref, terminal, net):
+    pin = port(ref, terminal)
+    key = net["subcircuit_connectivity_map_key"]
+    if pin.get("subcircuit_connectivity_map_key", key) != key:
+        raise ValueError(f"Conflicting assignment for {ref}.{terminal}")
+    pin["subcircuit_connectivity_map_key"] = key
+    sid = f"rail_{ref}_{terminal}"
+    board.append(dict(type="source_trace", source_trace_id=sid, name=sid,
+                      connected_source_port_ids=[pin["source_port_id"]],
+                      connected_source_net_ids=[net["source_net_id"]], subcircuit_connectivity_map_key=key))
+    return sid
+
+# The old FPC doubled as a ground tie for the right shoulder switch.
+bind_supply("SW_R", "pin4", ground(board))
+for name, numbers in panel_rails.items():
+    if name == "GND":
+        net = ground(board)
+    else:
+        net = dict(type="source_net", source_net_id="raster_" + name, name=name,
+                   subcircuit_connectivity_map_key="raster_" + name)
+        board.append(net)
+    for number in numbers:
+        terminal = f"pin{number}"
+        sid = bind_supply("J_LCD", terminal, net)
+        if name == "GND":
+            land = one(board, "pcb_port", source_port_id=port("J_LCD", terminal)["source_port_id"])
+            board.append(dict(type="pcb_via", pcb_via_id=f"pcb_raster_ground_{number}",
+                              source_trace_id=sid, source_net_id=net["source_net_id"],
+                              subcircuit_connectivity_map_key=net["subcircuit_connectivity_map_key"],
+                              x=land["x"], y=land["y"], from_layer="top", to_layer="inner1",
+                              layers=["top", "inner1"], hole_diameter=0.125, outer_diameter=0.28))
+for touch in ("SCL", "SDA", "IRQ"):
+    bind_supply("R_TOUCH_" + touch, "pin2", one(board, "source_net", name="VDD_IO_3V3_SEQ"))
 
 for index, axis in enumerate(("LX", "LY", "RX", "RY")):
     interface_trace("ADC_" + axis, "U_JOY_ADC", f"AIN{index}", "C_JOY_" + axis, "pin1")
@@ -251,6 +278,17 @@ for number in (3, 98, 108, 109):
         if {point["from_layer"], point["to_layer"]} != {"top", "inner1"}:
             raise ValueError(f"Unexpected ground transition in {number}")
         add_ground_return(trace, point, f"pcb_retained_ground_{number}_{index}")
+# Both L1-L2 transitions on the retained backlight gate need plated lands.
+gate = one(board, "pcb_trace", pcb_trace_id="pcb_trace_14")
+gate_source = one(board, "source_trace", source_trace_id=gate["source_trace_id"])
+for index, via in enumerate(p for p in gate["route"] if p["route_type"] == "via"):
+    if {via["from_layer"], via["to_layer"]} != {"top", "inner1"}:
+        raise ValueError("Unexpected backlight gate span")
+    board.append(dict(type="pcb_via", pcb_via_id=f"pcb_backlight_gate_{index}",
+                      pcb_trace_id=gate["pcb_trace_id"], source_trace_id=gate_source["source_trace_id"],
+                      subcircuit_connectivity_map_key=gate_source["subcircuit_connectivity_map_key"],
+                      x=via["x"], y=via["y"], from_layer="top", to_layer="inner1",
+                      layers=["top", "inner1"], hole_diameter=0.125, outer_diameter=0.28))
 for index, (x, y) in enumerate(json.loads((root / "system-ground-stitches.json").read_text())):
     board.append(dict(type="pcb_via", pcb_via_id=f"pcb_mmc0_return_{index}",
                       source_net_id=gnd["source_net_id"],

@@ -73,7 +73,7 @@ def verify(elements, check_ddr_power=False, check_ddr_signals=False, check_syste
             terminal = "pin1" if axis[1] == "X" else "pin4"
             required.append([f"{connector}.{terminal}", f"R_JOY_{axis}.pin1"])
     if check_retained_returns:
-        required[2].extend(["C_SD_BULK.pin2", "R_LOGIC_FB_BOTTOM.pin2", "C_AMP_VDD_BULK.pin2", "U_SPK_AMP.PGND2",
+        required[2].extend([*(f"J_LCD.pin{n}" for n in (5, 36, 38, 48)), "C_SD_BULK.pin2", "R_LOGIC_FB_BOTTOM.pin2", "C_AMP_VDD_BULK.pin2", "U_SPK_AMP.PGND2",
                             "J_SPK.pin3", "C_3V3_IN.pin2", "R_LCD_BL_PULLDOWN.pin2"])
     if check_control_bus:
         for signal, ball in (("SCL", "C16"), ("SDA", "C17")):

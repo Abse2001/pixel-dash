@@ -12,6 +12,11 @@ def apply_wide_layout(board):
     outline = json.loads(Path(__file__).with_name("wide-outline.json").read_text())
     spec, = [e for e in board if e["type"] == "pcb_board"]
     spec.update(outline)
+    # Move only the two lower enclosure mounts on the wide PCB.
+    for side in (-1, 1):
+        hole, = [e for e in board if e["type"] == "pcb_hole" and e.get("hole_diameter") == 3.3
+                 and (e["x"], e["y"]) == (side * 50, -32)]
+        hole.update(x=side * 70, y=-29)
     # Shell-specific display keepers, cell models and fasteners belong to the
     # small enclosure. The wide design retains the actual controller mechanisms.
     mechanical_offsets = {
