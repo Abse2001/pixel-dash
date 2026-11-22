@@ -20,7 +20,7 @@ def polygon(pour):
     return Polygon(outer, holes)
 
 
-def audit(board, microsd=False, full_width=False, raster=False, archive=None):
+def audit(board, microsd=False, full_width=False, raster=False, archive=None, study_open=()):
     nets = {e["source_net_id"]: e["name"] for e in board if e["type"] == "source_net"}
     names = {e["source_trace_id"]: e.get("name", "") for e in board if e["type"] == "source_trace"}
     ref = {"top": ("inner1", "GND"), "bottom": ("inner2", "GND" if microsd or raster else "VDDS_DDR")}
@@ -98,7 +98,13 @@ def audit(board, microsd=False, full_width=False, raster=False, archive=None):
                 combined = unary_union(gaps)
                 yield name, layer, ref[layer][0], combined.area if full_width else combined.length
 
-    if not microsd and not raster and len(seen) != 50:
+    if study_open:
+        intended = {name for name in names.values() if name and name.startswith("DDR_")}
+        missing = intended - seen
+        if len(intended) != 50 or set(study_open) != missing:
+            raise ValueError(f"Study DDR reference audit found {len(intended)} source signals and opens {sorted(missing)}")
+        print(f"Study reference coverage screened {len(seen)} routed DDR signals. Open signals: {', '.join(sorted(missing))}.", file=sys.stderr)
+    elif not microsd and not raster and len(seen) != 50:
         raise ValueError(f"Expected 50 routed DDR signals, found {len(seen)}")
     if raster and not seen:
         raise ValueError("The assembled board contains no routed raster signals")
@@ -112,11 +118,13 @@ if __name__ == "__main__":
     group = parser.add_mutually_exclusive_group()
     group.add_argument("--micro-sd", action="store_true")
     group.add_argument("--raster", action="store_true")
+    group.add_argument("--study-open", nargs="+", metavar="DDR_SIGNAL", default=(),
+                       help="Partial DDR study only: require exactly these source signals to be open")
     parser.add_argument("--full-width", action="store_true")
     parser.add_argument("--gerbers", type=Path, help="Check the connected reference copper reconstructed from the manufacturing archive")
     args = parser.parse_args()
     full_width = args.full_width
-    failures = sorted(audit(json.loads(args.circuit.read_text()), args.micro_sd, full_width, args.raster, args.gerbers))
+    failures = sorted(audit(json.loads(args.circuit.read_text()), args.micro_sd, full_width, args.raster, args.gerbers, args.study_open))
     out = csv.writer(sys.stdout)
     out.writerow(("signal", "signal_layer", "reference_layer", "uncovered_copper_mm2" if full_width else "uncovered_centerline_mm"))
     for name, layer, ref, length in failures:

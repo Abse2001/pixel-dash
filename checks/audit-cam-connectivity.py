@@ -331,6 +331,7 @@ def main():
     parser.add_argument("--mmc0-power", action="store_true", help="require card supply, ground, pull-ups and all seven links")
     parser.add_argument("--mmc0-only", action="store_true",
                         help="return the drilled MMC0 result independently of other open nets")
+    parser.add_argument("--byte-lanes-only", action="store_true", help="Require 22 distinct drilled byte endpoints and reject shorts across all mapped lands.")
     args = parser.parse_args()
     if args.mmc0_only and any((args.pmic_controls, args.handheld_ground, args.cpu_power, args.sysboot, args.panel_storage)):
         parser.error("--mmc0-only cannot be combined with whole-handheld checks")
@@ -421,7 +422,12 @@ def main():
     ddr_nodes = set()
     ddr_open = []
     ddr = [t for t in board if t["type"] == "source_trace" and (t.get("name") or "").startswith("DDR_")]
-    if len(ddr) != 50 or len({t["name"] for t in ddr}) != 50:
+    if args.byte_lanes_only:
+        required = {f"DDR_D{i}" for i in range(16)} | {f"DDR_{s}{i}" for s in ("DQS", "DQSn", "DQM") for i in (0, 1)}
+        ddr = [t for t in ddr if t["name"] in required]
+        if len(ddr) != 22 or {t["name"] for t in ddr} != required:
+            raise ValueError("Expected the 22 unique data, mask and strobe signals")
+    elif len(ddr) != 50 or len({t["name"] for t in ddr}) != 50:
         raise ValueError("Expected 50 uniquely named DDR source links")
     for trace in ddr:
         cpu, ram = (ports[pid] for pid in trace["connected_source_port_ids"])
@@ -435,6 +441,8 @@ def main():
     print(f"{len(ddr_nodes)} distinct DDR ball pairs connected. {len(plating)} plated barrels checked. No shorts between mapped land nets.")
     if ddr_open:
         print("Open DDR links: " + ", ".join(sorted(ddr_open)))
+    if args.byte_lanes_only:
+        return bool(ddr_open)
     if "TP_UART_RX.pin1" in terminals:
         probes = (("U1.E15", "TP_UART_RX.pin1"), ("U1.E16", "TP_UART_TX.pin1"), ("TP_UART_GND.pin1", "C_DDR25.pin2"))
         networks = {terminals[a] for a, _ in probes}
