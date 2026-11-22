@@ -218,7 +218,14 @@ for saved_name, plan in paths.items():
         raise ValueError(f"Empty route section on {sid}")
     first_layer = "top" if "top" in start["layers"] else "bottom"
     outer_layers = (first_layer, "bottom" if first_layer == "top" else "top")
-    last_layer = outer_layers[(len(sections) - 1) % 2]
+    routing_layers = [outer_layers[i % 2] for i in range(len(sections))]
+    if isinstance(plan, dict) and "layers" in plan:
+        routing_layers = plan["layers"]
+        if (len(routing_layers) != len(sections) or routing_layers[0] != first_layer
+                or any(layer not in layers for layer in routing_layers)
+                or any(a == b for a, b in zip(routing_layers, routing_layers[1:]))):
+            raise ValueError(f"Invalid saved routing layers on {sid}")
+    last_layer = routing_layers[-1]
     for pad, point, layer in ((start, sections[0][0], first_layer), (end, sections[-1][-1], last_layer)):
         if layer not in pad["layers"] or dist(point, (pad["x"], pad["y"])) > 1e-5:
             raise ValueError(f"Saved route no longer lands on a terminal of {sid}")
@@ -227,16 +234,16 @@ for saved_name, plan in paths.items():
     trace_id = "pcb_" + sid
     key = source["subcircuit_connectivity_map_key"]
     for index, section in enumerate(sections):
-        layer = outer_layers[index % 2]
+        layer = routing_layers[index]
         if index:
             x, y = section[0]
             if dist((x, y), sections[index-1][-1]) > 1e-7:
                 raise ValueError(f"Mismatch at via {index} on {sid}")
-            previous = outer_layers[(index - 1) % 2]
+            previous = routing_layers[index-1]
             route.append(dict(route_type="via", x=x, y=y, from_layer=previous, to_layer=layer))
             board.append(dict(type="pcb_via", pcb_via_id=f"{trace_id}_via_{index}", pcb_trace_id=trace_id,
                               source_trace_id=sid, subcircuit_connectivity_map_key=key, x=x, y=y,
-                              from_layer=previous, to_layer=layer, layers=list(layers),
+                              from_layer="top", to_layer="bottom", layers=list(layers),
                               hole_diameter=0.15, outer_diameter=0.30))
         route.extend(dict(route_type="wire", layer=layer, width=width, x=x, y=y) for x, y in section)
     route[0]["start_pcb_port_id"] = start["pcb_port_id"]
