@@ -32,23 +32,25 @@ BYTE1 [0.000, 23.000] mm: 2/11 routed outside (DDR_D12, DDR_D14)
     DDR_DQM1 25.628 mm (2 traversals)
     DDR_DQS1 25.570 mm (2 traversals)
     DDR_DQSn1 25.660 mm (2 traversals)
-ADDR_CTRL_CK [28.550, 31.090] mm: 2/27 routed outside (DDR_A10, DDR_CKE)
-  DDR_A10 32.773 mm, shorten by 1.683 mm to reach the window
+ADDR_CTRL_CK [28.550, 31.090] mm: 5/27 routed outside (DDR_A10, DDR_A13, DDR_A14, DDR_A6, DDR_CKE)
+  DDR_A10 39.232 mm, shorten by 8.142 mm to reach the window
+  DDR_A13 21.497 mm, lengthen by 7.053 mm to reach the window
+  DDR_A14 24.546 mm, lengthen by 4.004 mm to reach the window
+  DDR_A6 23.065 mm, lengthen by 5.485 mm to reach the window
   DDR_CKE 33.841 mm, shorten by 2.751 mm to reach the window
-  Provisional nominal-window screen including barrels: 27/27 outside
+  Provisional nominal-window screen including barrels: 26/27 outside
     DDR_A0 31.692 mm (2 traversals)
     DDR_A1 34.841 mm (4 traversals)
-    DDR_A10 35.833 mm (2 traversals)
+    DDR_A10 42.292 mm (2 traversals)
     DDR_A11 34.712 mm (4 traversals)
     DDR_A12 31.720 mm (2 traversals)
-    DDR_A13 37.901 mm (6 traversals)
-    DDR_A14 31.952 mm (2 traversals)
+    DDR_A13 24.557 mm (2 traversals)
+    DDR_A14 27.606 mm (2 traversals)
     DDR_A15 31.640 mm (2 traversals)
     DDR_A2 31.720 mm (2 traversals)
     DDR_A3 31.710 mm (2 traversals)
     DDR_A4 31.780 mm (2 traversals)
     DDR_A5 32.003 mm (2 traversals)
-    DDR_A6 31.774 mm (2 traversals)
     DDR_A7 31.666 mm (2 traversals)
     DDR_A8 31.779 mm (2 traversals)
     DDR_A9 31.778 mm (2 traversals)
@@ -82,5 +84,5 @@ BYTE0 worst data-to-strobe difference with isolated strobe: 38.469 ps (DDR_D7 an
 BYTE0 worst data-to-strobe difference with uniform odd mode strobe: 41.386 ps (DDR_D7 and DDR_DQSn0).
 BYTE1 worst data-to-strobe difference with isolated strobe: 20.582 ps (DDR_D8 and DDR_DQS1).
 BYTE1 worst data-to-strobe difference with uniform odd mode strobe: 23.846 ps (DDR_D8 and DDR_DQS1).
-DDR_A10 minus clock-pair mean in the uniform odd-mode clock scenario: +28.698 ps.
+DDR_A10 minus clock-pair mean in the uniform odd-mode clock scenario: +66.703 ps.
 DDR_CKE minus clock-pair mean in the uniform odd-mode clock scenario: +55.169 ps.

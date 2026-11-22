@@ -238,7 +238,16 @@ for saved_name, plan in paths.items():
             raise ValueError(f"Invalid saved routing layers on {sid}")
     last_layer = routing_layers[-1]
     for pad, point, layer in ((start, sections[0][0], first_layer), (end, sections[-1][-1], last_layer)):
-        if layer not in pad["layers"] or dist(point, (pad["x"], pad["y"])) > 1e-5:
+        allowed = 1e-5
+        if isinstance(plan, dict) and plan.get("offset_ball"):
+            ref, terminal = plan["offset_ball"].split(".")
+            if ref != "U1":
+                raise ValueError(f"Offset landing is only defined for processor balls on {sid}")
+            if pad["source_port_id"] == port(ref, terminal)["source_port_id"]:
+                copper_land = one(board, "pcb_smtpad", pcb_port_id=pad["pcb_port_id"], shape="circle")
+                # Keep the center of the trace end at least a quarter-width inside the ball land.
+                allowed = copper_land["radius"] - plan["width"] / 4
+        if layer not in pad["layers"] or dist(point, (pad["x"], pad["y"])) > allowed:
             raise ValueError(f"Saved route no longer lands on a terminal of {sid}")
     width = plan.get("width", 0.102) if isinstance(plan, dict) else 0.102
     via_drill, via_land = (plan.get("via_drill", 0.15), plan.get("via_land", 0.30)) if isinstance(plan, dict) else (0.15, 0.30)
@@ -252,10 +261,13 @@ for saved_name, plan in paths.items():
             if dist((x, y), sections[index-1][-1]) > 1e-7:
                 raise ValueError(f"Mismatch at via {index} on {sid}")
             previous = routing_layers[index-1]
+            span = plan.get("via_span", layers) if isinstance(plan, dict) else layers
+            if tuple(span) != layers and (tuple(span) != ("top", "inner1") or set(span) != {previous, layer}):
+                raise ValueError(f"Drill span does not match routed layers on {sid}")
             route.append(dict(route_type="via", x=x, y=y, from_layer=previous, to_layer=layer))
             board.append(dict(type="pcb_via", pcb_via_id=f"{trace_id}_via_{index}", pcb_trace_id=trace_id,
                               source_trace_id=sid, subcircuit_connectivity_map_key=key, x=x, y=y,
-                              from_layer="top", to_layer="bottom", layers=list(layers),
+                              from_layer=span[0], to_layer=span[-1], layers=list(span),
                               hole_diameter=via_drill, outer_diameter=via_land))
         route.extend(dict(route_type="wire", layer=layer, width=width, x=x, y=y) for x, y in section)
     route[0]["start_pcb_port_id"] = start["pcb_port_id"]

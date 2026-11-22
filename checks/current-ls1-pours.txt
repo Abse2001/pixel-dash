@@ -1,9 +1,9 @@
 drill_npth.drl matches 19 round hits and 0 slots
-drill-L1-L4.drl matches 664 round hits and 6 slots
-drill-L3-L4.drl matches 23 round hits and 0 slots
+drill-L1-L4.drl matches 667 round hits and 6 slots
+drill-L3-L4.drl matches 22 round hits and 0 slots
 pitch_mm,upper_squares,lower_squares,total_mOhm_35um_20C,drop_mV_300mA
-0.080,10.4425,11.2294,10.6749,3.2025
-0.055,10.0956,10.8696,10.3269,3.0981
-0.040,9.9062,10.6654,10.1330,3.0399
-0.030,9.8418,10.5999,10.0690,3.0207
-0.025,9.7728,10.4777,9.9748,2.9925
+0.080,13.2580,11.5748,12.2319,3.6696
+0.055,12.8886,11.4071,11.9674,3.5902
+0.040,12.6625,11.0289,11.6697,3.5009
+0.030,12.5268,10.9819,11.5797,3.4739
+0.025,12.4631,10.8366,11.4768,3.4430
