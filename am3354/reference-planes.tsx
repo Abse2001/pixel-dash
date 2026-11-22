@@ -5,7 +5,14 @@ import fanout from "./reference-fanout.json";
 const supplyOutline = [
 	{ x: -27, y: 5 },
 	{ x: 6.2, y: 5 },
-	{ x: 6.2, y: 29 },
+	// Keep the DDR supply lands at y=17.55 and 21.55 connected while
+    // allowing a ground-referenced I2C escape beside the processor.
+    { x: 6.2, y: 18.05 },
+    { x: 4.15, y: 18.60 },
+    { x: 4.15, y: 20.75 },
+    { x: 5.15, y: 21.18 },
+    { x: 6.2, y: 21.50 },
+    { x: 6.2, y: 29 },
 	{ x: -27, y: 29 },
 ];
 

@@ -25,7 +25,7 @@ def restrict_ground(board, ground_net, layer="inner1"):
         # Reserve the entire DDR supply island, including its internal antipads.
         supply, = (p for p in board if p["type"] == "pcb_copper_pour" and
                    p["layer"] == layer and p["source_net_id"] != ground_net)
-        island = Polygon(ring_vertices(supply["brep_shape"]["outer_ring"])).envelope
+        island = Polygon(ring_vertices(supply["brep_shape"]["outer_ring"]))
         clearances.append(island.buffer(0.16, join_style="mitre"))
     for e in board:
         kind = e["type"]

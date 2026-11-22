@@ -161,11 +161,16 @@ for saved_name, plan in paths.items():
     else:
         sections = plan["sections"] if isinstance(plan, dict) else plan
         if isinstance(plan, dict):
-            ref, terminal = plan["end_at"].split(".")
+            field = "end_at" if "end_at" in plan else "start_at"
+            ref, terminal = plan[field].split(".")
             alternate = port(ref, terminal)
             if alternate["subcircuit_connectivity_map_key"] != source["subcircuit_connectivity_map_key"]:
                 raise ValueError(f"Alternate terminal has the wrong net on {saved_name}")
-            end = one(board, "pcb_port", source_port_id=alternate["source_port_id"])
+            alternate_land = one(board, "pcb_port", source_port_id=alternate["source_port_id"])
+            if field == "end_at":
+                end = alternate_land
+            else:
+                start = alternate_land
         if any(e["type"] == "pcb_trace" and e.get("source_trace_id") == sid for e in board):
             raise ValueError(f"Saved copper duplicates existing routing on {saved_name}")
     if not sections or any(len(section) < 2 for section in sections):
