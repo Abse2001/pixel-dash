@@ -10,6 +10,10 @@ The routed D1, D2, D5 and D6 paths each measure 19.920 mm. Their two 1.420 mm th
 
 Drilled CAM verifies 44 distinct package links and six opens. The routed links pass full-width reference coverage, the copper and via-edge clearances, drill spacing and exported Gerber shorts. Sequenced MMC0 also passes. [Drilled CAM record](studies/ddr-breakout/study-cam.txt)
 
+The [50-signal study ledger](studies/ddr-breakout/all-signals.csv) includes the six open data paths and all command signals. Each byte currently has six routed members out of nine data and mask signals. The six available upper-byte members pass peer, strobe and modeled matching. D12 has only 0.0452 ps of modeled headroom. The low-byte pin permutation reduces the longest Manhattan distance to 19.8000 mm. D1, D2, D5 and D6 pass the original 20.600 mm project ceiling but exceed this revised placement nominal by 0.1200 mm. Each also misses peer matching to D7 by 2.6672 mm beyond the 0.635 mm limit. Actual fabrication, package delays and receiver waveforms remain unverified.
+
+Reproduce the partial ledger with `PYTHONPATH=checks python checks/compare-ddr-routing.py --study complete.circuit.json study.circuit.json`. The default comparison still requires all 50 paths.
+
 The native assembly retains the previous full-bus plane protection envelope when rebuilding the incomplete layout. The 50-link release check still fails on this branch. Fabrication remains on hold.
 
 ## Complete-board baseline
