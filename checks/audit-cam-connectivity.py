@@ -50,6 +50,17 @@ def processor_power(terminals):
     cpu_balls = sorted(b for b, name in balls.items() if name == "VDDS_DDR")
     if not dram_balls or len(cpu_balls) != 7:
         raise ValueError("Unexpected DDR supply ball map")
+    ground = terminals["TP_UART_GND.pin1"]
+    for label, ball, part in (("RAM ZQ", "U_DDR.L8", "R_ZQ"), ("CPU VTP", "U1.J3", "R_VTP"),
+                              ("RAM VREFCA bypass", "U_DDR.M8", "C_VREF_CA"),
+                              ("RAM VREFDQ bypass", "U_DDR.H1", "C_VREF_DQ"),
+                              ("CPU DDR VREF bypass", "U1.J4", "C_CPU_VREF")):
+        sense = terminals[part + ".pin1"]
+        local = terminals[ball] == sense
+        returned = terminals[part + ".pin2"] == ground
+        isolated = sense not in (ground, terminals["C_PMIC_DDR.pin1"], terminals[cpu_ddr])
+        print(f"{label} CAM: {ball} to {part}.pin1={local}, return to main ground={returned}, sense isolated from supply and return={isolated}")
+        failed |= not (local and returned and isolated)
     dram_nodes = {terminals["U_DDR." + b] for b in dram_balls}
     cpu_nodes = {terminals["U1." + b] for b in cpu_balls}
     direct = sum(terminals["U_DDR." + b] == terminals["C_PMIC_DDR.pin1"] for b in dram_balls)

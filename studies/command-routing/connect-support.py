@@ -9,7 +9,8 @@ board=json.loads(Path(sys.argv[1]).read_bytes())
 sys.path.insert(0,str(Path(__file__).resolve().parents[2] / "production"))
 from connectivity import trace_net_keys
 _, trace_keys=trace_net_keys(board)
-plans=json.loads(Path(__file__).with_name("support-paths.json").read_bytes())
+plan_file = Path(sys.argv[3]) if len(sys.argv) > 3 else Path(__file__).with_name("support-paths.json")
+plans = json.loads(plan_file.read_bytes())
 ids={e.get(e["type"]+"_id"):e for e in board}
 ports={}
 for p in board:
