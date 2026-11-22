@@ -120,17 +120,17 @@ export function DdrVref() {
 				thickness={0.102}
 				pcbStraightLine
 			/>
-			{cpuPath.vias.map(({ name, at, buried }) => (
+			{cpuPath.vias.map(({ name, at, through }) => (
 				<via
 					key={name}
 					name={name}
 					pcbX={at.x}
 					pcbY={at.y}
 					connectsTo="net.DDR_VREF"
-					fromLayer={buried ? "inner1" : "top"}
-					toLayer={buried ? "inner2" : "inner1"}
-					outerDiameter={buried ? 0.3 : 0.28}
-					holeDiameter={buried ? 0.15 : 0.125}
+					fromLayer="top"
+					toLayer={through ? "bottom" : "inner1"}
+					outerDiameter={through ? 0.3 : 0.28}
+					holeDiameter={through ? 0.15 : 0.125}
 				/>
 			))}
 			{cpuPath.traces.map(({ start, end, width, path }) => (

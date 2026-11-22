@@ -6,23 +6,23 @@
 				"x": -5.31,
 				"y": 15.91
 			},
-			"buried": false
+			"through": false
 		},
 		{
 			"name": "V_CPU_VREF_2",
 			"at": {
-				"x": -5.59,
-				"y": 15.91
+				"x": -6.339,
+				"y": 15.906
 			},
-			"buried": true
+			"through": true
 		},
 		{
 			"name": "V_CPU_VREF_3",
 			"at": {
-				"x": -8.24,
-				"y": 15.805
+				"x": -8.258,
+				"y": 15.792
 			},
-			"buried": true
+			"through": true
 		},
 		{
 			"name": "V_CPU_VREF_4",
@@ -30,7 +30,7 @@
 				"x": -8.635,
 				"y": 15.7
 			},
-			"buried": false
+			"through": false
 		}
 	],
 	"traces": [
@@ -58,21 +58,21 @@
 			]
 		},
 		{
-			"start": ".V_CPU_VREF_1 > .inner1",
-			"end": ".V_CPU_VREF_2 > .inner1",
-			"width": 0.34,
+			"start": ".V_CPU_VREF_1 > .top",
+			"end": ".V_CPU_VREF_2 > .top",
+			"width": 0.145,
 			"path": []
 		},
 		{
-			"start": ".V_CPU_VREF_2 > .inner2",
-			"end": ".V_CPU_VREF_3 > .inner2",
-			"width": 0.254,
+			"start": ".V_CPU_VREF_2 > .bottom",
+			"end": ".V_CPU_VREF_3 > .bottom",
+			"width": 0.32,
 			"path": []
 		},
 		{
-			"start": ".V_CPU_VREF_3 > .inner1",
-			"end": ".V_CPU_VREF_4 > .inner1",
-			"width": 0.254,
+			"start": ".V_CPU_VREF_3 > .top",
+			"end": ".V_CPU_VREF_4 > .top",
+			"width": 0.4,
 			"path": []
 		},
 		{
