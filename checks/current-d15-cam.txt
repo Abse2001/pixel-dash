@@ -59,7 +59,7 @@ OPEN unnamedsubcircuitsubcircuit_source_group_0_connectivity_net193 has 2 separa
 OPEN unnamedsubcircuitsubcircuit_source_group_0_connectivity_net32 has 2 separate CAM networks: U1.N18 | J_USB.A7, J_USB.B7
 OPEN unnamedsubcircuitsubcircuit_source_group_0_connectivity_net34 has 2 separate CAM networks: U1.N17 | J_USB.A6, J_USB.B6
 38 mapped land nets have multiple physical networks.
-Verified 7895 strokes from 614 PCB traces against all four copper Gerbers.
+Verified 7884 strokes from 614 PCB traces against all four copper Gerbers.
 No shorts detected in index.circuit.json
 50 unique connections match the package functions. 2 within-byte DQ remaps.
 U1.N2 DDR_D3 -> U_DDR.H7 DQ7
