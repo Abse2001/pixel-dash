@@ -2,7 +2,7 @@
 
 ## DDR timing study
 
-The timing branch retains 50 distinct drilled DDR links. Byte 1’s worst modeled strobe skew is +10.205 ps on D12, and byte 0’s is +39.729 ps on D7, against the ±3.663 ps engineering screen. TI's data-to-strobe routing limit is 0.635 mm. A13 and A14 enter the 28.550–31.090 mm nominal command window. A10, A6 and CKE remain outside it. The full report lists every net’s prior and current length, traversed depth, flight estimate, signed skew and residual against its TI and modeled targets. [Verified timing study c9be947](https://github.com/Abse2001/pixel-dash/blob/c9be947/checks/current-ddr-change.csv)
+The complete routed candidate at 4cdb79c has 50 distinct drilled CPU-to-DDR3L connections. All 70 local blind-via lands reach connected inner-layer Gerber copper. Byte 0's worst modeled data skew is +38.508 ps on D7 and byte 1's is +7.700 ps on D12, against ±3.663 ps. DQS0's pair mismatch is 0.0145 mm against TI's 0.127 mm limit. A10, A6 and CKE still miss the project command window, and receiver timing remains open. The separate 47-link candidate meets matching on the complete upper byte but has three open lower-byte nets. Fabrication remains on hold. [Complete routed layout](https://github.com/Abse2001/pixel-dash/tree/4cdb79c) · [All 50 lengths, delays and targets](https://github.com/Abse2001/pixel-dash/blob/4cdb79c/checks/current-ddr-change.csv) · [Drilled whole-board connectivity](https://github.com/Abse2001/pixel-dash/blob/4cdb79c/checks/current-raster-taps-cam.txt) · [Upper-byte routing study](https://github.com/Abse2001/pixel-dash/tree/a4307c5)
 
 ## Wide handheld checkpoint
 
