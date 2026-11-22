@@ -54,7 +54,7 @@ export function PowerControl() {
     <trace from=".R_PMIC_SCL > .pin2" to=".R_PMIC_SDA > .pin2" thickness={0.2}
       pcbPath={[{x:0.432816,y:-0.63},{x:-2.932816,y:-0.63}]}/>
     <trace from=".R_PMIC_SDA > .pin2" to="net.VDD_IO_3V3_SEQ"/>
-    {Object.entries(processorBalls).filter(([, supply]) => supply === "VDDSHV6").map(([ball]) => (
+    {Object.entries(processorBalls).filter(([, supply]) => supply === "VDDSHV3" || supply === "VDDSHV6").map(([ball]) => (
       <trace key={ball} from={".U1 > ." + ball} to="net.VDD_IO_3V3_SEQ"/>
     ))}
     <DdrSelect name="R_DDR_VSEL" pcbX={-14.4} pcbY={24.25}/>
@@ -68,13 +68,17 @@ export function PowerControl() {
         holeDiameter={0.254} outerDiameter={0.4572} connectsTo="net.GND"/>
     )))}
     <trace from=".U_PMIC > .EP" to="net.GND"/>
-    <BackupInputCapacitor name="C_PMIC_IN_BU" pcbX={-16.74994} pcbY={29.719866} pcbRotation={270}/>
-    <trace name="PMIC_BACKUP_INPUT" from=".U_PMIC > .IN_BU" to=".C_PMIC_IN_BU > .pin1"
-      thickness={0.20} pcbPath={[{x:1.75006,y:5.19989}]}/>
+    <BackupInputCapacitor name="C_PMIC_IN_BU" pcbX={-18.049916} pcbY={30.84989} pcbRotation={180} layer="bottom"/>
+    <via name="V_PMIC_BU_FEED" pcbX={-18.74994} pcbY={29.99989}
+      holeDiameter={0.20} outerDiameter={0.40} connectsTo="net.VSYS"/>
+    <trace name="PMIC_BACKUP_INPUT" from=".U_PMIC > .IN_BU" to=".V_PMIC_BU_FEED > .top"
+      thickness={0.23} pcbStraightLine/>
+    <trace from=".V_PMIC_BU_FEED > .bottom" to=".C_PMIC_IN_BU > .pin1"
+      thickness={0.23} pcbStraightLine/>
     <trace from=".C_PMIC_IN_BU > .pin1" to="net.VSYS"/>
     <trace from=".C_PMIC_IN_BU > .pin2" to="net.GND"/>
-    <via name="V_PMIC_IN_BU_RETURN" pcbX={-16.74994} pcbY={29.019842}
-      fromLayer="top" toLayer="inner1" holeDiameter={0.125} outerDiameter={0.28}
+    <via name="V_PMIC_IN_BU_RETURN" pcbX={-17.349892} pcbY={30.84989}
+      fromLayer="bottom" toLayer="inner2" holeDiameter={0.125} outerDiameter={0.28}
       connectsTo={[".C_PMIC_IN_BU > .pin2", "net.GND"]}/>
     <HoldUpCapacitor name="C_PMIC_SYS_BU" pcbX={-14.000086} pcbY={27.750058}/>
     <trace name="PMIC_BACKUP_SYSTEM" from=".U_PMIC > .SYS_BU" to=".C_PMIC_SYS_BU > .pin1"
@@ -87,11 +91,11 @@ export function PowerControl() {
     <via name="V_PMIC_CC_GND" pcbX={-17.749942} pcbY={29.19989}
       fromLayer="top" toLayer="inner1" holeDiameter={0.125} outerDiameter={0.28}
       connectsTo={[".U_PMIC > .CC", "net.GND"]}/>
-    <HoldUpCapacitor name="C_PMIC_INT_LDO" pcbX={-22.049908} pcbY={30.79989}/>
+    <HoldUpCapacitor name="C_PMIC_INT_LDO" pcbX={-22.049908} pcbY={30.94989}/>
     <trace name="PMIC_INTERNAL_LDO" from=".U_PMIC > .INT_LDO" to=".C_PMIC_INT_LDO > .pin1"
       thickness={0.20} pcbStraightLine/>
     <trace from=".C_PMIC_INT_LDO > .pin2" to="net.GND"/>
-    <via name="V_PMIC_INT_RETURN" pcbX={-21.349884} pcbY={30.79989}
+    <via name="V_PMIC_INT_RETURN" pcbX={-21.349884} pcbY={30.94989}
       fromLayer="top" toLayer="inner1" holeDiameter={0.125} outerDiameter={0.28}
       connectsTo={[".C_PMIC_INT_LDO > .pin2", "net.GND"]}/>
   </>
