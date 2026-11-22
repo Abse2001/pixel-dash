@@ -457,6 +457,12 @@ def main():
             for land in lands:
                 if terminals[land] != terminals[anchor]:
                     raise ValueError(f"Converter connection open between {anchor} and {land}")
+        logic_rail = terminals["C_3V3_OUT_A.pin1"]
+        if any(terminals["U_SPK_AMP." + control] != logic_rail for control in ("MUTE", "SHND")):
+            raise ValueError("PAM8403 active-low enable or mute lacks the regulated 3.3 V feed")
+        if logic_rail in (terminals["U_SPK_AMP.GND"], terminals["U_SPK_AMP.VDD"]):
+            raise ValueError("PAM8403 control rail aliases ground or amplifier power")
+        print("PAM8403 MUTE and SHND reach regulated 3.3 V and are isolated from ground and VDD.")
         print("Battery inductor and 3.3 V regulator: all eight lands reach the intended external copper.")
     if args.pmic_controls:
         for start, end in (

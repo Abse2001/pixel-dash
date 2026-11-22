@@ -1772,5 +1772,7 @@
     "width": 0.2,
     "end_at": "C_3V3_OUT_B.pin1",
     "sections": [[[-20.7, -16.9], [-22.4, -16.800002]]]
-  }
+  },
+  "amp-enable": {"rail": "V3V3", "rail_terminals": ["U_SPK_AMP.SHND", "U_SPK_AMP.MUTE"], "width": 0.15, "sections": [[[-34.26442, -13.635], [-39.73558, -13.635]]]},
+  "amp-supply": {"rail": "V3V3", "rail_terminals": ["U_SPK_AMP.SHND", "C_3V3_OUT_A.pin1"], "width": 0.15, "sections": [[[-34.26442, -13.635], [-30.965, -15.015], [-18.9, -14.950002]]]}
 }
