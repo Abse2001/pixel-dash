@@ -4,6 +4,10 @@ The [unrouted handheld example](examples/unrouted-handheld) contains the populat
 
 ## Current electrical checkpoint
 
+BA2 now measures 28.6872 mm, down from 29.7914 mm, inside the 28.550–31.090 mm placement window. It keeps both L1–L4 transitions and 2.840 mm of contacted barrel. Mixed-mode flight falls from 190.6105 to 184.2404 ps and signed skew to the CK pair mean falls from +10.7705 to +4.4005 ps. This is a board-flight estimate; command receiver setup and hold still require launch and waveform qualification. The 49 other DDR routes and all DDR via sets reproduce exactly. [Per-net timing and residuals](checks/current-ddr-change.csv)
+
+Drilled CAM confirms 50 distinct DDR links and no shorts between mapped lands. The common DDR envelope, full-width DDR and MMC0 reference, local return lands, drill spacing, 0.102 mm copper and separate 0.1524 mm via-edge audits pass. The sequenced 3.3 V rail reaches 19/21 CPU lands. N5 and P5 still require an escape outside the reserved DDR area. The raster audit following strap aliases finds inherited ground-coverage gaps on D11 and D15. [Physical net report](checks/current-raster-taps-cam.txt) · [Raster return findings](checks/current-aliased-raster-reference.txt)
+
 Drilled CAM verifies 50 distinct AM3354-to-DDR3L connections. The byte-0 strobe legs measure 20.3465 and 20.3320 mm. Their planar mismatch is 0.0145 mm against TI's 0.127 mm limit. Each still traverses two 1.420 mm L1–L4 vias. Three additional byte-0 data or mask paths meet the ±3.6633 ps board-flight screen. Their own copper and via locations are unchanged.
 
 | Net | Length (mm) | Flight (ps) | Prior → current worst signed skew (ps) | Remaining model headroom (ps) | Largest data-to-strobe mismatch (mm) |
