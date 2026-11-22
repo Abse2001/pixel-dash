@@ -11,7 +11,7 @@ import sys
 from pathlib import Path
 
 from shapely import STRtree, prepare
-from shapely.geometry import GeometryCollection
+from shapely.geometry import GeometryCollection, Point
 from shapely.ops import unary_union
 
 
@@ -82,13 +82,24 @@ def envelope_audit(board, archive=None):
             member = {"inner1": "In1_Cu.gbr", "inner2": "In2_Cu.gbr"}[layer]
             plane = ddr_cam.reference(archive, member, seed)
         # Count signal and power via antipads separately from missing or split reference copper.
-        antipads = unary_union([shape.buffer(0.16, quad_segs=64) for oid, key, shape in copper[layer]
-                                if by_id[oid]["type"] in ("pcb_via", "pcb_plated_hole")
-                                and key != plane_key and shape.distance(region) < 0.16])
+        reliefs = []
+        for oid, key, shape in copper[layer]:
+            item = by_id[oid]
+            if item["type"] not in ("pcb_via", "pcb_plated_hole") or key == plane_key or shape.distance(region) >= 0.16:
+                continue
+            if item["type"] == "pcb_via":
+                # Direct inscribed circle at the nominal relief radius. Buffering a
+                # polygonal via land twice compounds the chord approximation.
+                radius = item["outer_diameter"] / 2 + 0.16
+                relief = Point(item["x"], item["y"]).buffer(radius, quad_segs=512)
+            else:
+                relief = shape.buffer(0.16, quad_segs=512)
+            reliefs.append(relief)
+        antipads = unary_union(reliefs)
         missing = region.difference(plane)
         residual = missing.difference(antipads).area
         print(f"{layer} {reference}: envelope {region.area:.4f} mm², uncovered {missing.area:.4f} mm², "
-              f"uncovered outside nominal via antipads {residual:.4f} mm².", file=sys.stderr)
+              f"uncovered outside nominal via antipads {residual:.9f} mm².", file=sys.stderr)
         if residual > 1e-6:
             yield layer, "reference_plane", reference, f"{residual:.6f}", ""
     for layer in ("top", "bottom"):
