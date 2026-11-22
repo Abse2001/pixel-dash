@@ -61,6 +61,18 @@ def processor_power(terminals):
         isolated = sense not in (ground, terminals["C_PMIC_DDR.pin1"], terminals[cpu_ddr])
         print(f"{label} CAM: {ball} to {part}.pin1={local}, return to main ground={returned}, sense isolated from supply and return={isolated}")
         failed |= not (local and returned and isolated)
+    for label, a, b in (
+        ("VREF divider high supply", "R_VREF_HIGH.pin2", "C_PMIC_DDR.pin1"),
+        ("VREF divider low return", "R_VREF_LOW.pin2", "TP_UART_GND.pin1"),
+        ("VREF divider midpoint", "R_VREF_HIGH.pin1", "R_VREF_LOW.pin1"),
+        ("VREFCA bias input", "R_VREF_HIGH.pin1", "R_VREF_CA.pin2"),
+        ("VREFCA bias output", "R_VREF_CA.pin1", "U_DDR.M8"),
+        ("RAM VREFDQ bias", "R_VREF_HIGH.pin1", "U_DDR.H1"),
+        ("CPU DDR VREF bias", "R_VREF_HIGH.pin1", "U1.J4"),
+    ):
+        connected = terminals[a] == terminals[b]
+        print(f"{label} CAM: {a} to {b}={'PASS' if connected else 'OPEN'}")
+        failed |= not connected
     dram_nodes = {terminals["U_DDR." + b] for b in dram_balls}
     cpu_nodes = {terminals["U1." + b] for b in cpu_balls}
     direct = sum(terminals["U_DDR." + b] == terminals["C_PMIC_DDR.pin1"] for b in dram_balls)
