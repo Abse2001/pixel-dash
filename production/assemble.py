@@ -269,7 +269,15 @@ for saved_name, plan in paths.items():
                               source_trace_id=sid, subcircuit_connectivity_map_key=key, x=x, y=y,
                               from_layer=span[0], to_layer=span[-1], layers=list(span),
                               hole_diameter=via_drill, outer_diameter=via_land))
-        route.extend(dict(route_type="wire", layer=layer, width=width, x=x, y=y) for x, y in section)
+        if isinstance(plan, dict) and "section_widths" in plan:
+            section_widths = plan["section_widths"][index]
+            if len(section_widths) != len(section) - 1 or min(section_widths) < width:
+                raise ValueError(f"Invalid segment widths on {sid}")
+            wire_widths = [*section_widths, section_widths[-1]]
+        else:
+            wire_widths = [width] * len(section)
+        route.extend(dict(route_type="wire", layer=layer, width=w, x=x, y=y)
+                     for (x, y), w in zip(section, wire_widths))
     route[0]["start_pcb_port_id"] = start["pcb_port_id"]
     route[-1]["end_pcb_port_id"] = end["pcb_port_id"]
     board.append(dict(type="pcb_trace", pcb_trace_id=trace_id, source_trace_id=sid,
