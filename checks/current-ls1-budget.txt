@@ -29,6 +29,11 @@ Direct L3-to-lower-bank feed to E5, with the original parallel path omitted, equ
   inner 35 um, 80 C: 58.273 mOhm; remaining at 250 mA -2.068 mV, at 300 mA -10.482 mV before return and transient losses.
   inner 17.5 um, 20 C: 50.220 mOhm; remaining at 250 mA -0.055 mV, at 300 mA -8.066 mV before return and transient losses.
   inner 17.5 um, 80 C: 62.061 mOhm; remaining at 250 mA -3.015 mV, at 300 mA -11.618 mV before return and transient losses.
+Both physical feeds with their shared copper counted once, 35 um outer foil, equal ball loads:
+  inner 35 um, 20 C, grid 0.025 mm: 44.218 mOhm; remaining at 250 mA 1.445 mV, at 300 mA -6.265 mV before return and transient losses.
+  inner 35 um, 80 C, grid 0.025 mm: 54.645 mOhm; remaining at 250 mA -1.161 mV, at 300 mA -9.393 mV before return and transient losses.
+  inner 17.5 um, 20 C, grid 0.025 mm: 46.602 mOhm; remaining at 250 mA 0.850 mV, at 300 mA -6.981 mV before return and transient losses.
+  inner 17.5 um, 80 C, grid 0.025 mm: 57.591 mOhm; remaining at 250 mA -1.898 mV, at 300 mA -10.277 mV before return and transient losses.
 Sensitivity to a 100 mA step lasting 1 us, before regulator response, ESR and ESL:
   50% effective: 23.00 uF, ideal capacitive droop 4.35 mV
   75% effective: 34.50 uF, ideal capacitive droop 2.90 mV

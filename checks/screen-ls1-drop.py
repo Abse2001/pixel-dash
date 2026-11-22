@@ -1,5 +1,6 @@
 """Screen the DCDC3–LS1–CPU path with explicit copper and load assumptions."""
 import argparse
+import csv
 import json
 import math
 from pathlib import Path
@@ -8,6 +9,7 @@ parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument("board", type=Path)
 parser.add_argument("--pour-mohm", type=float, help="L4 spreading resistance from the same export at 35 um and 20 C")
 parser.add_argument("--direct-pour-mohm", type=float, help="Resistance from the direct L4 feed to the CPU supply via in the same export")
+parser.add_argument("--sheet-network-report", type=Path, help="Gerber/drill sheet solve from estimate-ls1-pours.py --joined")
 args = parser.parse_args()
 if args.direct_pour_mohm is not None and not (math.isfinite(args.direct_pour_mohm) and args.direct_pour_mohm > 0):
     parser.error("Direct-feed spreading resistance must be positive and finite")
@@ -55,6 +57,8 @@ for p in upstream["route"]:
         via, = (v for v in vias if math.hypot(v["x"] - p["x"], v["y"] - p["y"]) < 1e-5
                 and {"top", "bottom"} <= set(v["layers"]))
         barrels.append((via["hole_diameter"], 1.530))
+if len(barrels) != 2:
+    raise ValueError("Update the IN_LS1 barrel model for the changed upstream topology")
 by_id = {v["pcb_via_id"]: v for v in vias}
 for name, depth in [("output", 1.530 - .0764), ("upper", .0764),
                     ("bridge_upper", .0764), ("bridge_lower", .0764), ("balls", 1.530)]:
@@ -106,10 +110,10 @@ if args.pour_mohm is not None:
         headroom = available - load * 110
         print(f"  {load*1000:.0f} mA: pre-board allowance {headroom:.3f} mV, modeled board drop {series*load:.3f} mV, remaining {headroom-series*load:.3f} mV.")
     print(f"Zero-margin current in this DC scenario: {1000*available/(110+series):.1f} mA before return drop, package, ripple and transients.")
+common = [upstream] + [e for e in downstream if e["pcb_trace_id"] in {
+        "pcb_ddr_supply_ls1", "pcb_ddr_supply_ls1_flare", "pcb_ddr_supply_cpu"}]
 if args.direct_pour_mohm is not None:
     # Screen one complete path to avoid crediting overlapping copper twice.
-    common = [upstream] + [e for e in downstream if e["pcb_trace_id"] in {
-        "pcb_ddr_supply_ls1", "pcb_ddr_supply_ls1_flare", "pcb_ddr_supply_cpu"}]
     # First two barrels are the IN_LS1 feed. The source and ball barrels are common to both routes.
     direct_barrels = barrels[:2] + [(by_id["via_ddr_supply_" + name]["hole_diameter"], depth)
         for name, depth in [("output", 1.530-.0764), ("lower_bank", .0764), ("balls", 1.530)]]
@@ -119,6 +123,30 @@ if args.direct_pour_mohm is not None:
         scale = 1+.00393*(temp-20)
         series = (trace_mohm([*common, *direct],inner) + rbarrel + args.direct_pour_mohm + even_load)*scale
         print(f"  inner {inner*1000:g} um, {temp} C: {series:.3f} mOhm; remaining at 250 mA {40-.250*(110+series):.3f} mV, at 300 mA {40-.300*(110+series):.3f} mV before return and transient losses.")
+if args.sheet_network_report is not None:
+    lines = args.sheet_network_report.read_text().splitlines()
+    header = "pitch_mm,inner_um,outer_um,joined_L3_output_to_L4_balls_mOhm_at_20C"
+    rows = list(csv.DictReader(lines[lines.index(header):]))
+    by_foil = {}
+    for row in rows:
+        foil = float(row["inner_um"])
+        pitch = float(row["pitch_mm"])
+        resistance = float(row["joined_L3_output_to_L4_balls_mOhm_at_20C"])
+        if float(row["outer_um"]) != 35 or not (pitch > 0 and resistance > 0):
+            raise ValueError("Invalid copper mesh result")
+        if foil not in by_foil or pitch < by_foil[foil][0]:
+            by_foil[foil] = (pitch, resistance)
+    if set(by_foil) != {17.5, 35} or not direct:
+        raise ValueError("Expected the two foil cases and both physical feeds")
+    common_barrels = barrels[:2] + [(by_id["via_ddr_supply_output"]["hole_diameter"], 1.530-.0764),
+                                    (by_id["via_ddr_supply_balls"]["hole_diameter"], 1.530)]
+    rbarrel = sum(1000*rho*depth/(math.pi*.020*(bore+.020)) for bore, depth in common_barrels)
+    print("Both physical feeds with their shared copper counted once, 35 um outer foil, equal ball loads:")
+    for foil, (pitch, resistance) in sorted(by_foil.items(), reverse=True):
+        cold = trace_mohm(common, foil/1000) + resistance + rbarrel + even_load
+        for temp in (20,80):
+            board_r = cold*(1+.00393*(temp-20))
+            print(f"  inner {foil:g} um, {temp} C, grid {pitch:g} mm: {board_r:.3f} mOhm; remaining at 250 mA {40-.250*(110+board_r):.3f} mV, at 300 mA {40-.300*(110+board_r):.3f} mV before return and transient losses.")
 print("Sensitivity to a 100 mA step lasting 1 us, before regulator response, ESR and ESL:")
 for retention in (.5, .75, 1.):
     effective = nominal * retention
