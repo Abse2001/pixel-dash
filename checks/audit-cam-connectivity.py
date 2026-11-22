@@ -2,6 +2,7 @@
 import argparse
 import csv
 import json
+import math
 import re
 import runpy
 from collections import defaultdict
@@ -81,6 +82,38 @@ def processor_power(terminals):
         print("LDO1 output capacitor missing.")
         failed = True
     return failed
+
+
+def internal_bypass(board, terminals, labels):
+    """Inspect fitted capacitor lands on the drilled Gerber networks, TI SPRS717L §5.9."""
+    components = {e.get("name"): e for e in board if e["type"] == "source_component"}
+    locations = {labels[p["pcb_port_id"]]: (p["x"], p["y"]) for p in board
+                 if p["type"] == "pcb_port" and p["pcb_port_id"] in labels}
+    ground, supply = terminals["TP_UART_GND.pin1"], terminals["U_PMIC.LDO1"]
+    outputs = {terminals["U1." + ball] for ball in ("C10", "D9", "D11")}
+    isolated = len(outputs | {ground, supply}) == 5
+    print("Internal regulator output separation from one another, LDO1 and GND:", "PASS" if isolated else "FAIL")
+    passed = isolated
+    for ball, nominal, ref in (("C10", 1, "C_VBB_MPU"), ("D9", 1, "C_SRAM_CORE"),
+                               ("D11", 1, "C_SRAM_MPU"), ("D10", 10, "C_SRAM_MPU_IN"),
+                               ("E9", 10, "C_SRAM_CORE_IN")):
+        ball_name = "U1." + ball
+        node = terminals[ball_name]
+        candidates = []
+        for name, part in components.items():
+            if not math.isclose(part.get("capacitance", 0), nominal * 1e-6, rel_tol=1e-5):
+                continue
+            for signal, ret in (("pin1","pin2"), ("pin2","pin1")):
+                sig = f"{name}.{signal}"
+                if terminals.get(sig) == node and terminals.get(f"{name}.{ret}") == ground:
+                    candidates.append((math.dist(locations[ball_name], locations[sig]), name))
+        ok = any(name == ref for _, name in candidates) and (nominal == 1 or node == supply)
+        nearest = min(candidates) if candidates else None
+        print(f"{ball_name} {nominal} uF {ref}: {'CONNECTED' if ok else 'MISSING'}; "
+              + (f"nearest qualifying {nearest[1]} at {nearest[0]:.3f} mm land-center distance"
+                 if nearest else "no fitted capacitor of this value across the ball and ground"))
+        passed &= ok
+    return not passed
 
 
 def rtc_startup(terminals):
@@ -286,13 +319,14 @@ def main():
     startup_failed = args.cpu_power and rtc_startup(terminals)
     power_failed = args.cpu_power and processor_power(terminals)
     straps_failed = args.sysboot and sysboot(terminals)
+    caps_failed = args.cpu_power and internal_bypass(board, terminals, port_labels)
     interfaces_failed = args.panel_storage and panel_and_storage(terminals)
     opens = {k: len(v) for k, v in nodes_by_net.items() if len(v) > 1}
     for key, count in sorted(opens.items()):
         examples = [", ".join(sorted(members[key][node])[:3]) or "via only" for node in sorted(nodes_by_net[key])]
         print(f"OPEN {key} has {count} separate CAM networks: " + " | ".join(examples))
     print(f"{len(opens)} mapped land nets have multiple physical networks.")
-    return bool(opens) or power_failed or startup_failed or straps_failed or interfaces_failed
+    return bool(opens) or power_failed or startup_failed or straps_failed or interfaces_failed or caps_failed
 
 
 if __name__ == "__main__":

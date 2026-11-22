@@ -61,8 +61,11 @@ barrels = []
 for p in upstream["route"]:
     if p["route_type"] == "via":
         via, = (v for v in vias if math.hypot(v["x"] - p["x"], v["y"] - p["y"]) < 1e-5
-                and {"top", "bottom"} <= set(v["layers"]))
-        barrels.append((via["hole_diameter"], stack.outer_to_outer))
+                and {p["from_layer"], p["to_layer"]} <= set(v["layers"]))
+        span = {p["from_layer"], p["to_layer"]}
+        depth = {frozenset(("top","inner1")): stack.outer_to_inner,
+                 frozenset(("top","bottom")): stack.outer_to_outer}[frozenset(span)]
+        barrels.append((via["hole_diameter"], depth))
 if len(barrels) != 2:
     raise ValueError("Update the IN_LS1 barrel model for the changed upstream topology")
 by_id = {v["pcb_via_id"]: v for v in vias}

@@ -30,6 +30,33 @@ links pass, with 13 full-width reference gaps and both byte windows still open. 
 HDI4_1-2b-1_149_35_2V13 is the pinned engineering cross section.
 DDR timing, hot LS1 margin and supplier acceptance remain open.
 
+The IN_LS1 supply now uses two L1–L2 blind vias and a wide L2 trace. The
+actual copper and drill spans reduce the 250 mA, 80 °C forward-path drop by
+4.034 mV. With the single digital VSS return included the modeled headroom
+is −0.217 mV, previously −4.186 mV. At 300 mA it is −6.476 mV even before
+return loss. The 100 mA/1 µs transient adds 2.17–4.35 mV of ideal cap droop.
+CAM confirms the separate CPU and memory rails, unchanged DDR reference
+coverage, clean drill spacing and no unrelated copper or 6 mil violations.
+[Hot-load screen](checks/current-ls1-budget.txt) · [Return calculation](checks/current-ls1-pours.txt)
+
+The [coordinated seven-net trial](https://github.com/Abse2001/pixel-dash/tree/214365f)
+opened both the B5 and N5 corridors and shortened D1 and A10, but the trial
+copper shorts nets together and loses full-width reference. It stays separate.
+
+### Pending cold-boot bench test
+
+With power and backup energy fully removed between runs, repeat cold starts
+with the 7-inch panel disconnected, then with it connected while unpowered.
+Capture 3.3 V, RTC rails, PGOOD_BU and PWRONRSTn from power application.
+Record all sixteen strap voltages at the rising PWRONRSTn edge against the
+applicable TI input thresholds and setup/hold limits. Early bring-up firmware
+must log the latched CONTROL_STATUS SYSBOOT field (expected 0x4017) on UART0
+before switching LCD pins to raster. Record the boot source, MMC0 boot
+result, DDR initialization and panel/backlight supply state on each run.
+This is pending hardware verification. CAM currently confirms only bits
+11, 13, 14 and 15. TI section 5.9 local capacitors have a separate
+endpoint check under `--cpu-power`.
+
 ### Routing and verification history
 
 All 50 AM3354-to-DDR3L signals reach their intended balls on 50 distinct electrical nodes. The adjacent plane covers the full trace width for all 50 signals outside their own via launch antipads. The board-wide 0.102 mm unrelated-copper, 0.1524 mm via-edge and drill-spacing checks pass. Each of the 7,491 routed strokes matches the copper Gerbers, and all five drill files match the board.
