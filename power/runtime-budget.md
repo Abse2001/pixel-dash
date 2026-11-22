@@ -53,6 +53,8 @@ The BQ25606RGER is a replacement candidate available as JLCPCB C374063. Its swit
 
 ## Wide-shell pocket study
 
+[Pocket and mounting-hole drawing](../previews/battery-pocket.png)
+
 The separate parametric insert in `mechanical/wide/battery-pocket.scad` preserves the compact shell and its tub. The default flat profile uses the MakerFocus 9065115 supplier tolerance of ±2 mm on 112 × 65 × 8.8 mm, giving a maximum study envelope of **114 × 67 × 10.8 mm**. The YELUFT listing picture shows MakerFocus branding, but provides no model or tolerance tying the shipped pack to that envelope. The compact profile uses the PKCELL drawing maxima of **69 × 56.5 × 19 mm**. Neither profile selects a new battery SKU. [MakerFocus product specifications](https://www.makerfocus.com/products/makerfocus-3-7v-lipo-battery-10000mah-lithium-rechargeable-battery-9065115-with-micro-ph2-0-plug-for-raspberry-pi-ups-board) · [PKCELL drawing, page 8](https://cdn-shop.adafruit.com/product-files/5035/5035_10050mAh_3.7V_A1____20210511.pdf)
 
 The flat insert measures 119 × 72 × 14.3 mm outside. Its provisional clearances are 1 mm per side and 2 mm in depth. An open-top lead slot faces the connector side. Swelling allowance, pack retention, cable bend, protection board, NTC placement, connector polarity and vertical separation from the PCB still require verification for the selected pack. The flat profile overlaps the lower two existing PCB mounting bosses in plan. A symmetric alternative at X = ±70, Y = −29 mm clears the pocket and existing NTC cutouts. On the right the nearest non-pour copper is KEY_START, 4.709 mm from the proposed center. The compact insert measures 74 × 61.5 × 22.5 mm and clears all four boss envelopes in plan.
