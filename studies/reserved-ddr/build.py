@@ -8,9 +8,12 @@ from planes import reclaim_drills, replace_paths
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument("baseline", type=Path)
 parser.add_argument("output", type=Path)
+parser.add_argument("--pair-first", action="store_true", help="reproduce the D8/D9-only stage with D15 open")
 args = parser.parse_args()
 board = json.loads(args.baseline.read_text())
 here = Path(__file__).parent
+if args.pair_first:
+    here = here / "pair-first"
 paths = json.loads((here/"paths.json").read_text())
 opened = set(json.loads((here/"open.json").read_text()))
 if opened.intersection(paths):

@@ -9,3 +9,15 @@ D8, D9, D12 and D14 meet the 22.090–22.674 mm joint window for the reserved st
 [Per-net timing and residuals](timing.csv) · [CAM verification](verification.txt)
 
 To reproduce the study, run `python studies/reserved-ddr/build.py BASELINE.json STUDY.json` on the assembled c9be947 circuit. Export STUDY.json with the project's native Gerber exporter. Pass `--study-open-ddr studies/reserved-ddr/open.json` to the CAM-connectivity and full-width reference checks when auditing this deliberately partial export. The normal audits require the full interface.
+
+## First stage with 49 physical connections
+
+Use `--pair-first` with the builder and `pair-first/open.json` with the two partial-study audits. This stage replaces only D8 and D9 and lifts D15. The assembled board retains the baseline paths for D12 and D14. Independent checks on this export counted 49 distinct DDR paths and 1,006 plated barrels. The exact open is D15. Reference coverage, copper spacing, via-edge spacing, drill spacing and shorts checks passed, as did sequenced MMC0 power and its seven links. The old D15 route occupies copper needed for both D8 and D9. Twelve alternative three-signal assignment/order trials did not recover all three together.
+
+[First-stage per-net timing](pair-first/timing.csv) · [First-stage CAM verification](pair-first/verification.txt)
+
+## Other bounded trials
+
+The northward 1 mm RAM placement reduced the two-via byte-1 target to 17.484–18.277 mm. The reserved mask failed to escape. At the alternate offset the measured strobe lengths were 24.255 and 24.355 mm. The 0.635 mm matching tolerance then requires at least 23.720 mm against a placement ceiling of 23.500 mm. Neither placement advanced.
+
+On byte 0 a D2/D4/D3/D5/D7 escape order found five two-via paths measuring 12.807, 16.067, 20.825, 24.377 and 23.363 mm respectively. All five missed the 19.590–20.220 mm joint window for that via depth. A D4-first order yielded only four paths. The command study found two-via paths for A1/A11/CKE/A10/A6 of 15.96/16.52/23.01/18.68/19.94 mm with additional command copper lifted. None reached the 28.550–31.090 mm project window. These preliminary lengths came from geometric search before a Gerber acceptance check. The complete exported board retains its original byte-0 and command routes.
