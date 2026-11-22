@@ -389,9 +389,13 @@ def main():
     if args.handheld_ground:
         ground, = (e for e in board if e["type"] == "source_net" and e["name"] == "GND")
         ground_nodes = nodes_by_net[ground["subcircuit_connectivity_map_key"]]
-        if ground_nodes != {terminals["TP_UART_GND.pin1"]}:
-            raise ValueError(f"Handheld ground has {len(ground_nodes)} separate CAM networks")
-        print("All mapped handheld ground lands and barrels join the UART ground probe.")
+        isolated = ground_nodes - {terminals["TP_UART_GND.pin1"]}
+        if isolated:
+            for island in sorted(isolated):
+                lands = sorted(members[ground["subcircuit_connectivity_map_key"]][island])
+                print("Isolated handheld ground: " + (", ".join(lands) or "via only"))
+        else:
+            print("All mapped handheld ground lands and barrels join the UART ground probe.")
     startup_failed = args.cpu_power and rtc_startup(terminals)
     power_failed = args.cpu_power and processor_power(terminals)
     straps_failed = args.sysboot and sysboot(terminals)
@@ -403,7 +407,7 @@ def main():
         examples = [", ".join(sorted(members[key][node])[:3]) or "via only" for node in sorted(nodes_by_net[key])]
         print(f"OPEN {key} has {count} separate CAM networks: " + " | ".join(examples))
     print(f"{len(opens)} mapped land nets have multiple physical networks.")
-    return bool(opens) or power_failed or startup_failed or straps_failed or interfaces_failed or caps_failed or card_failed
+    return bool(opens) or (args.handheld_ground and bool(isolated)) or power_failed or startup_failed or straps_failed or interfaces_failed or caps_failed or card_failed
 
 
 if __name__ == "__main__":

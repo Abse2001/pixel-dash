@@ -21,7 +21,7 @@ export function DdrVref() {
 			<via
 				name="V_RAM_VREF_CA"
 				pcbX={-22.335046}
-				pcbY={18.215096}
+				pcbY={19.215096}
 				connectsTo="net.DDR_VREF_CA"
 				outerDiameter={0.35}
 				holeDiameter={0.2}
@@ -36,7 +36,7 @@ export function DdrVref() {
 			<via
 				name="V_REF_LINK_CA0"
 				pcbX={-23.6}
-				pcbY={18.3625}
+				pcbY={19.3625}
 				outerDiameter={0.36}
 				holeDiameter={0.2}
 				connectsTo="net.DDR_VREF_CA"
@@ -58,9 +58,9 @@ export function DdrVref() {
 					{ x: -2.383303, y: -9.475016 },
 					{ x: -1.11, y: -12.135 },
 					{ x: -0.3375, y: -12.675 },
-					{ x: 8.1, y: -12.4875 },
-					{ x: 12.6375, y: -11.2875 },
-					{ x: 13.35, y: -10.0875 },
+					{ x: 8.1, y: -13.4875 },
+					{ x: 12.6375, y: -12.2875 },
+					{ x: 13.35, y: -11.0875 },
 				]}
 			/>
 			<trace
@@ -77,7 +77,7 @@ export function DdrVref() {
 			<CL05B104KO5NNNC
 				name="C_VREF_CA"
 				pcbX={-23.8}
-				pcbY={18.75625}
+				pcbY={19.75625}
 				layer="bottom"
 			/>
 			<trace
@@ -152,7 +152,7 @@ export function DdrVref() {
 					: A_0402WGF1001TCE;
 				const laser = "V_" + name;
 				// Manual paths start at H1. Its footprint is rotated 180 degrees.
-				const path = route.map((p) => ({ x: -20 - p.x, y: 15.15 - p.y }));
+				const path = route.map((p) => ({ x: -20 - p.x, y: 16.15 - p.y }));
 				return [
 					<Device
 						key={name}

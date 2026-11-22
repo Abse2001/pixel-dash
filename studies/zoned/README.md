@@ -1,24 +1,21 @@
-# Zoned CPU escape study
+# Northward RAM and boot escape study
 
-Starting at e6b5c4c, reserve the power and reset routes, ground returns and
-fixed-package DDR region before admitting outer-layer DDR tracks. Keep
-this partial build on the study branch. The production branch still
-carries all 50 DDR links. Build with the normal `bun run build` entry point.
+The RAM, its local bypass and reference fanout move 1.0 mm in +Y.
+The CPU remains fixed. This study reserves the reset, power, ground and
+boot routes before rebuilding either data lane. The only retained DDR
+signals are CK and CKn. The two package-to-package clock paths and their
+reference pass on the export. All other 48 memory signals are open.
 
-The first pass admitted 39 original DDR routes outside the four boot
-corridors. The L2 slots disconnected the returns of C_DDR23 and C_DDR29.
-Two L4 ground traces now join those pads to nearby verified ground pads.
-The next pass routes BA2 on five sections with four plated traversals.
-The originating package lands, old vias and replacement vias are checked
-during assembly. Interior voids from lifted vias are refilled while
-retaining relief for active copper and new plated holes.
+The drilled export decodes SYSBOOT as `01000000000101?1`. Fifteen
+straps reach their intended CPU ball and bias. R2 (SYSBOOT1) is open.
+Both RTC domains, reset, wake, hold, 21/21 DCDC4 CPU and USB supply
+lands, all grounds, the seven MMC0 links and the card supply pass.
+The crystal load capacitor and two strap resistors have new local ground
+returns. Two controller traces move around the relocated RAM fanout.
+VREF_CA clears the opposite zero-ohm resistor land.
 
-The drilled export verifies 40/50 DDR links, B5 to PGOOD_BU, C5 to
-nWAKEUP and 21/21 DCDC4 CPU/USB supply lands including N5 and P5.
-All ground lands reach the ground probe. No unrelated copper falls
-below 0.102 mm or the separate 0.1524 mm via-edge rule. Drill spacing,
-Gerber shorts, all routed DDR full-width references, the DDR envelope,
-six raster and seven MMC0 full-width references pass. The full-board
-connectivity and DDR timing gates remain open. B4 and twelve SYSBOOT
-straps remain open. See the explicitly deferred nets, endpoint report
-and incomplete timing screen in this directory.
+The 0.102 mm copper screen, independent 0.1524 mm via-edge screen,
+drill spacing, outer DDR envelope and connected full-width references
+for the routed clock, SD and LCD all pass. The LCD still has 6/29
+end-to-end links. This branch is a placement and escape study. The
+production board retains 50 DDR links and its buffered DDR regulator.

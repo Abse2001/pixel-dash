@@ -1,0 +1,5 @@
+ball,direction_degrees_from_positive_x,launch_x_mm,launch_y_mm,number_of_routes_to_move,interfering_routes
+R1,276.7746,-51.58430,10.62193,4,DDR_DQS0 DDR_DQS1 DDR_DQSn0 DDR_DQSn1
+R2,280.0000,-50.77794,10.62286,3,DDR_DQS1 DDR_DQSn0 DDR_DQSn1
+R3,285.0000,-49.96548,10.62564,0,
+R4,283.0000,-49.17178,10.62410,0,

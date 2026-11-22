@@ -59,7 +59,7 @@ def identity(e):
 
 # Route checkpoints use fixed world coordinates. A layout pass that moves this
 # group invalidates both its stored copper and the enclosure clearance review.
-for ref, expected in (("U1", (-44.8,15.15)), ("U_DDR", (-65.0,15.15))):
+for ref, expected in (("U1", (-44.8,15.15)), ("U_DDR", (-65.0,16.15))):
     package = one(channel, "source_component", name=ref)
     center = one(channel, "pcb_component", source_component_id=identity(package))["center"]
     if dist((center["x"],center["y"]),expected)>1e-4:
@@ -150,6 +150,9 @@ def bind_supply(ref, terminal, net):
                       connected_source_net_ids=[net["source_net_id"]], subcircuit_connectivity_map_key=key))
     return sid
 
+# The crystal case and its load capacitor also share a top-side return.
+for ref, terminal in (("Y_OSC0", "pin4"), ("C_OSC0_IN", "pin2")):
+    bind_supply(ref, terminal, ground(board))
 # The old FPC doubled as a ground tie for the right shoulder switch.
 bind_supply("SW_R", "pin2", ground(board))
 for shoulder in ("SW_L", "SW_R"):
