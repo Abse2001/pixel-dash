@@ -7,7 +7,7 @@ from shapely import STRtree, affinity, unary_union
 from shapely.geometry import LineString, Point, Polygon, box
 
 
-def verify(elements, check_ddr_power=False, check_ddr_signals=False, check_system_io=False, check_pmic_hold=False, check_pmic_backup=False, check_rtc_filters=False, check_joysticks=False, check_control_bus=False, check_ddr_regulator=False):
+def verify(elements, check_ddr_power=False, check_ddr_signals=False, check_system_io=False, check_pmic_hold=False, check_pmic_backup=False, check_rtc_filters=False, check_joysticks=False, check_control_bus=False, check_ddr_regulator=False, check_retained_returns=False):
     names = {e["source_component_id"]: e.get("name") for e in elements if e["type"] == "source_component"}
     pins = {e["source_port_id"]: f"{names.get(e['source_component_id'])}.{e['name']}"
             for e in elements if e["type"] == "source_port"}
@@ -72,6 +72,9 @@ def verify(elements, check_ddr_power=False, check_ddr_signals=False, check_syste
             connector = "J_JOY_" + axis[0]
             terminal = "pin1" if axis[1] == "X" else "pin4"
             required.append([f"{connector}.{terminal}", f"R_JOY_{axis}.pin1"])
+    if check_retained_returns:
+        required[2].extend(["R_LOGIC_FB_BOTTOM.pin2", "C_AMP_VDD_BULK.pin2", "U_SPK_AMP.PGND2",
+                            "J_SPK.pin3", "C_3V3_IN.pin2", "R_LCD_BL_PULLDOWN.pin2"])
     if check_control_bus:
         for signal, ball in (("SCL", "C16"), ("SDA", "C17")):
             required.append([f"U1.{ball}", "U_PMIC." + signal, "U_JOY_ADC." + signal,
@@ -264,8 +267,9 @@ if __name__ == "__main__":
     parser.add_argument("--pmic-hold", action="store_true")
     parser.add_argument("--pmic-backup", action="store_true")
     parser.add_argument("--rtc-filters", action="store_true")
+    parser.add_argument("--retained-returns", action="store_true")
     parser.add_argument("--joysticks", action="store_true")
     parser.add_argument("--control-bus", action="store_true")
     parser.add_argument("--ddr-regulator", action="store_true")
     args = parser.parse_args()
-    verify(json.loads(args.circuit.read_text()), args.ddr_power, args.ddr_signals, args.system_io, args.pmic_hold, args.pmic_backup, args.rtc_filters, args.joysticks, args.control_bus, args.ddr_regulator)
+    verify(json.loads(args.circuit.read_text()), args.ddr_power, args.ddr_signals, args.system_io, args.pmic_hold, args.pmic_backup, args.rtc_filters, args.joysticks, args.control_bus, args.ddr_regulator, args.retained_returns)

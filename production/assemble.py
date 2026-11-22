@@ -204,6 +204,13 @@ for saved_name, plan in paths.items():
     else:
         board = [e for e in board if not (e["type"] == "pcb_trace_missing_error" and e.get("source_trace_id") == sid)]
 gnd = ground(board)
+def add_ground_return(trace, point, via_id):
+    board.append(dict(type="pcb_via", pcb_via_id=via_id, pcb_trace_id=trace["pcb_trace_id"],
+                      source_trace_id=trace["source_trace_id"], source_net_id=gnd["source_net_id"],
+                      subcircuit_connectivity_map_key=gnd["subcircuit_connectivity_map_key"],
+                      x=point["x"], y=point["y"], from_layer="top", to_layer="inner1",
+                      layers=["top", "inner1"], hole_diameter=0.125, outer_diameter=0.28))
+
 # These filter returns ended at vias owned by the removed processor circuitry.
 # Terminate each retained top trace in a blind via to the L2 ground plane.
 for number in (1265, 1266, 1267, 1322):
@@ -220,11 +227,17 @@ for number in (1265, 1266, 1267, 1322):
         trace["route"] = [route[0], transition, endpoint]
     transition["to_layer"] = endpoint["layer"] = "inner1"
     endpoint.pop("end_pcb_port_id", None)
-    board.append(dict(type="pcb_via", pcb_via_id=f"pcb_joystick_ground_{number}",
-                      pcb_trace_id=trace["pcb_trace_id"], source_trace_id=trace["source_trace_id"],
-                      source_net_id=gnd["source_net_id"], subcircuit_connectivity_map_key=gnd["subcircuit_connectivity_map_key"],
-                      x=transition["x"], y=transition["y"], from_layer="top", to_layer="inner1",
-                      layers=["top", "inner1"], hole_diameter=0.125, outer_diameter=0.28))
+    add_ground_return(trace, transition, f"pcb_joystick_ground_{number}")
+# Stitch the existing converter and audio ground tracks wherever they change
+# between their surface pads and the main ground plane.
+for number in (3, 98, 108, 109):
+    trace = one(board, "pcb_trace", pcb_trace_id=f"pcb_trace_{number}")
+    for index, point in enumerate(trace["route"]):
+        if point["route_type"] != "via":
+            continue
+        if {point["from_layer"], point["to_layer"]} != {"top", "inner1"}:
+            raise ValueError(f"Unexpected ground transition in {number}")
+        add_ground_return(trace, point, f"pcb_retained_ground_{number}_{index}")
 for index, (x, y) in enumerate(json.loads((root / "system-ground-stitches.json").read_text())):
     board.append(dict(type="pcb_via", pcb_via_id=f"pcb_mmc0_return_{index}",
                       source_net_id=gnd["source_net_id"],
