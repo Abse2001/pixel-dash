@@ -347,16 +347,23 @@ def main():
         if len(keys) > 1:
             raise ValueError(f"CAM short at {node} joins {sorted(keys)}")
     ports = {e["source_port_id"]: e["pcb_port_id"] for e in board if e["type"] == "pcb_port" and e.get("source_port_id")}
+    deferred = set(json.loads((CHECKS.parent / "studies/zoned/deferred.json").read_text()))
     ddr_nodes = set()
+    seen_open = set()
     for trace in board:
         if trace["type"] == "source_trace" and (trace.get("name") or "").startswith("DDR_"):
             a, z = (by_pad[ports[pid]] for pid in trace["connected_source_port_ids"])
+            if trace['name'] in deferred:
+                if a == z:
+                    raise ValueError(f"Unexpected copper on deferred {trace['name']}")
+                seen_open.add(trace['name'])
+                continue
             if a != z or a in ddr_nodes:
                 raise ValueError(f"Exported copper opens or aliases {trace['name']}")
             ddr_nodes.add(a)
-    if len(ddr_nodes) != 50:
+    if len(ddr_nodes) + len(deferred) != 50 or deferred != seen_open:
         raise ValueError(f"Expected 50 physically distinct DDR links, found {len(ddr_nodes)}")
-    print(f"50 distinct DDR ball pairs connected. {len(plating)} plated barrels checked. No shorts between mapped land nets.")
+    print(f"Study: {len(ddr_nodes)}/50 distinct DDR ball pairs connected; {len(seen_open)} explicitly open. {len(plating)} plated barrels checked. No shorts between mapped land nets.")
     terminals = {port_labels[pid]: node for pid, node in by_pad.items() if pid in port_labels}
     if "TP_UART_RX.pin1" in terminals:
         probes = (("U1.E15", "TP_UART_RX.pin1"), ("U1.E16", "TP_UART_TX.pin1"), ("TP_UART_GND.pin1", "C_DDR25.pin2"))

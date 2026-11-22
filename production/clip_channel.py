@@ -81,7 +81,7 @@ def restrict_ground(board, ground_net, layer="inner1"):
 
     pour["brep_shape"] = {"outer_ring": ring(remaining.exterior), "inner_rings": [ring(r) for r in remaining.interiors]}
 
-def clear_handheld_copper_from_ddr(board):
+def clear_handheld_copper_from_ddr(board, expected_routes=50):
     """Clear added routed copper and plated transitions from the already rendered DDR power island."""
     island, = (e for e in board if e["type"] == "pcb_copper_pour" and e["layer"] == "inner2")
     shape = island["brep_shape"]
@@ -126,7 +126,7 @@ def clear_handheld_copper_from_ddr(board):
                           and (e.get("name") or "").startswith("DDR_")}
             routes = [LineString([(v["x"], v["y"]) for v in e["route"]]).buffer(.20)
                       for e in board if e["type"] == "pcb_trace" and e["source_trace_id"] in signal_ids]
-            if len(routes) != 50 or unary_union(routes).convex_hull.intersects(discarded):
+            if len(routes) != expected_routes or unary_union(routes).convex_hull.intersects(discarded):
                 raise ValueError("An isolated L3 fragment overlaps the routed DDR region")
             for v in board:
                 if (v["type"] == "pcb_via" and "inner2" in v["layers"] and

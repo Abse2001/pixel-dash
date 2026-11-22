@@ -18,6 +18,24 @@ schematic_pins={e["schematic_port_id"] for e in board if e["type"]=="schematic_p
 board=[e for e in board if e["type"]!="schematic_trace" or
        all(p in schematic_pins for p in re.findall(r"schematic_port_\d+",e.get("source_trace_id","")))]
 channel = json.loads(Path(sys.argv[1]).read_text())
+# Study branch only. Refill interior plane voids from lifted DDR holes.
+# The saved channel still defines every CPU/RAM schematic connection.
+deferred = set(json.loads((root.parent / "studies/zoned/deferred.json").read_text()))
+new_paths = json.loads((root.parent / "studies/zoned/routes.json").read_text())
+lifted = deferred | new_paths.keys()
+zoned_sources = {s["name"]: s for s in channel if s["type"] == "source_trace" and s.get("name") in lifted}
+signals_lifted = {s["source_trace_id"] for s in zoned_sources.values()}
+originals = {t["source_trace_id"]: t for t in channel if t["type"] == "pcb_trace" and t.get("source_trace_id") in signals_lifted}
+traces_lifted = {t["pcb_trace_id"] for t in originals.values()}
+if len(traces_lifted) != len(lifted) or set(zoned_sources) != lifted:
+    raise ValueError("Study paths differ from the populated channel")
+lifted_vias = [e for e in channel if e["type"] == "pcb_via" and e.get("pcb_trace_id") in traces_lifted]
+channel = [e for e in channel if e["type"] not in ("pcb_trace", "pcb_via") or e.get("pcb_trace_id") not in traces_lifted]
+import runpy
+study = runpy.run_path(str(root.parent / "studies/zoned/planes.py"))
+new_vias = study["replace_paths"](channel, zoned_sources, new_paths, originals)
+study["reclaim_drills"](channel, lifted_vias, new_vias)
+
 def one(elements, kind, **attributes):
     matches = [e for e in elements if e["type"] == kind and
                all(e.get(k) == v for k, v in attributes.items())]
@@ -483,7 +501,7 @@ probe_footprints = {e["pcb_component_id"] for e in board
 board = [e for e in board if e["type"] != "pcb_solder_paste" or e.get("pcb_component_id") not in probe_footprints]
 add_switched_ddr_feeds(board, port)
 restrict_ground(board, gnd["source_net_id"])
-clear_handheld_copper_from_ddr(board)
+clear_handheld_copper_from_ddr(board, 50 - len(deferred))
 add_inner2_ground(board, ground(board)["source_net_id"])
 add_switched_ddr_pours(board)
 Path(sys.argv[2]).write_text(json.dumps(board,separators=(",",":")))

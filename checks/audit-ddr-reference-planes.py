@@ -98,7 +98,8 @@ def audit(board, microsd=False, full_width=False, raster=False, archive=None):
                 combined = unary_union(gaps)
                 yield name, layer, ref[layer][0], combined.area if full_width else combined.length
 
-    if not microsd and not raster and len(seen) != 50:
+    deferred = set(json.loads((Path(__file__).resolve().parents[1] / "studies/zoned/deferred.json").read_text()))
+    if not microsd and not raster and (seen.intersection(deferred) or len(seen) + len(deferred) != 50):
         raise ValueError(f"Expected 50 routed DDR signals, found {len(seen)}")
     if raster and not seen:
         raise ValueError("The assembled board contains no routed raster signals")
