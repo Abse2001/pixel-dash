@@ -166,7 +166,7 @@ if args.return_path:
     cpu_via, = [v for v in gnd_vias if np.hypot(v["x"]-pad["x"], v["y"]-pad["y"]) < .001]
     thermal = [v for v in gnd_vias if abs(v["x"]-ep_land["x"]) + v["outer_diameter"]/2 < ep_land["width"]/2
                and abs(v["y"]-ep_land["y"]) + v["outer_diameter"]/2 < ep_land["height"]/2]
-    end = min(thermal, key=lambda v: np.hypot(v["x"]-cpu_via["x"], v["y"]-cpu_via["y"]))
+    end = min((v for v in thermal if "bottom" in v["layers"]), key=lambda v: np.hypot(v["x"]-cpu_via["x"], v["y"]-cpu_via["y"]))
     crop = box(min(cpu_via["x"],end["x"])-4, min(cpu_via["y"],end["y"])-5,
                max(cpu_via["x"],end["x"])+4, max(cpu_via["y"],end["y"])+5)
     bores = []
@@ -187,3 +187,26 @@ if args.return_path:
         resistance = squares(sheet,cpu_via,end,pitch)*.01724/stack.foil + barrel
         print(f"  mesh {pitch:g} mm: {resistance:.3f} mOhm at 20 C, "
               f"{resistance*(1+.00393*60)*.25:.3f} mV at 250 mA and 80 C.")
+
+    # Compare the same source and legacy return with and without the added
+    # EP microvias. Solve the shared L2 sheet once per mesh and include each
+    # barrel as a distinct resistor to the equipotential exposed land.
+    added = [v for v in thermal if v["pcb_via_id"].startswith("pmic_ep_return_")]
+    if added:
+        if len(added) != 2:
+            raise ValueError("Expected both added PMIC exposed-pad returns")
+        contacts = [cpu_via, end, *added]
+        rb = np.array([.01724*stack.outer_to_inner/(np.pi*stack.wall*(v["hole_diameter"]+stack.wall))
+                       for v in contacts])
+        for pitch in (.075, .05):
+            network = sheet_conductance(sheet, contacts, pitch) * stack.foil/.01724
+            # CPU current enters L2 through A1. The three other lands sink
+            # current through their individual barrels to the grounded EP.
+            network[1:,1:] += np.diag(1/rb[1:])
+            current = np.array([1., 0., 0., 0.])
+            volts = np.linalg.solve(network, current)
+            if not np.isclose((volts[1:]/rb[1:]).sum(), 1):
+                raise ValueError("Parallel return current does not balance")
+            resistance = rb[0] + volts[0]
+            print(f"  three EP returns, mesh {pitch:g} mm: {resistance:.3f} mOhm at 20 C, "
+                  f"{resistance*(1+.00393*60)*.25:.3f} mV at 250 mA and 80 C.")

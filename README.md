@@ -30,11 +30,14 @@ links pass, with 13 full-width reference gaps and both byte windows still open. 
 HDI4_1-2b-1_149_35_2V13 is the pinned engineering cross section.
 DDR timing, hot LS1 margin and supplier acceptance remain open.
 
-The IN_LS1 supply now uses two L1–L2 blind vias and a wide L2 trace. The
-actual copper and drill spans reduce the 250 mA, 80 °C forward-path drop by
-4.034 mV. With the single digital VSS return included the modeled headroom
-is −0.217 mV, previously −4.186 mV. At 300 mA it is −6.476 mV even before
-return loss. The 100 mA/1 µs transient adds 2.17–4.35 mV of ideal cap droop.
+The IN_LS1 supply uses two L1–L2 blind vias and a wide L2 trace.
+The LS1 output escape and L5 CPU feed flare into available copper.
+Two additional PMIC exposed-pad microvias share the L2 ground return.
+At 250 mA and 80 °C the modeled headroom is **+0.895 mV** including
+the three screened EP returns, up from **−4.186 mV** at 9d79e24.
+The shared-sheet solve uses 30 µm finished copper, 20 µm assumed via walls
+and a single A1 CPU return. Both 0.075 mm and 0.050 mm return meshes
+were checked. At 300 mA the forward margin is −5.258 mV before return loss. The 100 mA/1 µs transient adds 2.17–4.35 mV of ideal cap droop.
 CAM confirms the separate CPU and memory rails, unchanged DDR reference
 coverage, clean drill spacing and no unrelated copper or 6 mil violations.
 [Hot-load screen](checks/current-ls1-budget.txt) · [Return calculation](checks/current-ls1-pours.txt)

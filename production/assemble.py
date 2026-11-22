@@ -333,6 +333,14 @@ def add_ground_return(trace, point, via_id):
                       x=point["x"], y=point["y"], from_layer="top", to_layer="inner1",
                       layers=["top", "inner1"], hole_diameter=0.125, outer_diameter=0.28))
 
+# Short ground paths from the CPU-facing edge of the PMIC exposed pad to L2.
+for label, y in (("south", 23.45), ("north", 27.05)):
+    board.append(dict(type="pcb_via", pcb_via_id=f"pmic_ep_return_{label}",
+                      source_net_id=gnd["source_net_id"],
+                      subcircuit_connectivity_map_key=gnd["subcircuit_connectivity_map_key"],
+                      x=-22.55, y=y, from_layer="top", to_layer="inner1",
+                      layers=["top", "inner1"], hole_diameter=0.125, outer_diameter=0.28))
+
 # Ground the low SYSBOOT strap resistors at their own bias pads.
 for bit in range(16):
     source = one(board, "source_trace", name=f"SYSBOOT{bit}_BIAS")

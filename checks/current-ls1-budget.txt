@@ -2,18 +2,18 @@ LS1 bank: 22 capacitors, 46.00 uF nominal. TI nominal window 10–100 uF.
 DCDC3 setpoint 1.350 V, screening at -2%; CPU minimum 1.283 V. LS1 110 mOhm at 300 mA.
 Copper screen, 30 um outer foil. Whole CPU load carried through the series feed to L5.
 inner_um,temp_C,input_mOhm,output_mOhm,load_mA,trace_drop_mV,barrel_drop_mV,remaining_mV
-30,20,3.750,24.868,150,4.293,0.674,18.533
-30,20,3.750,24.868,225,6.439,1.011,7.800
-30,20,3.750,24.868,250,7.155,1.123,4.222
-30,20,3.750,24.868,300,8.585,1.348,-2.933
-30,80,4.635,30.732,150,5.305,0.833,17.362
-30,80,4.635,30.732,225,7.957,1.249,6.043
-30,80,4.635,30.732,250,8.842,1.388,2.270
-30,80,4.635,30.732,300,10.610,1.666,-5.276
+30,20,3.750,21.583,150,3.800,0.674,19.026
+30,20,3.750,21.583,225,5.700,1.011,8.539
+30,20,3.750,21.583,250,6.333,1.123,5.043
+30,20,3.750,21.583,300,7.600,1.348,-1.948
+30,80,4.635,26.672,150,4.696,0.833,17.971
+30,80,4.635,26.672,225,7.044,1.249,6.957
+30,80,4.635,26.672,250,7.827,1.388,3.285
+30,80,4.635,26.672,300,9.392,1.666,-4.058
 L5 to E5 at 20 C and 30 um top copper: additional 0.694 mV with 300 mA split equally across seven balls; 1.505 mV if all current enters E5.
 Both physical feeds with their shared copper counted once, 30 um outer foil, equal ball loads:
-  inner 30 um, 20 C, grid 0.025 mm: 36.349 mOhm; remaining at 250 mA 3.413 mV, at 300 mA -3.905 mV before return and transient losses.
-  inner 30 um, 80 C, grid 0.025 mm: 44.920 mOhm; remaining at 250 mA 1.270 mV, at 300 mA -6.476 mV before return and transient losses.
+  inner 30 um, 20 C, grid 0.025 mm: 33.064 mOhm; remaining at 250 mA 4.234 mV, at 300 mA -2.919 mV before return and transient losses.
+  inner 30 um, 80 C, grid 0.025 mm: 40.860 mOhm; remaining at 250 mA 2.285 mV, at 300 mA -5.258 mV before return and transient losses.
 Sensitivity to a 100 mA step lasting 1 us, before regulator response, ESR and ESL:
   50% effective: 23.00 uF, ideal capacitive droop 4.35 mV
   75% effective: 34.50 uF, ideal capacitive droop 2.90 mV
