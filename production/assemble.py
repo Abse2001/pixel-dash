@@ -6,7 +6,7 @@ import re
 import sys
 from pathlib import Path
 from build_retained import build
-from clip_channel import add_inner2_ground, restrict_ground
+from clip_channel import add_inner2_ground, clear_handheld_vias_from_ddr, restrict_ground
 from wide_layout import apply_wide_layout
 
 root = Path(__file__).resolve().parent
@@ -199,7 +199,7 @@ for saved_name, plan in paths.items():
         sections = plan["sections"]
     else:
         sections = plan["sections"] if isinstance(plan, dict) else plan
-        if isinstance(plan, dict):
+        if isinstance(plan, dict) and ("end_at" in plan or "start_at" in plan):
             field = "end_at" if "end_at" in plan else "start_at"
             ref, terminal = plan[field].split(".")
             alternate = port(ref, terminal)
@@ -220,6 +220,7 @@ for saved_name, plan in paths.items():
     for pad, point, layer in ((start, sections[0][0], first_layer), (end, sections[-1][-1], last_layer)):
         if layer not in pad["layers"] or dist(point, (pad["x"], pad["y"])) > 1e-5:
             raise ValueError(f"Saved route no longer lands on a terminal of {sid}")
+    width = plan.get("width", 0.102) if isinstance(plan, dict) else 0.102
     route = []
     trace_id = "pcb_" + sid
     key = source["subcircuit_connectivity_map_key"]
@@ -235,7 +236,7 @@ for saved_name, plan in paths.items():
                               source_trace_id=sid, subcircuit_connectivity_map_key=key, x=x, y=y,
                               from_layer=previous, to_layer=layer, layers=list(layers),
                               hole_diameter=0.15, outer_diameter=0.30))
-        route.extend(dict(route_type="wire", layer=layer, width=0.102, x=x, y=y) for x, y in section)
+        route.extend(dict(route_type="wire", layer=layer, width=width, x=x, y=y) for x, y in section)
     route[0]["start_pcb_port_id"] = start["pcb_port_id"]
     route[-1]["end_pcb_port_id"] = end["pcb_port_id"]
     board.append(dict(type="pcb_trace", pcb_trace_id=trace_id, source_trace_id=sid,
@@ -347,5 +348,6 @@ probe_footprints = {e["pcb_component_id"] for e in board
                     if e["type"] == "pcb_component" and e.get("source_component_id") in probe_parts}
 board = [e for e in board if e["type"] != "pcb_solder_paste" or e.get("pcb_component_id") not in probe_footprints]
 restrict_ground(board, gnd["source_net_id"])
+clear_handheld_vias_from_ddr(board)
 add_inner2_ground(board, ground(board)["source_net_id"])
 Path(sys.argv[2]).write_text(json.dumps(board,separators=(",",":")))

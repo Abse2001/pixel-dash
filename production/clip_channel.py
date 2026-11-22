@@ -81,6 +81,32 @@ def restrict_ground(board, ground_net, layer="inner1"):
 
     pour["brep_shape"] = {"outer_ring": ring(remaining.exterior), "inner_rings": [ring(r) for r in remaining.interiors]}
 
+def clear_handheld_vias_from_ddr(board):
+    """Clear added plated transitions from the already rendered DDR power island."""
+    island, = (e for e in board if e["type"] == "pcb_copper_pour" and e["layer"] == "inner2")
+    shape = island["brep_shape"]
+    def coords(ring):
+        return [(p["x"], p["y"]) for p in ring["vertices"]]
+    original = Polygon(coords(shape["outer_ring"]), [coords(r) for r in shape["inner_rings"]])
+    supply, = (e for e in board if e.get("source_net_id") == island["source_net_id"] and e["type"] == "source_net")
+    antipads = []
+    for via in board:
+        if via["type"] != "pcb_via" or via["pcb_via_id"].startswith("channel_") or "inner2" not in via["layers"]:
+            continue
+        if via.get("subcircuit_connectivity_map_key") == supply["subcircuit_connectivity_map_key"]:
+            continue
+        relief = Point(via["x"], via["y"]).buffer(via["outer_diameter"] / 2 + 0.16, quad_segs=96)
+        if original.intersects(relief):
+            antipads.append(relief)
+    if antipads:
+        result = original.difference(unary_union(antipads))
+        if result.geom_type != "Polygon" or not result.is_valid:
+            raise ValueError("A handheld via divides the DDR supply island")
+        def ring(boundary):
+            return {"vertices": [{"x": x, "y": y} for x, y in list(boundary.coords)[:-1]]}
+        island["brep_shape"] = {"outer_ring": ring(result.exterior), "inner_rings": [ring(r) for r in result.interiors]}
+
+
 def add_inner2_ground(board, ground_net):
     board_outline, = (e for e in board if e["type"] == "pcb_board")
     # Gerber clear polarity affects all previously drawn copper on this layer.

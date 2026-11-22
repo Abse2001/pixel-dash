@@ -23,6 +23,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("circuit", type=Path)
     parser.add_argument("gerbers", type=Path)
+    parser.add_argument("--pmic-controls", action="store_true", help="require routed PMIC supply, wake pull-up, interrupt and cold-reset connections")
     args = parser.parse_args()
     board = json.loads(args.circuit.read_text())
     drill = runpy.run_path(str(CHECKS / "audit-channel-drills.py"))
@@ -122,6 +123,16 @@ def main():
         if len(networks) != 3 or any(terminals[a] != terminals[b] for a, b in probes):
             raise ValueError("UART probe pads have a short or an open")
         print("UART0 RX, TX and ground reach three distinct probe networks.")
+    if args.pmic_controls:
+        for start, end in (
+            ("C_PMIC_DDR.pin1", "U_PMIC.IN_LS1"),
+            ("U_PMIC.nWAKEUP", "R_PMIC_WAKE.pin1"),
+            ("U_PMIC.nINT", "U1.T14"),
+            ("U_PMIC.PGOOD", "U1.B15"),
+        ):
+            if terminals[start] != terminals[end]:
+                raise ValueError(f"PMIC connection open between {start} and {end}")
+            print(f"PMIC copper verified between {start} and {end}.")
     opens = {k: len(v) for k, v in nodes_by_net.items() if len(v) > 1}
     for key, count in sorted(opens.items()):
         examples = [", ".join(sorted(members[key][node])[:3]) or "via only" for node in sorted(nodes_by_net[key])]
