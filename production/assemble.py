@@ -144,9 +144,30 @@ apply_wide_layout(board)
 # Check their endpoints before reusing them after a placement change.
 paths = json.loads((root / "system-paths.json").read_text())
 layers = ("top", "inner1", "inner2", "bottom")
-for sid, sections in paths.items():
-    source = one(board, "source_trace", source_trace_id=sid)
+for saved_name, plan in paths.items():
+    if saved_name.startswith("system_"):
+        source = one(board, "source_trace", source_trace_id=saved_name)
+    else:
+        source = one(board, "source_trace", display_name=saved_name)
+    sid = source["source_trace_id"]
     start, end = [one(board, "pcb_port", source_port_id=pid) for pid in source["connected_source_port_ids"]]
+    if isinstance(plan, dict) and "join_trace" in plan:
+        retained = one(board, "pcb_trace", pcb_trace_id=plan["join_trace"], source_trace_id=sid)
+        anchor = retained["route"][0]
+        end = one(board, "pcb_port", pcb_port_id=anchor["start_pcb_port_id"])
+        if dist((end["x"], end["y"]), (anchor["x"], anchor["y"])) > 1e-5:
+            raise ValueError(f"Retained endpoint moved on {saved_name}")
+        sections = plan["sections"]
+    else:
+        sections = plan["sections"] if isinstance(plan, dict) else plan
+        if isinstance(plan, dict):
+            ref, terminal = plan["end_at"].split(".")
+            alternate = port(ref, terminal)
+            if alternate["subcircuit_connectivity_map_key"] != source["subcircuit_connectivity_map_key"]:
+                raise ValueError(f"Alternate terminal has the wrong net on {saved_name}")
+            end = one(board, "pcb_port", source_port_id=alternate["source_port_id"])
+        if any(e["type"] == "pcb_trace" and e.get("source_trace_id") == sid for e in board):
+            raise ValueError(f"Saved copper duplicates existing routing on {saved_name}")
     if not sections or any(len(section) < 2 for section in sections):
         raise ValueError(f"Empty route section on {sid}")
     last_layer = layers[-1] if len(sections) % 2 == 0 else layers[0]
@@ -173,7 +194,10 @@ for sid, sections in paths.items():
     route[-1]["end_pcb_port_id"] = end["pcb_port_id"]
     board.append(dict(type="pcb_trace", pcb_trace_id=trace_id, source_trace_id=sid,
                       subcircuit_connectivity_map_key=key, route=route))
-    board.remove(one(board, "pcb_trace_missing_error", pcb_trace_missing_error_id="open_" + sid))
+    if saved_name.startswith("system_"):
+        board.remove(one(board, "pcb_trace_missing_error", pcb_trace_missing_error_id="open_" + sid))
+    else:
+        board = [e for e in board if not (e["type"] == "pcb_trace_missing_error" and e.get("source_trace_id") == sid)]
 gnd = ground(board)
 for index, (x, y) in enumerate(json.loads((root / "system-ground-stitches.json").read_text())):
     board.append(dict(type="pcb_via", pcb_via_id=f"pcb_mmc0_return_{index}",

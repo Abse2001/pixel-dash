@@ -9,6 +9,7 @@ import { A_0402WGF1002TCE as Pull10k } from "../imports/A_0402WGF1002TCE"
 import { RT0402BRD0712K1L as DdrSelect } from "../imports/RT0402BRD0712K1L"
 import { LQM21FN100M80L as BackupInductor } from "../imports/LQM21FN100M80L"
 import { CL31A476MPHNNNE as BackupOutputCapacitor } from "../imports/CL31A476MPHNNNE"
+import { SPM3012T_1R5M as MainInductor } from "../imports/SPM3012T_1R5M"
 import processorBalls from "../am3354/processor-balls.json"
 import { FRC0402J222_TS as I2cPullup } from "../imports/FRC0402J222_TS"
 
@@ -24,11 +25,10 @@ export function PowerControl() {
     <SKRTLAE010 name="SW_POWER" pcbX={-25.35} pcbY={38.85} pcbRotation={180}
       internallyConnectedPins={[["pin1","pin3"]]}/>
     <Pull100k name="R_POWER_PB" pcbX={-25.35} pcbY={35.9}/>
-    <Pull100k name="R_PMIC_WAKE" pcbX={-28} pcbY={25}/>
-    <Pull10k name="R_PMIC_IRQ" pcbX={-27} pcbY={27}/>
+    <Pull100k name="R_PMIC_WAKE" pcbX={-28} pcbY={25} layer="bottom"/>
+    <Pull10k name="R_PMIC_IRQ" pcbX={-27} pcbY={27} layer="bottom"/>
     <net name="VSYS"/><net name="VDDS_RTC_1V8"/>
-    <trace name="POWER_KEY" from=".U_PMIC > .PB" to=".SW_POWER > .pin2" thickness={0.15}
-      pcbPath={[{x:-5.05,y:-0.60},{x:-5.20,y:-0.45},{x:-5.20,y:2.35}]}/>
+    <trace name="POWER_KEY" from=".U_PMIC > .PB" to=".SW_POWER > .pin2" thickness={0.15}/>
     <trace name="POWER_KEY_BIAS" from=".SW_POWER > .pin2" to=".R_POWER_PB > .pin1" thickness={0.15} pcbStraightLine/>
     <trace from=".R_POWER_PB > .pin2" to="net.VSYS"/>
     {[[1, -24.125], [3, -26.575]].map(([pin, x]) => (
@@ -101,6 +101,22 @@ export function PowerControl() {
     <via name="V_PMIC_INT_RETURN" pcbX={-21.349884} pcbY={30.94989}
       fromLayer="top" toLayer="inner1" holeDiameter={0.125} outerDiameter={0.28}
       connectsTo={[".C_PMIC_INT_LDO > .pin2", "net.GND"]}/>
+    <net name="DCDC3_1V35"/>
+    <MainInductor name="L_PMIC_DDR" pcbX={-27.74989} pcbY={28.249932} pcbRotation={180}/>
+    <BackupOutputCapacitor name="C_PMIC_DDR" pcbX={-31.04989} pcbY={29.249932} pcbRotation={90}/>
+    <trace from=".U_PMIC > .L3" to=".L_PMIC_DDR > .pin1" thickness={0.36}
+      pcbPath={[{x:-5.09989,y:2.249932}]}/>
+    <trace from=".L_PMIC_DDR > .pin2" to=".C_PMIC_DDR > .pin1" thickness={0.60} pcbStraightLine/>
+    <trace from=".U_PMIC > .FB3" to=".C_PMIC_DDR > .pin1" thickness={0.15} pcbStraightLine/>
+    <trace from=".C_PMIC_DDR > .pin1" to="net.DCDC3_1V35"/>
+    <trace from=".U_PMIC > .IN_LS1" to="net.DCDC3_1V35"/>
+    <trace from=".U_PMIC > .IN_DCDC3" to="net.VSYS"/>
+    <trace from=".C_PMIC_DDR > .pin2" to="net.GND"/>
+    {[-0.24, 0.24].flatMap(x => [-0.24, 0.24].map(y => (
+      <via key={`${x}_${y}`} name={`V_DDR_REG_RETURN_${x < 0 ? 0 : 1}_${y < 0 ? 0 : 1}`}
+        pcbX={-31.04989+x} pcbY={30.842512+y} fromLayer="top" toLayer="inner1"
+        holeDiameter={0.125} outerDiameter={0.28} connectsTo={[".C_PMIC_DDR > .pin2","net.GND"]}/>
+    )))}
     <net name="VDD_RTC_CORE_1V0"/>
     <BackupInductor name="L_PMIC_RTC_CORE" pcbX={-11.55011} pcbY={24.250062}/>
     <BackupOutputCapacitor name="C_PMIC_RTC_CORE" pcbX={-8.25011} pcbY={24.250062} pcbRotation={90}/>
