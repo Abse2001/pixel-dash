@@ -4,6 +4,8 @@ The [unrouted handheld example](examples/unrouted-handheld) contains the populat
 
 ## Current electrical checkpoint
 
+Two 0.18 mm top-layer feeds connect P6–P5–N5 on the sequenced DCDC4 rail. Independent Gerber and drill reconstruction verifies 21/21 CPU I/O supply lands, 50 distinct DDR signals and 1,082 plated barrels, with zero shorts between mapped lands. There are 34 remaining split nets. All seven switched CPU DDR supply lands and the separate DRAM feed still connect. The DDR, MMC0 and raster full-width reference checks, 70 blind return lands, drill spacing, 0.102 mm copper and 0.1524 mm via-edge spacing pass. The switched DDR rail's modeled hot corner has 13.721 mV DC reserve and 2.820 mV after the transient allowance at 105 °C, 80% effective conductor area and 40 mΩ switch resistance. Hardware startup, brownout and transient response remain open. [Physical endpoint checks](checks/current-raster-taps-cam.txt) · [Rail model](checks/current-ls1-budget.txt)
+
 Drilled CAM verifies 50 distinct AM3354-to-DDR3L connections. The byte-0 strobe legs measure 20.3465 and 20.3320 mm. Their planar mismatch is 0.0145 mm against TI's 0.127 mm limit. Each still traverses two 1.420 mm L1–L4 vias. Three additional byte-0 data or mask paths meet the ±3.6633 ps board-flight screen. Their own copper and via locations are unchanged.
 
 | Net | Length (mm) | Flight (ps) | Prior → current worst signed skew (ps) | Remaining model headroom (ps) | Largest data-to-strobe mismatch (mm) |
