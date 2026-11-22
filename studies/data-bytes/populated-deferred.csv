@@ -1,0 +1,51 @@
+postponed_copper,reason
+channel_pcb_trace_102,"DDR_D0 top, DDR_D13 top, DDR_D4 top, DDR_DQM0 top, DDR_DQSn0 top, land clearance channel_pcb_smtpad_331, land clearance channel_pcb_smtpad_347, land clearance channel_pcb_smtpad_362, land clearance channel_pcb_smtpad_376"
+channel_pcb_trace_162,DDR_D12 top
+channel_pcb_trace_163,land clearance channel_pcb_smtpad_500
+channel_pcb_trace_164,DDR_D13 bottom
+channel_pcb_trace_165,"DDR_D0 top, DDR_D11 top, DDR_D3 top, DDR_D4 top, DDR_DQM1 top, land clearance channel_pcb_smtpad_341, land clearance channel_pcb_smtpad_358, land clearance channel_pcb_smtpad_380, land clearance channel_pcb_smtpad_381"
+channel_pcb_trace_168,"DDR_D0 top, DDR_D11 top, DDR_D2 top, DDR_D3 top, DDR_D4 top, DDR_DQM1 top, land clearance channel_pcb_smtpad_357, land clearance channel_pcb_smtpad_381"
+channel_pcb_trace_170,"land clearance channel_pcb_smtpad_339, land clearance channel_pcb_smtpad_355, land clearance channel_pcb_smtpad_371, land clearance channel_pcb_smtpad_387, land clearance channel_pcb_smtpad_403, land clearance channel_pcb_smtpad_419, land clearance channel_pcb_smtpad_504"
+channel_pcb_trace_171,land clearance channel_pcb_smtpad_495
+channel_pcb_trace_174,DDR_DQM1 top
+channel_pcb_trace_176,"DDR_D11 top, DDR_D12 top"
+channel_pcb_trace_177,"DDR_D11 top, DDR_D12 top, DDR_DQM1 top"
+channel_pcb_trace_178,"DDR_D10 bottom, DDR_D8 bottom"
+channel_pcb_trace_179,DDR_DQM1 top
+channel_pcb_trace_180,"DDR_D1 top, DDR_D9 top, DDR_DQM1 top"
+channel_pcb_trace_181,"DDR_D0 top, DDR_DQSn0 top, land clearance channel_pcb_smtpad_330, land clearance channel_pcb_smtpad_346, land clearance channel_pcb_smtpad_362, land clearance channel_pcb_smtpad_378"
+channel_pcb_trace_184,"DDR_D0 top, DDR_D2 top, DDR_D3 top, DDR_D4 top, DDR_D5 top, DDR_D7 top, land clearance channel_pcb_smtpad_332, land clearance channel_pcb_smtpad_348, land clearance channel_pcb_smtpad_379, land clearance channel_pcb_smtpad_395, land clearance channel_pcb_smtpad_411, land clearance channel_pcb_smtpad_436, land clearance channel_pcb_smtpad_510"
+channel_pcb_trace_186,"DDR_D0 top, DDR_D2 top, land clearance channel_pcb_smtpad_330, land clearance channel_pcb_smtpad_346, land clearance channel_pcb_smtpad_363, land clearance channel_pcb_smtpad_380, land clearance channel_pcb_smtpad_397, land clearance channel_pcb_smtpad_413"
+channel_pcb_trace_32,DDR_DQM1 top
+channel_pcb_trace_33,DDR_DQM1 inner1
+channel_pcb_trace_37,DDR_D11 inner1
+channel_pcb_trace_78,DDR_D1 top
+channel_pcb_trace_81,DDR_D11 top
+channel_pcb_trace_82,DDR_D12 top
+channel_pcb_trace_83,DDR_D14 top
+channel_pcb_trace_84,DDR_D1 top
+channel_pcb_trace_87,DDR_D2 top
+channel_pcb_trace_93,DDR_D7 top
+channel_pcb_trace_94,"DDR_D0 top, DDR_D13 top, DDR_D4 top, DDR_DQM0 top, DDR_DQSn0 top, land clearance channel_pcb_smtpad_331, land clearance channel_pcb_smtpad_346, land clearance channel_pcb_smtpad_362, land clearance channel_pcb_smtpad_376"
+channel_pcb_trace_95,"DDR_D0 top, DDR_D3 top, DDR_D4 top, DDR_D9 top, DDR_DQM1 top, land clearance channel_pcb_smtpad_325, land clearance channel_pcb_smtpad_342, land clearance channel_pcb_smtpad_359, land clearance channel_pcb_smtpad_379, land clearance channel_pcb_smtpad_380, land clearance channel_pcb_smtpad_396, land clearance channel_pcb_smtpad_413"
+channel_pcb_via_10,DDR_DQM1 inner1
+channel_pcb_via_142,"DDR_D12 inner1, DDR_D12 top, land clearance channel_pcb_smtpad_500"
+channel_pcb_via_143,"DDR_D15 bottom, DDR_D15 top, land clearance channel_pcb_smtpad_340, land clearance channel_pcb_smtpad_341"
+channel_pcb_via_149,"DDR_D11 inner1, DDR_D11 top, DDR_D12 inner1, DDR_D12 top"
+channel_pcb_via_150,"DDR_D10 bottom, DDR_D10 inner2, DDR_D11 inner1, DDR_D11 top, DDR_DQM1 inner1, DDR_DQM1 top"
+channel_pcb_via_151,"DDR_D8 bottom, DDR_D8 inner2, DDR_DQM1 inner1, DDR_DQM1 top, DDR_DQSn1 bottom, DDR_DQSn1 inner2"
+channel_pcb_via_152,"DDR_DQM1 inner1, DDR_DQM1 top"
+channel_pcb_via_18,DDR_D11 inner1
+channel_pcb_via_59,DDR_D1 top
+channel_pcb_via_62,DDR_D11 top
+channel_pcb_via_63,"DDR_D12 bottom, DDR_D12 drill, DDR_D12 inner1, DDR_D12 top, DDR_DQS1 bottom"
+channel_pcb_via_64,"DDR_D13 inner1, DDR_D13 top, DDR_D14 inner1, DDR_D14 top, DDR_D15 bottom"
+channel_pcb_via_65,DDR_D1 top
+channel_pcb_via_67,DDR_D5 bottom
+channel_pcb_via_68,DDR_D2 top
+channel_pcb_via_74,"DDR_D6 bottom, DDR_D7 inner1, DDR_D7 top"
+channel_pcb_via_75,DDR_D13 top
+channel_pcb_via_76,"DDR_DQS0 bottom, DDR_DQSn0 bottom"
+channel_pcb_via_77,land clearance channel_pcb_smtpad_420
+channel_pcb_via_81,DDR_D4 bottom
+channel_pcb_via_9,"DDR_DQM1 inner1, DDR_DQM1 top"

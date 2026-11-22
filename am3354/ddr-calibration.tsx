@@ -6,8 +6,8 @@ export function DdrCalibration() {
 		<>
 			<A_0402WGF499JTCE
 				name="R_VTP"
-				pcbX={-4.81984087}
-				pcbY={15.28600287}
+				pcbX={-5.41984087}
+				pcbY={15.43600287}
 				pcbRotation={135}
 				layer="bottom"
 			/>

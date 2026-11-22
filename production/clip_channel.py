@@ -126,7 +126,12 @@ def clear_handheld_copper_from_ddr(board):
                           and (e.get("name") or "").startswith("DDR_")}
             routes = [LineString([(v["x"], v["y"]) for v in e["route"]]).buffer(.20)
                       for e in board if e["type"] == "pcb_trace" and e["source_trace_id"] in signal_ids]
-            if len(routes) != 50 or unary_union(routes).convex_hull.intersects(discarded):
+            expected = {f"DDR_D{i}" for i in range(16)} | {f"DDR_{s}{i}" for s in ("DQS", "DQSn", "DQM") for i in (0, 1)}
+            actual = {e["source_trace_id"] for e in board if e["type"] == "pcb_trace"}
+            routed = {s.get("name") for s in board if s["type"] == "source_trace" and s["source_trace_id"] in actual and s["source_trace_id"] in signal_ids}
+            if not expected.issubset(routed) or len(routes) != len(routed):
+                raise ValueError("Missing protected byte routes or duplicate DDR route in plane check")
+            if unary_union(routes).convex_hull.intersects(discarded):
                 raise ValueError("An isolated L3 fragment overlaps the routed DDR region")
             for v in board:
                 if (v["type"] == "pcb_via" and "inner2" in v["layers"] and

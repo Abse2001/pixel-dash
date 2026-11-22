@@ -1,0 +1,25 @@
+Pixel Dash populated wide handheld — locked DDR data checkpoint
+Preserved breakout: 2dc2af8e9348c3d09c16256f42c4f51124befd7e
+
+drill_npth.drl matches 19 round hits and 0 slots
+drill-L1-L4.drl matches 684 round hits and 6 slots
+drill-L1-L2.drl matches 271 round hits and 0 slots
+drill-L2-L3.drl matches 8 round hits and 0 slots
+drill-L3-L4.drl matches 23 round hits and 0 slots
+22 distinct DDR ball pairs connected. 992 plated barrels checked. No shorts between mapped land nets.
+MMC0 sequenced card power and seven distinct links: PASS
+
+0 unrelated copper pairs below 0.102 mm
+0 via/layer/unrelated-net pairs below 0.1524 mm
+0 via drill-spacing findings
+0 nonlocal same-net DDR copper contacts
+Longest cumulative below-nominal run is 7.513 mm on DDR_D8; TI allowance 31.750 mm.
+Screened 236 placed courtyards. Found 0 overlaps.
+Study reference coverage screened 22 routed DDR signals. Open signals: DDR_A0, DDR_A1, DDR_A10, DDR_A11, DDR_A12, DDR_A13, DDR_A14, DDR_A15, DDR_A2, DDR_A3, DDR_A4, DDR_A5, DDR_A6, DDR_A7, DDR_A8, DDR_A9, DDR_BA0, DDR_BA1, DDR_BA2, DDR_CASn, DDR_CK, DDR_CKE, DDR_CKn, DDR_CSn0, DDR_ODT, DDR_RASn, DDR_RESETn, DDR_WEn.
+0 signal/layer reference-coverage findings
+Verified 4818 strokes from 582 PCB traces against all four copper Gerbers.
+
+All 22 protected geometry hashes match. The per-signal length and flight report is byte-for-byte identical to breakout-timing.csv. Flight is modeled on the reference stack.
+
+SHA-256: uncompressed populated circuit  9317e0da2ceb6073f89497da9c24f7fc7784e1e482c2abefde43b3656e53b4e0
+SHA-256: examined Gerber and drill ZIP  85f2a510045e6fe450bd0ceaa4d3867fa5cb668f8d282c6b2fd5b7d1acc310a0

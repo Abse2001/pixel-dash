@@ -2,7 +2,11 @@
 
 The [unrouted handheld example](examples/unrouted-handheld) contains the populated board and a full-board input for testing the Bus Lanes autorouter.
 
-## Current electrical checkpoint
+## Populated handheld with locked DDR data routes
+
+This branch integrates the two verified byte lanes into the populated four-layer handheld. Building the board checks both CPU and RAM ball mappings, every routed vertex and width, and all 44 via locations, diameters and spans against the saved breakout. Both byte lanes use the 1.491 mm reference stack. The 28 remaining clock, address, command and reset links still require routing. Fabrication remains on hold. [Routing checkpoint and reports](studies/data-bytes) · [Preserved two-package breakout](https://github.com/Abse2001/pixel-dash/tree/pixel-dash-ddr-bytes-verified-2dc2af8)
+
+## Earlier 50-link fallback at bf75444
 
 The PAM8403 mute and shutdown inputs now reach the auxiliary 3.3 V output through two top-layer tracks. Both inputs are active low. The drilled CAM check verifies both connections and their isolation from ground and amplifier VDD. This closes the remaining two open amplifier control lands and reduces the whole-board count to 34 open mapped nets. [Drilled connectivity report](checks/current-raster-taps-cam.txt) · [PAM8403 pin functions](https://www.diodes.com/assets/Datasheets/PAM8403.pdf)
 
