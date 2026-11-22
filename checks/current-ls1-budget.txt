@@ -24,6 +24,11 @@ AM335x Table 5-10 estimates 250 mA worst-case VDDS_DDR current. TPS65218D0 speci
   250 mA: pre-board allowance 12.500 mV, modeled board drop 13.722 mV, remaining -1.222 mV.
   300 mA: pre-board allowance 7.000 mV, modeled board drop 16.466 mV, remaining -9.466 mV.
 Zero-margin current in this DC scenario: 242.6 mA before return drop, package, ripple and transients.
+Direct L3-to-lower-bank feed to E5, with the original parallel path omitted, equal CPU ball loads:
+  inner 35 um, 20 C: 47.154 mOhm; remaining at 250 mA 0.711 mV, at 300 mA -7.146 mV before return and transient losses.
+  inner 35 um, 80 C: 58.273 mOhm; remaining at 250 mA -2.068 mV, at 300 mA -10.482 mV before return and transient losses.
+  inner 17.5 um, 20 C: 50.220 mOhm; remaining at 250 mA -0.055 mV, at 300 mA -8.066 mV before return and transient losses.
+  inner 17.5 um, 80 C: 62.061 mOhm; remaining at 250 mA -3.015 mV, at 300 mA -11.618 mV before return and transient losses.
 Sensitivity to a 100 mA step lasting 1 us, before regulator response, ESR and ESL:
   50% effective: 23.00 uF, ideal capacitive droop 4.35 mV
   75% effective: 34.50 uF, ideal capacitive droop 2.90 mV

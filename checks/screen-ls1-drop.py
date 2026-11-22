@@ -7,7 +7,10 @@ from pathlib import Path
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument("board", type=Path)
 parser.add_argument("--pour-mohm", type=float, help="L4 spreading resistance from the same export at 35 um and 20 C")
+parser.add_argument("--direct-pour-mohm", type=float, help="Resistance from the direct L4 feed to the CPU supply via in the same export")
 args = parser.parse_args()
+if args.direct_pour_mohm is not None and not (math.isfinite(args.direct_pour_mohm) and args.direct_pour_mohm > 0):
+    parser.error("Direct-feed spreading resistance must be positive and finite")
 if args.pour_mohm is not None and not (math.isfinite(args.pour_mohm) and args.pour_mohm > 0):
     parser.error("Spreading resistance must be positive and finite")
 board = json.loads(args.board.read_text())
@@ -20,6 +23,10 @@ traces = [e for e in board if e["type"] == "pcb_trace"]
 upstream, = (e for e in traces if any(p.get("start_pcb_port_id") == land["pcb_port_id"]
                                       or p.get("end_pcb_port_id") == land["pcb_port_id"] for p in e["route"]))
 downstream = [e for e in traces if e["pcb_trace_id"].startswith("pcb_ddr_supply_")]
+direct = [e for e in downstream if e["pcb_trace_id"].startswith("pcb_ddr_supply_lower_bank_")]
+downstream = [e for e in downstream if e not in direct]
+if args.direct_pour_mohm is not None and not direct:
+    parser.error("This layout has no direct feed to the lower LS1 bank")
 if not downstream:
     raise ValueError("Missing LS1 output route")
 
@@ -99,6 +106,19 @@ if args.pour_mohm is not None:
         headroom = available - load * 110
         print(f"  {load*1000:.0f} mA: pre-board allowance {headroom:.3f} mV, modeled board drop {series*load:.3f} mV, remaining {headroom-series*load:.3f} mV.")
     print(f"Zero-margin current in this DC scenario: {1000*available/(110+series):.1f} mA before return drop, package, ripple and transients.")
+if args.direct_pour_mohm is not None:
+    # Screen one complete path to avoid crediting overlapping copper twice.
+    common = [upstream] + [e for e in downstream if e["pcb_trace_id"] in {
+        "pcb_ddr_supply_ls1", "pcb_ddr_supply_ls1_flare", "pcb_ddr_supply_cpu"}]
+    # First two barrels are the IN_LS1 feed. The source and ball barrels are common to both routes.
+    direct_barrels = barrels[:2] + [(by_id["via_ddr_supply_" + name]["hole_diameter"], depth)
+        for name, depth in [("output", 1.530-.0764), ("lower_bank", .0764), ("balls", 1.530)]]
+    rbarrel = sum(1000*rho*depth/(math.pi*.020*(bore+.020)) for bore, depth in direct_barrels)
+    print("Direct L3-to-lower-bank feed to E5, with the original parallel path omitted, equal CPU ball loads:")
+    for inner, temp in [(.035,20), (.035,80), (.0175,20), (.0175,80)]:
+        scale = 1+.00393*(temp-20)
+        series = (trace_mohm([*common, *direct],inner) + rbarrel + args.direct_pour_mohm + even_load)*scale
+        print(f"  inner {inner*1000:g} um, {temp} C: {series:.3f} mOhm; remaining at 250 mA {40-.250*(110+series):.3f} mV, at 300 mA {40-.300*(110+series):.3f} mV before return and transient losses.")
 print("Sensitivity to a 100 mA step lasting 1 us, before regulator response, ESR and ESL:")
 for retention in (.5, .75, 1.):
     effective = nominal * retention

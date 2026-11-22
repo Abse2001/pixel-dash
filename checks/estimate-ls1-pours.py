@@ -73,8 +73,17 @@ for a, b in pairs:
     island, = (p for p in image.geoms if p.intersection(annulus(first)).area > .001 and
                p.intersection(annulus(last)).area > .001)
     islands.append((island, first, last))
-print("pitch_mm,upper_squares,lower_squares,total_mOhm_35um_20C,drop_mV_300mA")
+columns = "pitch_mm,upper_squares,lower_squares,total_mOhm_35um_20C,drop_mV_300mA"
+if "via_ddr_supply_lower_bank" in via:
+    columns += ",direct_lower_squares,direct_lower_mOhm_35um_20C"
+print(columns)
 for pitch in (.080, .055, .040, .030, .025):
     upper, lower = [squares(*data, pitch) for data in islands]
     resistance = (upper + lower) * .01724 / .035
-    print(f"{pitch:.3f},{upper:.4f},{lower:.4f},{resistance:.4f},{.300*resistance:.4f}")
+    row = f"{pitch:.3f},{upper:.4f},{lower:.4f},{resistance:.4f},{.300*resistance:.4f}"
+    if "via_ddr_supply_lower_bank" in via:
+        sheet, _, cpu = islands[1]
+        contact = via["via_ddr_supply_lower_bank"]
+        direct = squares(sheet, contact, cpu, pitch)
+        row += f",{direct:.4f},{direct*.01724/.035:.4f}"
+    print(row)

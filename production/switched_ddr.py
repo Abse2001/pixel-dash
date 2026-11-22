@@ -35,6 +35,19 @@ def add_switched_ddr_feeds(board, port):
     trace('regulator_trunk', 'U_PMIC.LS1', 'inner2', 1.00, [(-22.689,32.554),(-24.208,31.868)])
     trace('regulator_bend', 'U_PMIC.LS1', 'inner2', .60, [(-24.208,31.868),(-24.859,31.574)])
     trace('regulator_landing', 'U_PMIC.LS1', 'inner2', .80, [(-24.859,31.574),(-26.595,30.79)])
+    # Feed the lower L4 bank from the source barrel without interrupting the DDR reference island.
+    for index, (width, path) in enumerate([
+        (0.85, [(-18.055, 30.685), (-18.23, 30.8725)]),
+        (1.1, [(-18.23, 30.8725), (-18.405, 31.06)]),
+        (1.5, [(-18.405, 31.06), (-18.405, 31.808)]),
+        (2, [(-18.405, 31.808), (-18.405, 32.556)]),
+        (2.5, [(-18.405, 32.556), (-18.405, 32.93), (-18.735, 34.745)]),
+        (3.2, [(-18.735, 34.745), (-19.659, 35.669)]),
+        (4, [(-19.659, 35.669), (-19.89, 35.9), (-21.843448, 35.9)]),
+        (5, [(-21.843448, 35.9), (-31.22, 35.9), (-35.003, 32.088)]),
+    ]):
+        trace(f'lower_bank_{index}', 'U_PMIC.LS1', 'inner2', width, path)
+    via('lower_bank', -35.003, 32.088, .60, .30)
     via('upper', -26.595,30.79,.38,.18)
     trace('bypass_bridge','U_PMIC.LS1','inner2',.60,[(-45.11,23.475),(-46.405,21.62)])
     via('bridge_upper',-45.11,23.475,.45,.20)
