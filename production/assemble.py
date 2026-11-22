@@ -262,13 +262,16 @@ for saved_name, plan in paths.items():
                 raise ValueError(f"Mismatch at via {index} on {sid}")
             previous = routing_layers[index-1]
             span = plan.get("via_span", layers) if isinstance(plan, dict) else layers
+            drill, land = via_drill, via_land
+            if isinstance(plan, dict) and plan.get("use_top_microvias") and {previous, layer} == {"top", "inner1"}:
+                span, drill, land = ("top", "inner1"), 0.125, 0.28
             if tuple(span) != layers and (tuple(span) != ("top", "inner1") or set(span) != {previous, layer}):
                 raise ValueError(f"Drill span does not match routed layers on {sid}")
             route.append(dict(route_type="via", x=x, y=y, from_layer=previous, to_layer=layer))
             board.append(dict(type="pcb_via", pcb_via_id=f"{trace_id}_via_{index}", pcb_trace_id=trace_id,
                               source_trace_id=sid, subcircuit_connectivity_map_key=key, x=x, y=y,
                               from_layer=span[0], to_layer=span[-1], layers=list(span),
-                              hole_diameter=via_drill, outer_diameter=via_land))
+                              hole_diameter=drill, outer_diameter=land))
         if isinstance(plan, dict) and "section_widths" in plan:
             section_widths = plan["section_widths"][index]
             if len(section_widths) != len(section) - 1 or min(section_widths) < width:

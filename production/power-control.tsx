@@ -1,3 +1,4 @@
+import { CL21A226MAQNNNE as LdoOutputCapacitor } from "../imports/CL21A226MAQNNNE"
 import { Fragment } from "react"
 import { CL10A475KO8NNNC as BackupInputCapacitor } from "../imports/CL10A475KO8NNNC"
 import { CL10A105KB8NNNC as HoldUpCapacitor } from "../imports/CL10A105KB8NNNC"
@@ -39,6 +40,21 @@ export function PowerControl() {
           thickness={0.2} pcbStraightLine/>
         <trace from={`.SW_POWER > .pin${pin}`} to="net.GND"/>
       </>
+    ))}
+    <net name="VDD_LDO1_1V8"/>
+    <LdoOutputCapacitor name="C_PMIC_LDO1" pcbX={-16.999934} pcbY={12.30011}
+      pcbRotation={180} layer="bottom"/>
+    <trace from=".U_PMIC > .LDO1" to="net.VDD_LDO1_1V8"/>
+    <trace from=".C_PMIC_LDO1 > .pin1" to="net.VDD_LDO1_1V8"/>
+    <trace from=".C_PMIC_LDO1 > .pin2" to="net.GND"/>
+    <via name="V_PMIC_LDO1_RETURN" pcbX={-15.999936} pcbY={12.30011}
+      fromLayer="bottom" toLayer="inner2" holeDiameter={0.125} outerDiameter={0.28}
+      connectsTo={[".C_PMIC_LDO1 > .pin2", "net.GND"]}/>
+    {Object.entries(processorBalls).filter(([, supply]) => [
+      "VDDS", "VDDS_PLL_DDR", "VDDS_PLL_MPU", "VDDS_PLL_CORE_LCD", "VDDS_OSC",
+      "VDDS_SRAM_CORE_BG", "VDDS_SRAM_MPU_BB", "VDDA_ADC", "VDDA1P8V_USB0", "VDDA1P8V_USB1",
+    ].includes(supply)).map(([ball]) => (
+      <trace key={ball} from={".U1 > ." + ball} to="net.VDD_LDO1_1V8"/>
     ))}
     <trace from=".U_PMIC > .IN_LDO1" to="net.VSYS"/>
     <trace name="PMIC_INPUT" from=".U_PMIC > .IN_BIAS" to="net.VSYS"/>

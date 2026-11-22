@@ -321,3 +321,19 @@ A 100 mA increment held for 1 µs requires 2.17–4.35 mV from the capacitors
 alone assuming 46–23 µF effective and no regulator response. Return
 impedance, fitted effective capacitance, package drop and load-step
 response remain unverified. LS1 fails this hot-load screen.
+
+### First LDO1 output distribution checkpoint
+
+The 1.8 V LDO1 output reaches C_PMIC_LDO1 (Samsung CL21A226MAQNNNE,
+22 µF nominal, JLCPCB C45783) and ten CPU loads in exported copper. The
+capacitor return reaches system ground. CAM independently separates the
+output, input and return. All sixteen intended package balls now have a
+source net assignment. The remaining physical opens are E14, H15, N16,
+P14, P9 and R16. Datasheet capacitance under bias, high-frequency bypass at
+each load and supply noise at the four DPLL domains remain to be verified.
+
+Using L1–L2 microvias on the CPU feeds preserved both DDR supply domains,
+the CPU and memory ground returns, and full-width reference coverage.
+The single-net and 6 mil spacing checks passed. The Gerber short check
+passed and 7,436 strokes matched. Whole-board CAM still flags 40 open nets,
+including the partially distributed LDO1 rail.

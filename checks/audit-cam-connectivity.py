@@ -68,6 +68,17 @@ def processor_power(terminals):
         connected = terminals[label] == terminals[supply]
         print(f"System supply copper {'PASS' if connected else 'OPEN'} {supply} to {label}.")
         failed |= not connected
+    ldo = terminals["U_PMIC.LDO1"]
+    ldo_ground = terminals["TP_UART_GND.pin1"]
+    if "C_PMIC_LDO1.pin1" in terminals:
+        correct = (terminals["C_PMIC_LDO1.pin1"] == ldo and
+                   terminals["C_PMIC_LDO1.pin2"] == ldo_ground and
+                   len({ldo, ldo_ground, terminals["U_PMIC.IN_LDO1"]}) == 3)
+        print(f"LDO1 output capacitor, ground and input isolation: {'PASS' if correct else 'FAIL'}.")
+        failed |= not correct
+    else:
+        print("LDO1 output capacitor missing.")
+        failed = True
     return failed
 
 
