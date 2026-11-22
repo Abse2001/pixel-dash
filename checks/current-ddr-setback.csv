@@ -1,4 +1,1 @@
 layer,non_ddr_copper,adjacent_ddr_signal,edge_gap_mm,four_widths_mm
-top,pcb_system_boot_tap_11,DDR_D12,0.231112,0.408000
-top,pcb_system_boot_tap_13,DDR_D12,0.231074,0.408000
-top,pcb_system_boot_tap_15,DDR_D12,0.231164,0.408000
