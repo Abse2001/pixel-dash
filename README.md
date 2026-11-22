@@ -1,5 +1,8 @@
 # Pixel Dash
 
+The [matched-depth byte-1 routing study](https://github.com/Abse2001/pixel-dash/tree/96865c435a6ccb58319ba0327567e1109c01d628/studies/reserved-ddr) preserves two exported checkpoints. D8 and D9 meet the physical matching and modeled skew gates with 49 of 50 DDR connections present. Adding D12 and D14 brings those four signals into margin with 46 of 50 present. The 50-link copper on this branch stays at c9be947. The [complete-board per-net timing ledger](checks/current-ddr-change.csv) records its remaining violations.
+
+
 ## Receiver timing and length-gate definitions
 
 The 20.600 mm and 23.000 mm byte limits are the project's placement-derived Manhattan length ceilings. On page 188 of TI SPRS717L Rev. L, Table 7-69 puts DQLM0 and DQLM1 under MAX for the parameter “nominal length.” The separate TI data-to-data and data-to-strobe mismatch limit is 0.635 mm. Pair matching uses 0.127 mm. The ±3.663 ps board-flight screen is model-derived.
