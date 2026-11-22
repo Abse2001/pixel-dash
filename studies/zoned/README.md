@@ -6,8 +6,11 @@ boot routes before rebuilding either data lane. The only retained DDR
 signals are CK and CKn. The two package-to-package clock paths and their
 reference pass on the export. All other 48 memory signals are open.
 
-The drilled export decodes SYSBOOT as `01000000000101?1`. Fifteen
-straps reach their intended CPU ball and bias. R2 (SYSBOOT1) is open.
+The drilled export decodes all sixteen SYSBOOT straps as
+`0100000000010111` (0x4017). R_SYSBOOT1 moved to (−35.52, 5.28) mm
+at 180°. Its bias joins the sequenced high strap rail. A dedicated route
+connects its sense land to R2. The populated courtyards, native Gerber
+shorts, rail isolation and all sixteen sense-to-bias isolation checks pass.
 Both RTC domains, reset, wake, hold, 21/21 DCDC4 CPU and USB supply
 lands, all grounds, the seven MMC0 links and the card supply pass.
 The crystal load capacitor and two strap resistors have new local ground
