@@ -41,6 +41,43 @@ def processor_power(terminals):
         print(f"Processor supply/return to {anchor}: {len(expected) - len(missing)}/{len(expected)} balls connected."
               + (" Open " + ", ".join(missing) if missing else ""))
         failed |= bool(missing)
+    memory = json.loads((CHECKS.parent / "am3354/memory-balls.json").read_text())
+    dram_balls = sorted(b for b, name in memory.items() if name in {"VDD", "VDDQ"})
+    cpu_balls = sorted(b for b, name in balls.items() if name == "VDDS_DDR")
+    if not dram_balls or len(cpu_balls) != 7:
+        raise ValueError("Unexpected DDR supply ball map")
+    dram_nodes = {terminals["U_DDR." + b] for b in dram_balls}
+    cpu_nodes = {terminals["U1." + b] for b in cpu_balls}
+    direct = sum(terminals["U_DDR." + b] == terminals["C_PMIC_DDR.pin1"] for b in dram_balls)
+    separate = not (dram_nodes & cpu_nodes)
+    print(f"DDR memory supply to DCDC3 output capacitor: {direct}/{len(dram_balls)} VDD/VDDQ balls connected.")
+    print(f"DDR memory supply isolation from CPU VDDS_DDR: {'PASS' if separate else 'SHORT between the two domains'}.")
+    failed |= direct != len(dram_balls) or not separate
+    return failed
+
+
+def rtc_startup(terminals):
+    """Audit the external RTC regulator and sequencer wiring on physical CAM nodes."""
+    paths = [
+        ("U1.B4", "U1.D7"), ("U1.D7", "C_PMIC_RTC_IO.pin1"),
+        ("U1.D6", "C_PMIC_RTC_CORE.pin1"),
+        ("U_PMIC.FB5", "C_PMIC_RTC_CORE.pin1"), ("U_PMIC.FB6", "C_PMIC_RTC_IO.pin1"),
+        ("U_PMIC.PGOOD_BU", "U1.B5"), ("U_PMIC.nWAKEUP", "U1.C5"),
+        ("R_PMIC_WAKE.pin2", "C_PMIC_RTC_IO.pin1"), ("U_PMIC.PWR_EN", "U1.C6"),
+        ("U_PMIC.PGOOD", "R_PMIC_POR.pin1"), ("R_PMIC_POR.pin2", "U_PMIC.DCDC4"),
+        ("U_PMIC.PGOOD", "U1.B15"), ("U_PMIC.GPIO3", "U1.A10"),
+        ("C_PMIC_RTC_CORE.pin2", "TP_UART_GND.pin1"), ("C_PMIC_RTC_IO.pin2", "TP_UART_GND.pin1"),
+    ]
+    failed = False
+    for start, end in paths:
+        connected = terminals[start] == terminals[end]
+        print(f"Startup copper {'PASS' if connected else 'OPEN'} {start} to {end}.")
+        failed |= not connected
+    for start, end in [("U1.B4", "U1.D6"), ("U1.D7", "U1.D6"),
+                       ("C_PMIC_RTC_IO.pin1", "C_PMIC_RTC_CORE.pin1")]:
+        isolated = terminals[start] != terminals[end]
+        print(f"RTC isolation {'PASS' if isolated else 'SHORT'} {start} from {end}.")
+        failed |= not isolated
     return failed
 
 
@@ -166,13 +203,14 @@ def main():
         if ground_nodes != {terminals["TP_UART_GND.pin1"]}:
             raise ValueError(f"Handheld ground has {len(ground_nodes)} separate CAM networks")
         print("All mapped handheld ground lands and barrels join the UART ground probe.")
+    startup_failed = args.cpu_power and rtc_startup(terminals)
     power_failed = args.cpu_power and processor_power(terminals)
     opens = {k: len(v) for k, v in nodes_by_net.items() if len(v) > 1}
     for key, count in sorted(opens.items()):
         examples = [", ".join(sorted(members[key][node])[:3]) or "via only" for node in sorted(nodes_by_net[key])]
         print(f"OPEN {key} has {count} separate CAM networks: " + " | ".join(examples))
     print(f"{len(opens)} mapped land nets have multiple physical networks.")
-    return bool(opens) or power_failed
+    return bool(opens) or power_failed or startup_failed
 
 
 if __name__ == "__main__":
