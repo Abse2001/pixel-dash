@@ -39,6 +39,12 @@ The wide handheld now targets a single nominal 3.7 V, 10,000 mAh pack. The worki
 
 [MakerFocus specifications](https://www.makerfocus.com/products/makerfocus-3-7v-lipo-battery-10000mah-lithium-rechargeable-battery-9065115-with-micro-ph2-0-plug-for-raspberry-pi-ups-board) · [Amazon listing](https://www.amazon.com/dp/B093WS6C66) · [DigiKey 5035](https://www.digikey.com/en/products/detail/adafruit-industries-llc/5035/14625568) · [PKCELL pack drawing, p. 8](https://cdn-shop.adafruit.com/product-files/5035/5035_10050mAh_3.7V_A1____20210511.pdf) · [Adafruit charger board](https://github.com/adafruit/Adafruit-BQ24074-PCB/blob/844404b10e1a87820ee9cb9024d85f67f4bc4bfd/Adafruit_BQ24074.brd) · [DigiKey PiJuice battery listings](https://www.digikey.com/en/products/filter/batteries-rechargeable-secondary/maker-emporium-ltd/91)
 
+## Battery pocket on the preserved compact shell
+
+The modeled original pack occupies 61.0 × 47.7 × 7.9 mm. A horizontal slice of the rear-shell mesh at Z = −8.0 mm gives a 62.0 × 48.7 mm rectangular pack bay (X = −31.0 to +31.0 mm, Y = −22.35 to +26.35 mm). The opening to the right leads into the cable bay. The MakerFocus 112 × 65 mm and PKCELL 69 × 56.5 mm packs both exceed the rectangular pack bay in plan. The complete compact rear shell is 157 mm wide, while the wide PCB is 232 mm wide. The old shell remains a fallback.
+
+The YELUFT listing does not give a guaranteed maximum envelope including its protection board and lead exit. Its fit in a revised shell and polarity at the keyed header remain open. The nominal capacity alone cannot determine the required pocket dimensions.
+
 ## Charger sizing for the 10 Ah pack
 
 The integrated BQ25185 has 18 kΩ from ILIM/VSET to ground and 620 Ω from ISET to ground. These select 4.2 V, a 500 mA USB input limit and approximately 484 mA fast charge (300 AΩ / 620 Ω). A full 10 Ah recharge would need at least 20.7 hours at that current before taper and system load. TI revision B lists a 360-minute typical fast-charge safety timer. At nominal current six hours adds at most 2.9 Ah. This configuration cannot serve as the final charger for the selected capacity. [TI BQ25185 electrical characteristics and sections 6.3.7.7 and 7.2.2](https://www.ti.com/lit/ds/symlink/bq25185.pdf)
