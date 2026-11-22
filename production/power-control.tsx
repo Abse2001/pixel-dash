@@ -191,5 +191,15 @@ export function PowerControl() {
     {Object.entries(processorBalls).filter(([, pad]) => pad === "VDD_CORE" || pad === "VDD_MPU").map(([ball, rail]) => (
       <trace key={ball} from={".U1 > ." + ball} to={"net." + rail}/>
     ))}
+    {[
+      { ball: "A5", x: -48.409942, y: 21.940088 }, // VSS_RTC
+      { ball: "E8", x: -45.999896, y: 18.749942 }, // VSSA_ADC
+      { ball: "M14", x: -41.200058, y: 13.150004 }, // VSSA_USB
+      { ball: "N14", x: -41.200058, y: 12.349904 }, // VSSA_USB
+    ].map(({ ball, x, y }) => (
+      <via key={ball} name={`V_ANALOG_RETURN_${ball}`} pcbX={x} pcbY={y}
+        fromLayer="top" toLayer="inner1" holeDiameter={0.125} outerDiameter={0.28}
+        connectsTo={[`.U1 > .${ball}`, "net.GND"]}/>
+    ))}
   </>
 }
