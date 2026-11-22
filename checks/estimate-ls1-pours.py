@@ -230,8 +230,21 @@ if args.return_path:
     thermal = [v for v in gnd_vias if abs(v["x"]-ep_land["x"]) + v["outer_diameter"]/2 < ep_land["width"]/2
                and abs(v["y"]-ep_land["y"]) + v["outer_diameter"]/2 < ep_land["height"]/2]
     end = min((v for v in thermal if "bottom" in v["layers"]), key=lambda v: np.hypot(v["x"]-cpu_via["x"], v["y"]-cpu_via["y"]))
-    crop = box(min(cpu_via["x"],end["x"])-4, min(cpu_via["y"],end["y"])-5,
-               max(cpu_via["x"],end["x"])+4, max(cpu_via["y"],end["y"])+5)
+    bounds = box(min(cpu_via["x"],end["x"])-4, min(cpu_via["y"],end["y"])-5,
+                 max(cpu_via["x"],end["x"])+4, max(cpu_via["y"],end["y"])+5)
+    layer = artwork(archive, "In1_Cu.gbr")
+    source, sink = [Point(v["x"],v["y"]) for v in (cpu_via,end)]
+    # Dense BGA antipads can carry the return outside the initial local rectangle.
+    # Expand until both terminals actually share exported L2 copper.
+    for extra in (0, 4, 8, 16, 32, 64, 128):
+        crop = bounds.buffer(extra, join_style="mitre") if extra else bounds
+        cropped = layer.intersection(crop)
+        if any(region.covers(source) and region.covers(sink)
+               for region in getattr(cropped, "geoms", [cropped])):
+            break
+    else:
+        raise ValueError("No continuous L2 return between the CPU and PMIC terminals")
+    print(f"L2 return solve expands the local rectangle by {extra} mm on each side.")
     bores = []
     with ZipFile(archive) as z:
         for member, expected in drill["expected_drills"](board).items():
@@ -242,7 +255,7 @@ if args.return_path:
                 center = Point(points[0]) if len(points) == 1 else LineString(points)
                 if crop.distance(center) <= diameter/2:
                     bores.append(center.buffer(diameter/2, quad_segs=48))
-    sheet = artwork(archive, "In1_Cu.gbr").intersection(crop).difference(unary_union(bores))
+    sheet = cropped.difference(unary_union(bores))
     barrel = sum(.01724*stack.outer_to_inner/(np.pi*stack.wall*(v["hole_diameter"]+stack.wall))
                  for v in (cpu_via,end))
     print(f"Single L2 return from U1.A1 to EP via at ({end['x']:.4f}, {end['y']:.4f}); both barrels included.")
