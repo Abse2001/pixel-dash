@@ -2,7 +2,7 @@
 from pathlib import Path
 import runpy
 
-from shapely.geometry import box
+from shapely.geometry import LineString, box
 from shapely.ops import unary_union
 
 
@@ -64,4 +64,32 @@ def add_switched_ddr_pours(board):
     for i,part in enumerate(parts):
         board.append(dict(type='pcb_copper_pour',pcb_copper_pour_id=f'switched_ddr_{i}',source_net_id=rail['source_net_id'],
                           shape='brep',layer='bottom',covered_with_solder_mask=True,
+                          brep_shape={'outer_ring':ring(part.exterior),'inner_rings':[ring(r) for r in part.interiors]}))
+
+    # Spread the supply along the seven CPU DDR lands and out to the L4
+    # feed. Use the stored escape as the spine, so it follows placement.
+    cpu, = (e for e in board if e['type'] == 'source_component' and e.get('name') == 'U1')
+    balls = {p['name']: p['source_port_id'] for p in board if p['type'] == 'source_port'
+             and p.get('source_component_id') == cpu['source_component_id']}
+    pads = {p['source_port_id']: (p['x'], p['y']) for p in board if p['type'] == 'pcb_port' and p.get('source_port_id')}
+    feed = ids['pcb_ddr_supply_cpu']['route']
+    spine = LineString([pads[balls['E5']], *[(p['x'], p['y']) for p in feed]])
+    window = spine.buffer(.53, quad_segs=48)
+    search_area = window.buffer(.42)
+    relief = []
+    for oid, net, shape in copper['top']:
+        if net == key or not shape.intersects(search_area):
+            continue
+        # Keep four DDR trace widths from signal copper and six mil from
+        # unrelated via lands. Existing routed links are preserved.
+        gap = .410 if net in signals else .155 if ids[oid]['type'] == 'pcb_via' else .110
+        relief.append(shape.buffer(gap, quad_segs=48))
+    usable = window.difference(unary_union(relief))
+    usable = usable.buffer(-.065, quad_segs=32).buffer(.065, quad_segs=32)
+    pieces = getattr(usable, 'geoms', (usable,))
+    for i, part in enumerate(pieces):
+        if not part.intersects(spine) or part.area < .1:
+            continue
+        board.append(dict(type='pcb_copper_pour', pcb_copper_pour_id=f'cpu_ddr_row_{i}',
+                          source_net_id=rail['source_net_id'], layer='top', shape='brep', covered_with_solder_mask=True,
                           brep_shape={'outer_ring':ring(part.exterior),'inner_rings':[ring(r) for r in part.interiors]}))

@@ -65,10 +65,10 @@ bias, control, CT, output, ground and the separate memory rail.
 [TI TPS22975 electrical characteristics and timing](https://www.ti.com/lit/ds/symlink/tps22975.pdf)
 
 At 250 mA CPU load plus 29.6 mA bleed, the 105 °C sensitivity with
-80% conductor area and 40 mΩ switch resistance leaves **9.88 mV DC**
+80% conductor area and 40 mΩ switch resistance leaves **12.57 mV DC**
 above the CPU minimum. Combining the −2.5% source case with a 100 mA,
 1 µs step, 46.5 µF effective output capacitance and a 2 mV parasitic
-allowance falls **1.024 mV below the CPU minimum**. The drilled top-layer solve includes the BGA land copper between trace ends and a 0.150 mm contact at E5. The earlier land-edge model omitted that resistance. Capture bias, enable, input and voltage at
+allowance leaves **1.672 mV** of modeled transient reserve. Mask-covered top copper follows the seven supply lands and their input via. It reduces the drilled L1 resistance to a 0.150 mm E5 contact from 13.352 to 7.570 mΩ. Gerber payload comparison shows only top copper changed. Capture bias, enable, input and voltage at
 the CPU on cold start, hot load steps, commanded shutdown and abrupt
 input loss. Measure reverse current during collapse. These results depend
 on the reference stack, load, switch resistance and capacitor impedance.
