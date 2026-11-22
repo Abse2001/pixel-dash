@@ -1,7 +1,7 @@
 """Compare all 50 rendered DDR connections to the AM3354 and Micron ball maps."""
+import argparse
 import json
 import re
-import sys
 from pathlib import Path
 
 
@@ -44,11 +44,57 @@ def check(board, cpu, ram):
     return [line for _, line in sorted(changes)]
 
 
+def check_ti_model(path, cpu):
+    # Read only pin identifiers and selectors from the supplied ZCZ IBIS model.
+    wanted = {ball: pin.upper() for ball, pin in cpu.items()
+              if pin.startswith("DDR_") and pin not in {"DDR_VREF", "DDR_VTP"}}
+    pins = {}
+    modeled_balls = set()
+    section = ""
+    component = ""
+    package = ""
+    selectors_1v35 = set()
+    with path.open(encoding="latin1") as model:
+        for raw in model:
+            line = raw.partition("|")[0].strip()
+            if not line:
+                continue
+            if line.startswith("["):
+                tag, _, value = line.partition("]")
+                section = tag[1:].casefold()
+                if section == "component":
+                    component = value.strip().casefold()
+                elif section == "define package model":
+                    package = value.strip().casefold()
+                elif section == "model selector":
+                    selector = value.strip()
+                continue
+            fields = line.split()
+            if section == "pin" and component == "am335x_zcz" and fields[0] in wanted:
+                pins[fields[0]] = fields[1:3]
+            elif section == "pin numbers" and package == "am335x_zcz":
+                modeled_balls.add(fields[0])
+            elif section == "model selector" and "1.35V" in line.upper():
+                selectors_1v35.add(selector)
+    if len(wanted) != 50:
+        raise ValueError(f"Expected 50 CPU DDR signal balls, got {len(wanted)}")
+    for ball, signal in wanted.items():
+        found = pins.get(ball, [])
+        if len(found) != 2 or found[0] != signal or found[1] not in selectors_1v35 or ball not in modeled_balls:
+            raise ValueError(f"{ball} {signal} lacks a matching ZCZ package pin or 1.35 V selector: {found}")
+    print("All 50 DDR signal balls match TI's ZCZ pin table, package pin list and 1.35 V selector coverage.")
+
+
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("circuit", type=Path)
+    parser.add_argument("--ti-ibis", type=Path, help="Extracted TI SPRM552C ZCZ IBIS file")
+    args = parser.parse_args()
     directory = Path(__file__).resolve().parents[1] / "am3354"
-    changes = check(json.loads(Path(sys.argv[1]).read_text()),
-                    json.loads((directory / "processor-balls.json").read_text()),
-                    json.loads((directory / "memory-balls.json").read_text()))
+    cpu = json.loads((directory / "processor-balls.json").read_text())
+    changes = check(json.loads(args.circuit.read_text()), cpu, json.loads((directory / "memory-balls.json").read_text()))
     print(f"50 unique connections match the package functions. {len(changes)} within-byte DQ remaps.")
     for row in changes:
         print(row)
+    if args.ti_ibis:
+        check_ti_model(args.ti_ibis, cpu)
