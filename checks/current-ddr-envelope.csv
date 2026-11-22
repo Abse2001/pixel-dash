@@ -1,0 +1,9 @@
+layer,copper_or_plane,net,finding_area_in_region_mm2,finding_area_including_margin_mm2
+inner1,reference_plane,GND,0.051981,
+inner2,reference_plane,VDDS_DDR,1.151814,
+top,pcb_system_JOY_L_CLICK,unnamedsubcircuitsubcircuit_source_group_0_connectivity_net137,0.000000,0.193955
+top,pcb_system_LCD_D14,system_LCD_D14,0.028753,0.080285
+top,pcb_system_boot_tap_11,system_LCD_D11,0.157066,0.215032
+top,pcb_system_boot_tap_13,system_LCD_D13,0.100806,0.153558
+top,pcb_system_boot_tap_14,system_LCD_D14,0.028783,0.080364
+top,pcb_system_boot_tap_15,system_LCD_D15,0.000000,0.010960

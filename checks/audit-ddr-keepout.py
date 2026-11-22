@@ -1,8 +1,9 @@
 """Check the TI Table 7-63 non-DDR signal setback at the routed DDR copper.
 
-This is a necessary lower bound on the keepout. It does not certify the entire
-enclosing DDR region, the space between bus traces or the reference planes.
+The default measures nearest copper. The optional convex-envelope screen also
+checks space between routes and looks for uncategorized reference-plane gaps.
 """
+import argparse
 import csv
 import json
 import runpy
@@ -10,6 +11,8 @@ import sys
 from pathlib import Path
 
 from shapely import STRtree
+from shapely.geometry import GeometryCollection
+from shapely.ops import unary_union
 
 
 def audit(board):
@@ -43,11 +46,67 @@ def audit(board):
                 yield layer, oid, signal, f"{gap:.6f}", f"{limit:.6f}"
 
 
+def envelope_audit(board):
+    """Conservative common envelope for both routing faces, including the RAM lands."""
+    copper = runpy.run_path(str(Path(__file__).with_name("audit-copper-contacts.py")))["copper"](board)
+    by_id = {e[e["type"] + "_id"]: e for e in board if e["type"] + "_id" in e}
+    signals = {e["subcircuit_connectivity_map_key"] for e in board
+               if e["type"] == "source_trace" and (e.get("name") or "").startswith("DDR_")}
+    if len(signals) != 50:
+        raise ValueError("Expected 50 distinct DDR signal nets")
+    support = {e["subcircuit_connectivity_map_key"] for e in board if e["type"] == "source_net"
+               and e["name"] in {"GND", "VDDS_DDR", "DDR_VREF", "DDR_VREF_CA", "DDR_VTP", "DDR_ZQ"}}
+    ram, = (e for e in board if e["type"] == "source_component" and e.get("name") == "U_DDR")
+    ram_pcb, = (e["pcb_component_id"] for e in board if e["type"] == "pcb_component"
+                and e["source_component_id"] == ram["source_component_id"])
+    boundary_parts = []
+    widths = set()
+    for layer in ("top", "bottom"):
+        for oid, key, shape in copper[layer]:
+            item = by_id[oid]
+            if key in signals or item.get("pcb_component_id") == ram_pcb:
+                boundary_parts.append(shape)
+                if item["type"] == "pcb_trace":
+                    widths.update(p["width"] for p in item["route"] if p.get("layer") == layer)
+    region = GeometryCollection(boundary_parts).convex_hull
+    clearance = 4 * max(widths)
+    margin = region.buffer(clearance, quad_segs=64)
+    for layer, reference in (("inner1", "GND"), ("inner2", "VDDS_DDR")):
+        (plane_key, plane), = ((key, shape) for oid, key, shape in copper[layer]
+                  if by_id[oid]["type"] == "pcb_copper_pour" and by_id[by_id[oid]["source_net_id"]]["name"] == reference)
+        # Count signal and power via antipads separately from missing or split reference copper.
+        antipads = unary_union([shape.buffer(0.16, quad_segs=64) for oid, key, shape in copper[layer]
+                                if by_id[oid]["type"] in ("pcb_via", "pcb_plated_hole")
+                                and key != plane_key and shape.distance(region) < 0.16])
+        missing = region.difference(plane)
+        residual = missing.difference(antipads).area
+        print(f"{layer} {reference}: envelope {region.area:.4f} mm², uncovered {missing.area:.4f} mm², "
+              f"uncovered outside nominal via antipads {residual:.4f} mm².", file=sys.stderr)
+        if residual > 1e-6:
+            yield layer, "reference_plane", reference, f"{residual:.6f}", ""
+    for layer in ("top", "bottom"):
+        for oid, key, shape in copper[layer]:
+            item = by_id[oid]
+            if key in signals or key in support or item["type"] not in ("pcb_trace", "pcb_via", "pcb_plated_hole"):
+                continue
+            if shape.distance(region) < clearance - 1e-7:
+                yield layer, oid, key, f"{shape.intersection(region).area:.6f}", f"{shape.intersection(margin).area:.6f}"
+
+
 if __name__ == "__main__":
-    board = json.loads(Path(sys.argv[1]).read_text())
-    findings = sorted(audit(board))
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("circuit", type=Path)
+    parser.add_argument("--envelope", action="store_true", help="Screen a convex envelope around DDR routing and RAM lands")
+    args = parser.parse_args()
+    board = json.loads(args.circuit.read_text())
     out = csv.writer(sys.stdout)
-    out.writerow(("layer", "non_ddr_copper", "adjacent_ddr_signal", "edge_gap_mm", "four_widths_mm"))
+    if args.envelope:
+        findings = sorted(envelope_audit(board))
+        out.writerow(("layer", "copper_or_plane", "net", "finding_area_in_region_mm2", "finding_area_including_margin_mm2"))
+        print(f"{len(findings)} findings across signal and reference layers in the conservative envelope screen.", file=sys.stderr)
+    else:
+        findings = sorted(audit(board))
+        out.writerow(("layer", "non_ddr_copper", "adjacent_ddr_signal", "edge_gap_mm", "four_widths_mm"))
+        print(f"{len(findings)} unrelated signal trace/via and layer combinations inside the 4w setback.", file=sys.stderr)
     out.writerows(findings)
-    print(f"{len(findings)} unrelated signal trace/via and layer combinations inside the 4w setback.", file=sys.stderr)
     sys.exit(bool(findings))
