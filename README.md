@@ -1,5 +1,9 @@
 # Pixel Dash
 
+## DDR timing study
+
+The separate 50-link DDR study measures 39.729 ps worst-case modeled data-to-strobe skew on byte 0 and 11.113 ps on byte 1. The reference-build screen is 3.663 ps. TI's data-to-strobe routing limit is 0.635 mm. CK, DQS0 and DQS1 meet their 0.127 mm pair-length limit. The study also tunes A13, A14 and A6 toward the 28.550–31.090 mm command window. The per-net report records all lengths, flight times, limits and outstanding failures. [DDR timing checkpoint c28dc8c](https://github.com/Abse2001/pixel-dash/blob/c28dc8c/checks/current-ddr-targets.md)
+
 ## Wide handheld checkpoint
 
 **Fabrication is on hold.** DCDC4 supplies 19/21 assigned 3.3 V CPU/USB
