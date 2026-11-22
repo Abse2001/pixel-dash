@@ -94,6 +94,25 @@ for label, nets, limit in [
         print(f"{label} geometric spread including {args.through_span_mm:g} mm per traversal: "
               f"{max(physical)-min(physical):.3f} mm", file=sys.stderr)
 
+# TI SPRS717L Table 7-69 separates intra-DQ and DQ-to-strobe matching.
+# Report the actual limiting pins so routing edits can target the right path.
+for lane, nets in enumerate(lanes):
+    strobes = {f"DDR_DQS{lane}", f"DDR_DQSn{lane}"}
+    dq = sorted((nets - strobes) & rows.keys())
+    if len(dq) < 2 or not strobes <= rows.keys():
+        continue
+    for span in [0, *([args.through_span_mm] if args.through_span_mm is not None else [])]:
+        lengths = {n: rows[n][0] + span * rows[n][2] for n in dq + sorted(strobes)}
+        shortest = min(dq, key=lengths.get)
+        longest = max(dq, key=lengths.get)
+        data, strobe = max(((d, s) for d in dq for s in sorted(strobes)),
+                           key=lambda pair: abs(lengths[pair[0]] - lengths[pair[1]]))
+        basis = f"estimated with {span:g} mm per traversal" if span else "planar"
+        print(f"BYTE{lane} {basis}: DQ/DM spread {lengths[longest]-lengths[shortest]:.3f} mm "
+              f"({longest} to {shortest}), worst DQ/DM-to-DQS mismatch "
+              f"{abs(lengths[data]-lengths[strobe]):.3f} mm ({data} to {strobe}), "
+              "limit 0.635 mm each", file=sys.stderr)
+
 out = csv.writer(sys.stdout)
 out.writerow(["Signal", "Planar length (mm)", "Through vias"])
 for n, (length, _, vias) in sorted(rows.items()):
