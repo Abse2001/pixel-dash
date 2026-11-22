@@ -132,7 +132,8 @@ if args.direct_pour_mohm is not None:
 if args.sheet_network_report is not None:
     lines = args.sheet_network_report.read_text().splitlines()
     header = "pitch_mm,inner_um,outer_um,joined_L3_output_to_L4_balls_mOhm_at_20C"
-    rows = list(csv.DictReader(lines[lines.index(header):]))
+    table = lines[lines.index(header):]
+    rows = csv.DictReader(table[:next((i for i, line in enumerate(table) if line.startswith(("drill", "Single L2 return"))), len(table))])
     by_foil = {}
     for row in rows:
         foil = float(row["inner_um"])

@@ -1,41 +1,21 @@
 LS1 bank: 22 capacitors, 46.00 uF nominal. TI nominal window 10–100 uF.
 DCDC3 setpoint 1.350 V, screening at -2%; CPU minimum 1.283 V. LS1 110 mOhm at 300 mA.
-Copper screen, 35 um outer foil. Whole CPU load carried through the series feed to L5.
+Copper screen, 30 um outer foil. Whole CPU load carried through the series feed to L5.
 inner_um,temp_C,input_mOhm,output_mOhm,load_mA,trace_drop_mV,barrel_drop_mV,remaining_mV
-35,20,10.785,21.315,150,4.815,1.399,17.286
-35,20,10.785,21.315,225,7.222,2.099,5.929
-35,20,10.785,21.315,250,8.025,2.332,2.143
-35,20,10.785,21.315,300,9.630,2.798,-5.428
-35,80,13.328,26.341,150,5.950,1.729,15.821
-35,80,13.328,26.341,225,8.926,2.594,3.731
-35,80,13.328,26.341,250,9.917,2.882,-0.299
-35,80,13.328,26.341,300,11.901,3.458,-8.359
-17.5,20,10.785,30.914,150,6.255,1.399,15.846
-17.5,20,10.785,30.914,225,9.382,2.099,3.769
-17.5,20,10.785,30.914,250,10.425,2.332,-0.256
-17.5,20,10.785,30.914,300,12.509,2.798,-8.308
-17.5,80,13.328,38.203,150,7.730,1.729,14.041
-17.5,80,13.328,38.203,225,11.594,2.594,1.062
-17.5,80,13.328,38.203,250,12.883,2.882,-3.264
-17.5,80,13.328,38.203,300,15.459,3.458,-11.917
-L5 to E5 at 20 C and 35 um top copper: additional 0.595 mV with 300 mA split equally across seven balls; 1.290 mV if all current enters E5.
-AM335x Table 5-10 estimates 250 mA worst-case VDDS_DDR current. TPS65218D0 specifies 110 mOhm at 300 mA, 1.35 V, DDR3L at 333 MHz.
-35 um, 20 C, equal ball loads: board series resistance to E5 54.888 mOhm including 11.477 mOhm in L4.
-  250 mA: pre-board allowance 12.500 mV, modeled board drop 13.722 mV, remaining -1.222 mV.
-  300 mA: pre-board allowance 7.000 mV, modeled board drop 16.466 mV, remaining -9.466 mV.
-Zero-margin current in this DC scenario: 242.6 mA before return drop, package, ripple and transients.
-Direct L3-to-lower-bank feed to E5, with the original parallel path omitted, equal CPU ball loads:
-  inner 35 um, 20 C: 47.154 mOhm; remaining at 250 mA 0.711 mV, at 300 mA -7.146 mV before return and transient losses.
-  inner 35 um, 80 C: 58.273 mOhm; remaining at 250 mA -2.068 mV, at 300 mA -10.482 mV before return and transient losses.
-  inner 17.5 um, 20 C: 50.220 mOhm; remaining at 250 mA -0.055 mV, at 300 mA -8.066 mV before return and transient losses.
-  inner 17.5 um, 80 C: 62.061 mOhm; remaining at 250 mA -3.015 mV, at 300 mA -11.618 mV before return and transient losses.
-Both physical feeds with their shared copper counted once, 35 um outer foil, equal ball loads:
-  inner 35 um, 20 C, grid 0.025 mm: 44.218 mOhm; remaining at 250 mA 1.445 mV, at 300 mA -6.265 mV before return and transient losses.
-  inner 35 um, 80 C, grid 0.025 mm: 54.645 mOhm; remaining at 250 mA -1.161 mV, at 300 mA -9.393 mV before return and transient losses.
-  inner 17.5 um, 20 C, grid 0.025 mm: 46.602 mOhm; remaining at 250 mA 0.850 mV, at 300 mA -6.981 mV before return and transient losses.
-  inner 17.5 um, 80 C, grid 0.025 mm: 57.591 mOhm; remaining at 250 mA -1.898 mV, at 300 mA -10.277 mV before return and transient losses.
+30,20,12.582,24.868,150,5.617,1.308,16.575
+30,20,12.582,24.868,225,8.426,1.961,4.862
+30,20,12.582,24.868,250,9.362,2.179,0.958
+30,20,12.582,24.868,300,11.235,2.615,-6.850
+30,80,15.549,30.732,150,6.942,1.616,14.942
+30,80,15.549,30.732,225,10.413,2.424,2.413
+30,80,15.549,30.732,250,11.570,2.693,-1.763
+30,80,15.549,30.732,300,13.884,3.232,-10.116
+L5 to E5 at 20 C and 30 um top copper: additional 0.694 mV with 300 mA split equally across seven balls; 1.505 mV if all current enters E5.
+Both physical feeds with their shared copper counted once, 30 um outer foil, equal ball loads:
+  inner 30 um, 20 C, grid 0.025 mm: 49.405 mOhm; remaining at 250 mA 0.149 mV, at 300 mA -7.821 mV before return and transient losses.
+  inner 30 um, 80 C, grid 0.025 mm: 61.054 mOhm; remaining at 250 mA -2.764 mV, at 300 mA -11.316 mV before return and transient losses.
 Sensitivity to a 100 mA step lasting 1 us, before regulator response, ESR and ESL:
   50% effective: 23.00 uF, ideal capacitive droop 4.35 mV
   75% effective: 34.50 uF, ideal capacitive droop 2.90 mV
   100% effective: 46.00 uF, ideal capacitive droop 2.17 mV
-Barrels assume 20 um plating, 1.530 mm full span, 0.0764 mm L3-to-L4. The trace/barrel table excludes L4 spreading, return path, package and transient parasitics. Load, effective capacitance, finished stack and copper temperature are unverified.
+HDI4_1-2b-1_149_35_2V13. Assumed barrel wall 20 um, full span 1.42 mm, L3-to-L4 0.095 mm. The trace/barrel table excludes L4 spreading, return path, package and transient parasitics. Load, effective capacitance, finished stack and copper temperature are unverified.

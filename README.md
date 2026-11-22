@@ -347,3 +347,15 @@ checks passed. CAM verified 960 plated barrels, 50 distinct DDR pairs and
 include boot straps and raster signals. B4, B5, C5, N5 and P5 still lack
 their required feeds. Voltage tolerance, local decoupling and analog noise
 at the LDO1 loads remain separate outstanding checks.
+
+At 374a690 the joined LS1 feed and cropped return model use the same 30 µm
+copper. The L2 return screen uses one digital VSS ball, U1.A1, its plated
+via and the exposed-pad via at (−22.30, 23.20) mm. Copper comes from the
+drilled L2 Gerber. With current constrained to this single return, the
+0.050/0.075 mm meshes give 4.601/4.635 mΩ at 20 °C. At 250 mA and 80 °C
+the finer mesh adds 1.421 mV to the drop, taking the modeled DC margin to
+−4.185 mV. Other ground lands provide parallel paths in hardware. At
+50% effective capacitance, a further 100 mA step for 1 µs gives a 4.35 mV
+ideal capacitive term before ESR, ESL and regulation. A measured transient
+waveform and actual via plating are still unavailable. Use --return-path on
+the Würth sheet solve to reproduce the single-return case.
