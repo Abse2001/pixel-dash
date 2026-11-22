@@ -1,9 +1,9 @@
 50/50 routed. Open:
 BYTE0 [0.000, 20.600] mm: 5/11 routed outside (DDR_D1, DDR_D3, DDR_D4, DDR_D5, DDR_D7)
 BYTE1 [0.000, 23.000] mm: 2/11 routed outside (DDR_D12, DDR_D14)
-ADDR_CTRL_CK [28.550, 31.090] mm: 4/27 routed outside (DDR_A0, DDR_A10, DDR_A3, DDR_CKE)
+ADDR_CTRL_CK [28.550, 31.090] mm: 2/27 routed outside (DDR_A10, DDR_CKE)
 BYTE0 skew across 11/11 signals 7.091 mm, limit 0.635
-BYTE1 skew across 11/11 signals 5.347 mm, limit 0.635
+BYTE1 skew across 11/11 signals 3.503 mm, limit 0.635
 DDR_CK skew across 2/2 signals 0.095 mm, limit 0.127
 DDR_DQS0 skew across 2/2 signals 0.110 mm, limit 0.127
 DDR_DQS1 skew across 2/2 signals 0.090 mm, limit 0.127
