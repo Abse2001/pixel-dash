@@ -1,9 +1,9 @@
 drill_npth.drl matches 19 round hits and 0 slots
-drill-L1-L4.drl matches 740 round hits and 6 slots
+drill-L1-L4.drl matches 741 round hits and 6 slots
 drill-L1-L2.drl matches 287 round hits and 0 slots
 drill-L2-L3.drl matches 20 round hits and 0 slots
 drill-L3-L4.drl matches 33 round hits and 0 slots
-36 distinct DDR ball pairs connected. 1086 plated barrels checked. No shorts between mapped land nets.
+36 distinct DDR ball pairs connected. 1087 plated barrels checked. No shorts between mapped land nets.
 Open DDR links: DDR_A0 (U1.F3 to U_DDR.N3), DDR_A1 (U1.H1 to U_DDR.P7), DDR_A10 (U1.F4 to U_DDR.L7), DDR_A11 (U1.F2 to U_DDR.R7), DDR_A12 (U1.E3 to U_DDR.N7), DDR_A13 (U1.H3 to U_DDR.T3), DDR_A2 (U1.E4 to U_DDR.P3), DDR_A3 (U1.C3 to U_DDR.N2), DDR_A4 (U1.C2 to U_DDR.P8), DDR_CASn (U1.F1 to U_DDR.K3), DDR_CSn0 (U1.H2 to U_DDR.L2), DDR_ODT (U1.G1 to U_DDR.K1), DDR_RASn (U1.G4 to U_DDR.J3), DDR_RESETn (U1.G2 to U_DDR.T2)
 UART0 RX, TX and ground reach three distinct probe networks.
 PAM8403 MUTE and SHND reach regulated 3.3 V and are isolated from ground and VDD.
@@ -35,7 +35,7 @@ Processor supply/return to U_DDR_SWITCH.VOUT1: 7/7 balls connected.
 Processor supply/return to U_PMIC.DCDC4: 21/21 balls connected.
 Processor supply/return to U_PMIC.LDO1: 16/16 balls connected.
 RAM ZQ CAM: U_DDR.L8 to R_ZQ.pin1=True, return to main ground=True, sense isolated from supply and return=True
-CPU VTP CAM: U1.J3 to R_VTP.pin1=False, return to main ground=True, sense isolated from supply and return=True
+CPU VTP CAM: U1.J3 to R_VTP.pin1=True, return to main ground=True, sense isolated from supply and return=True
 RAM VREFCA bypass CAM: U_DDR.M8 to C_VREF_CA.pin1=True, return to main ground=True, sense isolated from supply and return=True
 RAM VREFDQ bypass CAM: U_DDR.H1 to C_VREF_DQ.pin1=True, return to main ground=True, sense isolated from supply and return=True
 CPU DDR VREF bypass CAM: U1.J4 to C_CPU_VREF.pin1=True, return to main ground=True, sense isolated from supply and return=True
@@ -142,7 +142,6 @@ OPEN channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net41 has 2
 OPEN channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net44 has 2 separate CAM networks: U_DDR.R7 | U1.F2
 OPEN channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net46 has 2 separate CAM networks: U_DDR.T2 | U1.G2
 OPEN channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net47 has 2 separate CAM networks: U_DDR.T3 | U1.H3
-OPEN channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net53 has 2 separate CAM networks: R_VTP.pin1 | U1.J3
 OPEN system_LCD_D1 has 2 separate CAM networks: U1.R2 | J_LCD.pin31, R_SYSBOOT1.pin2
 OPEN system_LCD_D10 has 2 separate CAM networks: U1.U3 | J_LCD.pin20, R_SYSBOOT10.pin2
 OPEN system_LCD_D12 has 2 separate CAM networks: R_SYSBOOT12.pin2, U1.V2 | J_LCD.pin15
@@ -172,4 +171,4 @@ OPEN unnamedsubcircuitsubcircuit_source_group_0_connectivity_net124 has 2 separa
 OPEN unnamedsubcircuitsubcircuit_source_group_0_connectivity_net193 has 2 separate CAM networks: R_LIPO_ENABLE.pin2, U_LIPO_BOOST.EN, U_LIPO_UVLO.N_RESET | Q_LIPO_USB_OFF.pin3
 OPEN unnamedsubcircuitsubcircuit_source_group_0_connectivity_net32 has 2 separate CAM networks: U1.N18 | J_USB.A7, J_USB.B7
 OPEN unnamedsubcircuitsubcircuit_source_group_0_connectivity_net34 has 2 separate CAM networks: U1.N17 | J_USB.A6, J_USB.B6
-44 mapped land nets have multiple physical networks.
+43 mapped land nets have multiple physical networks.
