@@ -54,3 +54,11 @@ python studies/ddr-breakout/fixed-via-bound.py dist/index.circuit.json DDR_D13 -
 ```
 
 A separate two-transition routing experiment released the CPU and RAM via locations for D5, D12 and D14 together. It also tried releasing D1 and swapping D1/D5 and D12/D14 within their respective bytes. The 0.032–0.033 mm grid candidates retained either clearance overlaps or excess length. The production design keeps all 50 original endpoints and its previously verified copper. The current length, flight estimate, signed skew, applicable limit and residual for every routed signal are in the [timing ledger](../../checks/current-ddr-change.csv).
+
+D5 has cross-byte constraints of its own. With both D5 vias fixed, D10 alone sets a 20.62444 mm lower bound and D11 alone sets a 21.12251 mm lower bound. They exceed the present byte-0 two-via upper timing target of 20.2196 mm by 0.40484 mm and 0.90291 mm respectively. A five-net trial released D5, D10, D11, D12 and D14, including both transitions per net. Its identity mapping and two alternative byte-1 permutations all retained overlaps.
+
+For D1, the lower bound is 21.83192 mm even with every obstacle removed. Keeping only the CPU-side via gives 20.37595 mm, and keeping only the RAM-side via gives 20.71282 mm. Either original via alone precludes 20.2196 mm. This follows from adding the two straight-line distances from the retained via to the package balls and allows the other via to move anywhere. The present D1 package-ball separation is 17.39990 mm. Reproduce these three bounds with:
+
+```sh
+python studies/ddr-breakout/fixed-via-bound.py dist/index.circuit.json DDR_D1 --keep-only
+```

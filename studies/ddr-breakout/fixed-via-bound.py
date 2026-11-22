@@ -111,7 +111,7 @@ if __name__ == "__main__":
     parser.add_argument("--ram-signal", help="Pair this CPU escape with another same-byte DQ receiver escape")
     selection = parser.add_mutually_exclusive_group()
     selection.add_argument("--lift", nargs="*", default=[])
-    selection.add_argument("--keep-only", nargs="+", help="Use only these DDR nets as obstacles")
+    selection.add_argument("--keep-only", nargs="*", help="Use only these DDR nets as obstacles (empty for straight chords)")
     args = parser.parse_args()
     with open(args.circuit_json) as source:
         routes = read_routes(json.load(source))
@@ -141,3 +141,8 @@ if __name__ == "__main__":
         bounds.append(section_bound(section[0], section[-1], polygons))
     print(f"{args.signal} section bounds (mm):", *(f"{value:.5f}" for value in bounds))
     print(f"Total lower bound: {sum(bounds):.5f} mm")
+    if args.keep_only == [] and len(sections) == 3:
+        start, end = sections[0][0], sections[-1][-1]
+        for side, via in (("CPU", sections[0][-1]), ("RAM", sections[-1][0])):
+            length = math.dist(start, via) + math.dist(via, end)
+            print(f"With only the {side}-side via fixed: {length:.5f} mm")
