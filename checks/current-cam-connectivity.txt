@@ -11,7 +11,7 @@ PMIC copper verified between U_PMIC.nINT and U1.T14.
 PMIC copper verified between U_PMIC.PGOOD and U1.B15.
 All mapped handheld ground lands and barrels join the UART ground probe.
 Processor supply/return to TP_UART_GND.pin1: 43/43 balls connected.
-Processor supply/return to C_PMIC_CORE.pin1: 17/20 balls connected. Open F6, G6, K6
+Processor supply/return to C_PMIC_CORE.pin1: 18/20 balls connected. Open F6, G6
 Processor supply/return to C_PMIC_MPU.pin1: 7/7 balls connected.
 Processor supply/return to C_PMIC_RTC_CORE.pin1: 0/1 balls connected. Open D6
 Processor supply/return to C_PMIC_RTC_IO.pin1: 0/2 balls connected. Open B4, D7
@@ -24,8 +24,8 @@ OPEN channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net75 has 2
 OPEN channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net77 has 4 separate CAM networks: R_PMIC_WAKE.pin2 | U1.B4 | U1.D7 | C_PMIC_RTC_IO.pin1, L_PMIC_RTC_IO.pin2, U_PMIC.FB6
 OPEN channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net78 has 2 separate CAM networks: R_PMIC_POR.pin1 | U1.B15, U_PMIC.PGOOD
 OPEN channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net80 has 2 separate CAM networks: U1.B5 | U_PMIC.PGOOD_BU
-OPEN channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net83 has 4 separate CAM networks: U1.K6 | U1.G6 | U1.F6 | C_PMIC_CORE.pin1, L_PMIC_CORE.pin2, U1.F7
-OPEN channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net86 has 19 separate CAM networks: R_PMIC_IRQ.pin2, R_PMIC_POR.pin2 | U1.P5 | U1.N5 | U1.P6 | U1.P12 | U1.E12 | U1.E11 | U1.E10 | U1.P13 | U1.L14 | U1.K14 | U1.G14 | U1.F14 | U1.E13 | R_PMIC_SCL.pin2, R_PMIC_SDA.pin2, R_SYSBOOT0.pin1 | C_JOY_ADC.pin1, U_JOY_ADC.VDD | R_TOUCH_IRQ.pin2 | R_TOUCH_SDA.pin2 | R_TOUCH_SCL.pin2
+OPEN channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net83 has 3 separate CAM networks: U1.G6 | U1.F6 | C_PMIC_CORE.pin1, L_PMIC_CORE.pin2, U1.F7
+OPEN channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net86 has 19 separate CAM networks: R_PMIC_IRQ.pin2, R_PMIC_POR.pin2 | U1.P5 | U1.N5 | U1.P6 | U1.P12 | U1.E11 | U1.E10 | U1.E12 | U1.P13 | U1.L14 | U1.K14 | U1.G14 | U1.F14 | U1.E13 | R_PMIC_SCL.pin2, R_PMIC_SDA.pin2, R_SYSBOOT0.pin1 | C_JOY_ADC.pin1, U_JOY_ADC.VDD | R_TOUCH_IRQ.pin2 | R_TOUCH_SDA.pin2 | R_TOUCH_SCL.pin2
 OPEN system_LCD_D0 has 3 separate CAM networks: U1.R1 | R_SYSBOOT0.pin2 | J_LCD.pin32
 OPEN system_LCD_D1 has 3 separate CAM networks: U1.R2 | R_SYSBOOT1.pin2 | J_LCD.pin31
 OPEN system_LCD_D10 has 3 separate CAM networks: U1.U3 | R_SYSBOOT10.pin2 | J_LCD.pin20
