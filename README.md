@@ -2,7 +2,7 @@
 
 ## Wide handheld checkpoint
 
-All 50 AM3354-to-DDR3L signals reach their intended balls on 50 distinct electrical nodes. The adjacent plane covers the full trace width for all 50 signals outside their own via launch antipads. The board-wide 0.102 mm unrelated-copper, 0.1524 mm via-edge and drill-spacing checks pass. Each of the 6,972 routed strokes matches the copper Gerbers, and all five drill files match the board.
+All 50 AM3354-to-DDR3L signals reach their intended balls on 50 distinct electrical nodes. The adjacent plane covers the full trace width for all 50 signals outside their own via launch antipads. The board-wide 0.102 mm unrelated-copper, 0.1524 mm via-edge and drill-spacing checks pass. Each of the 6,969 routed strokes matches the copper Gerbers, and all five drill files match the board.
 
 The native PCB checker and the independent same-net copper audit both clear the four corrected DDR bends. The local PMIC feedback, RTC switch and joystick ADC supply traces also clear their native endpoint checks. Whole-board opens and bus constraints remain.
 
