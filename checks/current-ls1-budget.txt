@@ -1,15 +1,15 @@
-Full current to E5 through one VIN and one VOUT land. 20 C traces/barrels 3.412, drilled VIN feed 2.871, L4 feed 11.401, drilled L1 CPU row 7.570, CPU-to-regulator return 6.756, loop 32.010 mOhm.
+Full current to E5 through one VIN and one VOUT land. 20 C traces/barrels 3.412, drilled VIN feed 2.871, L4 feed 11.765, drilled L1 CPU row 7.570, CPU-to-regulator return 6.756, loop 32.373 mOhm.
 CPU 250 mA plus worst output bleed; screen all series sections at 279.59 mA.
 TPS22975 upper tabulated hot RON at 5 V VBIAS near this VIN is 25 mOhm; 34/40 mOhm screens bracket published bias corners and an added sensitivity. Data-sheet test current is 200 mA.
 temp_C,conductance_fraction,switch_mOhm,loop_mOhm,dc_reserve_mV,dynamic_reserve_mV
-80,1.00,34,39.558,19.434,8.533
-80,1.00,40,39.558,17.756,6.856
-80,0.80,34,49.447,16.669,5.768
-80,0.80,40,49.447,14.991,4.091
-105,1.00,34,42.703,18.554,7.654
-105,1.00,40,42.703,16.877,5.976
-105,0.80,34,53.378,15.570,4.669
-105,0.80,40,53.378,13.892,2.991
+80,1.00,34,40.007,19.308,8.408
+80,1.00,40,40.007,17.631,6.730
+80,0.80,34,50.009,16.512,5.611
+80,0.80,40,50.009,14.834,3.934
+105,1.00,34,43.188,18.419,7.518
+105,1.00,40,43.188,16.741,5.841
+105,0.80,34,53.985,15.400,4.500
+105,0.80,40,53.985,13.722,2.822
 Sequenced shutdown, ignoring QOD: control below 0.5 V by 5.94 ms; CPU rail at next 20 ms strobe 96.95 mV. Verify collapse and reverse current during hard VSYS loss.
 1 nF CT: TI typical 10–90% ramp 495–595 us at 1.2–1.5 V and 5 V bias. At 111.6 uF and 495 us, 10–90% average capacitive current 248 mA.
 Engineering headroom screen PASS

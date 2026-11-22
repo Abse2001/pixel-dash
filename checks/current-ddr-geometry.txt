@@ -9,7 +9,7 @@ Screened 12 routed raster signals.
 0 signal/layer reference-coverage findings
 0 signal/layer reference-coverage findings
 0 via/layer/unrelated-net pairs below 0.1524 mm
-Verified 8470 strokes from 633 PCB traces against all four copper Gerbers.
+Verified 8460 strokes from 633 PCB traces against all four copper Gerbers.
 50 unique connections match the package functions. 2 within-byte DQ remaps.
 U1.N2 DDR_D3 -> U_DDR.H7 DQ7
 U1.P4 DDR_D7 -> U_DDR.F8 DQ3

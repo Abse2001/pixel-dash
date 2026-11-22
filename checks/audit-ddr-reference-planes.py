@@ -25,6 +25,11 @@ def audit(board, microsd=False, full_width=False, raster=False, archive=None):
     names = {e["source_trace_id"]: e.get("name", "") for e in board if e["type"] == "source_trace"}
     ref = {"top": ("inner1", "GND"), "bottom": ("inner2", "GND" if microsd or raster else "VDDS_DDR")}
     if raster:
+        sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "production"))
+        from connectivity import trace_net_keys
+        _, keys = trace_net_keys(board)
+        panel = {key: source for source, key in keys.items() if source.startswith("system_LCD_")}
+        raster_sources = {source: panel[key] for source, key in keys.items() if key in panel}
         ref.update(inner1=("inner2", "GND"), inner2=("inner1", "GND"))
     pours = [e for e in board if e["type"] == "pcb_copper_pour"]
     vias = {xy(e): e for e in board if e["type"] == "pcb_via"}
@@ -46,11 +51,14 @@ def audit(board, microsd=False, full_width=False, raster=False, archive=None):
         if trace["type"] != "pcb_trace":
             continue
         name = names[trace["source_trace_id"]]
-        if microsd or raster:
-            prefix = "system_LCD_" if raster else "system_SD_"
-            if not trace["source_trace_id"].startswith(prefix):
+        if raster:
+            name = raster_sources.get(trace["source_trace_id"])
+            if name is None:
                 continue
+        elif microsd:
             name = trace["source_trace_id"]
+            if not name.startswith("system_SD_"):
+                continue
         elif not name.startswith("DDR_"):
             continue
         seen.add(name)

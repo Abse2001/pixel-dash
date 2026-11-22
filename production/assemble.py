@@ -336,7 +336,17 @@ for saved_name, plan in paths.items():
             drill, land = via_drill, via_land
             if isinstance(plan, dict) and plan.get("use_top_microvias") and {previous, layer} == {"top", "inner1"}:
                 span, drill, land = ("top", "inner1"), 0.125, 0.28
-            if tuple(span) != layers and (tuple(span) != ("top", "inner1") or set(span) != {previous, layer}):
+            if isinstance(plan, dict) and "drill_spans" in plan:
+                spans = plan["drill_spans"]
+                if len(spans) != len(sections) - 1:
+                    raise ValueError(f"Expected one drill span per transition on {sid}")
+                span = tuple(spans[index - 1])
+                dimensions = {layers: (0.15, 0.30), layers[:2]: (0.125, 0.28),
+                              layers[1:3]: (0.20, 0.36), layers[2:]: (0.125, 0.28)}
+                if span not in dimensions or not {previous, layer}.issubset(span):
+                    raise ValueError(f"Unsupported drill span on {sid}")
+                drill, land = dimensions[span]
+            elif tuple(span) != layers and (tuple(span) != ("top", "inner1") or set(span) != {previous, layer}):
                 raise ValueError(f"Drill span does not match routed layers on {sid}")
             route.append(dict(route_type="via", x=x, y=y, from_layer=previous, to_layer=layer))
             board.append(dict(type="pcb_via", pcb_via_id=f"{trace_id}_via_{index}", pcb_trace_id=trace_id,
