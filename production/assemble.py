@@ -336,7 +336,12 @@ for saved_name, plan in paths.items():
             drill, land = via_drill, via_land
             if isinstance(plan, dict) and plan.get("use_top_microvias") and {previous, layer} == {"top", "inner1"}:
                 span, drill, land = ("top", "inner1"), 0.125, 0.28
-            if tuple(span) != layers and (tuple(span) != ("top", "inner1") or set(span) != {previous, layer}):
+            if isinstance(plan, dict) and plan.get("use_adjacent_hdi_vias"):
+                first, last = sorted((layers.index(previous), layers.index(layer)))
+                if last - first == 1:
+                    span = layers[first:last + 1]
+                    drill, land = (0.20, 0.36) if first == 1 else (0.125, 0.28)
+            if tuple(span) != layers and (tuple(span) not in (layers[:2], layers[1:3], layers[2:]) or set(span) != {previous, layer}):
                 raise ValueError(f"Drill span does not match routed layers on {sid}")
             route.append(dict(route_type="via", x=x, y=y, from_layer=previous, to_layer=layer))
             board.append(dict(type="pcb_via", pcb_via_id=f"{trace_id}_via_{index}", pcb_trace_id=trace_id,

@@ -1,0 +1,4 @@
+layer,copper_or_plane,net,finding_area_in_region_mm2,finding_area_including_margin_mm2
+top,pcb_io_feed_N5,channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net91,0.138676,0.169417
+top,pcb_io_feed_P5,channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net91,0.007214,0.084161
+top,pcb_system_boot_tap_12,system_LCD_D12,0.000000,0.022357
