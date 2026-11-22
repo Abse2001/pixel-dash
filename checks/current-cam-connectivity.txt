@@ -14,14 +14,14 @@ Processor supply/return to TP_UART_GND.pin1: 43/43 balls connected.
 Processor supply/return to C_PMIC_CORE.pin1: 11/20 balls connected. Open F6, G10, G6, K6, M13, N12, N13, N8, N9
 Processor supply/return to C_PMIC_MPU.pin1: 1/7 balls connected. Open F10, F11, F12, F13, G13, H13
 Processor supply/return to C_PMIC_RTC_CORE.pin1: 0/1 balls connected. Open D6
-Processor supply/return to C_PMIC_RTC_IO.pin1: 0/1 balls connected. Open D7
+Processor supply/return to C_PMIC_RTC_IO.pin1: 0/2 balls connected. Open B4, D7
 Processor supply/return to U_PMIC.LS1: 0/7 balls connected. Open E5, F5, G5, H5, J5, K5, L5
 Processor supply/return to U_PMIC.DCDC4: 0/15 balls connected. Open E10, E11, E12, E13, F14, G14, K14, L14, N15, N5, P12, P13, P5, P6, R15
 Processor supply/return to U_PMIC.LDO1: 0/16 balls connected. Open D10, D8, E14, E6, E7, E9, F9, H15, K13, N16, N6, P14, P9, R10, R11, R16
 OPEN channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net62 has 2 separate CAM networks: U1.C6 | U_PMIC.PWR_EN
 OPEN channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net63 has 2 separate CAM networks: U1.C5 | R_PMIC_WAKE.pin1, U_PMIC.nWAKEUP
-OPEN channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net75 has 3 separate CAM networks: U1.B4 | U1.D6 | C_PMIC_RTC_CORE.pin1, L_PMIC_RTC_CORE.pin2, U_PMIC.FB5
-OPEN channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net77 has 3 separate CAM networks: R_PMIC_WAKE.pin2 | U1.D7 | C_PMIC_RTC_IO.pin1, L_PMIC_RTC_IO.pin2, U_PMIC.FB6
+OPEN channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net75 has 2 separate CAM networks: U1.D6 | C_PMIC_RTC_CORE.pin1, L_PMIC_RTC_CORE.pin2, U_PMIC.FB5
+OPEN channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net77 has 4 separate CAM networks: R_PMIC_WAKE.pin2 | U1.B4 | U1.D7 | C_PMIC_RTC_IO.pin1, L_PMIC_RTC_IO.pin2, U_PMIC.FB6
 OPEN channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net78 has 2 separate CAM networks: R_PMIC_POR.pin1 | U1.B15, U_PMIC.PGOOD
 OPEN channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net80 has 2 separate CAM networks: U1.B5 | U_PMIC.PGOOD_BU
 OPEN channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net83 has 10 separate CAM networks: U1.N9 | U1.N8 | U1.K6 | U1.G6 | U1.F6 | U1.N12 | C_PMIC_CORE.pin1, L_PMIC_CORE.pin2, U1.F7 | U1.G10 | U1.N13 | U1.M13

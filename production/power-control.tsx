@@ -152,7 +152,8 @@ export function PowerControl() {
       </Fragment>
     ))}
     <trace from=".U1 > .D6" to="net.VDD_RTC_CORE_1V0"/>
-    <trace from=".U1 > .B4" to="net.VDD_RTC_CORE_1V0"/>
+    {/* SPRS717L Fig. 6-5 note B: disable the internal RTC LDO with VDDS_RTC. */}
+    <trace from=".U1 > .B4" to="net.VDDS_RTC_1V8"/>
     <trace from=".U1 > .D7" to="net.VDDS_RTC_1V8"/>
     <net name="VDD_CORE"/>
     <MainInductor name="L_PMIC_CORE" pcbX={-28.199890} pcbY={19.949942} pcbRotation={180}/>

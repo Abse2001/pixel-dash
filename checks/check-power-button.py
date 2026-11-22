@@ -25,6 +25,9 @@ assert key("SW_POWER","pin2") == key("U_PMIC","PB") == key("R_POWER_PB","pin1")
 assert key("U_PMIC","PB") not in {nets["VSYS"],nets["GND"]}
 for signal, ball in (("PWR_EN","C6"), ("nWAKEUP","C5"), ("nINT","T14"), ("SCL","C16"), ("SDA","C17")):
     assert key("U_PMIC", signal) == key("U1", ball), signal
+# SPRS717L Figure 6-5 note B, external RTC core supply with the internal LDO disabled.
+assert key("U1", "B4") == key("U1", "D7") == nets["VDDS_RTC_1V8"]
+assert key("U1", "D6") == nets["VDD_RTC_CORE_1V0"] != nets["VDDS_RTC_1V8"]
 assert key("R_PMIC_WAKE","pin2") == nets["VDDS_RTC_1V8"]
 assert key("R_PMIC_IRQ","pin2") == nets["VDD_IO_3V3_SEQ"]
 print("Momentary key, PMIC wake/hold/IRQ/I2C and retained battery protections verified in source.")
