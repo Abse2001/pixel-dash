@@ -4,19 +4,28 @@ Copper screen, 35 um outer foil. Whole CPU load carried through the series feed 
 inner_um,temp_C,input_mOhm,output_mOhm,load_mA,trace_drop_mV,barrel_drop_mV,remaining_mV
 35,20,18.502,21.315,150,5.973,1.399,16.128
 35,20,18.502,21.315,225,8.959,2.099,4.192
+35,20,18.502,21.315,250,9.954,2.332,0.214
 35,20,18.502,21.315,300,11.945,2.798,-7.744
 35,80,22.865,26.341,150,7.381,1.729,14.390
 35,80,22.865,26.341,225,11.071,2.594,1.585
+35,80,22.865,26.341,250,12.302,2.882,-2.683
 35,80,22.865,26.341,300,14.762,3.458,-11.220
 17.5,20,18.502,30.914,150,7.412,1.399,14.688
 17.5,20,18.502,30.914,225,11.119,2.099,2.033
+17.5,20,18.502,30.914,250,12.354,2.332,-2.186
 17.5,20,18.502,30.914,300,14.825,2.798,-10.623
 17.5,80,22.865,38.203,150,9.160,1.729,12.611
 17.5,80,22.865,38.203,225,13.740,2.594,-1.084
+17.5,80,22.865,38.203,250,15.267,2.882,-5.649
 17.5,80,22.865,38.203,300,18.320,3.458,-14.779
 L5 to E5 at 20 C and 35 um top copper: additional 0.595 mV with 300 mA split equally across seven balls; 1.290 mV if all current enters E5.
+AM335x Table 5-10 estimates 250 mA worst-case VDDS_DDR current. TPS65218D0 specifies 110 mOhm at 300 mA, 1.35 V, DDR3L at 333 MHz.
+35 um, 20 C, equal ball loads: board series resistance to E5 62.605 mOhm including 11.477 mOhm in L4.
+  250 mA: pre-board allowance 12.500 mV, modeled board drop 15.651 mV, remaining -3.151 mV.
+  300 mA: pre-board allowance 7.000 mV, modeled board drop 18.782 mV, remaining -11.782 mV.
+Zero-margin current in this DC scenario: 231.7 mA before return drop, package, ripple and transients.
 Sensitivity to a 100 mA step lasting 1 us, before regulator response, ESR and ESL:
   50% effective: 23.00 uF, ideal capacitive droop 4.35 mV
   75% effective: 34.50 uF, ideal capacitive droop 2.90 mV
   100% effective: 46.00 uF, ideal capacitive droop 2.17 mV
-Barrels assume 20 um plating, 1.530 mm full span, 0.0764 mm L3-to-L4. Excludes L4 spreading, return path, package and transient parasitics. Load, effective capacitance, finished stack and copper temperature are unverified.
+Barrels assume 20 um plating, 1.530 mm full span, 0.0764 mm L3-to-L4. The trace/barrel table excludes L4 spreading, return path, package and transient parasitics. Load, effective capacitance, finished stack and copper temperature are unverified.

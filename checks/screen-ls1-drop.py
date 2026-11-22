@@ -1,10 +1,16 @@
 """Screen the DCDC3–LS1–CPU path with explicit copper and load assumptions."""
+import argparse
 import json
 import math
-import sys
 from pathlib import Path
 
-board = json.loads(Path(sys.argv[1]).read_text())
+parser = argparse.ArgumentParser(description=__doc__)
+parser.add_argument("board", type=Path)
+parser.add_argument("--pour-mohm", type=float, help="L4 spreading resistance from the same export at 35 um and 20 C")
+args = parser.parse_args()
+if args.pour_mohm is not None and not (math.isfinite(args.pour_mohm) and args.pour_mohm > 0):
+    parser.error("Spreading resistance must be positive and finite")
+board = json.loads(args.board.read_text())
 parts = {e["name"]: e for e in board if e["type"] == "source_component"}
 pmic = parts["U_PMIC"]["source_component_id"]
 source, = (e for e in board if e["type"] == "source_port" and
@@ -66,7 +72,7 @@ for inner in (.035, .0175):
         scale = 1 + .00393 * (temp - 20)
         rin = trace_mohm([upstream], inner) * scale
         rout = trace_mohm(downstream, inner) * scale
-        for load in (.150, .225, .300):
+        for load in (.150, .225, .250, .300):
             drop = load * (rin + rout)
             remaining = 1000 * (1.350 * .98 - 1.283) - load * 110 - drop - load * via_mohm * scale
             print(f"{inner*1000:g},{temp},{rin:.3f},{rout:.3f},{load*1000:.0f},{drop:.3f},{load * via_mohm * scale:.3f},{remaining:.3f}")
@@ -84,9 +90,18 @@ for index, (a, b) in enumerate(zip(order, order[1:]), 1):
     farthest_load += resistance
 print(f"L5 to E5 at 20 C and 35 um top copper: additional {even_load * .300:.3f} mV with "
       f"300 mA split equally across seven balls; {farthest_load * .300:.3f} mV if all current enters E5.")
+if args.pour_mohm is not None:
+    series = trace_mohm([upstream, *downstream], .035) + via_mohm + args.pour_mohm + even_load
+    available = 1000 * (1.350 * .98 - 1.283)
+    print("AM335x Table 5-10 estimates 250 mA worst-case VDDS_DDR current. TPS65218D0 specifies 110 mOhm at 300 mA, 1.35 V, DDR3L at 333 MHz.")
+    print(f"35 um, 20 C, equal ball loads: board series resistance to E5 {series:.3f} mOhm including {args.pour_mohm:.3f} mOhm in L4.")
+    for load in (.250, .300):
+        headroom = available - load * 110
+        print(f"  {load*1000:.0f} mA: pre-board allowance {headroom:.3f} mV, modeled board drop {series*load:.3f} mV, remaining {headroom-series*load:.3f} mV.")
+    print(f"Zero-margin current in this DC scenario: {1000*available/(110+series):.1f} mA before return drop, package, ripple and transients.")
 print("Sensitivity to a 100 mA step lasting 1 us, before regulator response, ESR and ESL:")
 for retention in (.5, .75, 1.):
     effective = nominal * retention
     print(f"  {retention:.0%} effective: {effective:.2f} uF, ideal capacitive droop {100/effective:.2f} mV")
-print("Barrels assume 20 um plating, 1.530 mm full span, 0.0764 mm L3-to-L4. Excludes L4 spreading, return path, package and transient parasitics. "
+print("Barrels assume 20 um plating, 1.530 mm full span, 0.0764 mm L3-to-L4. The trace/barrel table excludes L4 spreading, return path, package and transient parasitics. "
       "Load, effective capacitance, finished stack and copper temperature are unverified.")
