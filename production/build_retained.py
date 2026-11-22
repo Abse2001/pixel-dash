@@ -7,6 +7,10 @@ from pathlib import Path
 def build():
     root = Path(__file__).parent
     board = json.loads(gzip.decompress((root / "retained.circuit.json.gz").read_bytes()))
+    # The two inherited tracks have no physical contact with any remaining
+    # land, via or trace on any layer. Their old endpoint ports were retired.
+    detached = {"pcb_trace_1161", "pcb_trace_1437"}
+    board = [item for item in board if not (item["type"] == "pcb_trace" and item["pcb_trace_id"] in detached)]
     edits = json.loads((root / "peripheral-route-edits.json").read_text())
     for element in board:
         if element["type"] == "pcb_trace" and element["pcb_trace_id"] in edits:
