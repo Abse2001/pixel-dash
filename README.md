@@ -55,6 +55,11 @@ The LS1 output escape and L5 CPU feed flare into available copper.
 Two additional PMIC exposed-pad microvias share the L2 ground return.
 At 250 mA and 80 °C the modeled headroom is **+0.535 mV** including
 the three screened EP returns, up from **−4.186 mV** at 9d79e24.
+The modeled 80 °C loop is 47.861 mΩ against 50 mΩ for zero DC headroom or
+30 mΩ for an illustrative 5 mV reserve. At 105 °C it reaches 51.666 mΩ.
+At 80 °C and 50% effective capacitance the 100 mA/1 µs screen leaves
+−3.813 mV. The independent DCDC3 2.5% dynamic-source case leaves
+−6.215 mV. Use `--require-hot-reserve` to enforce the combined screen.
 The shared-sheet solve uses 30 µm finished copper, 20 µm assumed via walls
 and a single A1 CPU return. Both 0.075 mm and 0.050 mm return meshes
 were checked. At 300 mA the forward margin is −4.854 mV before return loss. The 100 mA/1 µs transient adds 2.17–4.35 mV of ideal cap droop.

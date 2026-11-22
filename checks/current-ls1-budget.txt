@@ -14,6 +14,15 @@ L5 to E5 at 20 C and 30 um top copper: additional 0.694 mV with 300 mA split equ
 Both physical feeds with their shared copper counted once, 30 um outer foil, equal ball loads:
   inner 30 um, 20 C, grid 0.025 mm: 31.973 mOhm; remaining at 250 mA 4.507 mV, at 300 mA -2.592 mV before return and transient losses.
   inner 30 um, 80 C, grid 0.025 mm: 39.512 mOhm; remaining at 250 mA 2.622 mV, at 300 mA -4.854 mV before return and transient losses.
+At 250 mA, 1.350 V -2%, CPU minimum 1.283 V, switch corner 110 mOhm,
+the forward plus return limit is 50 mOhm for zero DC margin or 30 mOhm for 5 mV reserve.
+temp_C,conductance_fraction,board_loop_mOhm,dc_mV,dc_less_100mA_1us_50pctC_mV,source_dynamic_corner_mV
+80,1.00,47.861,0.535,-3.813,-6.215
+80,0.80,59.826,-2.457,-6.804,-9.207
+105,1.00,51.666,-0.417,-4.764,-7.167
+105,0.80,64.583,-3.646,-7.993,-10.396
+Hot reserve screen: FAIL
+The separate source dynamic column uses TI's 50–450 mA DCDC3 test at the regulator. The local cap sensitivity excludes ESR, ESL, package and control response.
 Sensitivity to a 100 mA step lasting 1 us, before regulator response, ESR and ESL:
   50% effective: 23.00 uF, ideal capacitive droop 4.35 mV
   75% effective: 34.50 uF, ideal capacitive droop 2.90 mV
