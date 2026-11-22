@@ -7,15 +7,6 @@
 		"y": 21.950088
 	},
 	{
-		"chip": "U1",
-		"ball": "L5",
-		"net": "VDDS_DDR",
-		"x": -3.399942,
-		"y": 13.950104,
-		"buriedX": -3.105493,
-		"buriedY": 14.120104
-	},
-	{
 		"chip": "U_DDR",
 		"ball": "A1",
 		"net": "VDDS_DDR",

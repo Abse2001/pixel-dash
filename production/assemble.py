@@ -6,6 +6,7 @@ import re
 import sys
 from pathlib import Path
 from build_retained import build
+from switched_ddr import add_switched_ddr_feeds, add_switched_ddr_pours
 from processor_power import add_processor_feeds
 from clip_channel import add_inner2_ground, clear_handheld_copper_from_ddr, restrict_ground
 from wide_layout import apply_wide_layout
@@ -375,7 +376,9 @@ probe_parts = {e["source_component_id"] for e in board
 probe_footprints = {e["pcb_component_id"] for e in board
                     if e["type"] == "pcb_component" and e.get("source_component_id") in probe_parts}
 board = [e for e in board if e["type"] != "pcb_solder_paste" or e.get("pcb_component_id") not in probe_footprints]
+add_switched_ddr_feeds(board, port)
 restrict_ground(board, gnd["source_net_id"])
 clear_handheld_copper_from_ddr(board)
 add_inner2_ground(board, ground(board)["source_net_id"])
+add_switched_ddr_pours(board)
 Path(sys.argv[2]).write_text(json.dumps(board,separators=(",",":")))

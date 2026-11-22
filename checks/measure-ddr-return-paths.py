@@ -19,6 +19,13 @@ def measurements(board):
     names = {}
     high_speed = {e["name"] for e in parts.values() if e.get("name", "").startswith("C_DDR")
                   and e.get("manufacturer_part_number") == "CL05B104KO5NNNC"}
+    # Only capacitors between the L2 and L3 reference nets can bridge a DDR signal via.
+    assignments = json.loads((Path(__file__).resolve().parents[1] / "am3354/bypass-placement.json").read_text())
+    expected = {f"C_DDR{i}" for i, entry in enumerate(assignments, 1)
+                if entry["chip"] == "U_DDR" and entry["kind"] == "highSpeed"}
+    high_speed = (high_speed - {f"C_DDR{i}" for i, entry in enumerate(assignments, 1) if entry["chip"] == "U1"})
+    if not expected <= high_speed:
+        raise ValueError("Missing memory reference decoupler")
     bypass = {}
     for e in board:
         if e["type"] != "source_trace":

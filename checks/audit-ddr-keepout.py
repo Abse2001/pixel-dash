@@ -23,7 +23,7 @@ def audit(board):
     if len(signals) != 50:
         raise ValueError("Expected 50 distinct DDR signal nets")
     support = {e["subcircuit_connectivity_map_key"] for e in board if e["type"] == "source_net"
-               and e["name"] in {"GND", "VDDS_DDR", "DDR_VREF", "DDR_VREF_CA", "DDR_VTP", "DDR_ZQ"}}
+               and e["name"] in {"GND", "VDDS_DDR", "VDDS_DDR_CPU", "DDR_VREF", "DDR_VREF_CA", "DDR_VTP", "DDR_ZQ"}}
     for layer in ("top", "bottom"):
         ddr = [(key, shape, max(p["width"] for p in by_id[oid]["route"] if p.get("layer") == layer))
                for oid, key, shape in copper[layer]
@@ -55,7 +55,7 @@ def envelope_audit(board, archive=None):
     if len(signals) != 50:
         raise ValueError("Expected 50 distinct DDR signal nets")
     support = {e["subcircuit_connectivity_map_key"] for e in board if e["type"] == "source_net"
-               and e["name"] in {"GND", "VDDS_DDR", "DDR_VREF", "DDR_VREF_CA", "DDR_VTP", "DDR_ZQ"}}
+               and e["name"] in {"GND", "VDDS_DDR", "VDDS_DDR_CPU", "DDR_VREF", "DDR_VREF_CA", "DDR_VTP", "DDR_ZQ"}}
     ram, = (e for e in board if e["type"] == "source_component" and e.get("name") == "U_DDR")
     ram_pcb, = (e["pcb_component_id"] for e in board if e["type"] == "pcb_component"
                 and e["source_component_id"] == ram["source_component_id"])

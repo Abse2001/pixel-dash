@@ -101,15 +101,15 @@ export function PowerControl() {
     <via name="V_PMIC_INT_RETURN" pcbX={-21.349884} pcbY={30.94989}
       fromLayer="top" toLayer="inner1" holeDiameter={0.125} outerDiameter={0.28}
       connectsTo={[".C_PMIC_INT_LDO > .pin2", "net.GND"]}/>
-    <net name="DCDC3_1V35"/>
     <MainInductor name="L_PMIC_DDR" pcbX={-27.74989} pcbY={28.249932} pcbRotation={180}/>
     <BackupOutputCapacitor name="C_PMIC_DDR" pcbX={-31.04989} pcbY={29.249932} pcbRotation={90}/>
     <trace from=".U_PMIC > .L3" to=".L_PMIC_DDR > .pin1" thickness={0.36}
       pcbPath={[{x:-5.09989,y:2.249932}]}/>
     <trace from=".L_PMIC_DDR > .pin2" to=".C_PMIC_DDR > .pin1" thickness={0.60} pcbStraightLine/>
     <trace from=".U_PMIC > .FB3" to=".C_PMIC_DDR > .pin1" thickness={0.15} pcbPath={[{x:-4.5998892,y:1.80721214}]}/>
-    <trace from=".C_PMIC_DDR > .pin1" to="net.DCDC3_1V35"/>
-    <trace from=".U_PMIC > .IN_LS1" to="net.DCDC3_1V35"/>
+    <trace from=".C_PMIC_DDR > .pin1" to="net.VDDS_DDR"/>
+    <trace from=".U_PMIC > .LS1" to="net.VDDS_DDR_CPU"/>
+    <trace from=".U_PMIC > .IN_LS1" to="net.VDDS_DDR"/>
     <trace from=".U_PMIC > .IN_DCDC3" to="net.VSYS"/>
     <trace from=".C_PMIC_DDR > .pin2" to="net.GND"/>
     {[-0.24, 0.24].flatMap(x => [-0.24, 0.24].map(y => (
@@ -202,5 +202,11 @@ export function PowerControl() {
         fromLayer="top" toLayer="inner1" holeDiameter={0.125} outerDiameter={0.28}
         connectsTo={[`.U1 > .${ball}`, "net.GND"]}/>
     ))}
+    <via name="V_DRAM_OUTPUT" pcbX={-34.81} pcbY={27.355}
+      outerDiameter={0.30} holeDiameter={0.15} connectsTo="net.VDDS_DDR"/>
+    <via name="V_DRAM_PLANE" pcbX={-39.395} pcbY={25.395}
+      outerDiameter={0.30} holeDiameter={0.15} connectsTo="net.VDDS_DDR"/>
+    <trace from=".C_PMIC_DDR > .pin1" to=".V_DRAM_OUTPUT > .top" thickness={0.45} pcbStraightLine/>
+    <trace from=".V_DRAM_OUTPUT > .bottom" to=".V_DRAM_PLANE > .bottom" thickness={0.45} pcbStraightLine/>
   </>
 }

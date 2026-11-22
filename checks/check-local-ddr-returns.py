@@ -20,6 +20,16 @@ bypass = json.loads((root/"am3354/bypass-placement.json").read_text())
 terminals = [(f["chip"], f["ball"], "top", "GND") for f in fanout if f["net"] == "GND"]
 for i, part in enumerate(bypass, 1):
     side = part["layer"]
+    if part["chip"] == "U1" and side == "bottom":
+        # The switched supply lands now contact L4 directly.
+        pin = pins[parts[f"C_DDR{i}"]["source_component_id"], "pin1"]
+        land, = [p for p in rows("pcb_smtpad") if p.get("pcb_port_id") == pads[pin["source_port_id"]]["pcb_port_id"]]
+        net, = [n for n in rows("source_net") if n["name"] == "VDDS_DDR_CPU"]
+        faces = [p["brep_shape"] for p in rows("pcb_copper_pour") if p["layer"] == "bottom" and p["source_net_id"] == net["source_net_id"]]
+        if not any(Polygon([xy(v) for v in f["outer_ring"]["vertices"]],
+                           [[xy(v) for v in h["vertices"]] for h in f["inner_rings"]]).covers(Point(xy(land))) for f in faces):
+            raise ValueError(f"C_DDR{i} does not contact the switched L4 supply")
+        continue
     terminals.append((f"C_DDR{i}", "pin2" if side == "top" else "pin1", side,
                       "GND" if side == "top" else "VDDS_DDR"))
 ring = lambda r: [xy(p) for p in r["vertices"]]

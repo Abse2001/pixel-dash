@@ -26,7 +26,7 @@
   {"chip": "U1", "x": 3.4, "y": 15.55, "rotation": 90, "layer": "bottom", "kind": "highSpeed"},
   {"chip": "U1", "x": 2.6, "y": 19.55, "rotation": 90, "layer": "bottom", "kind": "highSpeed"},
   {"chip": "U1", "x": -3.5, "y": 8.35, "rotation": 90, "layer": "bottom", "kind": "highSpeed"},
-  {"chip": "U1", "x": -7.0, "y": 7.15, "rotation": 0, "layer": "bottom", "kind": "highSpeed"},
+  {"chip": "U1", "x": -7.4, "y": 5.75, "rotation": 0, "layer": "bottom", "kind": "highSpeed"},
   {"chip": "U1", "x": -0.6, "y": 23.55, "rotation": 0, "layer": "bottom", "kind": "highSpeed"},
   {"chip": "U1", "x": 1.8, "y": 9.95, "rotation": 90, "layer": "bottom", "kind": "highSpeed"},
   {"chip": "U1", "x": 3.8, "y": 21.55, "rotation": 0, "layer": "bottom", "kind": "highSpeed", "bodyOffsetY": 0.35},

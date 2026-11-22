@@ -72,7 +72,8 @@ def verify(elements, check_ddr_power=False, check_ddr_signals=False, check_syste
                     raise ValueError(f"Incorrect processor or feedback assignment to {net['name']}")
         if check_ddr_regulator:
             bypass("C_PMIC_DDR", "FB3", 47e-6, "C96123")
-            required[-1].append("L_PMIC_DDR.pin2")
+            required[3].extend(required.pop())
+            required[3].extend(["L_PMIC_DDR.pin2", "U_PMIC.IN_LS1"])
             required.append([pins[pmic_pin("L3")["source_port_id"]], "L_PMIC_DDR.pin1"])
             required.append([pins[pmic_pin("PB")["source_port_id"]], "SW_POWER.pin2", "R_POWER_PB.pin1"])
             part, = [e for e in elements if e["type"] == "source_component" and e.get("name") == "L_PMIC_DDR"]
@@ -200,18 +201,23 @@ def verify(elements, check_ddr_power=False, check_ddr_signals=False, check_syste
     if check_ddr_power:
         base = Path(__file__).resolve().parents[1] / "am3354"
         supply = ["plane.inner2.VDDS_DDR"]
+        switched = ["U_PMIC.LS1"]
         ground = ["plane.inner1.GND"]
         for ref, filename in (("U1", "processor-balls.json"), ("U_DDR", "memory-balls.json")):
             balls = json.loads((base / filename).read_text())
             for ball, signal in balls.items():
                 if signal in ({"VDDS_DDR"} if ref == "U1" else {"VDD", "VDDQ"}):
-                    supply.append(f"{ref}.{ball}")
+                    (switched if ref == "U1" else supply).append(f"{ref}.{ball}")
                 if signal in {"VSS", "VSSQ"}:
                     ground.append(f"{ref}.{ball}")
         bypass = json.loads((base / "bypass-placement.json").read_text())
-        supply.extend(f"C_DDR{i}.pin1" for i in range(1, len(bypass)+1))
+        supply.append("C_PMIC_DDR.pin1")
+        for i, capacitor in enumerate(bypass, 1):
+            (switched if capacitor["chip"] == "U1" else supply).append(f"C_DDR{i}.pin1")
         ground.extend(f"C_DDR{i}.pin2" for i in range(1, len(bypass)+1))
-        for group in (supply, ground):
+        if {root(i) for i in labels[supply[0]]} & {root(i) for i in labels[switched[0]]}:
+            raise ValueError("DDR regulator input and switched output domains share copper")
+        for group in (supply, switched, ground):
             plane, *terminals = group
             plane_id, = labels[plane]
             disconnected = [label for label in terminals

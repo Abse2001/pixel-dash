@@ -42,7 +42,7 @@ const pending = packages.flatMap(({ name, balls }) =>
 			label === "VDDS_DDR" ||
 			(name === "U_DDR" && (label === "VDD" || label === "VDDQ"))
 		) {
-			return [{ name, ball, net: "VDDS_DDR" }];
+			return [{ name, ball, net: name === "U1" ? "VDDS_DDR_CPU" : "VDDS_DDR" }];
 		}
 		return [];
 	}),
@@ -53,6 +53,12 @@ export function ReferencePlanes({ pcbOffsetX }: { pcbOffsetX: number }) {
 		<>
 			<net name="GND" />
 			<net name="VDDS_DDR" />
+            <net name="VDDS_DDR_CPU" />
+            {(["E5", "F5", "G5", "H5", "J5", "K5"] as const).map((ball, i) => (
+                <trace key={ball} from={".U1 > ." + ball}
+                    to={".U1 > ." + ["F5", "G5", "H5", "J5", "K5", "L5"][i]}
+                    thickness={[0.28, 0.20, 0.34, 0.36, 0.36, 0.36][i]} pcbStraightLine />
+            ))}
 			<copperpour
 				connectsTo="net.GND"
 				layer="inner1"
