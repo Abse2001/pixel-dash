@@ -51,9 +51,9 @@ const controls: Record<string, string> = {
 	UDQS: "DQS1",
 	"UDQS#": "DQSn1",
 };
-// DQ1, DQ2 and DQ5 share the low-byte strobe and mask, as do DQ3 and DQ7.
+// DQ1, DQ2, DQ4 and DQ5 are reassigned within byte 0.
 // Memory ball labels stay as marked on the Micron package.
-const cpuBitForRamBit: Readonly<Record<string, number>> = { DQ4: 5, DQ1: 4, DQ2: 1, DQ3: 7, DQ5: 2, DQ7: 3 };
+const cpuBitForRamBit: Readonly<Record<string, number>> = { DQ4: 5, DQ1: 4, DQ2: 1, DQ5: 2 };
 
 function memoryNet(signal: string) {
 	const pin = signal.split("/")[0];

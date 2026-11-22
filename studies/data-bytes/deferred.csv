@@ -1,0 +1,54 @@
+postponed_copper,reason
+channel_pcb_trace_0,"DDR_D0 top, DDR_D3 bottom, DDR_D7 bottom"
+channel_pcb_trace_1,"DDR_D4 bottom, DDR_D4 top, DDR_DQM0 bottom, DDR_DQM0 top"
+channel_pcb_trace_10,"DDR_D0 top, DDR_D4 top, DDR_DQM0 bottom"
+channel_pcb_trace_104,DDR_D0 top
+channel_pcb_trace_2,"DDR_D0 bottom, DDR_D7 bottom"
+channel_pcb_trace_203,DDR_D0 bottom
+channel_pcb_trace_206,DDR_D0 top
+channel_pcb_trace_209,DDR_D0 top
+channel_pcb_trace_211,"DDR_D0 top, DDR_DQM0 top"
+channel_pcb_trace_23,DDR_D7 bottom
+channel_pcb_trace_24,DDR_D0 top
+channel_pcb_trace_3,"DDR_D3 bottom, DDR_D4 bottom, DDR_D4 top"
+channel_pcb_trace_4,"DDR_D0 bottom, DDR_D7 bottom"
+channel_pcb_trace_40,DDR_D0 top
+channel_pcb_trace_5,"DDR_D0 bottom, DDR_D7 bottom"
+channel_pcb_trace_6,"DDR_D0 top, DDR_D4 bottom, DDR_DQM0 top"
+channel_pcb_trace_7,"DDR_D3 bottom, DDR_D4 bottom"
+channel_pcb_trace_8,"DDR_D0 bottom, DDR_D3 bottom, DDR_D7 bottom, DDR_DQM0 top"
+channel_pcb_trace_9,"DDR_D0 bottom, DDR_D4 top, DDR_D7 bottom"
+channel_pcb_via_147,"DDR_D0 bottom, DDR_D0 inner2"
+channel_pcb_via_236,"DDR_D0 inner1, DDR_D0 top, DDR_D7 bottom, DDR_D7 inner2"
+channel_pcb_via_237,connected to postponed channel_pcb_trace_0
+channel_pcb_via_238,"DDR_D4 bottom, DDR_D4 inner2, DDR_DQM0 inner1, DDR_DQM0 top"
+channel_pcb_via_239,"DDR_D4 inner1, DDR_DQM0 bottom, DDR_DQM0 drill, DDR_DQM0 inner1, DDR_DQM0 inner2, DDR_DQM0 top"
+channel_pcb_via_240,connected to postponed channel_pcb_trace_2
+channel_pcb_via_241,connected to postponed channel_pcb_trace_2
+channel_pcb_via_242,"DDR_D4 bottom, DDR_D4 drill, DDR_D4 inner1, DDR_D4 inner2, DDR_D4 top"
+channel_pcb_via_243,connected to postponed channel_pcb_trace_3
+channel_pcb_via_244,connected to postponed channel_pcb_trace_4
+channel_pcb_via_245,connected to postponed channel_pcb_trace_4
+channel_pcb_via_246,connected to postponed channel_pcb_trace_5
+channel_pcb_via_247,connected to postponed channel_pcb_trace_5
+channel_pcb_via_248,"DDR_D4 bottom, DDR_D4 inner2"
+channel_pcb_via_249,"DDR_D4 bottom, DDR_D4 inner2"
+channel_pcb_via_250,connected to postponed channel_pcb_trace_7
+channel_pcb_via_251,connected to postponed channel_pcb_trace_7
+channel_pcb_via_252,"DDR_D0 bottom, DDR_D0 inner2"
+channel_pcb_via_253,connected to postponed channel_pcb_trace_8
+channel_pcb_via_254,connected to postponed channel_pcb_trace_9
+channel_pcb_via_255,connected to postponed channel_pcb_trace_9
+channel_pcb_via_256,"DDR_DQM0 inner1, DDR_DQM0 top"
+channel_pcb_via_257,"DDR_D4 inner1, DDR_D4 top"
+channel_pcb_via_282,connected to postponed channel_pcb_trace_23
+channel_pcb_via_283,connected to postponed channel_pcb_trace_23
+channel_pcb_via_284,connected to postponed channel_pcb_trace_24
+channel_pcb_via_285,connected to postponed channel_pcb_trace_24
+channel_pcb_via_318,connected to postponed channel_pcb_trace_40
+channel_pcb_via_319,connected to postponed channel_pcb_trace_40
+channel_pcb_via_320,connected to postponed channel_pcb_trace_40
+channel_pcb_via_321,connected to postponed channel_pcb_trace_40
+channel_pcb_via_57,DDR_D0 top
+channel_pcb_via_77,DDR_D3 bottom
+channel_pcb_via_79,DDR_DQM0 bottom

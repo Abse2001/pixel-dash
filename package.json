@@ -4,7 +4,7 @@
   "private": true,
   "main": "dist/index.circuit.json",
   "scripts": {
-    "build": "bun production/render-channel.tsx && python production/assemble.py dist/channel.circuit.json dist/index.circuit.json"
+    "build": "bun production/render-channel.tsx && python production/assemble.py dist/channel.circuit.json dist/overlaid.circuit.json && python studies/data-bytes/prepare.py dist/overlaid.circuit.json dist/index.circuit.json dist/deferred.csv --byte 0"
   },
   "dependencies": {
     "@tscircuit/copper-pour-solver": "0.0.74",
