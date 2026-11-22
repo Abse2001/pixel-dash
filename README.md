@@ -1,6 +1,7 @@
 # Pixel Dash
 
-The [matched-depth byte-1 routing study](https://github.com/Abse2001/pixel-dash/tree/96865c435a6ccb58319ba0327567e1109c01d628/studies/reserved-ddr) preserves two exported checkpoints. D8 and D9 meet the physical matching and modeled skew gates with 49 of 50 DDR connections present. Adding D12 and D14 brings those four signals into margin with 46 of 50 present. The 50-link copper on this branch stays at c9be947. The [complete-board per-net timing ledger](checks/current-ddr-change.csv) records its remaining violations.
+D15, D8 and D9 connect with two 1.420 mm transitions each in the full 50-link interface. Local reallocation required new paths for those three signals and a bottom-layer jog on D4. The existing DQS1 pair, DQM1 and every other DDR route stayed in place. D15/D8/D9 measure 22.428/22.430/22.430 mm against the 22.090–22.674 mm joint strobe/flight window. D12 and D14 still fail the byte-1 data-to-data, data-to-strobe and delay gates. The native build passed all-layer shorts, drilled connectivity, reference and clearance checks including sequenced MMC0. The whole board retains 38 mapped nets with disconnected islands. [Electrical timing and residuals](checks/current-ddr-change.csv) · [Physical checks](checks/current-d15-cam.txt) · [Earlier 49- and 46-link studies](https://github.com/Abse2001/pixel-dash/tree/96865c4/studies/reserved-ddr)
+
 
 
 ## Receiver timing and length-gate definitions
