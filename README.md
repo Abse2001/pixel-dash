@@ -1,5 +1,9 @@
 # Pixel Dash
 
+## Populated handheld DDR data checkpoint
+
+The tagged populated layout preserves all 22 passing byte 0 and byte 1 routes through 44 plated vias. The handheld Gerbers verify each distinct CPU-to-RAM pair, full-width reference coverage and zero mapped-land shorts. All 236 component courtyards clear after relocating eight passives. The other 28 DDR links remain open on this checkpoint. [Saved populated circuit and checks](https://github.com/Abse2001/pixel-dash/tree/pixel-dash-populated-ddr-locked/studies/data-bytes) · [Preserved breakout](https://github.com/Abse2001/pixel-dash/tree/pixel-dash-ddr-bytes-verified-2dc2af8)
+
 ## DDR timing study
 
 The complete routed candidate at bf75444 has 50 distinct drilled CPU-to-DDR3L connections. All 71 local blind-via lands reach connected inner-layer Gerber copper. A staggered 100 nF bypass shortens the return distance at 21 DDR transitions. ODT improves from 9.504 to 7.123 mm, and the worst remaining transition is A1 at 8.718 mm. Byte 0's worst modeled data skew is +38.508 ps on D7 and byte 1's is +7.700 ps on D12, against ±3.663 ps. DQS0's pair mismatch is 0.0145 mm against TI's 0.127 mm limit. A6 now measures 28.647 mm and A4 measures 28.650 mm against the 28.550–31.090 mm command window. Both use two full-depth vias. A10 and CKE still miss that window, and receiver timing remains open. The separate 47-link candidate meets matching on the complete upper byte but has three open lower-byte nets. Fabrication remains on hold. [Complete routed layout](https://github.com/Abse2001/pixel-dash/tree/bf75444) · [All 50 lengths, delays and targets](https://github.com/Abse2001/pixel-dash/blob/bf75444/checks/current-ddr-change.csv) · [Drilled whole-board connectivity](https://github.com/Abse2001/pixel-dash/blob/bf75444/checks/current-raster-taps-cam.txt) · [Upper-byte routing study](https://github.com/Abse2001/pixel-dash/tree/a4307c5)
