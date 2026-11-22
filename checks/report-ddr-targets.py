@@ -33,7 +33,7 @@ def delays(n):
     return iso, mixed, iso-xy*(single-odd)
 
 print("# AM3354 DDR3L routing and board-flight targets\n")
-print("Lengths are in mm and flight times in ps. The nominal length and skew screens use TI SPRS717L Tables 7-68 and 7-69. "
+print("Lengths are in mm and flight times in ps. TI SPRS717L Table 7-69 lists DQLM0/1 under MAX for nominal length. The project computes each byte ceiling from this placement. Table 7-68 gives the command nominal-length window. "
       "The separate delay estimate uses the 1.491 mm reference build, 5.769 ps/mm isolated, 5.617 ps/mm odd mode and 6.600 ps/mm of traversed barrel. "
       "A full L1–L4 passage adds 1.420 mm and 9.372 ps. Mixed mode estimates same-layer pair proximity within 0.42 mm. "
       "The 3.663 ps data-skew screen converts 0.635 mm at the isolated rate. TI specifies a length limit. "
@@ -44,7 +44,7 @@ for i in range(2):
     byte_nets.update(dq + strobes)
     maximum = max(spans[n] for n in dq + strobes)
     print(f"## Byte {i}\n")
-    print(f"Nominal planar length ≤ {maximum:.3f} mm. Data-to-data and data-to-either-strobe mismatch ≤ 0.635 mm each. "
+    print(f"Placement-derived project maximum ≤ {maximum:.3f} mm. Data-to-data and data-to-either-strobe mismatch ≤ 0.635 mm each. "
           "Strobe positive-to-negative mismatch ≤ 0.127 mm. Each modeled delta below is the worst absolute difference to either strobe leg. "
           "The model screen checks isolated, mixed and uniform odd-mode strobe cases.\n")
     ref_times = [rows[n][5] for n in strobes]
@@ -61,7 +61,7 @@ for i in range(2):
         md = max(abs(mixed-rows[q][5]) for q in strobes)
         worst = max(abs(iso-t) for q in strobes for t in delays(q))
         fails = []
-        if length>maximum:fails.append("nominal")
+        if length>maximum:fails.append("project length")
         if pd>skew:fails.append("strobe length")
         if worst>delay_limit:fails.append("modeled skew")
         if peer:fails.append("data length vs " + ", ".join(peer))
@@ -86,14 +86,20 @@ nom = max(spans[n] for n in control)+7.62
 lo,hi=nom-1.27,nom+1.27
 print("## Address, control and clock\n")
 print(f"The longest Manhattan distance plus 7.620 mm gives CACLM = {nom:.3f} mm. Target range is {lo:.3f}–{hi:.3f} mm. "
-      "Each isolated-flight target below converts the length window at that net’s actual via depth. "
-      "The signed mixed-mode difference uses the mean of CK and CKn. The data-byte 3.663 ps screen does not apply to this group.\n")
-header("Net","Planar mm","Via count","Isolated flight ps","Isolated target ps","Mixed Δ to CK mean ps","Nominal length result")
+      "The receiver captures control/address relative to the rising CK differential crossing. Board skew Δ uses the mixed signal flight minus the CK-pair mean. Positive Δ consumes setup time and increases hold time.\n")
+print("The populated MT41K512M16VRP-107 has two x8 dies in one package on the board's single rank. The values below use the Micron 4Gb x8 Table 60 DDR3L-1866 speed-bin bases at AC135/DC90, 65 ps setup and 110 ps hold. "
+      "The minimum CPU-ball valid intervals before and after the clock are 65 + Δ and 110 − Δ ps at the reference slew. For the conservative DDR3L-800 AC135/DC90 screening case substitute 365 and 285 ps. "
+      "Actual margin also needs controller earliest/latest launch relative to CK, receiver slew derating, jitter, threshold crossings and package/die loading. These margins remain open. "
+      "Command protocol timings for CKE, ODT and chip select are additional checks.\n")
+header("Net","Planar mm","Via span mm","Flight ps","Δ to CK ps","Required source setup ps","Required source hold ps","Receiver margin","Nominal length result")
 mean=sum(rows[n][5] for n in ("DDR_CK","DDR_CKn"))/2
 for n in control:
     length,count,depth,_,iso,mixed=rows[n]
     corr=lo-length if length<lo else hi-length if length>hi else 0.
-    line(label(n),f"{length:.3f}",count,f"{iso:.3f}",f"{lo*single+depth*barrel:.3f}–{hi*single+depth*barrel:.3f}",f"{mixed-mean:+.3f}",f"{corr:+.3f} mm needed" if corr else "pass")
+    delta=mixed-mean
+    ca=n not in ("DDR_CK","DDR_CKn")
+    line(label(n),f"{length:.3f}",f"{depth:.3f}",f"{mixed:.3f}",f"{delta:+.3f}",f"{65+delta:.3f}" if ca else "—",f"{110-delta:.3f}" if ca else "—","open" if ca else "clock",f"{corr:+.3f} mm needed" if corr else "pass")
+print("\n[Micron x8 base-die timing, Tables 60–64](https://media.digikey.com/pdf/Data%20Sheets/Micron%20Technology%20Inc%20PDFs/MT41K_DDR3L_4Gb_Rev.Q_Dec2017_DS.pdf#page=102) · [TwinDie topology and part data](https://datasheet.datasheet.lcsc.com/datasheet/pdf/1a552aaada9c9cb5685b5fb937531c2e.pdf)")
 a,b=(rows[n] for n in ("DDR_CK","DDR_CKn"))
 print(f"\nCK pair mismatch is {abs(a[0]-b[0]):.3f} mm against 0.127 mm. Its mixed flight difference is {abs(a[5]-b[5]):.3f} ps.\n")
 r=rows["DDR_RESETn"]

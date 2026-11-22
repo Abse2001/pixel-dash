@@ -35,15 +35,16 @@ def cases(row):
 
 writer = csv.writer(sys.stdout, lineterminator="\n")
 writer.writerow(["signal","prior_length_mm","current_length_mm","prior_vias","current_vias","prior_barrel_mm",
-                 "current_barrel_mm","prior_mixed_flight_ps","current_mixed_flight_ps","TI_nominal_min_mm",
-                 "TI_nominal_max_mm","TI_nominal_excess_mm","geometry_plus_barrels_nominal_excess_mm_provisional",
+                 "current_barrel_mm","prior_mixed_flight_ps","current_mixed_flight_ps","placement_nominal_min_mm",
+                 "placement_nominal_max_mm","placement_nominal_excess_mm","geometry_plus_barrels_nominal_excess_mm_provisional",
                  "TI_max_abs_DQ_peer_delta_mm","TI_DQ_peer_limit_mm","TI_DQ_peer_excess_mm","TI_max_abs_strobe_or_pair_delta_mm",
                  "TI_strobe_or_pair_limit_mm","TI_strobe_or_pair_excess_mm","reference","prior_signed_mixed_skew_ps",
                  "current_signed_mixed_skew_ps","prior_signed_worst_scenario_ps","current_signed_worst_scenario_ps",
                  "prior_worst_scenario","current_worst_scenario","model_abs_skew_limit_ps","model_skew_excess_ps","model_flight_min_ps",
                  "model_flight_max_ps","model_flight_window_excess_ps","joint_length_min_current_span_mm",
                  "joint_length_max_current_span_mm","current_span_window_feasible","joint_length_min_2_full_vias_mm",
-                 "joint_length_max_2_full_vias_mm","two_full_vias_window_feasible"])
+                 "joint_length_max_2_full_vias_mm","two_full_vias_window_feasible","required_source_setup_ps_AC135_1866","required_source_hold_ps_DC90_1866",
+                 "required_source_setup_ps_AC135_800_screen","required_source_hold_ps_DC90_800_screen","receiver_margin_status"])
 lanes = []
 for i in (0,1):
     data = [f"DDR_D{j}" for j in range(8*i, 8*i+8)] + [f"DDR_DQM{i}"]
@@ -54,7 +55,7 @@ for name, current in sorted(now.items()):
     old = prior[name]
     row = [name,old[0],current[0],old[1],current[1],old[2],current[2],old[5],current[5]]
     if name == "DDR_RESETn":
-        writer.writerow([*row,*([""]*28)])
+        writer.writerow([*row,*([""]*33)])
         continue
     lane = next(((data,pair) for data,pair in lanes if name in data+pair),None)
     if lane:
@@ -94,9 +95,9 @@ for name, current in sorted(now.items()):
     else:
         def relative(source):
             return source[name][5]-sum(source[n][5] for n in clock)/2
-        lower,upper = [x*single+current[2]*barrel for x in (lo,hi)]
+        # Receiver timing is relative to CK. Bounds derived solely from planar length cannot establish a margin.
         row.extend(["","","","CK pair mean",relative(prior),relative(now),"","","","","","",
-                    lower,upper,residual(current[4],lower,upper)])
+                    "","",""])
     if name in data:
         peer_times = [t for n in pair for t in cases(now[n]).values()]
         # Each bound must satisfy both strobe legs, every delay scenario, and TI geometry.
@@ -109,5 +110,10 @@ for name, current in sorted(now.items()):
             row.extend([minimum,maximum,"yes" if minimum<=maximum else "no"])
     else:
         row.extend([""]*6)
-    assert len(row)==37
+    if name in controls and name not in clock:
+        delta = relative(now)
+        row.extend([65+delta,110-delta,365+delta,285-delta,"open: launch and receiver waveform"])
+    else:
+        row.extend([""]*5)
+    assert len(row)==42
     writer.writerow([f"{x:.4f}" if isinstance(x,float) else x for x in row])

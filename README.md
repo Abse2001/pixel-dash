@@ -1,10 +1,16 @@
 # Pixel Dash
 
+## Receiver timing and length-gate definitions
+
+The 20.600 mm and 23.000 mm byte limits are the project's placement-derived Manhattan length ceilings. On page 188 of TI SPRS717L Rev. L, Table 7-69 puts DQLM0 and DQLM1 under MAX for the parameter “nominal length.” The separate TI data-to-data and data-to-strobe mismatch limit is 0.635 mm. Pair matching uses 0.127 mm. The ±3.663 ps board-flight screen is model-derived.
+
+The clock and command nets terminate at one x16 TwinDie package containing two x8 dies in a single rank. At A1 the mixed-mode board path arrives 23.339 ps after the clock-pair mean. Under Micron's DDR3L-1866 AC135/DC90 reference-slew case, this consumes 23.339 ps of setup and adds 23.339 ps of hold. The CPU-ball waveform must supply at least 88.339 ps of setup and 86.661 ps of hold before uncertainty. A1 passes its nominal routing window. Receiver slack remains unknown until launch timing, package effects, PVT, jitter and actual input slew at the shared receiver load are bounded. The per-net CSV also gives the conservative DDR3L-800 screening case. [Receiver requirements and board flight](checks/current-ddr-targets.md) · [All path lengths, via depths, windows and residuals](checks/current-ddr-change.csv)
+
 ## Current DDR group timing pass
 
 Both DQS1 conductors gained 0.125 mm in one shared routing corridor. D8 and D9 each retain four 1.420 mm layer transitions. The strobe legs each retain two. The 0.635 mm TI length budget can offset only 3.663 ps on an isolated trace at the reference-build rate. Two extra full-depth transitions contribute 18.744 ps in the barrel model. The byte still needs a different transition topology to meet both limits.
 
-The byte-1 nominal length ceiling is 23.000 mm. TI limits the mismatch between each data signal and either strobe to 0.635 mm. The separate model screen is ±3.663 ps. Signs in the table are relative to the limiting strobe leg, with positive values indicating later data. Excess is the amount beyond the corresponding limit. The [complete comparison against c28dc8c](checks/current-ddr-change.csv) includes every net, individual span totals, all TI residuals, signed delay and the applicable model window.
+The placement-derived byte-1 length ceiling is 23.000 mm. TI limits the mismatch between each data signal and either strobe to 0.635 mm. The separate model screen is ±3.663 ps. Signs in the table are relative to the limiting strobe leg, with positive values indicating later data. Excess is the amount beyond the corresponding limit. The [complete comparison against c28dc8c](checks/current-ddr-change.csv) includes every net, individual span totals, all TI residuals, signed delay and the applicable model window.
 
 | Net | Previous → current length mm | Barrel mm | Flight ps | Worst signed skew ps | Model excess ps | TI data-to-strobe excess mm |
 |---|---:|---:|---:|---:|---:|---:|
