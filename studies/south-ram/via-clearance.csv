@@ -1,0 +1,39 @@
+via,layer,unrelated_net,edge_gap_mm,via_x_mm,via_y_mm,trace
+channel_pcb_via_79,top,channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net56,-0.2795118,-60.840109999999996,11.25,.U_DDR > .H1 to .R_VREF_HIGH > .pin1
+channel_pcb_via_135,bottom,channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net30,-0.2164753,-57.8,4.628,DDR_A10
+channel_pcb_via_264,top,channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net56,-0.1987236,-59.114999999999995,11.13,.U_DDR > .H1 to .R_VREF_HIGH > .pin1
+channel_pcb_via_259,top,channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net56,-0.1780854,-57,11.60888889,.U_DDR > .H1 to .C_VREF_DQ > .pin1
+channel_pcb_via_262,top,channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net56,-0.1496910,-56.595,9.40980062,.U_DDR > .H1 to .C_VREF_DQ > .pin1
+channel_pcb_via_135,top,channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net55,0.0171258,-57.8,4.628,.V_REF_LINK_CA0 > .top to .R_VREF_CA > .pin1
+channel_pcb_via_150,top,channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net56,0.0270735,-57.094476,12.60773051,.U_DDR > .H1 to .R_VREF_LOW > .pin1
+channel_pcb_via_104,top,unnamedsubcircuitsubcircuit_source_group_0_connectivity_net92,0.0292365,-69.9,22.65,KEY_SELECT
+channel_pcb_via_4,top,channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net56,0.0688002,-61.800108,12.450104,.U_DDR > .H1 to .R_VREF_HIGH > .pin1
+channel_pcb_via_153,top,channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net56,0.0714342,-56.9942417,9.646626,.U_DDR > .H1 to .C_VREF_DQ > .pin1
+channel_pcb_via_260,top,channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net56,0.0994726,-56.19,9.96384526,.U_DDR > .H1 to .C_VREF_DQ > .pin1
+channel_pcb_via_337,top,channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net22,0.1025570,-56.955,18.058972,DDR_RASn
+channel_pcb_via_326,top,channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net19,0.1025784,-55.515,13.0952905,DDR_D4
+channel_pcb_via_336,bottom,channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net37,0.1087122,-55.65,18.35565451,DDR_BA1
+channel_pcb_via_260,top,channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net13,0.1098442,-56.19,9.96384526,DDR_D2
+channel_pcb_via_309,bottom,channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net34,0.1103184,-57.05,20.29232813,DDR_A3
+channel_pcb_via_271,bottom,channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net15,0.1147096,-55.897927599999996,7.48347878,DDR_D1
+channel_pcb_via_326,bottom,channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net18,0.1169106,-55.515,13.0952905,DDR_DQSn0
+channel_pcb_via_259,bottom,channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net19,0.1174698,-57,11.60888889,DDR_D4
+channel_pcb_via_260,bottom,channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net17,0.1252439,-56.19,9.96384526,DDR_D6
+channel_pcb_via_259,bottom,channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net10,0.1267685,-57,11.60888889,DDR_D8
+channel_pcb_via_274,top,channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net13,0.1298030,-55.739999999999995,9.50225589,DDR_D2
+channel_pcb_via_337,bottom,channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net35,0.1301112,-56.955,18.058972,DDR_A0
+channel_pcb_via_145,top,channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net40,0.1326547,-54.0679471,15.04640577,DDR_A1
+channel_pcb_via_332,top,channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net47,0.1334175,-58.035,21.40392212,DDR_A13
+channel_pcb_via_320,bottom,channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net33,0.1341326,-54.3,19.01926389,DDR_A15
+channel_pcb_via_279,top,channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net40,0.1357497,-53.489999999999995,14.67162151,DDR_A1
+channel_pcb_via_338,bottom,channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net25,0.1375038,-57,18.80888889,DDR_CASn
+channel_pcb_via_263,top,channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net11,0.1378859,-58.305,8.80071559,DDR_D0
+channel_pcb_via_349,top,channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net47,0.1391549,-58.339999999999996,22.180457,DDR_A13
+channel_pcb_via_270,bottom,channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net0,0.1401043,-53.714999999999996,8.70117362,DDR_D13
+channel_pcb_via_334,bottom,channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net39,0.1441950,-55.928,21.61499482,DDR_A2
+channel_pcb_via_258,top,channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net6,0.1447670,-54.12,13.25771289,DDR_D9
+channel_pcb_via_256,bottom,channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net11,0.1448693,-56.259946,11.642776210000001,DDR_D0
+channel_pcb_via_338,bottom,channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net35,0.1496954,-57,18.80888889,DDR_A0
+channel_pcb_via_338,top,channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net42,0.1498103,-57,18.80888889,DDR_A7
+channel_pcb_via_283,bottom,channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net8,0.1501359,-58.44,7.61176089,DDR_D10
+channel_pcb_via_292,bottom,channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net26,0.1514604,-55.379999999999995,17.28418989,DDR_CKn

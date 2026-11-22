@@ -13,7 +13,7 @@ export function DdrVref() {
 			<A_0603WAF0000T5E
 				name="R_VREF_CA"
 				pcbX={-10.87024}
-				pcbY={9.08996}
+				pcbY={8.38858965}
 				pcbRotation={-143.1301023542}
 			/>
 			<trace from=".R_VREF_CA > .pin1" to="net.DDR_VREF_CA" />
@@ -21,7 +21,7 @@ export function DdrVref() {
 			<via
 				name="V_RAM_VREF_CA"
 				pcbX={-22.335046}
-				pcbY={18.215096}
+				pcbY={16.715096}
 				connectsTo="net.DDR_VREF_CA"
 				outerDiameter={0.35}
 				holeDiameter={0.2}
@@ -36,7 +36,7 @@ export function DdrVref() {
 			<via
 				name="V_REF_LINK_CA0"
 				pcbX={-23.6}
-				pcbY={18.3625}
+				pcbY={16.8625}
 				outerDiameter={0.36}
 				holeDiameter={0.2}
 				connectsTo="net.DDR_VREF_CA"
@@ -77,7 +77,7 @@ export function DdrVref() {
 			<CL05B104KO5NNNC
 				name="C_VREF_CA"
 				pcbX={-23.8}
-				pcbY={18.75625}
+				pcbY={17.25625}
 				layer="bottom"
 			/>
 			<trace
@@ -95,13 +95,13 @@ export function DdrVref() {
 			<TMK063ABJ104KP_F
 				name="C_CPU_VREF"
 				pcbX={-8.8739735}
-				pcbY={15.3660265}
+				pcbY={15.27981955}
 				pcbRotation={225}
 			/>
 			<via
 				name="V_CPU_VREF_GND"
 				pcbX={-9.0679471}
-				pcbY={15.1720529}
+				pcbY={15.04640577}
 				fromLayer="top"
 				toLayer="inner1"
 				outerDiameter={0.28}

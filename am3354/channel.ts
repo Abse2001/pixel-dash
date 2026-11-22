@@ -26,7 +26,7 @@ export const packages = [
 		rows: "ABCDEFGHJKLMNPRT",
 		columns: 9,
 		x: -20,
-		y: 15.15,
+		y: 13.65,
 		rotation: 180,
 		diameter: 0.394,
 		width: 8,
