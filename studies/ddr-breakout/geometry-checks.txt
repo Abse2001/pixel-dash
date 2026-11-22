@@ -19,3 +19,5 @@ U1.N2 DDR_D3 -> U_DDR.H7 DQ7
 U1.N3 DDR_D4 -> U_DDR.F7 DQ1
 U1.N4 DDR_D5 -> U_DDR.H3 DQ4
 U1.P4 DDR_D7 -> U_DDR.F8 DQ3
+Screened 45 routed signals. Study opens: DDR_D0, DDR_D3, DDR_D4, DDR_D9.
+Longest cumulative below-nominal run is 19.501 mm on DDR_WEn; TI allowance 31.750 mm.

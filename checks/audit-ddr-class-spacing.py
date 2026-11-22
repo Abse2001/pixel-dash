@@ -1,4 +1,5 @@
 """Measure same-layer DDR spacing against TI AM335x Tables 7-68 and 7-69."""
+import argparse
 import csv
 import json
 import re
@@ -44,7 +45,7 @@ def covered_length(line, intersections):
     return total
 
 
-def main(board):
+def main(board, study_open=()):
     traces, keys = trace_net_keys(board)
     sections = defaultdict(list)
     for trace in board:
@@ -88,9 +89,15 @@ def main(board):
                     below.append(line.intersection(seg.buffer(width, quad_segs=32)))
             restricted[name] += covered_length(line, relaxed)
             below_minimum[name] += covered_length(line, below)
-    if len(restricted) != 49:
+    if study_open:
+        intended = {e["name"] for e in traces.values() if net_class(e.get("name") or "")}
+        missing = intended - restricted.keys()
+        if len(intended) != 49 or set(study_open) != missing:
+            raise ValueError(f"Expected the named study opens, found {sorted(missing)} among {len(intended)} signal classes")
+        print(f"Screened {len(restricted)} routed signals. Study opens: {', '.join(sorted(missing))}.", file=sys.stderr)
+    elif len(restricted) != 49:
         raise ValueError(f"Expected 49 signals subject to the class spacing tables, found {len(restricted)}")
-    out = csv.writer(sys.stdout)
+    out = csv.writer(sys.stdout, lineterminator="\n")
     out.writerow(("signal", "below_nominal_mm", "below_1w_mm"))
     for name in sorted(restricted):
         out.writerow((name, f"{restricted[name]:.4f}", f"{below_minimum[name]:.4f}"))
@@ -101,4 +108,9 @@ def main(board):
 
 
 if __name__ == "__main__":
-    sys.exit(main(json.loads(Path(sys.argv[1]).read_text())))
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("board", type=Path)
+    parser.add_argument("--study-open", nargs="+", metavar="DDR_SIGNAL", default=(),
+                        help="Require exactly these signals to be missing in a partial routing study")
+    args = parser.parse_args()
+    sys.exit(main(json.loads(args.board.read_text()), args.study_open))
