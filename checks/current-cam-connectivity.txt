@@ -38,6 +38,8 @@ Processor supply/return to U_PMIC.DCDC4: 0/15 balls connected. Open E10, E11, E1
 Processor supply/return to U_PMIC.LDO1: 0/16 balls connected. Open D10, D8, E14, E6, E7, E9, F9, H15, K13, N16, N6, P14, P9, R10, R11, R16
 DDR memory supply to DCDC3 output capacitor: 0/18 VDD/VDDQ balls connected.
 DDR memory supply isolation from CPU VDDS_DDR: SHORT between the two domains.
+U1 DDR bypass to U_PMIC.LS1: 0/22 supplied, 22 on copper shared with the other load domain.
+U_DDR DDR bypass to C_PMIC_DDR.pin1: 0/14 supplied, 14 on copper shared with the other load domain.
 OPEN channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net62 has 2 separate CAM networks: U1.C6 | U_PMIC.PWR_EN
 OPEN channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net63 has 2 separate CAM networks: U1.C5 | R_PMIC_WAKE.pin1, U_PMIC.nWAKEUP
 OPEN channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net75 has 2 separate CAM networks: U1.D6 | C_PMIC_RTC_CORE.pin1, L_PMIC_RTC_CORE.pin2, U_PMIC.FB5

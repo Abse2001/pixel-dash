@@ -53,6 +53,14 @@ def processor_power(terminals):
     print(f"DDR memory supply to DCDC3 output capacitor: {direct}/{len(dram_balls)} VDD/VDDQ balls connected.")
     print(f"DDR memory supply isolation from CPU VDDS_DDR: {'PASS' if separate else 'SHORT between the two domains'}.")
     failed |= direct != len(dram_balls) or not separate
+    bypass = json.loads((CHECKS.parent / "am3354/bypass-placement.json").read_text())
+    for ref, anchor, wrong in (("U1", "U_PMIC.LS1", dram_nodes), ("U_DDR", "C_PMIC_DDR.pin1", cpu_nodes)):
+        caps = [f"C_DDR{i}.pin1" for i, cap in enumerate(bypass, 1) if cap["chip"] == ref]
+        fed = sum(terminals[cap] == terminals[anchor] for cap in caps)
+        aliased = [cap for cap in caps if terminals[cap] in wrong]
+        print(f"{ref} DDR bypass to {anchor}: {fed}/{len(caps)} supplied, "
+              f"{len(aliased)} on copper shared with the other load domain.")
+        failed |= fed != len(caps) or bool(aliased)
     return failed
 
 
