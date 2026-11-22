@@ -23,14 +23,10 @@
   "DDR_D14",
   "DDR_D2",
   "DDR_D3",
-  "DDR_D5",
   "DDR_D6",
-  "DDR_D7",
   "DDR_D8",
   "DDR_D9",
   "DDR_DQM0",
   "DDR_DQM1",
-  "DDR_DQS0",
-  "DDR_DQSn0",
   "DDR_ODT"
 ]

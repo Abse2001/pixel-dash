@@ -1,8 +1,9 @@
-16/50 routed. Open: DDR_A1, DDR_A10, DDR_A11, DDR_A12, DDR_A13, DDR_A14, DDR_A2, DDR_A3, DDR_A5, DDR_A6, DDR_A7, DDR_A8, DDR_A9, DDR_BA2, DDR_CKE, DDR_CSn0, DDR_D1, DDR_D10, DDR_D11, DDR_D12, DDR_D13, DDR_D14, DDR_D2, DDR_D3, DDR_D5, DDR_D6, DDR_D7, DDR_D8, DDR_D9, DDR_DQM0, DDR_DQM1, DDR_DQS0, DDR_DQSn0, DDR_ODT
-BYTE0 [0.000, 21.600] mm: 0/2 routed outside ()
-  Provisional nominal-window screen including barrels: 2/2 outside
+20/50 routed. Open: DDR_A1, DDR_A10, DDR_A11, DDR_A12, DDR_A13, DDR_A14, DDR_A2, DDR_A3, DDR_A5, DDR_A6, DDR_A7, DDR_A8, DDR_A9, DDR_BA2, DDR_CKE, DDR_CSn0, DDR_D1, DDR_D10, DDR_D11, DDR_D12, DDR_D13, DDR_D14, DDR_D2, DDR_D3, DDR_D6, DDR_D8, DDR_D9, DDR_DQM0, DDR_DQM1, DDR_ODT
+BYTE0 [0.000, 21.600] mm: 0/6 routed outside ()
+  Provisional nominal-window screen including barrels: 3/6 outside
     DDR_D0 23.043 mm (2 traversals)
-    DDR_D4 27.248 mm (4 traversals)
+    DDR_D5 22.874 mm (2 traversals)
+    DDR_D7 23.862 mm (2 traversals)
 BYTE1 [0.000, 22.000] mm: 1/3 routed outside (DDR_D15)
   DDR_D15 22.598 mm, shorten by 0.598 mm to reach the window
   Provisional nominal-window screen including barrels: 1/3 outside
@@ -19,15 +20,20 @@ ADDR_CTRL_CK [29.550, 32.090] mm: 10/10 routed outside (DDR_A0, DDR_A15, DDR_A4,
   DDR_RASn 28.697 mm, lengthen by 0.853 mm to reach the window
   DDR_WEn 28.876 mm, lengthen by 0.674 mm to reach the window
   Provisional nominal-window screen including barrels: 0/10 outside
-BYTE0 skew across 2/11 signals 1.365 mm, limit 0.635
-BYTE0 geometric spread including 1.42 mm per traversal: 4.205 mm, limit 0.635
+BYTE0 skew across 6/11 signals 6.004 mm, limit 0.635
+BYTE0 geometric spread including 1.42 mm per traversal: 6.004 mm, limit 0.635
 BYTE1 skew across 3/11 signals 4.479 mm, limit 0.635
 BYTE1 geometric spread including 1.42 mm per traversal: 4.479 mm, limit 0.635
 DDR_CK skew across 2/2 signals 0.095 mm, limit 0.127
 DDR_CK geometric spread including 1.42 mm per traversal: 0.095 mm, limit 0.127
-DDR_DQS0 skew unavailable
+DDR_DQS0 skew across 2/2 signals 0.000 mm, limit 0.127
+DDR_DQS0 geometric spread including 1.42 mm per traversal: 0.000 mm, limit 0.127
 DDR_DQS1 skew across 2/2 signals 0.000 mm, limit 0.127
 DDR_DQS1 geometric spread including 1.42 mm per traversal: 0.000 mm, limit 0.127
+BYTE0 planar: DQ/DM spread 6.004 mm (DDR_D7 to DDR_D4), worst DQ/DM-to-DQS mismatch 4.137 mm (DDR_D7 to DDR_DQSn0), limit 0.635 mm each
+BYTE0 estimated with 1.42 mm per traversal: DQ/DM spread 6.004 mm (DDR_D7 to DDR_D4), worst DQ/DM-to-DQS mismatch 4.137 mm (DDR_D7 to DDR_DQSn0), limit 0.635 mm each
 Uniform-line delay sensitivity: single 5.769, odd 5.617, barrel 6.6 ps/mm; 9.372 ps per full-depth traversal. Package and launch delays excluded.
+BYTE0 worst data-to-strobe difference with isolated strobe: 23.868 ps (DDR_D7 and DDR_DQSn0).
+BYTE0 worst data-to-strobe difference with uniform odd mode strobe: 26.434 ps (DDR_D7 and DDR_DQSn0).
 BYTE1 worst data-to-strobe difference with isolated strobe: 25.839 ps (DDR_D15 and DDR_DQSn1).
 BYTE1 worst data-to-strobe difference with uniform odd mode strobe: 28.593 ps (DDR_D15 and DDR_DQSn1).

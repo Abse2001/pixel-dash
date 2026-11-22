@@ -1,5 +1,5 @@
 drill_npth.drl matches 19 round hits and 0 slots
-drill-L1-L4.drl matches 644 round hits and 6 slots
+drill-L1-L4.drl matches 650 round hits and 6 slots
 drill-L3-L4.drl matches 23 round hits and 0 slots
 Buffered output L4 sheet to the CPU feed; bores subtracted.
   buffered mesh 0.08 mm: 17.8822 mOhm at 20 C
@@ -8,14 +8,11 @@ Buffered output L4 sheet to the CPU feed; bores subtracted.
   buffered mesh 0.03 mm: 16.8442 mOhm at 20 C
   buffered mesh 0.025 mm: 16.7743 mOhm at 20 C
 drill_npth.drl matches 19 round hits and 0 slots
-drill-L1-L4.drl matches 644 round hits and 6 slots
-drill-L3-L4.drl matches 23 round hits and 0 slots
-drill_npth.drl matches 19 round hits and 0 slots
-drill-L1-L4.drl matches 644 round hits and 6 slots
+drill-L1-L4.drl matches 650 round hits and 6 slots
 drill-L1-L2.drl matches 307 round hits and 0 slots
 drill-L2-L3.drl matches 9 round hits and 0 slots
 Single L2 return from U1.A1 to EP via at (-22.3000, 23.2000); both barrels included.
   mesh 0.075 mm: 8.260 mOhm at 20 C, 2.552 mV at 250 mA and 80 C.
-  mesh 0.05 mm: 6.987 mOhm at 20 C, 2.159 mV at 250 mA and 80 C.
+  mesh 0.05 mm: 6.990 mOhm at 20 C, 2.160 mV at 250 mA and 80 C.
   three EP returns, mesh 0.075 mm: 8.110 mOhm at 20 C, 2.506 mV at 250 mA and 80 C.
-  three EP returns, mesh 0.05 mm: 6.846 mOhm at 20 C, 2.115 mV at 250 mA and 80 C.
+  three EP returns, mesh 0.05 mm: 6.849 mOhm at 20 C, 2.116 mV at 250 mA and 80 C.
