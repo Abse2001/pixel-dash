@@ -1,4 +1,2 @@
 layer,copper_or_plane,net,finding_area_in_region_mm2,finding_area_including_margin_mm2
 top,pcb_system_JOY_L_CLICK,unnamedsubcircuitsubcircuit_source_group_0_connectivity_net137,0.000000,0.193942
-top,pcb_system_boot_tap_11,system_LCD_D11,0.000000,0.130947
-top,pcb_system_boot_tap_13,system_LCD_D13,0.031199,0.100142
