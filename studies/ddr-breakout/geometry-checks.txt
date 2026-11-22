@@ -1,14 +1,21 @@
-Native board copper checkpoint bc50b55
-Study reference coverage screened 44 routed DDR signals. Open signals: DDR_D0, DDR_D15, DDR_D3, DDR_D4, DDR_D8, DDR_D9.
+Native populated 45-link DDR study
+Study reference coverage screened 45 routed DDR signals. Open signals: DDR_D0, DDR_D3, DDR_D4, DDR_D8, DDR_D9.
 0 signal/layer reference-coverage findings
 0 unrelated copper pairs below 0.102 mm
 0 via/layer/unrelated-net pairs below 0.1524 mm
 0 via drill-spacing findings
 No shorts detected in index.circuit.json
-Verified 8377 strokes from 627 PCB traces against all four copper Gerbers.
-inner1 GND: envelope 386.1492 mm², uncovered 40.1997 mm², uncovered outside nominal via antipads 0.000000003 mm².
-inner2 VDDS_DDR: envelope 386.1492 mm², uncovered 32.2055 mm², uncovered outside nominal via antipads 0.000000003 mm².
+Verified 8691 strokes from 628 PCB traces against all four copper Gerbers.
+inner1 GND: envelope 386.1492 mm², uncovered 40.7996 mm², uncovered outside nominal via antipads 0.000000003 mm².
+inner2 VDDS_DDR: envelope 386.1492 mm², uncovered 32.8054 mm², uncovered outside nominal via antipads 0.000000003 mm².
 0 findings across signal and reference layers in the conservative envelope screen.
 0 signal/layer reference-coverage findings
 Screened 12 routed raster signals.
 0 signal/layer reference-coverage findings
+50 unique connections match the package functions. 6 within-byte DQ remaps.
+U1.M4 DDR_D1 -> U_DDR.F2 DQ2
+U1.N1 DDR_D2 -> U_DDR.H8 DQ5
+U1.N2 DDR_D3 -> U_DDR.H7 DQ7
+U1.N3 DDR_D4 -> U_DDR.F7 DQ1
+U1.N4 DDR_D5 -> U_DDR.H3 DQ4
+U1.P4 DDR_D7 -> U_DDR.F8 DQ3

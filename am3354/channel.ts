@@ -53,7 +53,7 @@ const controls: Record<string, string> = {
 };
 // DQ1, DQ2 and DQ5 share the low-byte strobe and mask, as do DQ3 and DQ7.
 // Memory ball labels stay as marked on the Micron package.
-const cpuBitForRamBit: Readonly<Record<string, number>> = { DQ1: 5, DQ2: 1, DQ3: 7, DQ5: 2, DQ7: 3 };
+const cpuBitForRamBit: Readonly<Record<string, number>> = { DQ4: 5, DQ1: 4, DQ2: 1, DQ3: 7, DQ5: 2, DQ7: 3 };
 
 function memoryNet(signal: string) {
 	const pin = signal.split("/")[0];

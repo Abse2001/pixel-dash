@@ -37,7 +37,7 @@ writer.writerow(["signal", "baseline_mm", "study_mm", "baseline_vias", "study_vi
                  "study_traversed_mm", "baseline_flight_ps", "study_flight_ps", "worst_signed_skew_ps",
                  "model_limit_ps", "model_excess_ps", "max_delta_to_strobes_mm", "TI_limit_mm",
                  "TI_excess_mm", "placement_gate_mm", "placement_excess_mm"])
-for name in ("DDR_D1", "DDR_D2", "DDR_D5", "DDR_D6", "DDR_D12", "DDR_D13", "DDR_D14"):
+for name in ("DDR_D1", "DDR_D2", "DDR_D5", "DDR_D6", "DDR_D12", "DDR_D13", "DDR_D14", "DDR_D15"):
     if name not in new:
         continue
     lane = int(int(name[5:]) >= 8)

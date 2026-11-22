@@ -4,17 +4,26 @@ The [unrouted handheld example](examples/unrouted-handheld) contains the populat
 
 ## Partial DDR breakout study
 
-This branch moves both vias on CPU D1 and remaps three low-byte data bits. CPU D1 reaches RAM DQ2, CPU D5 reaches RAM DQ1 and CPU D2 reaches RAM DQ5. Both byte strobes and masks retain their complete-board routes. Six DDR connections are open on this study. The complete 50-link handheld remains at `7f2d6bb`.
+Drilled CAM verifies 45 distinct DDR connections. D0, D3, D4, D8, D9 remain open. The complete 50-link handheld remains at `7f2d6bb`. The study moves D5 to RAM DQ4, D4 to DQ1, D1 to DQ2 and D2 to DQ5, all within the low byte. Both byte strobes and masks keep their previous routes. The native assembly retains the complete DDR region when rebuilding the reference planes.
 
-The routed D1, D2, D5 and D6 paths each measure 19.920 mm. Their two 1.420 mm through-via transitions bring estimated flight to 133.662 ps. The largest modeled difference to either low-byte strobe is +1.935 ps against ±3.663 ps. Each is within 0.3051 mm of both strobes against the TI 0.635 mm data-to-strobe limit. Missing peers prevent whole-byte signoff. D13 also reaches its RAM land via a new CPU-side escape. D12 measures 22.9903 mm with worst modeled strobe skew +3.6181 ps. D14 measures 22.7551 mm with worst modeled strobe skew +2.2617 ps. The two-transition byte-1 window is 22.3342–22.9981 mm on the provisional reference stack. [Study timing and source-to-RAM topology](studies/ddr-breakout/study-timing.csv)
+| CPU signal | Complete → study length (mm) | Estimated flight (ps) | Worst signed skew to a strobe (ps) | Worst planar mismatch to a strobe (mm) |
+|---|---:|---:|---:|---:|
+| D1 | 23.7653 → 19.9200 | 133.6625 | +1.9350 | 0.3050 |
+| D2 | 20.2383 → 19.9200 | 133.6624 | +1.9350 | 0.3050 |
+| D5 | 26.3833 → 19.7500 | 132.6817 | -2.7404 | 0.4750 |
+| D6 | 20.2549 → 19.9200 | 133.6624 | +1.9350 | 0.3050 |
+| D12 | 23.6978 → 22.9903 | 151.3748 | +3.6181 | 0.0220 |
+| D13 | 22.5862 → 22.9199 | 150.9689 | +3.2122 | 0.0493 |
+| D14 | 23.3728 → 22.7551 | 150.0184 | +2.2617 | 0.2140 |
+| D15 | 22.4276 → 22.6799 | 149.5842 | +1.8275 | 0.2893 |
 
-Drilled CAM verifies 44 distinct package links and six opens. The routed links pass full-width reference coverage, the copper and via-edge clearances, drill spacing and exported Gerber shorts. Sequenced MMC0 also passes. [Drilled CAM record](studies/ddr-breakout/study-cam.txt)
+Each listed path uses two 1.420 mm L1–L4 passages. TI's data-to-strobe and data-to-data mismatch limits are 0.635 mm, and the strobe-pair limit is 0.127 mm. The ±3.6633 ps screening threshold uses the 1.491 mm reference-stack model. D12 has 0.0452 ps of modeled headroom. Package delays, fabricated stack variation and receiver timing remain open.
 
-The [50-signal study ledger](studies/ddr-breakout/all-signals.csv) includes the six open data paths and all command signals. Each byte currently has six routed members out of nine data and mask signals. The six available upper-byte members pass peer, strobe and modeled matching. D12 has only 0.0452 ps of modeled headroom. The low-byte pin permutation reduces the longest Manhattan distance to 19.8000 mm. D1, D2, D5 and D6 pass the original 20.600 mm project ceiling but exceed this revised placement nominal by 0.1200 mm. Each also misses peer matching to D7 by 2.6672 mm beyond the 0.635 mm limit. Actual fabrication, package delays and receiver waveforms remain unverified.
+The [50-signal ledger](studies/ddr-breakout/all-signals.csv) records all open and failing signals, routed-peer coverage, span, flight, signed skew, geometry targets, modeled thresholds and excess. The original project length caps are 20.600 and 23.000 mm. The ledger also recalculates the placement nominal from the remapped package lands. [Changed data paths](studies/ddr-breakout/study-timing.csv)
 
-Reproduce the partial ledger with `PYTHONPATH=checks python checks/compare-ddr-routing.py --study complete.circuit.json study.circuit.json`. The default comparison still requires all 50 paths. The [manufacturing geometry checks](studies/ddr-breakout/geometry-checks.txt) include the exact routed subset and the separate 6 mil via-edge result. To reproduce subset reference coverage, run `PYTHONPATH=checks python checks/audit-ddr-reference-planes.py study.circuit.json --gerbers board.zip --full-width --study-open DDR_D0 DDR_D3 DDR_D4 DDR_D8 DDR_D9 DDR_D15`. The audit fails if the actual open signals differ.
+The routed copper passes the 0.102 mm copper and 0.1524 mm via-edge checks, drill spacing, Gerber shorts, full-width DDR, raster and MMC0 reference checks. Sequenced MMC0 passes. The full handheld connectivity audit also lists 35 open non-DDR networks. [Drilled CAM](studies/ddr-breakout/study-cam.txt) · [Manufacturing geometry checks](studies/ddr-breakout/geometry-checks.txt)
 
-The native assembly retains the previous full-bus plane protection envelope when rebuilding the incomplete layout. The 50-link release check still fails on this branch. Fabrication remains on hold.
+Reproduce the partial ledger with `PYTHONPATH=checks python checks/compare-ddr-routing.py --study complete.circuit.json study.circuit.json`. For the per-trace reference check, run `PYTHONPATH=checks python checks/audit-ddr-reference-planes.py study.circuit.json --gerbers board.zip --full-width --study-open DDR_D0 DDR_D3 DDR_D4 DDR_D8 DDR_D9`. Both release audits require all 50 signals by default. Fabrication remains on hold.
 
 ## Complete-board baseline
 
