@@ -50,6 +50,7 @@
 	{
 		"chip": "U_DDR",
 		"ball": "R1",
+		"linkWidth": 0.165,
 		"net": "VDDS_DDR",
 		"x": -16.320556,
 		"y": 20.329165,
@@ -70,6 +71,7 @@
 	{
 		"chip": "U_DDR",
 		"ball": "D2",
+		"linkWidth": 0.165,
 		"net": "VDDS_DDR",
 		"x": -17.599954,
 		"y": 11.550058,

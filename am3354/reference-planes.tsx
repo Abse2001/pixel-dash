@@ -66,7 +66,7 @@ export function ReferencePlanes({ pcbOffsetX }: { pcbOffsetX: number }) {
 				clearance={0.16}
 			/>
 			{microvias.map(
-				({ chip, ball, net, x, y, buriedX, buriedY, usesStub }) => {
+				({ chip, ball, net, x, y, buriedX, buriedY, usesStub, linkWidth }) => {
 					const via = "M_" + chip + "_" + ball;
 					const buried = via + "_B";
 					const pin = "." + chip + " > ." + ball;
@@ -112,7 +112,7 @@ export function ReferencePlanes({ pcbOffsetX }: { pcbOffsetX: number }) {
 										from={"." + via + " > .inner1"}
 										to={"." + buried + " > .inner1"}
 										pcbStraightLine
-										thickness={0.2}
+										thickness={linkWidth ?? 0.2}
 									/>,
 								]),
 					];
