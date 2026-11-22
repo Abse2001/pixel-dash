@@ -264,8 +264,9 @@ center anywhere on the chord between its two neighbors.
 
 D1 alone rules out closing the full bus by editing bends between these fixed
 escapes. Its chords total 23.1838 mm against a byte-0 upper window of
-23.1001 mm before adding any barrel delay. In the provisional 1.53 mm
-geometric traversal scenario, D1 must recover at least 3.1437 mm. Moving
+23.1001 mm before adding any barrel delay. With the 1.420 mm
+L1–L4 centerline span of Würth HDI4_1-2b-1_149_35_2V13, D1 must
+recover at least 2.9237 mm in the geometric traversal screen. Moving
 either its CPU-side via at (−53.6853, 8.4920) or its RAM-side via at
 (−63.3698, 8.9608) alone can recover at most 1.3862 mm. Both escapes, the
 land contacts, the layer topology, or the pin assignment must change under
