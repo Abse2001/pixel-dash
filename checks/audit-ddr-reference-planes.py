@@ -1,4 +1,5 @@
 """Screen routed outer-layer DDR centerlines against finished reference-plane polygons."""
+import argparse
 import csv
 import json
 import sys
@@ -19,10 +20,10 @@ def polygon(pour):
     return Polygon(outer, holes)
 
 
-def audit(board, microsd=False, full_width=False):
+def audit(board, microsd=False, full_width=False, raster=False):
     nets = {e["source_net_id"]: e["name"] for e in board if e["type"] == "source_net"}
     names = {e["source_trace_id"]: e.get("name", "") for e in board if e["type"] == "source_trace"}
-    ref = {"top": ("inner1", "GND"), "bottom": ("inner2", "GND" if microsd else "VDDS_DDR")}
+    ref = {"top": ("inner1", "GND"), "bottom": ("inner2", "GND" if microsd or raster else "VDDS_DDR")}
     pours = [e for e in board if e["type"] == "pcb_copper_pour"]
     vias = {xy(e): e for e in board if e["type"] == "pcb_via"}
     planes = {}
@@ -33,15 +34,19 @@ def audit(board, microsd=False, full_width=False):
         if len(matches) != 1:
             raise ValueError(f"Expected one finished {inner} {net} pour, found {len(matches)}")
         planes[layer] = polygon(matches[0])
+    seen = set()
     for trace in board:
         if trace["type"] != "pcb_trace":
             continue
         name = names[trace["source_trace_id"]]
-        if microsd:
-            if not trace["source_trace_id"].startswith("system_SD_"):
+        if microsd or raster:
+            prefix = "system_LCD_" if raster else "system_SD_"
+            if not trace["source_trace_id"].startswith(prefix):
                 continue
+            name = trace["source_trace_id"]
         elif not name.startswith("DDR_"):
             continue
+        seen.add(name)
         gaps_by_layer = {layer: [] for layer in ref}
         section = [trace["route"][0]]
         for end in trace["route"][1:]:
@@ -86,10 +91,22 @@ def audit(board, microsd=False, full_width=False):
                 combined = unary_union(gaps)
                 yield name, layer, ref[layer][0], combined.area if full_width else combined.length
 
+    if raster and not seen:
+        raise ValueError("The assembled board contains no routed raster signals")
+    if raster:
+        print(f"Screened {len(seen)} routed raster signals.", file=sys.stderr)
+
 
 if __name__ == "__main__":
-    full_width = "--full-width" in sys.argv[2:]
-    failures = sorted(audit(json.loads(Path(sys.argv[1]).read_text()), "--micro-sd" in sys.argv[2:], full_width))
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("circuit", type=Path)
+    group = parser.add_mutually_exclusive_group()
+    group.add_argument("--micro-sd", action="store_true")
+    group.add_argument("--raster", action="store_true")
+    parser.add_argument("--full-width", action="store_true")
+    args = parser.parse_args()
+    full_width = args.full_width
+    failures = sorted(audit(json.loads(args.circuit.read_text()), args.micro_sd, full_width, args.raster))
     out = csv.writer(sys.stdout)
     out.writerow(("signal", "signal_layer", "reference_layer", "uncovered_copper_mm2" if full_width else "uncovered_centerline_mm"))
     for name, layer, ref, length in failures:
