@@ -29,3 +29,28 @@ Lifting D12 and D14 together still requires moving at least one via or another n
 ```sh
 python studies/ddr-breakout/fixed-via-bound.py dist/index.circuit.json DDR_D12 --lift DDR_D14
 ```
+
+### D5 forces both byte-1 detours at the current via sites
+
+Using byte-0 D5 as the sole obstacle gives a 23.18303 mm lower bound for D12 and 23.33316 mm for D14. These exceed the byte-1 window by 0.18493 mm and 0.33506 mm respectively. With D1 alone the bounds are 21.92024 mm and 22.08984 mm. All lengths use the physical CPU and RAM ball centers and the two existing through-via locations.
+
+Even a legal DQ remap within byte 1 cannot reach the present D14 RAM escape within 22.9981 mm while retaining D5 and the eight CPU escape sites. The table holds the RAM-side via and ball fixed and allows each CPU source its shortest possible paths around D5. The calculation omits every other obstacle and allows arbitrary bends.
+
+| CPU DQ | Lower bound to the D14 receiver escape (mm) |
+|---|---:|
+| D8 | 34.53192 |
+| D9 | 32.78802 |
+| D10 | 24.78926 |
+| D11 | 24.33099 |
+| D12 | 24.13282 |
+| D13 | 23.73134 |
+| D14 | 23.33316 |
+| D15 | 33.46996 |
+
+To reproduce any row, select the corresponding CPU signal:
+
+```sh
+python studies/ddr-breakout/fixed-via-bound.py dist/index.circuit.json DDR_D13 --ram-signal DDR_D14 --keep-only DDR_D5
+```
+
+A separate two-transition routing experiment released the CPU and RAM via locations for D5, D12 and D14 together. It also tried releasing D1 and swapping D1/D5 and D12/D14 within their respective bytes. The 0.032–0.033 mm grid candidates retained either clearance overlaps or excess length. The production design keeps all 50 original endpoints and its previously verified copper. The current length, flight estimate, signed skew, applicable limit and residual for every routed signal are in the [timing ledger](../../checks/current-ddr-change.csv).
