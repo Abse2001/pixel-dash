@@ -298,6 +298,17 @@ for number in (3, 98, 108, 109):
         if {point["from_layer"], point["to_layer"]} != {"top", "inner1"}:
             raise ValueError(f"Unexpected ground transition in {number}")
         add_ground_return(trace, point, f"pcb_retained_ground_{number}_{index}")
+# The left joystick signal crosses the two main regulator filters on L4.
+joystick = one(board, "pcb_trace", pcb_trace_id="pcb_trace_1439")
+joystick_source = one(board, "source_trace", source_trace_id=joystick["source_trace_id"])
+for index, via in enumerate(p for p in joystick["route"] if p["route_type"] == "via"):
+    if {via["from_layer"], via["to_layer"]} != {"top", "bottom"}:
+        raise ValueError("Unexpected left joystick signal span")
+    board.append(dict(type="pcb_via", pcb_via_id=f"pcb_left_joystick_crossing_{index}",
+                      pcb_trace_id=joystick["pcb_trace_id"], source_trace_id=joystick["source_trace_id"],
+                      subcircuit_connectivity_map_key=joystick_source["subcircuit_connectivity_map_key"],
+                      x=via["x"], y=via["y"], from_layer=via["from_layer"], to_layer=via["to_layer"],
+                      layers=list(layers), hole_diameter=0.15, outer_diameter=0.30))
 # Both L1-L2 transitions on the retained backlight gate need plated lands.
 gate = one(board, "pcb_trace", pcb_trace_id="pcb_trace_14")
 gate_source = one(board, "source_trace", source_trace_id=gate["source_trace_id"])

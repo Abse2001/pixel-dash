@@ -7,7 +7,7 @@ from shapely import STRtree, affinity, unary_union
 from shapely.geometry import LineString, Point, Polygon, box
 
 
-def verify(elements, check_ddr_power=False, check_ddr_signals=False, check_system_io=False, check_pmic_hold=False, check_pmic_backup=False, check_rtc_filters=False, check_joysticks=False, check_control_bus=False, check_ddr_regulator=False, check_retained_returns=False):
+def verify(elements, check_ddr_power=False, check_ddr_signals=False, check_system_io=False, check_pmic_hold=False, check_pmic_backup=False, check_rtc_filters=False, check_joysticks=False, check_control_bus=False, check_ddr_regulator=False, check_retained_returns=False, check_processor_filters=False):
     names = {e["source_component_id"]: e.get("name") for e in elements if e["type"] == "source_component"}
     pins = {e["source_port_id"]: f"{names.get(e['source_component_id'])}.{e['name']}"
             for e in elements if e["type"] == "source_port"}
@@ -19,7 +19,7 @@ def verify(elements, check_ddr_power=False, check_ddr_signals=False, check_syste
         ["plane.inner1.GND", "R_VREF_LOW.pin2", "C_CPU_VREF.pin2", "C_VREF_DQ.pin2", "C_VREF_CA.pin2"],
         ["plane.inner2.VDDS_DDR", "R_VREF_HIGH.pin2"],
     ]
-    if check_pmic_hold or check_pmic_backup or check_rtc_filters or check_ddr_regulator:
+    if check_pmic_hold or check_pmic_backup or check_rtc_filters or check_ddr_regulator or check_processor_filters:
         def pmic_pin(name):
             pin, = [e for e in elements if e["type"] == "source_port" and
                     names.get(e["source_component_id"]) == "U_PMIC" and
@@ -52,6 +52,24 @@ def verify(elements, check_ddr_power=False, check_ddr_signals=False, check_syste
                 part, = [e for e in elements if e["type"] == "source_component" and e.get("name") == coil]
                 if part.get("supplier_part_numbers", {}).get("jlcpcb") != ["C162582"]:
                     raise ValueError(f"Unexpected RTC inductor for {rail}")
+        if check_processor_filters:
+            balls = json.loads((Path(__file__).resolve().parents[1] / "am3354/processor-balls.json").read_text())
+            for rail, index in (("CORE", 1), ("MPU", 2)):
+                cap, coil = f"C_PMIC_{rail}", f"L_PMIC_{rail}"
+                bypass(cap, f"FB{index}", 47e-6, "C96123")
+                required[-1].append(f"{coil}.pin2")
+                required.append([pins[pmic_pin(f"L{index}")["source_port_id"]], f"{coil}.pin1"])
+                inductor, = [e for e in elements if e["type"] == "source_component" and e.get("name") == coil]
+                if inductor.get("supplier_part_numbers", {}).get("jlcpcb") != ["C3221570"]:
+                    raise ValueError(f"Incorrect DCDC{index} inductor")
+                net, = [e for e in elements if e["type"] == "source_net" and e["name"] == f"VDD_{rail}"]
+                key = net["subcircuit_connectivity_map_key"]
+                expected = {f"U1.{ball}" for ball, supply in balls.items() if supply == net["name"]}
+                assigned = {pins[e["source_port_id"]] for e in elements if e["type"] == "source_port"
+                            and names.get(e["source_component_id"]) == "U1"
+                            and e.get("subcircuit_connectivity_map_key") == key}
+                if not expected or assigned != expected or pmic_pin(f"FB{index}").get("subcircuit_connectivity_map_key") != key:
+                    raise ValueError(f"Incorrect processor or feedback assignment to {net['name']}")
         if check_ddr_regulator:
             bypass("C_PMIC_DDR", "FB3", 47e-6, "C96123")
             required[-1].append("L_PMIC_DDR.pin2")
@@ -214,6 +232,8 @@ def verify(elements, check_ddr_power=False, check_ddr_signals=False, check_syste
         print("Both I2C lines reach the CPU, PMIC, joystick ADC and their pull-up lands.")
     if check_ddr_regulator:
         print("DCDC3 switch and output nodes reach separate inductor terminals. FB3 reaches the output capacitor and its return reaches L2. The power key and bias resistor reach PB.")
+    if check_processor_filters:
+        print("DCDC1 and DCDC2 each reach their inductor, capacitor, feedback and L2 return. CPU supply assignments match the ball map.")
     if check_ddr_signals:
         signal_roots = {}
         opens = []
@@ -272,5 +292,6 @@ if __name__ == "__main__":
     parser.add_argument("--joysticks", action="store_true")
     parser.add_argument("--control-bus", action="store_true")
     parser.add_argument("--ddr-regulator", action="store_true")
+    parser.add_argument("--processor-filters", action="store_true")
     args = parser.parse_args()
-    verify(json.loads(args.circuit.read_text()), args.ddr_power, args.ddr_signals, args.system_io, args.pmic_hold, args.pmic_backup, args.rtc_filters, args.joysticks, args.control_bus, args.ddr_regulator, args.retained_returns)
+    verify(json.loads(args.circuit.read_text()), args.ddr_power, args.ddr_signals, args.system_io, args.pmic_hold, args.pmic_backup, args.rtc_filters, args.joysticks, args.control_bus, args.ddr_regulator, args.retained_returns, args.processor_filters)

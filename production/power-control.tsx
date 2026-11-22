@@ -149,5 +149,42 @@ export function PowerControl() {
     <trace from=".U1 > .D6" to="net.VDD_RTC_CORE_1V0"/>
     <trace from=".U1 > .B4" to="net.VDD_RTC_CORE_1V0"/>
     <trace from=".U1 > .D7" to="net.VDDS_RTC_1V8"/>
+    <net name="VDD_CORE"/>
+    <MainInductor name="L_PMIC_CORE" pcbX={-28.199890} pcbY={19.949942} pcbRotation={180}/>
+    <BackupOutputCapacitor name="C_PMIC_CORE" pcbX={-32.499890} pcbY={19.949942} pcbRotation={270}/>
+    <trace from=".U_PMIC > .L1" to=".L_PMIC_CORE > .pin1" thickness={0.36} pcbStraightLine/>
+    <trace from=".L_PMIC_CORE > .pin2" to=".C_PMIC_CORE > .pin1" thickness={0.60} pcbStraightLine/>
+    <trace from=".U_PMIC > .FB1" to=".C_PMIC_CORE > .pin1" thickness={0.15} pcbStraightLine/>
+    <trace from=".C_PMIC_CORE > .pin1" to="net.VDD_CORE"/>
+    <trace from=".C_PMIC_CORE > .pin2" to="net.GND"/>
+    <trace from=".U_PMIC > .IN_DCDC1" to="net.VSYS"/>
+    <via name="V_PMIC_CORE_GND_00" pcbX={-32.739890} pcbY={18.117362}
+      fromLayer="top" toLayer="inner1" holeDiameter={0.125} outerDiameter={0.28} connectsTo={[".C_PMIC_CORE > .pin2","net.GND"]}/>
+    <via name="V_PMIC_CORE_GND_01" pcbX={-32.739890} pcbY={18.597362}
+      fromLayer="top" toLayer="inner1" holeDiameter={0.125} outerDiameter={0.28} connectsTo={[".C_PMIC_CORE > .pin2","net.GND"]}/>
+    <via name="V_PMIC_CORE_GND_10" pcbX={-32.259890} pcbY={18.117362}
+      fromLayer="top" toLayer="inner1" holeDiameter={0.125} outerDiameter={0.28} connectsTo={[".C_PMIC_CORE > .pin2","net.GND"]}/>
+    <via name="V_PMIC_CORE_GND_11" pcbX={-32.259890} pcbY={18.597362}
+      fromLayer="top" toLayer="inner1" holeDiameter={0.125} outerDiameter={0.28} connectsTo={[".C_PMIC_CORE > .pin2","net.GND"]}/>
+    <net name="VDD_MPU"/>
+    <MainInductor name="L_PMIC_MPU" pcbX={-28.199890} pcbY={24.149936} pcbRotation={180}/>
+    <BackupOutputCapacitor name="C_PMIC_MPU" pcbX={-32.999890} pcbY={24.149936} pcbRotation={180}/>
+    <trace from=".U_PMIC > .L2" to=".L_PMIC_MPU > .pin1" thickness={0.36} pcbPath={[{"x": -5.09989, "y": 0.249936}]}/>
+    <trace from=".L_PMIC_MPU > .pin2" to=".C_PMIC_MPU > .pin1" thickness={0.60} pcbStraightLine/>
+    <trace from=".U_PMIC > .FB2" to=".C_PMIC_MPU > .pin1" thickness={0.15} pcbPath={[{"x": -5.09989, "y": 0.750062}]}/>
+    <trace from=".C_PMIC_MPU > .pin1" to="net.VDD_MPU"/>
+    <trace from=".C_PMIC_MPU > .pin2" to="net.GND"/>
+    <trace from=".U_PMIC > .IN_DCDC2" to="net.VSYS"/>
+    <via name="V_PMIC_MPU_GND_00" pcbX={-34.832470} pcbY={23.909936}
+      fromLayer="top" toLayer="inner1" holeDiameter={0.125} outerDiameter={0.28} connectsTo={[".C_PMIC_MPU > .pin2","net.GND"]}/>
+    <via name="V_PMIC_MPU_GND_01" pcbX={-34.832470} pcbY={24.389936}
+      fromLayer="top" toLayer="inner1" holeDiameter={0.125} outerDiameter={0.28} connectsTo={[".C_PMIC_MPU > .pin2","net.GND"]}/>
+    <via name="V_PMIC_MPU_GND_10" pcbX={-34.352470} pcbY={23.909936}
+      fromLayer="top" toLayer="inner1" holeDiameter={0.125} outerDiameter={0.28} connectsTo={[".C_PMIC_MPU > .pin2","net.GND"]}/>
+    <via name="V_PMIC_MPU_GND_11" pcbX={-34.352470} pcbY={24.389936}
+      fromLayer="top" toLayer="inner1" holeDiameter={0.125} outerDiameter={0.28} connectsTo={[".C_PMIC_MPU > .pin2","net.GND"]}/>
+    {Object.entries(processorBalls).filter(([, pad]) => pad === "VDD_CORE" || pad === "VDD_MPU").map(([ball, rail]) => (
+      <trace key={ball} from={".U1 > ." + ball} to={"net." + rail}/>
+    ))}
   </>
 }
