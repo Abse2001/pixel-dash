@@ -62,6 +62,38 @@ def compare(local, supplier, placement_angle, side):
     return best_angle, round(worst, 4), len(common), status
 
 
+def usb_c_lands(board, footprint, catalog, angle, side):
+    # Both imports enumerate the same USB contacts with different synthetic pin numbers.
+    source_ports = {p["source_port_id"]: p["name"] for p in board if p["type"] == "source_port"}
+    ports = {p["pcb_port_id"]: source_ports.get(p.get("source_port_id")) for p in board if p["type"] == "pcb_port"}
+    contacts, anchors = {}, []
+    for land in board:
+        if land.get("pcb_component_id") != footprint["pcb_component_id"]:
+            continue
+        if land["type"] == "pcb_smtpad":
+            contacts[ports[land["pcb_port_id"]]] = [land_center(land)]
+        elif land["type"] == "pcb_plated_hole":
+            anchors.append(land_center(land))
+    reference = {hints[-1]: [(x, y)] for hints, x, y in catalog}
+    shell = {pin: reference.pop(pin) for pin in list(reference) if pin.startswith("shield_")}
+    if len(anchors) != 4 or len(shell) != 4 or len(contacts) != 12 or contacts.keys() != reference.keys():
+        raise ValueError("Incomplete USB-C contacts or shell anchors")
+    # The four shield slots are mechanically distinct. Compare their positions in the
+    # coordinate frame fixed by all twelve named electrical contacts.
+    board_center = center([v[0] for v in contacts.values()])
+    library_center = center([v[0] for v in reference.values()])
+    co, si = math.cos(math.radians(angle)), math.sin(math.radians(angle))
+    for name, (point,) in shell.items():
+        x, y = point[0] - library_center[0], point[1] - library_center[1]
+        if side == "bottom":
+            x = -x
+        expected = board_center[0] + co*x - si*y, board_center[1] + si*x + co*y
+        index = min(range(len(anchors)), key=lambda i: math.dist(anchors[i], expected))
+        contacts[name] = [anchors.pop(index)]
+        reference[name] = [point]
+    return contacts, reference
+
+
 def main():
     board = json.loads(Path(sys.argv[1]).read_text())
     library = json.loads(Path(__file__).with_name("jlcpcb-placement-lands.json").read_text())
@@ -121,7 +153,10 @@ def main():
             if result[-1] != "matches":
                 raise ValueError(f"{name} differs from the Omron top view at the placement angle: {result}")
             print(f"{name} matches the Omron B3F-3152 drill pattern and orientation.", file=sys.stderr)
-        result = compare(geometry[footprint["pcb_component_id"]], supplier, angle, side)
+        local = geometry[footprint["pcb_component_id"]]
+        if code == "C165948":
+            local, supplier = usb_c_lands(board, footprint, library[code]["lands"], angle, side)
+        result = compare(local, supplier, angle, side)
         writer.writerow((name, code, side, angle, *result))
         tested.add(name)
         findings += result[-1] != "matches"
