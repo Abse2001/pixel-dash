@@ -6,28 +6,28 @@ Lengths are in mm and flight times in ps. TI SPRS717L Table 7-69 lists DQLM0/1 u
 
 Placement-derived project maximum ≤ 20.600 mm. Data-to-data and data-to-either-strobe mismatch ≤ 0.635 mm each. Strobe positive-to-negative mismatch ≤ 0.127 mm. Each modeled delta below is the worst absolute difference to either strobe leg. The model screen checks isolated, mixed and uniform odd-mode strobe cases.
 
-With the present mixed-mode strobe times, the common data-flight target is 129.412–136.686 ps to satisfy both strobe legs. The other delay scenarios are evaluated against their own strobe times.
+With the present mixed-mode strobe times, the common data-flight target is 130.035–137.339 ps to satisfy both strobe legs. The other delay scenarios are evaluated against their own strobe times.
 
 | Signal | Planar / max mm | Via count | Mixed flight ps | Worst planar Δ to DQS mm | Mixed Δ ps | Worst modeled Δ ps / 3.663 | Failed screens |
 |---|---|---|---|---|---|---|---|
-| D0 | 20.286 / 20.600 | 2 | 135.772 | 0.061 | 2.749 | 3.425 | data length vs D1, D3, D4, D5, D7 |
-| D1 | 23.765 / 20.600 | 2 | 155.846 | 3.540 | 22.823 | 23.498 | project length; strobe length; modeled skew; data length vs D0, D2, D3, D4, D5, D6, DQM0 |
-| D2 | 20.238 / 20.600 | 4 | 154.243 | 0.013 | 21.220 | 21.895 | modeled skew; data length vs D1, D3, D4, D5, D7 |
-| D3 | 22.535 / 20.600 | 4 | 167.491 | 2.310 | 34.468 | 35.143 | project length; strobe length; modeled skew; data length vs D0, D1, D2, D4, D5, D6, D7, DQM0 |
-| D4 | 21.703 / 20.600 | 4 | 162.690 | 1.478 | 29.667 | 30.343 | project length; strobe length; modeled skew; data length vs D0, D1, D2, D3, D5, D6, D7, DQM0 |
-| D5 | 26.383 / 20.600 | 2 | 170.949 | 6.158 | 37.926 | 38.602 | project length; strobe length; modeled skew; data length vs D0, D1, D2, D3, D4, D6, D7, DQM0 |
-| D6 | 20.255 / 20.600 | 2 | 135.595 | 0.030 | 2.572 | 3.247 | data length vs D1, D3, D4, D5, D7 |
-| D7 | 23.222 / 20.600 | 4 | 171.457 | 2.997 | 38.434 | 39.109 | project length; strobe length; modeled skew; data length vs D0, D2, D3, D4, D5, D6, DQM0 |
-| DQM0 | 20.259 / 20.600 | 2 | 135.615 | 0.034 | 2.593 | 3.268 | data length vs D1, D3, D4, D5, D7 |
+| D0 | 20.286 / 20.600 | 2 | 135.772 | 0.061 | 2.096 | 2.823 | data length vs D1, D3, D4, D5, D7 |
+| D1 | 23.765 / 20.600 | 2 | 155.846 | 3.433 | 22.170 | 22.897 | project length; strobe length; modeled skew; data length vs D0, D2, D3, D4, D5, D6, DQM0 |
+| D2 | 20.238 / 20.600 | 4 | 154.243 | 0.108 | 20.567 | 21.294 | modeled skew; data length vs D1, D3, D4, D5, D7 |
+| D3 | 22.535 / 20.600 | 4 | 167.491 | 2.203 | 33.815 | 34.542 | project length; strobe length; modeled skew; data length vs D0, D1, D2, D4, D5, D6, D7, DQM0 |
+| D4 | 21.703 / 20.600 | 4 | 162.690 | 1.371 | 29.014 | 29.741 | project length; strobe length; modeled skew; data length vs D0, D1, D2, D3, D5, D6, D7, DQM0 |
+| D5 | 26.383 / 20.600 | 2 | 170.949 | 6.051 | 37.273 | 38.000 | project length; strobe length; modeled skew; data length vs D0, D1, D2, D3, D4, D6, D7, DQM0 |
+| D6 | 20.255 / 20.600 | 2 | 135.595 | 0.092 | 1.919 | 2.646 | data length vs D1, D3, D4, D5, D7 |
+| D7 | 23.222 / 20.600 | 4 | 171.457 | 2.890 | 37.781 | 38.508 | project length; strobe length; modeled skew; data length vs D0, D2, D3, D4, D5, D6, DQM0 |
+| DQM0 | 20.259 / 20.600 | 2 | 135.615 | 0.088 | 1.939 | 2.666 | data length vs D1, D3, D4, D5, D7 |
 
-- DQS0 measures 20.225 mm with 2 vias and 133.023 ps of mixed-mode flight.
-- DQSn0 measures 20.225 mm with 2 vias and 133.075 ps of mixed-mode flight.
-- Strobe pair mismatch is 0.000 mm against 0.127 mm. Mixed flight difference is 0.052 ps.
+- DQS0 measures 20.347 mm with 2 vias and 133.698 ps of mixed-mode flight.
+- DQSn0 measures 20.332 mm with 2 vias and 133.676 ps of mixed-mode flight.
+- Strobe pair mismatch is 0.014 mm against 0.127 mm. Mixed flight difference is 0.022 ps.
 - Data-to-data board flight spread is 35.862 ps (D7, D6) against the 3.663 ps model screen.
 - Data-to-data planar mismatch is 6.145 mm (D2, D5) against 0.635 mm.
 - Data-to-data including barrel depth mismatch is 6.128 mm (D5, D6) against 0.635 mm.
-- Data-to-strobe planar mismatch is 6.158 mm (D5, DQSn0) against 0.635 mm.
-- Data-to-strobe including barrel depth mismatch is 6.158 mm (D5, DQSn0) against 0.635 mm.
+- Data-to-strobe planar mismatch is 6.051 mm (D5, DQSn0) against 0.635 mm.
+- Data-to-strobe including barrel depth mismatch is 6.051 mm (D5, DQSn0) against 0.635 mm.
 
 ## Byte 1
 
