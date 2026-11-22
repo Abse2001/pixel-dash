@@ -24,6 +24,7 @@ def main():
     parser.add_argument("circuit", type=Path)
     parser.add_argument("gerbers", type=Path)
     parser.add_argument("--pmic-controls", action="store_true", help="require routed PMIC supply, wake pull-up, interrupt and cold-reset connections")
+    parser.add_argument("--handheld-ground", action="store_true", help="require all mapped ground lands and barrels to share the UART ground network")
     args = parser.parse_args()
     board = json.loads(args.circuit.read_text())
     drill = runpy.run_path(str(CHECKS / "audit-channel-drills.py"))
@@ -133,6 +134,12 @@ def main():
             if terminals[start] != terminals[end]:
                 raise ValueError(f"PMIC connection open between {start} and {end}")
             print(f"PMIC copper verified between {start} and {end}.")
+    if args.handheld_ground:
+        ground, = (e for e in board if e["type"] == "source_net" and e["name"] == "GND")
+        ground_nodes = nodes_by_net[ground["subcircuit_connectivity_map_key"]]
+        if ground_nodes != {terminals["TP_UART_GND.pin1"]}:
+            raise ValueError(f"Handheld ground has {len(ground_nodes)} separate CAM networks")
+        print("All mapped handheld ground lands and barrels join the UART ground probe.")
     opens = {k: len(v) for k, v in nodes_by_net.items() if len(v) > 1}
     for key, count in sorted(opens.items()):
         examples = [", ".join(sorted(members[key][node])[:3]) or "via only" for node in sorted(nodes_by_net[key])]

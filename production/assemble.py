@@ -341,6 +341,32 @@ for index, (x, y) in enumerate(json.loads((root / "system-ground-stitches.json")
                       subcircuit_connectivity_map_key=gnd["subcircuit_connectivity_map_key"],
                       x=x, y=y, from_layer="top", to_layer="bottom", layers=list(layers),
                       hole_diameter=0.20, outer_diameter=0.40))
+# Filled blind vias connect the retained handheld ground lands to the adjacent plane.
+for index, site in enumerate(json.loads((root / "ground-land-vias.json").read_text())):
+    ref, terminal = site["terminal"].split(".")
+    source = port(ref, terminal)
+    if source["subcircuit_connectivity_map_key"] != gnd["subcircuit_connectivity_map_key"]:
+        raise ValueError(f"Return via terminal is no longer ground: {site['terminal']}")
+    surface = site["side"]
+    adjacent = {"top": "inner1", "bottom": "inner2"}[surface]
+    board.append(dict(type="pcb_via", pcb_via_id=f"pcb_handheld_ground_land_{index}",
+                      source_net_id=gnd["source_net_id"],
+                      subcircuit_connectivity_map_key=gnd["subcircuit_connectivity_map_key"],
+                      x=site["x"], y=site["y"], from_layer=surface, to_layer=adjacent,
+                      layers=[surface, adjacent], hole_diameter=0.125, outer_diameter=0.28))
+    if "escape" in site:
+        land = one(board, "pcb_port", source_port_id=source["source_port_id"])
+        connection, = (t for t in board if t["type"] == "source_trace"
+                       and source["source_port_id"] in t["connected_source_port_ids"]
+                       and gnd["source_net_id"] in t["connected_source_net_ids"])
+        x, y = site["escape"]
+        board.append(dict(type="pcb_trace", pcb_trace_id=f"pcb_ground_escape_{index}",
+                          source_trace_id=connection["source_trace_id"],
+                          subcircuit_connectivity_map_key=gnd["subcircuit_connectivity_map_key"],
+                          route=[dict(route_type="wire", x=x, y=y, layer=surface, width=site["width"],
+                                      start_pcb_port_id=land["pcb_port_id"]),
+                                 dict(route_type="wire", x=site["x"], y=site["y"],
+                                      layer=surface, width=site["width"])]))
 # Bare probe lands need exposed copper without stencil apertures.
 probe_parts = {e["source_component_id"] for e in board
                if e["type"] == "source_component" and e.get("ftype") == "simple_test_point"}
