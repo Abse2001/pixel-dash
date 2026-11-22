@@ -18,7 +18,7 @@ BusLanes commit `55d5f2b` reached `native_fallback_assignment` and reported “N
 
 ## Regenerate and verify
 
-The fixture was extracted from the complete handheld copper checkpoint `66b9fc9`. From the repo root, with the project dependencies installed, run:
+The fixture was extracted from the complete handheld copper checkpoint `25bb680`. From the repo root, with the project dependencies installed, run:
 
 ```sh
 bun run build
