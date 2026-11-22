@@ -98,6 +98,8 @@ def verify(elements, check_ddr_power=False, check_ddr_signals=False, check_syste
         for signal, ball in (("SCL", "C16"), ("SDA", "C17")):
             required.append([f"U1.{ball}", "U_PMIC." + signal, "U_JOY_ADC." + signal,
                              f"R_PMIC_{signal}.pin1"])
+        required.append(["R_PMIC_SCL.pin2", "R_PMIC_SDA.pin2",
+                         *(f"R_SYSBOOT{bit}.pin1" for bit in (0, 1, 2, 4, 14))])
     labels = defaultdict(list)
     copper = defaultdict(list)
     parent = []
@@ -229,7 +231,7 @@ def verify(elements, check_ddr_power=False, check_ddr_signals=False, check_syste
     if check_joysticks:
         print("All four stick axes reach their filter inputs, and the four filter outputs reach their assigned ADC lands. The bypass and address strap reach their local nodes.")
     if check_control_bus:
-        print("Both I2C lines reach the CPU, PMIC, joystick ADC and their pull-up lands.")
+        print("Both I2C lines reach the CPU, PMIC, joystick ADC and their pull-up lands. The five high SYSBOOT bias pads reach the shared I/O rail copper.")
     if check_ddr_regulator:
         print("DCDC3 switch and output nodes reach separate inductor terminals. FB3 reaches the output capacitor and its return reaches L2. The power key and bias resistor reach PB.")
     if check_processor_filters:

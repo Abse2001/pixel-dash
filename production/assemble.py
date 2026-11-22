@@ -177,7 +177,16 @@ for saved_name, plan in paths.items():
     else:
         source = one(board, "source_trace", display_name=saved_name)
     sid = source["source_trace_id"]
-    start, end = [one(board, "pcb_port", source_port_id=pid) for pid in source["connected_source_port_ids"]]
+    pads = [one(board, "pcb_port", source_port_id=pid) for pid in source["connected_source_port_ids"]]
+    if len(pads) == 1 and isinstance(plan, dict) and "end_at" in plan:
+        rail, = source["connected_source_net_ids"]
+        if one(board, "source_net", source_net_id=rail)["subcircuit_connectivity_map_key"] != source["subcircuit_connectivity_map_key"]:
+            raise ValueError(f"Inconsistent rail assignment on {saved_name}")
+        start = pads[0]
+        ref, terminal = plan["end_at"].split(".")
+        end = one(board, "pcb_port", source_port_id=port(ref, terminal)["source_port_id"])
+    else:
+        start, end = pads
     if isinstance(plan, dict) and "join_trace" in plan:
         retained = one(board, "pcb_trace", pcb_trace_id=plan["join_trace"], source_trace_id=sid)
         anchor = retained["route"][0]
