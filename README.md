@@ -2,14 +2,18 @@
 
 The [unrouted handheld example](examples/unrouted-handheld) contains the populated board and a full-board input for testing the Bus Lanes autorouter.
 
-The three touch pull-up supply lands now reach sequenced DCDC4 through the card bulk-capacitor rail land. Drilled CAM verifies all three and the seven MMC0 links. The processor I/O bank balls N5 and P5 still require feeds. The touch signal connections and external touch interface remain open. [Physical rail and endpoint checks](checks/current-raster-taps-cam.txt)
+## Current electrical checkpoint
 
-Five panel branches now join J_LCD to the SYSBOOT sense resistors on LCD_D1, D2, D8, D9 and D10. Drilled CAM reaches 10/16 connector-to-resistor taps, 4/16 CPU-to-resistor straps and 6/29 CPU-to-panel signals. The five added branches use 10–12 through-vias each. Panel launch timing, return transfers and receiver margin remain open. All 50 DDR signal geometries match the previous checkpoint exactly. Gerber full-width DDR, MMC0 and routed raster reference screens passed, along with copper and drill spacing, the 6 mil via-edge audit, and all 7,995 exported trace strokes. [Drilled endpoint results](checks/current-raster-taps-cam.txt)
+All 50 DDR ball pairs are distinct in the drilled artwork. The paired byte-1 strobe trunk now follows a common curved path. DQS1 and DQSn1 measure 22.9692 mm and 22.9683 mm. Their 0.0009 mm difference meets the TI 0.127 mm pair limit. Both retain two L1–L4 transitions, 1.420 mm each on the reference stack. The 1.491 mm model gives a joint two-via data interval of 22.3342–22.9981 mm for these strobes. D8, D9 and D15 still fit that interval.
 
+| Byte-1 data | Length (prior → current), mm | Barrel total, mm | Flight, ps | Worst signed skew (prior → current), ps | Excess over ±3.6633 ps |
+|---|---:|---:|---:|---:|---:|
+| D12 | 23.6978 → 23.6978 | 2.840 | 155.4565 | +9.5717 → +7.6998 | 4.0365 ps |
+| D14 | 23.3728 → 23.3728 | 2.840 | 153.5818 | +7.6971 → +5.8252 | 2.1618 ps |
 
-D15, D8 and D9 connect with two 1.420 mm transitions each in the full 50-link interface. Local reallocation required new paths for those three signals and a bottom-layer jog on D4. The subsequent refinement shortened D4 to 21.703 mm and D12 to 23.698 mm. The existing DQS1 pair and DQM1 kept their verified geometry. D15/D8/D9 measure 22.428/22.430/22.430 mm against the 22.090–22.674 mm joint strobe/flight window. D12 and D14 still fail the byte-1 data-to-data, data-to-strobe and delay gates. The native build passed all-layer shorts, drilled connectivity, reference and clearance checks including sequenced MMC0. The whole board retains 38 mapped nets with disconnected islands. [Electrical timing and residuals](checks/current-ddr-change.csv) · [Physical checks](checks/current-d15-cam.txt) · [Earlier 49- and 46-link studies](https://github.com/Abse2001/pixel-dash/tree/96865c4/studies/reserved-ddr)
+D14 now meets the TI 0.635 mm data-to-either-strobe mismatch limit at 0.4046 mm. D12 measures 0.7295 mm against that limit. Both still exceed the project’s 23.000 mm placement ceiling and the TI data-to-data limit. [All 50 prior and current lengths, depths, flight estimates, targets and residuals](checks/current-ddr-change.csv) · [Per-group timing and receiver assumptions](checks/current-ddr-targets.md)
 
-
+The sequenced DCDC4 rail reaches all three touch pull-up supply lands. N5 and P5 still need feeds. Ten of sixteen panel-to-strap taps reach their resistor, four of sixteen CPU strap connections pass, and six of 29 CPU-to-panel signals pass. MMC0 power, bypass, returns and all seven signals pass. Removing isolated VSYS barrels pcb_via_202 and pcb_via_203, their manual-via bodies and connectivity records leaves 37 mapped land nets with multiple physical networks. The Gerbers reproduce all 8,196 routed strokes. The 0.102 mm copper, 0.1524 mm via-edge, drill spacing, full-width DDR/MMC0/raster reference and DDR envelope checks pass. Panel power generation, DDR timing and the remaining whole-board electrical and fabrication checks remain open. [Drilled rail, strap and interface results](checks/current-raster-taps-cam.txt)
 
 ## Receiver timing and length-gate definitions
 
@@ -17,7 +21,7 @@ The 20.600 mm and 23.000 mm byte limits are the project's placement-derived Manh
 
 The clock and command nets terminate at one x16 TwinDie package containing two x8 dies in a single rank. At A1 the mixed-mode board path arrives 23.339 ps after the clock-pair mean. Under Micron's DDR3L-1866 AC135/DC90 reference-slew case, this consumes 23.339 ps of setup and adds 23.339 ps of hold. The CPU-ball waveform must supply at least 88.339 ps of setup and 86.661 ps of hold before uncertainty. A1 passes its nominal routing window. Receiver slack remains unknown until launch timing, package effects, PVT, jitter and actual input slew at the shared receiver load are bounded. The per-net CSV also gives the conservative DDR3L-800 screening case. [Receiver requirements and board flight](checks/current-ddr-targets.md) · [All path lengths, via depths, windows and residuals](checks/current-ddr-change.csv)
 
-## Current DDR group timing pass
+## Earlier DDR group timing pass
 
 Both DQS1 conductors gained 0.125 mm in one shared routing corridor. D8 and D9 each retain four 1.420 mm layer transitions. The strobe legs each retain two. The 0.635 mm TI length budget can offset only 3.663 ps on an isolated trace at the reference-build rate. Two extra full-depth transitions contribute 18.744 ps in the barrel model. The byte still needs a different transition topology to meet both limits.
 

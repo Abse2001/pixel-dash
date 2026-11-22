@@ -33,28 +33,28 @@ With the present mixed-mode strobe times, the common data-flight target is 129.3
 
 Placement-derived project maximum ≤ 23.000 mm. Data-to-data and data-to-either-strobe mismatch ≤ 0.635 mm each. Strobe positive-to-negative mismatch ≤ 0.127 mm. Each modeled delta below is the worst absolute difference to either strobe leg. The model screen checks isolated, mixed and uniform odd-mode strobe cases.
 
-With the present mixed-mode strobe times, the common data-flight target is 143.223–150.101 ps to satisfy both strobe legs. The other delay scenarios are evaluated against their own strobe times.
+With the present mixed-mode strobe times, the common data-flight target is 144.665–151.916 ps to satisfy both strobe legs. The other delay scenarios are evaluated against their own strobe times.
 
 | Signal | Planar / max mm | Via count | Mixed flight ps | Worst planar Δ to DQS mm | Mixed Δ ps | Worst modeled Δ ps / 3.663 | Failed screens |
 |---|---|---|---|---|---|---|---|
-| D8 | 22.430 / 23.000 | 2 | 148.143 | 0.295 | 1.705 | 2.258 | data length vs D12, D14 |
-| D9 | 22.430 / 23.000 | 2 | 148.140 | 0.295 | 1.702 | 2.256 | data length vs D12, D14 |
-| D10 | 22.581 / 23.000 | 2 | 149.013 | 0.144 | 2.575 | 3.128 | data length vs D12, D14 |
-| D11 | 22.578 / 23.000 | 2 | 148.997 | 0.147 | 2.559 | 3.112 | data length vs D12, D14 |
-| D12 | 23.698 / 23.000 | 2 | 155.456 | 1.063 | 9.019 | 9.572 | project length; strobe length; modeled skew; data length vs D8, D9, D10, D11, D13, D15, DQM1 |
-| D13 | 22.586 / 23.000 | 2 | 149.044 | 0.139 | 2.606 | 3.159 | data length vs D12, D14 |
-| D14 | 23.373 / 23.000 | 2 | 153.582 | 0.738 | 7.144 | 7.697 | project length; strobe length; modeled skew; data length vs D8, D9, D10, D11, D13, D15, DQM1 |
-| D15 | 22.428 / 23.000 | 2 | 148.129 | 0.297 | 1.691 | 2.244 | data length vs D12, D14 |
-| DQM1 | 22.568 / 23.000 | 2 | 148.937 | 0.157 | 2.499 | 3.052 | data length vs D12, D14 |
+| D8 | 22.430 / 23.000 | 2 | 148.143 | 0.539 | 0.185 | 3.110 | data length vs D12, D14 |
+| D9 | 22.430 / 23.000 | 2 | 148.140 | 0.540 | 0.188 | 3.113 | data length vs D12, D14 |
+| D10 | 22.581 / 23.000 | 2 | 149.013 | 0.388 | 0.761 | 2.240 | data length vs D12, D14 |
+| D11 | 22.578 / 23.000 | 2 | 148.997 | 0.391 | 0.745 | 2.256 | data length vs D12, D14 |
+| D12 | 23.698 / 23.000 | 2 | 155.456 | 0.730 | 7.204 | 7.700 | project length; strobe length; modeled skew; data length vs D8, D9, D10, D11, D13, D15, DQM1 |
+| D13 | 22.586 / 23.000 | 2 | 149.044 | 0.383 | 0.792 | 2.209 | data length vs D12, D14 |
+| D14 | 23.373 / 23.000 | 2 | 153.582 | 0.405 | 5.330 | 5.825 | project length; modeled skew; data length vs D8, D9, D10, D11, D13, D15, DQM1 |
+| D15 | 22.428 / 23.000 | 2 | 148.129 | 0.542 | 0.199 | 3.124 | data length vs D12, D14 |
+| DQM1 | 22.568 / 23.000 | 2 | 148.937 | 0.401 | 0.685 | 2.316 | data length vs D12, D14 |
 
-- DQS1 measures 22.635 mm with 2 vias and 146.438 ps of mixed-mode flight.
-- DQSn1 measures 22.725 mm with 2 vias and 146.886 ps of mixed-mode flight.
-- Strobe pair mismatch is 0.090 mm against 0.127 mm. Mixed flight difference is 0.448 ps.
+- DQS1 measures 22.969 mm with 2 vias and 148.328 ps of mixed-mode flight.
+- DQSn1 measures 22.968 mm with 2 vias and 148.252 ps of mixed-mode flight.
+- Strobe pair mismatch is 0.001 mm against 0.127 mm. Mixed flight difference is 0.076 ps.
 - Data-to-data board flight spread is 7.327 ps (D12, D15) against the 3.663 ps model screen.
 - Data-to-data planar mismatch is 1.270 mm (D12, D15) against 0.635 mm.
 - Data-to-data including barrel depth mismatch is 1.270 mm (D12, D15) against 0.635 mm.
-- Data-to-strobe planar mismatch is 1.063 mm (D12, DQS1) against 0.635 mm.
-- Data-to-strobe including barrel depth mismatch is 1.063 mm (D12, DQS1) against 0.635 mm.
+- Data-to-strobe planar mismatch is 0.730 mm (D12, DQSn1) against 0.635 mm.
+- Data-to-strobe including barrel depth mismatch is 0.730 mm (D12, DQSn1) against 0.635 mm.
 
 ## Address, control and clock
 

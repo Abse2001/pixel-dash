@@ -47,6 +47,11 @@ with (root/"removed-parts.csv").open("w") as f:
         writer.writerow([name, e.get("manufacturer_part_number"), " ".join(e.get("supplier_part_numbers", {}).get("jlcpcb", [])), reason])
 
 dead = {eid(parts[n]) for n in retired_parts}
+# These VSYS stitching vias lose their last peripheral tracks in the wide layout.
+# Drilled CAM confirms that each barrel is isolated from every populated land.
+obsolete_vsys = {"V_CPU_B_ROUTED_291 connectivity", "V_CPU_B_ROUTED_292 connectivity"}
+dead.update(eid(e) for e in items("source_trace") if e.get("display_name") in obsolete_vsys)
+
 old_net = re.compile(r"^(?:V1V1$|BAT_OFF_GATE$|BAT_CONTROL_OR$|GPU_|GRAPHICS_|THROUGH_(?:QSPI|PSRAM|SWD|SWCLK|BOOTSEL|RUN_PULLUP))")
 dead.update(eid(e) for e in items("source_net") if old_net.search(e["name"]))
 dead.update(eid(e) for e in items("source_bus") if not e["name"].startswith("BAT_"))
