@@ -5,7 +5,7 @@ import placement from "./bypass-placement.json";
 export function DdrBypass() {
 	return (
 		<>
-			{placement.map(({ x, y, rotation, layer, kind, bodyOffsetY = 0 }, i) => {
+			{placement.map(({ x, y, rotation, layer, kind, bodyOffsetY = 0, supplyViaDistance }, i) => {
 				const isBulk = kind === "bulk";
 				const Capacitor = isBulk ? GRM21BC81C226ME44L : CL05B104KO5NNNC;
 				const viaDistance = isBulk ? 2.08 : 1.2;
@@ -25,8 +25,9 @@ export function DdrBypass() {
 						const adjacentPlane = side === "top" ? net === "GND" : net === "VDDS_DDR";
 						const planeLayer = side === "top" ? "inner1" : "inner2";
 						const via = "V_" + name + "_" + pin;
+						const distance = p === 0 ? supplyViaDistance ?? viaDistance : viaDistance;
 						const offset =
-							(p === 0 ? -viaDistance : viaDistance) *
+							(p === 0 ? -distance : distance) *
 							(side === "bottom" ? -1 : 1);
 						return [
 							<via
