@@ -201,7 +201,7 @@ def verify(elements, check_ddr_power=False, check_ddr_signals=False, check_syste
     if check_ddr_power:
         base = Path(__file__).resolve().parents[1] / "am3354"
         supply = ["plane.inner2.VDDS_DDR"]
-        switched = ["U_PMIC.LS1"]
+        switched = ["U_DDR_SWITCH.VOUT1", "U_DDR_SWITCH.VOUT2", "C_DDR_SW_LOAD.pin1", "R_DDR_SW_OUT.pin1"]
         ground = ["plane.inner1.GND"]
         for ref, filename in (("U1", "processor-balls.json"), ("U_DDR", "memory-balls.json")):
             balls = json.loads((base / filename).read_text())

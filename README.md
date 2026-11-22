@@ -6,7 +6,10 @@
 lands, including both supply balls of VDDSHV1, VDDSHV2 and VDDSHV4.
 Banks 2 and 4 power the upper raster data signals and MMC0 respectively.
 N5 and P5 are open. LDO1 reaches all 16 assigned 1.8 V loads. Only four
-CPU straps reach their bias resistors. CAM finds 6/29 CPU-to-panel and 7/7
+CPU straps reach their bias resistors. Five of sixteen panel contacts now
+reach their strap sense pads, including D0. The joystick ADC and its
+bypass draw from DCDC4 and share the main ground. CAM finds 6/29
+CPU-to-panel and 7/7
 CPU-to-card signal paths, with 38 mapped nets still open across the board.
 [PCB snapshot](previews/handheld.png) · [Physical connectivity](checks/current-cam-connectivity.txt)
 
@@ -50,22 +53,25 @@ links pass, with 13 full-width reference gaps and both byte windows still open. 
 HDI4_1-2b-1_149_35_2V13 is the pinned engineering cross section.
 DDR timing, hot LS1 margin and supplier acceptance remain open.
 
-The IN_LS1 supply uses two L1–L2 blind vias and a wide L2 trace.
-The LS1 output escape and L5 CPU feed flare into available copper.
-Two additional PMIC exposed-pad microvias share the L2 ground return.
-At 250 mA and 80 °C the modeled headroom is **+0.535 mV** including
-the three screened EP returns, up from **−4.186 mV** at 9d79e24.
-The modeled 80 °C loop is 47.861 mΩ against 50 mΩ for zero DC headroom or
-30 mΩ for an illustrative 5 mV reserve. At 105 °C it reaches 51.666 mΩ.
-At 80 °C and 50% effective capacitance the 100 mA/1 µs screen leaves
-−3.813 mV. The independent DCDC3 2.5% dynamic-source case leaves
-−6.215 mV. Use `--require-hot-reserve` to enforce the combined screen.
-The shared-sheet solve uses 30 µm finished copper, 20 µm assumed via walls
-and a single A1 CPU return. Both 0.075 mm and 0.050 mm return meshes
-were checked. At 300 mA the forward margin is −4.854 mV before return loss. The 100 mA/1 µs transient adds 2.17–4.35 mV of ideal cap droop.
-CAM confirms the separate CPU and memory rails, unchanged DDR reference
-coverage, clean drill spacing and no unrelated copper or 6 mil violations.
-[Hot-load screen](checks/current-ls1-budget.txt) · [Return calculation](checks/current-ls1-pours.txt)
+DCDC3 supplies the memory directly. At the next strobe LS1 enables a
+TPS22975DSGR (JLCPCB C524777) that supplies the seven CPU VDDS_DDR lands.
+VSYS biases the switch. LS1 drives its ON pin and a 22 µF / 220 Ω control
+network. A 1 nF CT capacitor controls turn-on. A 47 Ω output bleed and
+the switch discharge path provide controlled shutdown. CAM tests input,
+bias, control, CT, output, ground and the separate memory rail.
+[TI TPS22975 electrical characteristics and timing](https://www.ti.com/lit/ds/symlink/tps22975.pdf)
+
+At 250 mA CPU load plus 29.6 mA bleed, the 105 °C sensitivity with
+80% conductor area and 40 mΩ switch resistance leaves **11.44 mV DC**
+above the CPU minimum. Combining the −2.5% source case with a 100 mA,
+1 µs step, 46.5 µF effective output capacitance and a 2 mV parasitic
+allowance leaves **0.54 mV**. Capture bias, enable, input and voltage at
+the CPU on cold start, hot load steps, commanded shutdown and abrupt
+input loss. Measure reverse current during collapse. These results depend
+on the reference stack, load, switch resistance and capacitor impedance.
+Reproduce with `checks/estimate-ls1-pours.py BOARD GERBERS --wurth --return-path`
+and `checks/screen-ls1-drop.py BOARD --wurth --sheet-network-report REPORT --require-hot-reserve`.
+[Corner results](checks/current-ls1-budget.txt) · [Drilled sheet solve](checks/current-ls1-pours.txt)
 
 The [coordinated seven-net trial](https://github.com/Abse2001/pixel-dash/tree/214365f)
 opened both the B5 and N5 corridors and shortened D1 and A10, but the trial
@@ -92,7 +98,7 @@ The estimates use the engineering cross section and exclude capacitor
 derating, ESR, loop inductance and package drop. Dynamic bypass impedance,
 regulator stability and SRAM inrush remain unverified. The 1 mm L3 supply
 bridge retains the direct DCDC3 feed to all 18 DRAM supply balls and
-preserves full-width signal reference. All 227 fitted placements and 7,716
+preserves full-width signal reference. At the preceding capacitor checkpoint all 227 fitted placements and 7,716
 routed copper strokes match the engineering export.
 [TI SPRS717L §5.9, Tables 5-14 and 5-15](https://www.ti.com/lit/ds/symlink/am3354.pdf)
 

@@ -4,6 +4,8 @@ from hdi_build import LEGACY, WURTH
 import csv
 import json
 import math
+import subprocess
+import sys
 import re
 from pathlib import Path
 
@@ -29,6 +31,11 @@ if args.pour_mohm is not None and not (math.isfinite(args.pour_mohm) and args.po
     parser.error("Spreading resistance must be positive and finite")
 board = json.loads(args.board.read_text())
 parts = {e["name"]: e for e in board if e["type"] == "source_component"}
+if "U_DDR_SWITCH" in parts:
+    if not args.wurth or args.sheet_network_report is None:
+        parser.error("The buffered layout requires --wurth and a matching --sheet-network-report")
+    checker = Path(__file__).with_name("screen-buffered-ddr.py")
+    raise SystemExit(subprocess.call([sys.executable, checker, args.board, args.sheet_network_report]))
 pmic = parts["U_PMIC"]["source_component_id"]
 source, = (e for e in board if e["type"] == "source_port" and
            e["source_component_id"] == pmic and e["name"] == "IN_LS1")
