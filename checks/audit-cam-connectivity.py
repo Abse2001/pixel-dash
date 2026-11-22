@@ -65,6 +65,15 @@ def processor_power(terminals):
         print(f"{ref} DDR bypass to {anchor}: {fed}/{len(caps)} supplied, "
               f"{len(aliased)} on copper shared with the other load domain.")
         failed |= fed != len(caps) or bool(aliased)
+    returns = [f"C_DDR{i}" for i, cap in enumerate(bypass, 1)
+               if (cap["chip"], cap["kind"]) in {("U_DDR", "highSpeed"), ("channel", "return")}]
+    missing_returns = [ref for ref in returns
+                       if terminals[ref + ".pin1"] != terminals["C_PMIC_DDR.pin1"]
+                       or terminals[ref + ".pin2"] != terminals["TP_UART_GND.pin1"]]
+    print(f"DDR reference bypasses with both DCDC3 and ground lands connected: "
+          f"{len(returns) - len(missing_returns)}/{len(returns)}."
+          + (f" Open {', '.join(missing_returns)}." if missing_returns else ""))
+    failed |= not returns or bool(missing_returns)
     switch_rails = {
         "C_PMIC_DDR.pin1": ["U_DDR_SWITCH.VIN1", "U_DDR_SWITCH.VIN2", "C_DDR_SW_IN.pin1", "U_PMIC.IN_LS1"],
         "U_PMIC.LS1": ["U_DDR_SWITCH.ON", "C_DDR_SW_EN.pin1", "R_DDR_SW_EN.pin1"],
