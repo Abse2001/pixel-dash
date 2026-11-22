@@ -256,3 +256,24 @@ The approved wide-board lower mounts and rear-carrier bores are at X = ±70 mm, 
 All eleven low SYSBOOT bias terminals reach L2 ground. Two ground vias are offset to clear retained audio routing. The high-side bias, remaining processor sense connections and powered reset sampling still require verification.
 
 The fixed component lands constrain the LCD_DATA0/SYSBOOT0 escape at U1.R1. Run `python checks/screen-ddr-placement.py dist/index.circuit.json` to reproduce the optimistic pad-only bound. With the current RAM placement, even the far edge of R1 lies just 0.334 mm from the convex hull of the CPU DDR lands and RAM lands, inside the 0.408 mm envelope setback. A hypothetical +1.0 mm RAM Y shift raises the upper bound to 0.527 mm. This screen ignores tracks, vias and landing width. A placement change would require a new 50-link route and reference audit.
+
+### LDO1 input and physical boot-strap checkpoint
+
+The added 0.24 mm VSYS feed joins IN_LDO1 to IN_DCDC2 through two plated
+L1–L4 vias. Independent CAM walking confirms the input reaches the boost
+output, sharing the supply with IN_BU, IN_BIAS and IN_DCDC1–4. IN_LS1
+reaches the direct DCDC3 output. The LDO1 output still has 0/16 processor
+loads connected. The input assignment follows TI SLVUAA9B Figure 1.
+
+Run checks/audit-cam-connectivity.py with the assembled JSON, Gerber ZIP and
+--cpu-power --pmic-controls --handheld-ground --sysboot. The 16 fitted
+10 kΩ straps have the expected physical bias rails. Only bits 15, 14, 13
+and 11 reach the corresponding CPU balls. The resulting reset word is
+010?0??????????? (bit 15 first). Source decoding alone gives 0x4017.
+
+The four-layer export retains 50 physically distinct DDR links and separate
+CPU and memory power feeds. The 0.102 mm clearance, separate 6 mil via-edge
+audit, short check, full-width DDR and envelope reference checks passed.
+All 7,350 trace strokes matched the four copper files and all 221 placements
+matched the assembly export. Whole-board CAM still finds 39 disconnected
+mapped nets. Fabrication remains on hold.

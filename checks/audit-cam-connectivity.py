@@ -63,7 +63,8 @@ def processor_power(terminals):
         failed |= fed != len(caps) or bool(aliased)
     supply = "C_LIPO_BOOST_OUT.pin1"
     for label in ("C_3V3_IN.pin1", "C_AMP_VDD.pin1", "R_POWER_PB.pin2", "U_PMIC.IN_BU",
-                  "U_PMIC.IN_BIAS", "U_PMIC.IN_DCDC1", "U_PMIC.IN_DCDC2", "U_PMIC.IN_DCDC3", "U_PMIC.IN_DCDC4"):
+                  "U_PMIC.IN_BIAS", "U_PMIC.IN_DCDC1", "U_PMIC.IN_DCDC2", "U_PMIC.IN_DCDC3", "U_PMIC.IN_DCDC4",
+                  "U_PMIC.IN_LDO1"):
         connected = terminals[label] == terminals[supply]
         print(f"System supply copper {'PASS' if connected else 'OPEN'} {supply} to {label}.")
         failed |= not connected
@@ -95,6 +96,30 @@ def rtc_startup(terminals):
     return failed
 
 
+def sysboot(terminals):
+    """Read the bias and sense ends of the 16 fitted strap locations from CAM."""
+    balls = json.loads((CHECKS.parent / "am3354/processor-balls.json").read_text())
+    ground, high = (terminals[label] for label in ("TP_UART_GND.pin1", "U_PMIC.DCDC4"))
+    if ground == high:
+        raise ValueError("SYSBOOT bias rails share copper")
+    senses = []
+    for bit in range(16):
+        ball, = [name for name, function in balls.items() if function == f"LCD_DATA{bit}"]
+        senses.append(terminals[f"U1.{ball}"])
+    digits = []
+    for bit, sense in enumerate(senses):
+        bias = terminals[f"R_SYSBOOT{bit}.pin1"]
+        tap = terminals[f"R_SYSBOOT{bit}.pin2"]
+        bias_bit = {ground: "0", high: "1"}.get(bias, "?")
+        isolated = sense not in (ground, high) and senses.count(sense) == 1
+        connected = sense == tap
+        digits.append(bias_bit if connected and isolated else "?")
+        print(f"SYSBOOT{bit:02d} bias={bias_bit} CPU_to_resistor={connected} sense_isolated={isolated}")
+    word = "".join(reversed(digits))
+    print(f"Physical SYSBOOT[15:0] {word}, expected {0x4017:016b}.")
+    return word != f"{0x4017:016b}"
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("circuit", type=Path)
@@ -102,6 +127,7 @@ def main():
     parser.add_argument("--pmic-controls", action="store_true", help="require routed PMIC supply, wake pull-up, interrupt and cold-reset connections")
     parser.add_argument("--handheld-ground", action="store_true", help="require all mapped ground lands and barrels to share the UART ground network")
     parser.add_argument("--cpu-power", action="store_true", help="check assigned CPU supply domains and returns against their physical sources")
+    parser.add_argument("--sysboot", action="store_true", help="decode physical reset straps from resistor lands and CPU balls")
     args = parser.parse_args()
     board = json.loads(args.circuit.read_text())
     drill = runpy.run_path(str(CHECKS / "audit-channel-drills.py"))
@@ -224,12 +250,13 @@ def main():
         print("All mapped handheld ground lands and barrels join the UART ground probe.")
     startup_failed = args.cpu_power and rtc_startup(terminals)
     power_failed = args.cpu_power and processor_power(terminals)
+    straps_failed = args.sysboot and sysboot(terminals)
     opens = {k: len(v) for k, v in nodes_by_net.items() if len(v) > 1}
     for key, count in sorted(opens.items()):
         examples = [", ".join(sorted(members[key][node])[:3]) or "via only" for node in sorted(nodes_by_net[key])]
         print(f"OPEN {key} has {count} separate CAM networks: " + " | ".join(examples))
     print(f"{len(opens)} mapped land nets have multiple physical networks.")
-    return bool(opens) or power_failed or startup_failed
+    return bool(opens) or power_failed or startup_failed or straps_failed
 
 
 if __name__ == "__main__":

@@ -40,6 +40,7 @@ export function PowerControl() {
         <trace from={`.SW_POWER > .pin${pin}`} to="net.GND"/>
       </>
     ))}
+    <trace from=".U_PMIC > .IN_LDO1" to="net.VSYS"/>
     <trace name="PMIC_INPUT" from=".U_PMIC > .IN_BIAS" to="net.VSYS"/>
     <trace name="RTC_POWER_HOLD" from=".U1 > .C6" to=".U_PMIC > .PWR_EN"/>
     <trace name="RTC_WAKE" from=".U_PMIC > .nWAKEUP" to=".U1 > .C5"/>
