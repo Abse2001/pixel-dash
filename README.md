@@ -4,11 +4,11 @@ The [unrouted handheld example](examples/unrouted-handheld) contains the populat
 
 ## Partial DDR breakout study
 
-This branch moves both vias on CPU D1 and remaps three low-byte data bits. CPU D1 reaches RAM DQ2, CPU D5 reaches RAM DQ1 and CPU D2 reaches RAM DQ5. Both byte strobes and masks retain their complete-board routes. Seven DDR connections are open on this study. The complete 50-link handheld remains at `7f2d6bb`.
+This branch moves both vias on CPU D1 and remaps three low-byte data bits. CPU D1 reaches RAM DQ2, CPU D5 reaches RAM DQ1 and CPU D2 reaches RAM DQ5. Both byte strobes and masks retain their complete-board routes. Six DDR connections are open on this study. The complete 50-link handheld remains at `7f2d6bb`.
 
-The routed D1, D2 and D5 paths each measure 19.920 mm. Their two 1.420 mm through-via transitions bring estimated flight to 133.662 ps. The largest modeled difference to either low-byte strobe is +1.935 ps against ±3.663 ps. Each is within 0.3051 mm of both strobes against the TI 0.635 mm data-to-strobe limit. Missing peers prevent whole-byte signoff. D13 also reaches its RAM land via a new CPU-side escape. [Study timing and source-to-RAM topology](studies/ddr-breakout/study-timing.csv)
+The routed D1, D2, D5 and D6 paths each measure 19.920 mm. Their two 1.420 mm through-via transitions bring estimated flight to 133.662 ps. The largest modeled difference to either low-byte strobe is +1.935 ps against ±3.663 ps. Each is within 0.3051 mm of both strobes against the TI 0.635 mm data-to-strobe limit. Missing peers prevent whole-byte signoff. D13 also reaches its RAM land via a new CPU-side escape. [Study timing and source-to-RAM topology](studies/ddr-breakout/study-timing.csv)
 
-Drilled CAM verifies 43 distinct package links and seven opens. The routed links pass full-width reference coverage, the copper and via-edge clearances, drill spacing and exported Gerber shorts. Sequenced MMC0 also passes. [Drilled CAM record](studies/ddr-breakout/study-cam.txt)
+Drilled CAM verifies 44 distinct package links and six opens. The routed links pass full-width reference coverage, the copper and via-edge clearances, drill spacing and exported Gerber shorts. Sequenced MMC0 also passes. [Drilled CAM record](studies/ddr-breakout/study-cam.txt)
 
 The native assembly retains the previous full-bus plane protection envelope when rebuilding the incomplete layout. The 50-link release check still fails on this branch. Fabrication remains on hold.
 
