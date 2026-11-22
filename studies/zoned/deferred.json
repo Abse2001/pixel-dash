@@ -19,9 +19,7 @@
   "DDR_D2",
   "DDR_D3",
   "DDR_D6",
-  "DDR_D8",
   "DDR_D9",
   "DDR_DQM0",
-  "DDR_DQM1",
-  "DDR_ODT"
+  "DDR_DQM1"
 ]

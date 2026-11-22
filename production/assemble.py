@@ -522,6 +522,23 @@ probe_parts = {e["source_component_id"] for e in board
 probe_footprints = {e["pcb_component_id"] for e in board
                     if e["type"] == "pcb_component" and e.get("source_component_id") in probe_parts}
 board = [e for e in board if e["type"] != "pcb_solder_paste" or e.get("pcb_component_id") not in probe_footprints]
+# Join the crystal case and input-capacitor local return to the L3 ground
+# plane. The start is the existing Y_OSC0 pin 4 blind via.
+crystal = port("Y_OSC0", "pin4")
+anchor = one(board, "pcb_via", pcb_via_id="channel_pcb_via_158")
+land = one(board, "pcb_port", source_port_id=crystal["source_port_id"])
+ground_key = gnd["subcircuit_connectivity_map_key"]
+if (anchor.get("subcircuit_connectivity_map_key") != ground_key or "inner1" not in anchor["layers"]
+        or dist((anchor["x"], anchor["y"]), (land["x"], land["y"])) > 1e-5):
+    raise ValueError("Crystal return no longer starts at the grounded case via")
+end = (-38.590074, 6.265011)
+points = [(anchor["x"], anchor["y"]), (-41.215074, 5.775011), (-39.815074, 6.090011), end]
+board.append(dict(type="pcb_trace", pcb_trace_id="crystal_case_ground_bridge",
+                  source_trace_id="zoned_crystal_return", subcircuit_connectivity_map_key=ground_key,
+                  route=[dict(route_type="wire", layer="inner1", x=x, y=y, width=.20) for x,y in points]))
+board.append(dict(type="pcb_via", pcb_via_id="crystal_case_buried_return", source_net_id=gnd["source_net_id"],
+                  subcircuit_connectivity_map_key=ground_key, x=end[0], y=end[1], from_layer="inner1",
+                  to_layer="inner2", layers=["inner1","inner2"], outer_diameter=.36, hole_diameter=.20))
 add_switched_ddr_feeds(board, port)
 restrict_ground(board, gnd["source_net_id"])
 clear_handheld_copper_from_ddr(board, 50 - len(deferred))

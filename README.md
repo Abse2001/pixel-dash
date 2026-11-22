@@ -1,6 +1,6 @@
 # Pixel Dash
 
-This branch contains the north RAM electrical study. The [current study results](studies/zoned/README.md) supersede the historical routing and margin figures below. The 50-link production checkpoint is on pixel-dash-wide.
+This branch contains the north RAM electrical study. The [current study results](studies/zoned/README.md) supersede the historical routing and margin figures below. The 50-link production checkpoint is on pixel-dash-wide. [Study top copper](previews/wide-top-copper.png)
 
 ## Wide handheld checkpoint
 
