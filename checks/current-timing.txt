@@ -77,3 +77,10 @@ BYTE0 planar: DQ/DM spread 6.145 mm (DDR_D5 to DDR_D2), worst DQ/DM-to-DQS misma
 BYTE0 estimated with 1.53 mm per traversal: DQ/DM spread 6.128 mm (DDR_D5 to DDR_D6), worst DQ/DM-to-DQS mismatch 6.269 mm (DDR_D5 to DDR_DQSn0), limit 0.635 mm each
 BYTE1 planar: DQ/DM spread 2.478 mm (DDR_D12 to DDR_D15), worst DQ/DM-to-DQS mismatch 2.533 mm (DDR_D12 to DDR_DQS1), limit 0.635 mm each
 BYTE1 estimated with 1.53 mm per traversal: DQ/DM spread 3.074 mm (DDR_D8 to DDR_D15), worst DQ/DM-to-DQS mismatch 3.128 mm (DDR_D8 to DDR_DQS1), limit 0.635 mm each
+Uniform-line delay sensitivity: single 5.884, odd 5.739, barrel 6.596 ps/mm; 10.092 ps per full-depth traversal. Package and launch delays excluded.
+BYTE0 worst data-to-strobe difference with isolated strobe: 38.469 ps (DDR_D7 and DDR_DQSn0).
+BYTE0 worst data-to-strobe difference with uniform odd mode strobe: 41.386 ps (DDR_D7 and DDR_DQSn0).
+BYTE1 worst data-to-strobe difference with isolated strobe: 20.582 ps (DDR_D8 and DDR_DQS1).
+BYTE1 worst data-to-strobe difference with uniform odd mode strobe: 23.846 ps (DDR_D8 and DDR_DQS1).
+DDR_A10 minus clock-pair mean in the uniform odd-mode clock scenario: +28.698 ps.
+DDR_CKE minus clock-pair mean in the uniform odd-mode clock scenario: +55.169 ps.

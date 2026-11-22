@@ -9,7 +9,12 @@ from pathlib import Path
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument("circuit", type=Path)
 parser.add_argument("--through-span-mm", type=float, help="Estimate barrel contribution using the L1–L4 copper separation")
+parser.add_argument("--delay-rates", type=float, nargs=3, metavar=("SINGLE", "ODD", "BARREL"),
+                    help="Compare uniform line scenarios in ps/mm using the routed topology and --through-span-mm")
 args = parser.parse_args()
+if args.delay_rates is not None and (args.through_span_mm is None or
+                                     not all(math.isfinite(r) and r > 0 for r in args.delay_rates)):
+    parser.error("--delay-rates needs positive finite rates and --through-span-mm")
 if args.through_span_mm is not None and not (math.isfinite(args.through_span_mm) and args.through_span_mm > 0):
     parser.error("The through span must be finite and positive")
 elements = json.loads(args.circuit.read_text())
@@ -126,6 +131,32 @@ for lane, nets in enumerate(lanes):
               f"({longest} to {shortest}), worst DQ/DM-to-DQS mismatch "
               f"{abs(lengths[data]-lengths[strobe]):.3f} mm ({data} to {strobe}), "
               "limit 0.635 mm each", file=sys.stderr)
+
+if args.delay_rates:
+    single, odd, barrel = args.delay_rates
+    barrel_ps = args.through_span_mm * barrel
+
+    def flight(name, rate):
+        planar, _, vias = rows[name]
+        return planar * rate + vias * barrel_ps
+
+    print(f"Uniform-line delay sensitivity: single {single:g}, odd {odd:g}, barrel {barrel:g} ps/mm; "
+          f"{barrel_ps:.3f} ps per full-depth traversal. Package and launch delays excluded.", file=sys.stderr)
+    for lane, nets in enumerate(lanes):
+        strobes = {f"DDR_DQS{lane}", f"DDR_DQSn{lane}"}
+        data = (nets - strobes) & rows.keys()
+        if not data or not strobes <= rows.keys():
+            continue
+        for description, rate in (("isolated", single), ("uniform odd mode", odd)):
+            skew, d, strobe = max((abs(flight(d, single) - flight(strobe, rate)), d, strobe)
+                                  for d in data for strobe in strobes)
+            print(f"BYTE{lane} worst data-to-strobe difference with {description} strobe: "
+                  f"{skew:.3f} ps ({d} and {strobe}).", file=sys.stderr)
+    for name in ("DDR_A10", "DDR_CKE"):
+        if {name, "DDR_CK", "DDR_CKn"} <= rows.keys():
+            clock_mid = (flight("DDR_CK", odd) + flight("DDR_CKn", odd)) / 2
+            print(f"{name} minus clock-pair mean in the uniform odd-mode clock scenario: "
+                  f"{flight(name, single) - clock_mid:+.3f} ps.", file=sys.stderr)
 
 out = csv.writer(sys.stdout)
 out.writerow(["Signal", "Planar length (mm)", "Through vias"])
