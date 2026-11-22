@@ -47,6 +47,7 @@ def extract(board):
 old,cur = [extract(json.loads(Path(p).read_bytes())) for p in sys.argv[1:]]
 w = csv.writer(sys.stdout, lineterminator="\n")
 w.writerow(["signal","prior_mm","current_mm","prior_via_spans","current_via_spans","barrel_mm","flight_mixed_ps","signed_worst_skew_ps","model_limit_ps","model_excess_ps","TI_peer_delta_mm","TI_peer_limit_mm","TI_strobe_or_pair_delta_mm","TI_strobe_or_pair_limit_mm","TI_excess_mm","placement_ceiling_mm","placement_excess_mm","matching_and_model","placement"])
+failed = False
 for lane in (0,1):
     data = [f"DDR_D{i}" for i in range(8*lane,8*lane+8)]+[f"DDR_DQM{lane}"]
     pair = [f"DDR_DQS{lane}",f"DDR_DQSn{lane}"]
@@ -63,5 +64,7 @@ for lane in (0,1):
         modes=r.get('modes',[r['flight']]*3)
         signed=max((x-y for p in st for x,y in zip(modes,cur[p]['modes'])),key=abs)
         err=max(0,abs(signed)-ps); ti=max(0,delta-mm,peer-.635); place=max(0,r['length']-ceiling)
+        failed |= max(err, ti, place) > 1e-6
         vals=[n,old[n]['length'],r['length'],old[n]['vias'],r['vias'],r['barrel'],modes[1],signed,ps,err,peer if isdata else '',.635 if isdata else '',delta,mm,ti,ceiling,place,'FAIL' if max(err,ti)>1e-6 else 'PASS','FAIL' if place>1e-6 else 'PASS']
         w.writerow(round(v,5) if isinstance(v,float) else v for v in vals)
+sys.exit(int(failed))

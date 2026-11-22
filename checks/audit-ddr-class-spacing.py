@@ -1,4 +1,5 @@
 """Measure same-layer DDR spacing against TI AM335x Tables 7-68 and 7-69."""
+import argparse
 import csv
 import json
 import re
@@ -44,7 +45,7 @@ def covered_length(line, intersections):
     return total
 
 
-def main(board):
+def main(board, byte_lanes_only=False):
     traces, keys = trace_net_keys(board)
     sections = defaultdict(list)
     for trace in board:
@@ -66,7 +67,7 @@ def main(board):
     for items in sections.values():
         tree = STRtree([s[3] for s in items])
         for name, key, group, line, width in items:
-            if not group:
+            if not group or (byte_lanes_only and not group.startswith("DQ")):
                 continue
             relaxed = []
             below = []
@@ -88,7 +89,11 @@ def main(board):
                     below.append(line.intersection(seg.buffer(width, quad_segs=32)))
             restricted[name] += covered_length(line, relaxed)
             below_minimum[name] += covered_length(line, below)
-    if len(restricted) != 49:
+    if byte_lanes_only:
+        expected = {f"DDR_D{i}" for i in range(16)} | {f"DDR_{s}{i}" for s in ("DQS", "DQSn", "DQM") for i in (0, 1)}
+        if restricted.keys() != expected:
+            raise ValueError("Missing byte conductor in spacing check")
+    elif len(restricted) != 49:
         raise ValueError(f"Expected 49 signals subject to the class spacing tables, found {len(restricted)}")
     out = csv.writer(sys.stdout)
     out.writerow(("signal", "below_nominal_mm", "below_1w_mm"))
@@ -101,4 +106,8 @@ def main(board):
 
 
 if __name__ == "__main__":
-    sys.exit(main(json.loads(Path(sys.argv[1]).read_text())))
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("board", type=Path)
+    parser.add_argument("--byte-lanes-only", action="store_true")
+    args = parser.parse_args()
+    sys.exit(main(json.loads(args.board.read_text()), args.byte_lanes_only))

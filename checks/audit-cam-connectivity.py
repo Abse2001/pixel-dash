@@ -333,6 +333,8 @@ def main():
                         help="return the drilled MMC0 result independently of other open nets")
     parser.add_argument("--byte-lanes-only", action="store_true", help="Require 22 distinct drilled byte endpoints and reject shorts across all mapped lands.")
     args = parser.parse_args()
+    if args.byte_lanes_only and any((args.mmc0_only, args.mmc0_power, args.pmic_controls, args.handheld_ground, args.cpu_power, args.sysboot, args.panel_storage)):
+        parser.error("--byte-lanes-only requires a separate invocation from system checks")
     if args.mmc0_only and any((args.pmic_controls, args.handheld_ground, args.cpu_power, args.sysboot, args.panel_storage)):
         parser.error("--mmc0-only cannot be combined with whole-handheld checks")
     board = json.loads(args.circuit.read_text())
