@@ -47,6 +47,12 @@ for i in range(2):
     print(f"Nominal planar length ≤ {maximum:.3f} mm. Data-to-data and data-to-either-strobe mismatch ≤ 0.635 mm each. "
           "Strobe positive-to-negative mismatch ≤ 0.127 mm. Each modeled delta below is the worst absolute difference to either strobe leg. "
           "The model screen checks isolated, mixed and uniform odd-mode strobe cases.\n")
+    ref_times = [rows[n][5] for n in strobes]
+    tol_lo = max(ref_times)-delay_limit
+    tol_hi = min(ref_times)+delay_limit
+    print(f"With the present mixed-mode strobe times, the common data-flight target is "
+          f"{tol_lo:.3f}–{tol_hi:.3f} ps to satisfy both strobe legs. "
+          "The other delay scenarios are evaluated against their own strobe times.\n")
     header("Signal","Planar / max mm","Via count","Mixed flight ps","Worst planar Δ to DQS mm","Mixed Δ ps","Worst modeled Δ ps / 3.663","Failed screens")
     for n in dq:
         length, count, _, _, iso, mixed = rows[n]
@@ -65,6 +71,9 @@ for i in range(2):
     for n in strobes:
         print(f"- {label(n)} measures {rows[n][0]:.3f} mm with {rows[n][1]} vias and {rows[n][5]:.3f} ps of mixed-mode flight.")
     print(f"- Strobe pair mismatch is {abs(rows[a][0]-rows[b][0]):.3f} mm against 0.127 mm. Mixed flight difference is {abs(rows[a][5]-rows[b][5]):.3f} ps.")
+    low = min(dq, key=lambda n: rows[n][5])
+    high = max(dq, key=lambda n: rows[n][5])
+    print(f"- Data-to-data board flight spread is {rows[high][5]-rows[low][5]:.3f} ps ({label(high)}, {label(low)}) against the {delay_limit:.3f} ps model screen.")
     for desc,pairs in (("Data-to-data",list(itertools.combinations(dq,2))),("Data-to-strobe",list(itertools.product(dq,strobes)))):
         for barrels in (False,True):
             def length(n):

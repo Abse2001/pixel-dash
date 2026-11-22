@@ -34,18 +34,17 @@ BYTE1 [0.000, 23.000] mm: 2/11 routed outside (DDR_D12, DDR_D14)
     DDR_DQSn1 25.440 mm (2 traversals)
 ADDR_CTRL_CK [28.550, 31.090] mm: 5/27 routed outside (DDR_A10, DDR_A13, DDR_A14, DDR_A6, DDR_CKE)
   DDR_A10 39.232 mm, shorten by 8.142 mm to reach the window
-  DDR_A13 21.497 mm, lengthen by 7.053 mm to reach the window
-  DDR_A14 24.546 mm, lengthen by 4.004 mm to reach the window
-  DDR_A6 23.065 mm, lengthen by 5.485 mm to reach the window
+  DDR_A13 23.573 mm, lengthen by 4.977 mm to reach the window
+  DDR_A14 27.916 mm, lengthen by 0.634 mm to reach the window
+  DDR_A6 25.350 mm, lengthen by 3.200 mm to reach the window
   DDR_CKE 33.841 mm, shorten by 2.751 mm to reach the window
-  Provisional nominal-window screen including barrels: 26/27 outside
+  Provisional nominal-window screen including barrels: 25/27 outside
     DDR_A0 31.472 mm (2 traversals)
     DDR_A1 34.401 mm (4 traversals)
     DDR_A10 42.072 mm (2 traversals)
     DDR_A11 34.272 mm (4 traversals)
     DDR_A12 31.500 mm (2 traversals)
-    DDR_A13 24.337 mm (2 traversals)
-    DDR_A14 27.386 mm (2 traversals)
+    DDR_A13 26.413 mm (2 traversals)
     DDR_A15 31.420 mm (2 traversals)
     DDR_A2 31.500 mm (2 traversals)
     DDR_A3 31.490 mm (2 traversals)

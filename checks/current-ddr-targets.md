@@ -6,6 +6,8 @@ Lengths are in mm and flight times in ps. The nominal length and skew screens us
 
 Nominal planar length ≤ 20.600 mm. Data-to-data and data-to-either-strobe mismatch ≤ 0.635 mm each. Strobe positive-to-negative mismatch ≤ 0.127 mm. Each modeled delta below is the worst absolute difference to either strobe leg. The model screen checks isolated, mixed and uniform odd-mode strobe cases.
 
+With the present mixed-mode strobe times, the common data-flight target is 129.360–136.118 ps to satisfy both strobe legs. The other delay scenarios are evaluated against their own strobe times.
+
 | Signal | Planar / max mm | Via count | Mixed flight ps | Worst planar Δ to DQS mm | Mixed Δ ps | Worst modeled Δ ps / 3.663 | Failed screens |
 |---|---|---|---|---|---|---|---|
 | D0 | 20.286 / 20.600 | 2 | 135.772 | 0.171 | 3.317 | 4.045 | modeled skew; data length vs D1, D3, D4, D5, D7 |
@@ -21,6 +23,7 @@ Nominal planar length ≤ 20.600 mm. Data-to-data and data-to-either-strobe mism
 - DQS0 measures 20.225 mm with 2 vias and 133.023 ps of mixed-mode flight.
 - DQSn0 measures 20.115 mm with 2 vias and 132.455 ps of mixed-mode flight.
 - Strobe pair mismatch is 0.110 mm against 0.127 mm. Mixed flight difference is 0.568 ps.
+- Data-to-data board flight spread is 35.862 ps (D7, D6) against the 3.663 ps model screen.
 - Data-to-data planar mismatch is 6.145 mm (D2, D5) against 0.635 mm.
 - Data-to-data including barrel depth mismatch is 6.128 mm (D5, D6) against 0.635 mm.
 - Data-to-strobe planar mismatch is 6.269 mm (D5, DQSn0) against 0.635 mm.
@@ -29,6 +32,8 @@ Nominal planar length ≤ 20.600 mm. Data-to-data and data-to-either-strobe mism
 ## Byte 1
 
 Nominal planar length ≤ 23.000 mm. Data-to-data and data-to-either-strobe mismatch ≤ 0.635 mm each. Strobe positive-to-negative mismatch ≤ 0.127 mm. Each modeled delta below is the worst absolute difference to either strobe leg. The model screen checks isolated, mixed and uniform odd-mode strobe cases.
+
+With the present mixed-mode strobe times, the common data-flight target is 142.521–149.399 ps to satisfy both strobe legs. The other delay scenarios are evaluated against their own strobe times.
 
 | Signal | Planar / max mm | Via count | Mixed flight ps | Worst planar Δ to DQS mm | Mixed Δ ps | Worst modeled Δ ps / 3.663 | Failed screens |
 |---|---|---|---|---|---|---|---|
@@ -45,6 +50,7 @@ Nominal planar length ≤ 23.000 mm. Data-to-data and data-to-either-strobe mism
 - DQS1 measures 22.510 mm with 2 vias and 145.736 ps of mixed-mode flight.
 - DQSn1 measures 22.600 mm with 2 vias and 146.184 ps of mixed-mode flight.
 - Strobe pair mismatch is 0.090 mm against 0.127 mm. Mixed flight difference is 0.448 ps.
+- Data-to-data board flight spread is 9.243 ps (D12, D8) against the 3.663 ps model screen.
 - Data-to-data planar mismatch is 4.851 mm (D8, D12) against 0.635 mm.
 - Data-to-data including barrel depth mismatch is 2.011 mm (D8, D12) against 0.635 mm.
 - Data-to-strobe planar mismatch is 3.608 mm (D8, DQSn1) against 0.635 mm.
@@ -61,14 +67,14 @@ The longest Manhattan distance plus 7.620 mm gives CACLM = 29.820 mm. Target ran
 | A10 | 39.232 | 2 | 245.071 | 183.449–198.102 | +65.231 | -8.142 mm needed |
 | A11 | 28.592 | 4 | 202.435 | 202.193–216.846 | +22.595 | pass |
 | A12 | 28.660 | 2 | 184.086 | 183.449–198.102 | +4.246 | pass |
-| A13 | 21.497 | 2 | 142.762 | 183.449–198.102 | -37.078 | +7.053 mm needed |
-| A14 | 24.546 | 2 | 160.351 | 183.449–198.102 | -19.489 | +4.004 mm needed |
+| A13 | 23.573 | 2 | 154.737 | 183.449–198.102 | -25.103 | +4.977 mm needed |
+| A14 | 27.916 | 2 | 179.794 | 183.449–198.102 | -0.046 | +0.634 mm needed |
 | A15 | 28.580 | 2 | 183.621 | 183.449–198.102 | +3.781 | pass |
 | A2 | 28.660 | 2 | 184.084 | 183.449–198.102 | +4.244 | pass |
 | A3 | 28.650 | 2 | 184.025 | 183.449–198.102 | +4.185 | pass |
 | A4 | 28.720 | 2 | 184.430 | 183.449–198.102 | +4.590 | pass |
 | A5 | 28.943 | 2 | 185.716 | 183.449–198.102 | +5.876 | pass |
-| A6 | 23.065 | 4 | 170.549 | 202.193–216.846 | -9.291 | +5.485 mm needed |
+| A6 | 25.350 | 4 | 183.732 | 202.193–216.846 | +3.892 | +3.200 mm needed |
 | A7 | 28.606 | 2 | 183.774 | 183.449–198.102 | +3.934 | pass |
 | A8 | 28.719 | 2 | 184.422 | 183.449–198.102 | +4.582 | pass |
 | A9 | 28.718 | 2 | 184.416 | 183.449–198.102 | +4.576 | pass |
