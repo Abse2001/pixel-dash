@@ -13,6 +13,8 @@ CPU-to-panel and 7/7
 CPU-to-card signal paths, with 38 mapped nets still open across the board.
 [PCB snapshot](previews/handheld.png) · [Physical connectivity](checks/current-cam-connectivity.txt)
 
+The parallel north-RAM breakout proves all 16 SYSBOOT straps (0x4017), boot power and 7/29 panel signals together on drilled CAM. Its 16 connected DDR links include the length-matched DQS1 pair. It still has 34 open DDR links, and its separate hot supply screen falls 2.005 mV below the dynamic target. Production retains its 50 connected links. [Study geometry and results](https://github.com/Abse2001/pixel-dash/tree/62bfaf13b02d8b6e3b8e3d2a635768ca2fadfa9f/studies/zoned)
+
 MMC0 card power, both VDDSHV4 balls (H14/J14) and the five 10 kΩ
 CMD/DAT pulls share DCDC4. Its default SEQ4 setting enables DCDC4 at
 STROBE7. The independent retained regulator has no copper path to the
