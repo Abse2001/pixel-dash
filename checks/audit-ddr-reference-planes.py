@@ -4,6 +4,7 @@ import csv
 import json
 import sys
 from pathlib import Path
+from collections import defaultdict
 
 from shapely.geometry import LineString, Point, Polygon
 from shapely.ops import substring, unary_union
@@ -27,6 +28,20 @@ def audit(board, microsd=False, full_width=False, raster=False, archive=None, st
     if not microsd and not raster:
         ref["inner1"] = ("inner2", "VDDS_DDR")
         ref["inner2"] = ("inner1", "GND")
+    raster_by_source = {}
+    endpoint_layers = defaultdict(set)
+    if raster:
+        sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "production"))
+        from connectivity import trace_net_keys
+        _, keys = trace_net_keys(board)
+        by_key = {key: source for source, key in keys.items() if source.startswith("system_LCD_")}
+        raster_by_source = {source: by_key[key] for source, key in keys.items() if key in by_key}
+        for trace in board:
+            if trace["type"] != "pcb_trace" or trace["source_trace_id"] not in raster_by_source:
+                continue
+            for point in (trace["route"][0], trace["route"][-1]):
+                if point.get("layer"):
+                    endpoint_layers[keys[trace["source_trace_id"]], xy(point)].add(point["layer"])
     if raster:
         ref.update(inner1=("inner2", "GND"), inner2=("inner1", "GND"))
     pours = [e for e in board if e["type"] == "pcb_copper_pour"]
@@ -49,8 +64,12 @@ def audit(board, microsd=False, full_width=False, raster=False, archive=None, st
         if trace["type"] != "pcb_trace":
             continue
         name = names[trace["source_trace_id"]]
-        if microsd or raster:
-            prefix = "system_LCD_" if raster else "system_SD_"
+        if raster:
+            name = raster_by_source.get(trace["source_trace_id"])
+            if name is None:
+                continue
+        elif microsd:
+            prefix = "system_SD_"
             if not trace["source_trace_id"].startswith(prefix):
                 continue
             name = trace["source_trace_id"]
@@ -72,7 +91,17 @@ def audit(board, microsd=False, full_width=False, raster=False, archive=None, st
             # Measure from the transition even when a short wire segment follows it.
             def launch_length(point):
                 if point["route_type"] != "via":
-                    return 0
+                    if not raster:
+                        return 0
+                    key = keys[trace["source_trace_id"]]
+                    via = vias.get(xy(point))
+                    if not via or via.get("subcircuit_connectivity_map_key") != key:
+                        return 0
+                    span = set(via["layers"])
+                    if ref[layer][0] not in span or layer not in span:
+                        return 0
+                    if len(endpoint_layers[key, xy(point)] & span) < 2:
+                        return 0
                 return vias[xy(point)]["outer_diameter"] / 2 + launch_clearance
 
             first, last = launch_length(start), line.length - launch_length(end)
