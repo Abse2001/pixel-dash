@@ -1,6 +1,6 @@
 # Pixel Dash
 
-The latest populated routing study verifies 33/50 distinct CPU–RAM signals, both locked byte lanes, all 18 RAM supply balls and all 21 RAM ground balls. Seventeen signal pairs remain open, including CK and CKn. The Gerbers pass the full-width reference, shorts, copper, via-edge, drill and MMC0 gates for the installed routes. [Populated routing checkpoint and per-net status](https://github.com/Abse2001/pixel-dash/tree/e503b63/studies/command-routing) · [Full PCB snapshot](https://github.com/Abse2001/pixel-dash/blob/e503b63/studies/command-routing/populated-handheld.png)
+The populated clock-routing study verifies 36/50 distinct CPU–RAM signals. CK and CKn fit the 36.150–38.690 mm placement window and differ by 0.02038 mm against the 0.127 mm pair limit. The 22 byte routes and 44 byte vias match the previous checkpoint. Both RAM reference inputs reach their bias networks, and ZQ reaches the RAM and ground. Receiver timing, local H1 bypass and CPU VREF/VTP still gate fabrication. The locked D12/D14 escape leaves no compliant landing for CPU J4, F1 or G2 under the existing reference rules. [Native board and verification](https://github.com/Abse2001/pixel-dash/tree/4430c7b/studies/clock-first) · [Full PCB snapshot](https://github.com/Abse2001/pixel-dash/blob/4430c7b/studies/clock-first/populated-handheld.png) · [Preserved 33-link layout](https://github.com/Abse2001/pixel-dash/tree/e503b63/studies/command-routing)
 
 ## Populated handheld DDR data checkpoint
 
