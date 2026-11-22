@@ -79,6 +79,14 @@ for group, nets in enumerate([*lanes, control]):
         correction = f"shorten by {length-hi:.3f}" if length > hi else f"lengthen by {lo-length:.3f}"
         print(f"  {name} {length:.3f} mm, {correction} mm to reach the window", file=sys.stderr)
     failed |= bool(outside)
+    if args.through_span_mm is not None:
+        with_barrels = {n: rows[n][0] + rows[n][2] * args.through_span_mm for n in nets & rows.keys()}
+        beyond = sorted((n, length) for n, length in with_barrels.items() if not lo <= length <= hi)
+        print(f"  Provisional nominal-window screen including barrels: {len(beyond)}/{len(with_barrels)} outside",
+              file=sys.stderr)
+        for name, length in beyond:
+            print(f"    {name} {length:.3f} mm ({rows[name][2]} traversals)", file=sys.stderr)
+        failed |= bool(beyond)
 
 for label, nets, limit in [
     ("BYTE0", lanes[0], 0.635), ("BYTE1", lanes[1], 0.635),
