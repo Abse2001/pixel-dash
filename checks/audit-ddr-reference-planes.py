@@ -4,7 +4,7 @@ import json
 import sys
 from pathlib import Path
 
-from shapely.geometry import LineString, Polygon
+from shapely.geometry import LineString, Point, Polygon
 from shapely.ops import substring, unary_union
 
 
@@ -19,7 +19,7 @@ def polygon(pour):
     return Polygon(outer, holes)
 
 
-def audit(board, microsd=False):
+def audit(board, microsd=False, full_width=False):
     nets = {e["source_net_id"]: e["name"] for e in board if e["type"] == "source_net"}
     names = {e["source_trace_id"]: e.get("name", "") for e in board if e["type"] == "source_trace"}
     ref = {"top": ("inner1", "GND"), "bottom": ("inner2", "GND" if microsd else "VDDS_DDR")}
@@ -61,21 +61,38 @@ def audit(board, microsd=False):
                 return vias[xy(point)]["outer_diameter"] / 2 + launch_clearance
 
             first, last = launch_length(start), line.length - launch_length(end)
-            if first < last:
+            if full_width:
+                strokes = []
+                for a, b in zip(section, section[1:]):
+                    if xy(a) != xy(b):
+                        width = a["width"] if "width" in a else b["width"]
+                        strokes.append(LineString([xy(a), xy(b)]).buffer(width/2, quad_segs=64))
+                # Only the antipads of this section's plated transitions are exempt.
+                copper = unary_union(strokes)
+                for point in (start, end):
+                    radius = launch_length(point)
+                    if radius:
+                        copper = copper.difference(Point(xy(point)).buffer(radius, quad_segs=128))
+                uncovered = copper.difference(planes[layer])
+                if uncovered.area > 1e-6:
+                    gaps_by_layer[layer].append(uncovered)
+            elif first < last:
                 uncovered = substring(line, first, last).difference(planes[layer])
                 if uncovered.length > 0.001:
                     gaps_by_layer[layer].append(uncovered)
             section = [end]
         for layer, gaps in gaps_by_layer.items():
             if gaps:
-                yield name, layer, ref[layer][0], unary_union(gaps).length
+                combined = unary_union(gaps)
+                yield name, layer, ref[layer][0], combined.area if full_width else combined.length
 
 
 if __name__ == "__main__":
-    failures = sorted(audit(json.loads(Path(sys.argv[1]).read_text()), "--micro-sd" in sys.argv[2:]))
+    full_width = "--full-width" in sys.argv[2:]
+    failures = sorted(audit(json.loads(Path(sys.argv[1]).read_text()), "--micro-sd" in sys.argv[2:], full_width))
     out = csv.writer(sys.stdout)
-    out.writerow(("signal", "signal_layer", "reference_layer", "uncovered_centerline_mm"))
+    out.writerow(("signal", "signal_layer", "reference_layer", "uncovered_copper_mm2" if full_width else "uncovered_centerline_mm"))
     for name, layer, ref, length in failures:
-        out.writerow((name, layer, ref, f"{length:.4f}"))
+        out.writerow((name, layer, ref, f"{length:.7f}" if full_width else f"{length:.4f}"))
     print(f"{len(failures)} signal/layer reference-coverage findings", file=sys.stderr)
     sys.exit(bool(failures))
