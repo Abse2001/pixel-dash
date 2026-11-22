@@ -4,7 +4,7 @@ The [unrouted handheld example](examples/unrouted-handheld) contains the populat
 
 ## Partial DDR breakout study
 
-Drilled CAM verifies 46 distinct DDR connections. D0, D3, D4, D9 remain open. The complete 50-link handheld remains at `7f2d6bb`. The study moves D5 to RAM DQ4, D4 to DQ1, D1 to DQ2 and D2 to DQ5, all within the low byte. Both byte strobes and masks keep their previous routes. The native assembly retains the complete DDR region when rebuilding the reference planes.
+Drilled CAM verifies 47 distinct DDR connections. D0, D3, D4 remain open. The complete 50-link handheld remains at `7f2d6bb`. The study moves D5 to RAM DQ4, D4 to DQ1, D1 to DQ2 and D2 to DQ5, all within the low byte. Both byte strobes and masks keep their previous routes. The native assembly retains the complete DDR region when rebuilding the reference planes.
 
 | CPU signal | Complete → study length (mm) | Estimated flight (ps) | Worst signed skew to a strobe (ps) | Worst planar mismatch to a strobe (mm) |
 |---|---:|---:|---:|---:|
@@ -12,19 +12,22 @@ Drilled CAM verifies 46 distinct DDR connections. D0, D3, D4, D9 remain open. Th
 | D2 | 20.2383 → 19.9200 | 133.6624 | +1.9350 | 0.3050 |
 | D5 | 26.3833 → 19.7500 | 132.6817 | -2.7404 | 0.4750 |
 | D6 | 20.2549 → 19.9200 | 133.6624 | +1.9350 | 0.3050 |
-| D8 | 22.4300 → 22.6800 | 149.5848 | +1.8282 | 0.2892 |
+| D8 | 22.4300 → 22.6800 | 149.5849 | +1.8282 | 0.2892 |
+| D9 | 22.4296 → 22.6800 | 149.5849 | +1.8282 | 0.2892 |
 | D12 | 23.6978 → 22.9903 | 151.3748 | +3.6181 | 0.0220 |
 | D13 | 22.5862 → 22.9199 | 150.9689 | +3.2122 | 0.0493 |
 | D14 | 23.3728 → 22.7551 | 150.0184 | +2.2617 | 0.2140 |
-| D15 | 22.4276 → 22.6799 | 149.5842 | +1.8275 | 0.2893 |
+| D15 | 22.4276 → 22.6800 | 149.5849 | +1.8282 | 0.2892 |
+
+All eight upper-byte DQ, DQM1 and both DQS1 conductors pass the placement, TI mismatch and modeled skew checks together. The [class-spacing audit](studies/ddr-breakout/class-spacing.csv) and same-net short audit also pass on the routed study copper.
 
 Each listed path uses two 1.420 mm L1–L4 passages. TI's data-to-strobe and data-to-data mismatch limits are 0.635 mm, and the strobe-pair limit is 0.127 mm. The ±3.6633 ps screening threshold uses the 1.491 mm reference-stack model. D12 has 0.0452 ps of modeled headroom. Package delays, fabricated stack variation and receiver timing remain open.
 
 The [50-signal ledger](studies/ddr-breakout/all-signals.csv) records all open and failing signals, routed-peer coverage, span, flight, signed skew, geometry targets, modeled thresholds and excess. The original project length caps are 20.600 and 23.000 mm. The ledger also recalculates the placement nominal from the remapped package lands. [Changed data paths](studies/ddr-breakout/study-timing.csv)
 
-The routed copper passes the 0.102 mm copper and 0.1524 mm via-edge checks, drill spacing, Gerber shorts, full-width DDR, raster and MMC0 reference checks. The [TI class-spacing screen](studies/ddr-breakout/class-spacing.csv) finds a longest cumulative below-nominal run of 19.501 mm on WEn against a 31.750 mm allowance. Sequenced MMC0 passes. The full handheld connectivity audit also lists 35 open non-DDR networks. [Drilled CAM](studies/ddr-breakout/study-cam.txt) · [Manufacturing geometry checks](studies/ddr-breakout/geometry-checks.txt)
+The routed copper passes the 0.102 mm copper and 0.1524 mm via-edge checks, drill spacing, Gerber shorts, full-width DDR, raster and MMC0 reference checks. Sequenced MMC0 passes. The full handheld connectivity audit also lists 35 open non-DDR networks. [Drilled CAM](studies/ddr-breakout/study-cam.txt) · [Manufacturing geometry checks](studies/ddr-breakout/geometry-checks.txt)
 
-Reproduce the partial ledger with `PYTHONPATH=checks python checks/compare-ddr-routing.py --study complete.circuit.json study.circuit.json`. For the per-trace reference check, run `PYTHONPATH=checks python checks/audit-ddr-reference-planes.py study.circuit.json --gerbers board.zip --full-width --study-open DDR_D0 DDR_D3 DDR_D4 DDR_D9`. Both release audits require all 50 signals by default. Fabrication remains on hold.
+Reproduce the partial ledger with `PYTHONPATH=checks python checks/compare-ddr-routing.py --study complete.circuit.json study.circuit.json`. For the per-trace reference check, run `PYTHONPATH=checks python checks/audit-ddr-reference-planes.py study.circuit.json --gerbers board.zip --full-width --study-open DDR_D0 DDR_D3 DDR_D4`. Both release audits require all 50 signals by default. Fabrication remains on hold.
 
 ## Complete-board baseline
 
