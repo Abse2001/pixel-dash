@@ -12,7 +12,7 @@ Drilled CAM verifies 44 distinct package links and six opens. The routed links p
 
 The [50-signal study ledger](studies/ddr-breakout/all-signals.csv) includes the six open data paths and all command signals. Each byte currently has six routed members out of nine data and mask signals. The six available upper-byte members pass peer, strobe and modeled matching. D12 has only 0.0452 ps of modeled headroom. The low-byte pin permutation reduces the longest Manhattan distance to 19.8000 mm. D1, D2, D5 and D6 pass the original 20.600 mm project ceiling but exceed this revised placement nominal by 0.1200 mm. Each also misses peer matching to D7 by 2.6672 mm beyond the 0.635 mm limit. Actual fabrication, package delays and receiver waveforms remain unverified.
 
-Reproduce the partial ledger with `PYTHONPATH=checks python checks/compare-ddr-routing.py --study complete.circuit.json study.circuit.json`. The default comparison still requires all 50 paths.
+Reproduce the partial ledger with `PYTHONPATH=checks python checks/compare-ddr-routing.py --study complete.circuit.json study.circuit.json`. The default comparison still requires all 50 paths. The [manufacturing geometry checks](studies/ddr-breakout/geometry-checks.txt) include the exact routed subset and the separate 6 mil via-edge result. To reproduce subset reference coverage, run `PYTHONPATH=checks python checks/audit-ddr-reference-planes.py study.circuit.json --gerbers board.zip --full-width --study-open DDR_D0 DDR_D3 DDR_D4 DDR_D8 DDR_D9 DDR_D15`. The audit fails if the actual open signals differ.
 
 The native assembly retains the previous full-bus plane protection envelope when rebuilding the incomplete layout. The 50-link release check still fails on this branch. Fabrication remains on hold.
 
