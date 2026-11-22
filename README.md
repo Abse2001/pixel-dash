@@ -2,7 +2,7 @@
 
 ## DDR timing study
 
-The separate 50-link DDR study measures 39.729 ps worst-case modeled data-to-strobe skew on byte 0 and 11.113 ps on byte 1. The reference-build screen is 3.663 ps. TI's data-to-strobe routing limit is 0.635 mm. CK, DQS0 and DQS1 meet their 0.127 mm pair-length limit. The study also tunes A13, A14 and A6 toward the 28.550–31.090 mm command window. The per-net report records all lengths, flight times, limits and outstanding failures. [DDR timing checkpoint c28dc8c](https://github.com/Abse2001/pixel-dash/blob/c28dc8c/checks/current-ddr-targets.md)
+The timing branch retains 50 distinct drilled DDR links. Byte 1’s worst modeled strobe skew is +10.205 ps on D12, and byte 0’s is +39.729 ps on D7, against the ±3.663 ps engineering screen. TI's data-to-strobe routing limit is 0.635 mm. A13 and A14 enter the 28.550–31.090 mm nominal command window. A10, A6 and CKE remain outside it. The full report lists every net’s prior and current length, traversed depth, flight estimate, signed skew and residual against its TI and modeled targets. [Verified timing study c9be947](https://github.com/Abse2001/pixel-dash/blob/c9be947/checks/current-ddr-change.csv)
 
 ## Wide handheld checkpoint
 
