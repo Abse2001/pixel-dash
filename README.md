@@ -282,3 +282,9 @@ The independent 6 mil audit still finds six via/layer/net pairs and the
 full-width reference screen finds 14 signal/layer gaps. All 50 saved
 signal paths still land on their assigned package contacts. The placement
 remains a study with shorts and timing failures.
+
+Repositioning the CPU VREF vias and the two VREF_CA paths with the RAM
+placement reduces the offset study to 11 clearance findings, four 6 mil
+findings and 13 full-width reference findings. One bottom VREF segment is
+0.09152 mm from unrelated copper. Six top findings involve KEY_SELECT or
+KEY_RIGHT. The timing bounds and the production branch are unchanged.
