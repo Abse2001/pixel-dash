@@ -1,29 +1,29 @@
 50/50 routed. Open: 
 BYTE0 [0.000, 20.600] mm: 5/11 routed outside (DDR_D1, DDR_D3, DDR_D4, DDR_D5, DDR_D7)
-  DDR_D1 23.782 mm, shorten by 3.182 mm to reach the window
+  DDR_D1 23.774 mm, shorten by 3.174 mm to reach the window
   DDR_D3 22.535 mm, shorten by 1.935 mm to reach the window
   DDR_D4 21.894 mm, shorten by 1.294 mm to reach the window
   DDR_D5 26.544 mm, shorten by 5.944 mm to reach the window
-  DDR_D7 23.371 mm, shorten by 2.771 mm to reach the window
+  DDR_D7 23.228 mm, shorten by 2.628 mm to reach the window
   Provisional nominal-window screen including barrels: 11/11 outside
     DDR_D0 23.346 mm (2 traversals)
-    DDR_D1 26.842 mm (2 traversals)
+    DDR_D1 26.834 mm (2 traversals)
     DDR_D2 26.358 mm (4 traversals)
     DDR_D3 28.655 mm (4 traversals)
     DDR_D4 28.014 mm (4 traversals)
     DDR_D5 29.604 mm (2 traversals)
     DDR_D6 23.315 mm (2 traversals)
-    DDR_D7 29.491 mm (4 traversals)
+    DDR_D7 29.348 mm (4 traversals)
     DDR_DQM0 23.319 mm (2 traversals)
     DDR_DQS0 23.285 mm (2 traversals)
     DDR_DQSn0 23.175 mm (2 traversals)
 BYTE1 [0.000, 23.000] mm: 2/11 routed outside (DDR_D12, DDR_D14)
-  DDR_D12 25.517 mm, shorten by 2.517 mm to reach the window
+  DDR_D12 25.051 mm, shorten by 2.052 mm to reach the window
   DDR_D14 24.367 mm, shorten by 1.367 mm to reach the window
   Provisional nominal-window screen including barrels: 11/11 outside
     DDR_D10 25.641 mm (2 traversals)
     DDR_D11 25.641 mm (2 traversals)
-    DDR_D12 28.577 mm (2 traversals)
+    DDR_D12 28.111 mm (2 traversals)
     DDR_D13 25.647 mm (2 traversals)
     DDR_D14 27.427 mm (2 traversals)
     DDR_D15 25.624 mm (2 traversals)
@@ -65,7 +65,7 @@ ADDR_CTRL_CK [28.550, 31.090] mm: 2/27 routed outside (DDR_A10, DDR_CKE)
     DDR_WEn 31.827 mm (2 traversals)
 BYTE0 skew across 11/11 signals 6.429 mm, limit 0.635
 BYTE0 geometric spread including 1.53 mm per traversal: 6.429 mm, limit 0.635
-BYTE1 skew across 11/11 signals 3.007 mm, limit 0.635
+BYTE1 skew across 11/11 signals 2.541 mm, limit 0.635
 BYTE1 geometric spread including 1.53 mm per traversal: 3.128 mm, limit 0.635
 DDR_CK skew across 2/2 signals 0.095 mm, limit 0.127
 DDR_CK geometric spread including 1.53 mm per traversal: 0.095 mm, limit 0.127
@@ -75,5 +75,5 @@ DDR_DQS1 skew across 2/2 signals 0.090 mm, limit 0.127
 DDR_DQS1 geometric spread including 1.53 mm per traversal: 0.090 mm, limit 0.127
 BYTE0 planar: DQ/DM spread 6.305 mm (DDR_D5 to DDR_D2), worst DQ/DM-to-DQS mismatch 6.429 mm (DDR_D5 to DDR_DQSn0), limit 0.635 mm each
 BYTE0 estimated with 1.53 mm per traversal: DQ/DM spread 6.289 mm (DDR_D5 to DDR_D6), worst DQ/DM-to-DQS mismatch 6.429 mm (DDR_D5 to DDR_DQSn0), limit 0.635 mm each
-BYTE1 planar: DQ/DM spread 2.953 mm (DDR_D12 to DDR_D15), worst DQ/DM-to-DQS mismatch 3.007 mm (DDR_D12 to DDR_DQS1), limit 0.635 mm each
+BYTE1 planar: DQ/DM spread 2.487 mm (DDR_D12 to DDR_D15), worst DQ/DM-to-DQS mismatch 2.541 mm (DDR_D12 to DDR_DQS1), limit 0.635 mm each
 BYTE1 estimated with 1.53 mm per traversal: DQ/DM spread 3.074 mm (DDR_D8 to DDR_D15), worst DQ/DM-to-DQS mismatch 3.128 mm (DDR_D8 to DDR_DQS1), limit 0.635 mm each
