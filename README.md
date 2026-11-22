@@ -252,3 +252,24 @@ The approved wide-board lower mounts and rear-carrier bores are at X = ±70 mm, 
 All eleven low SYSBOOT bias terminals reach L2 ground. Two ground vias are offset to clear retained audio routing. The high-side bias, remaining processor sense connections and powered reset sampling still require verification.
 
 The fixed component lands constrain the LCD_DATA0/SYSBOOT0 escape at U1.R1. Run `python checks/screen-ddr-placement.py dist/index.circuit.json` to reproduce the optimistic pad-only bound. With the current RAM placement, even the far edge of R1 lies just 0.334 mm from the convex hull of the CPU DDR lands and RAM lands, inside the 0.408 mm envelope setback. A hypothetical +1.0 mm RAM Y shift raises the upper bound to 0.527 mm. This screen ignores tracks, vias and landing width. A placement change would require a new 50-link route and reference audit.
+
+### Fixed escape timing study on the offset placement
+
+The 50-route placement at 2f0fec0 retains 25 copper-clearance findings. For
+each timed signal, checks/bound-ddr-escapes.py draws straight chords between
+its saved ball contacts and successive via centers, ignoring every obstacle.
+The chord sum bounds the shortest possible planar route through those anchors.
+The CSV also reports the most one via relocation can save by allowing its
+center anywhere on the chord between its two neighbors.
+
+D1 alone rules out closing the full bus by editing bends between these fixed
+escapes. Its chords total 23.1838 mm against a byte-0 upper window of
+23.1001 mm before adding any barrel delay. In the provisional 1.53 mm
+geometric traversal scenario, D1 must recover at least 3.1437 mm. Moving
+either its CPU-side via at (−53.6853, 8.4920) or its RAM-side via at
+(−63.3698, 8.9608) alone can recover at most 1.3862 mm. Both escapes, the
+land contacts, the layer topology, or the pin assignment must change under
+those assumptions. This test holds the actual copper contact points fixed.
+Its 49 timed rows cover both byte lanes and command/address/clock. RESETn
+is checked for presence. Stackup-specific flight time, clearance, and
+reference coverage require independent verification.
