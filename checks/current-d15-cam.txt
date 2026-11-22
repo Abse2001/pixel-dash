@@ -70,3 +70,49 @@ U1.P4 DDR_D7 -> U_DDR.F8 DQ3
 0 via drill-spacing findings
 0 signal/layer reference-coverage findings
 MMC0 full-width reference: 0 signal/layer reference-coverage findings
+
+Additional whole-board checks on the 66b9fc9 copper
+Longest cumulative below-nominal run is 21.730 mm on DDR_A10; TI allowance 31.750 mm.
+PMIC copper verified between U_PMIC.L4A and L_PMIC_IO.pin1.
+PMIC copper verified between U_PMIC.L4B and L_PMIC_IO.pin2.
+PMIC copper verified between U_PMIC.DCDC4 and C_PMIC_IO_A.pin1.
+PMIC copper verified between U_PMIC.DCDC4 and C_PMIC_IO_B.pin1.
+PMIC copper verified between TP_UART_GND.pin1 and C_PMIC_IO_A.pin2.
+PMIC copper verified between TP_UART_GND.pin1 and C_PMIC_IO_B.pin2.
+PMIC copper verified between C_PMIC_DDR.pin1 and U_PMIC.IN_LS1.
+PMIC copper verified between U_PMIC.nWAKEUP and R_PMIC_WAKE.pin1.
+PMIC copper verified between U_PMIC.nINT and U1.T14.
+PMIC copper verified between U_PMIC.PGOOD and U1.B15.
+Startup copper OPEN U1.B4 to U1.D7.
+Startup copper PASS U1.D7 to C_PMIC_RTC_IO.pin1.
+Startup copper PASS U1.D6 to C_PMIC_RTC_CORE.pin1.
+Startup copper PASS U_PMIC.FB5 to C_PMIC_RTC_CORE.pin1.
+Startup copper PASS U_PMIC.FB6 to C_PMIC_RTC_IO.pin1.
+Startup copper OPEN U_PMIC.PGOOD_BU to U1.B5.
+Startup copper OPEN U_PMIC.nWAKEUP to U1.C5.
+Startup copper PASS R_PMIC_WAKE.pin2 to C_PMIC_RTC_IO.pin1.
+Startup copper PASS U_PMIC.PWR_EN to U1.C6.
+Startup copper PASS U_PMIC.PGOOD to R_PMIC_POR.pin1.
+Startup copper PASS R_PMIC_POR.pin2 to U_PMIC.DCDC4.
+Startup copper PASS U_PMIC.PGOOD to U1.B15.
+Startup copper PASS U_PMIC.GPIO3 to U1.A10.
+Startup copper PASS C_PMIC_RTC_CORE.pin2 to TP_UART_GND.pin1.
+Startup copper PASS C_PMIC_RTC_IO.pin2 to TP_UART_GND.pin1.
+SYSBOOT00 bias=1 CPU_to_resistor=False sense_isolated=True
+SYSBOOT01 bias=1 CPU_to_resistor=False sense_isolated=True
+SYSBOOT02 bias=1 CPU_to_resistor=False sense_isolated=True
+SYSBOOT03 bias=0 CPU_to_resistor=False sense_isolated=True
+SYSBOOT04 bias=1 CPU_to_resistor=False sense_isolated=True
+SYSBOOT05 bias=0 CPU_to_resistor=False sense_isolated=True
+SYSBOOT06 bias=0 CPU_to_resistor=False sense_isolated=True
+SYSBOOT07 bias=0 CPU_to_resistor=False sense_isolated=True
+SYSBOOT08 bias=0 CPU_to_resistor=False sense_isolated=True
+SYSBOOT09 bias=0 CPU_to_resistor=False sense_isolated=True
+SYSBOOT10 bias=0 CPU_to_resistor=False sense_isolated=True
+SYSBOOT11 bias=0 CPU_to_resistor=True sense_isolated=True
+SYSBOOT12 bias=0 CPU_to_resistor=False sense_isolated=True
+SYSBOOT13 bias=0 CPU_to_resistor=True sense_isolated=True
+SYSBOOT14 bias=1 CPU_to_resistor=True sense_isolated=True
+SYSBOOT15 bias=0 CPU_to_resistor=True sense_isolated=True
+Physical SYSBOOT[15:0] 010?0???????????, expected 0100000000010111.
+LCD CPU-to-connector copper 6/29. Reached LCD_D11, LCD_D13, LCD_D14, LCD_D15, LCD_PCLK, LCD_RESET. Open LCD_D0, LCD_D1, LCD_D10, LCD_D12, LCD_D16, LCD_D17, LCD_D18, LCD_D19, LCD_D2, LCD_D20, LCD_D21, LCD_D22, LCD_D23, LCD_D3, LCD_D4, LCD_D5, LCD_D6, LCD_D7, LCD_D8, LCD_D9, LCD_DE, LCD_HSYNC, LCD_VSYNC.
