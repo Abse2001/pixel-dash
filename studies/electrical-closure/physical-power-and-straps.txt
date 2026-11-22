@@ -1,9 +1,9 @@
 drill_npth.drl matches 19 round hits and 0 slots
-drill-L1-L4.drl matches 744 round hits and 6 slots
+drill-L1-L4.drl matches 746 round hits and 6 slots
 drill-L1-L2.drl matches 288 round hits and 0 slots
 drill-L2-L3.drl matches 21 round hits and 0 slots
-drill-L3-L4.drl matches 34 round hits and 0 slots
-36 distinct DDR ball pairs connected. 1093 plated barrels checked. No shorts between mapped land nets.
+drill-L3-L4.drl matches 35 round hits and 0 slots
+36 distinct DDR ball pairs connected. 1096 plated barrels checked. No shorts between mapped land nets.
 Open DDR links: DDR_A0 (U1.F3 to U_DDR.N3), DDR_A1 (U1.H1 to U_DDR.P7), DDR_A10 (U1.F4 to U_DDR.L7), DDR_A11 (U1.F2 to U_DDR.R7), DDR_A12 (U1.E3 to U_DDR.N7), DDR_A13 (U1.H3 to U_DDR.T3), DDR_A2 (U1.E4 to U_DDR.P3), DDR_A3 (U1.C3 to U_DDR.N2), DDR_A4 (U1.C2 to U_DDR.P8), DDR_CASn (U1.F1 to U_DDR.K3), DDR_CSn0 (U1.H2 to U_DDR.L2), DDR_ODT (U1.G1 to U_DDR.K1), DDR_RASn (U1.G4 to U_DDR.J3), DDR_RESETn (U1.G2 to U_DDR.T2)
 UART0 RX, TX and ground reach three distinct probe networks.
 PAM8403 MUTE and SHND reach regulated 3.3 V and are isolated from ground and VDD.
@@ -79,14 +79,14 @@ SYSBOOT05 bias=0 CPU_to_resistor=False sense_isolated=True
 SYSBOOT06 bias=0 CPU_to_resistor=False sense_isolated=True
 SYSBOOT07 bias=0 CPU_to_resistor=False sense_isolated=True
 SYSBOOT08 bias=0 CPU_to_resistor=True sense_isolated=True
-SYSBOOT09 bias=0 CPU_to_resistor=False sense_isolated=True
+SYSBOOT09 bias=0 CPU_to_resistor=True sense_isolated=True
 SYSBOOT10 bias=0 CPU_to_resistor=False sense_isolated=True
 SYSBOOT11 bias=0 CPU_to_resistor=True sense_isolated=True
 SYSBOOT12 bias=0 CPU_to_resistor=True sense_isolated=True
 SYSBOOT13 bias=0 CPU_to_resistor=True sense_isolated=True
 SYSBOOT14 bias=1 CPU_to_resistor=True sense_isolated=True
 SYSBOOT15 bias=0 CPU_to_resistor=True sense_isolated=True
-Physical SYSBOOT[15:0] 01000??0???????1, expected 0100000000010111.
+Physical SYSBOOT[15:0] 01000?00???????1, expected 0100000000010111.
 Internal regulator output separation from one another, LDO1 and GND: PASS
 U1.C10 1 uF C_VBB_MPU: CONNECTED; nearest qualifying C_VBB_MPU at 5.308 mm land-center distance
   Dedicated path ['U1.C10', 'C_VBB_MPU.pin1']: 6.047 mm planar, 2 transitions, 0.110 mm minimum width.
@@ -103,7 +103,7 @@ U1.D10 10 uF C_SRAM_MPU_IN: CONNECTED; nearest qualifying C_SRAM_MPU_IN at 7.069
 U1.E9 10 uF C_SRAM_CORE_IN: CONNECTED; nearest qualifying C_SRAM_MPU_IN at 7.661 mm land-center distance
   Dedicated path ['U1.E9', 'C_SRAM_CORE_IN.pin1']: 10.410 mm planar, 4 transitions, 0.200 mm minimum width.
   Forward line and contacted barrel resistance at 20 C: 22.76 mOhm; L1–L2 ground via in capacitor return land: True.
-LCD CPU-to-connector copper 8/29. Reached LCD_D0, LCD_D8, LCD_D11, LCD_D13, LCD_D14, LCD_D15, LCD_PCLK, LCD_RESET. Open LCD_D1, LCD_D10, LCD_D12, LCD_D16, LCD_D17, LCD_D18, LCD_D19, LCD_D2, LCD_D20, LCD_D21, LCD_D22, LCD_D23, LCD_D3, LCD_D4, LCD_D5, LCD_D6, LCD_D7, LCD_D9, LCD_DE, LCD_HSYNC, LCD_VSYNC.
+LCD CPU-to-connector copper 9/29. Reached LCD_D0, LCD_D8, LCD_D9, LCD_D11, LCD_D13, LCD_D14, LCD_D15, LCD_PCLK, LCD_RESET. Open LCD_D1, LCD_D10, LCD_D12, LCD_D16, LCD_D17, LCD_D18, LCD_D19, LCD_D2, LCD_D20, LCD_D21, LCD_D22, LCD_D23, LCD_D3, LCD_D4, LCD_D5, LCD_D6, LCD_D7, LCD_DE, LCD_HSYNC, LCD_VSYNC.
 SD CPU-to-connector copper 7/7. Reached SD_CLK, SD_CMD, SD_DAT0, SD_DAT1, SD_DAT2, SD_DAT3, SD_DETECT. Open none.
 Raster data connector to strap sense pads: 10/16; bits [0, 1, 2, 8, 9, 10, 11, 13, 14, 15].
 Touch pull-ups on sequenced DCDC4: 3/3 (SDA, SCL, IRQ).
@@ -159,7 +159,6 @@ OPEN system_LCD_D4 has 3 separate CAM networks: U1.T1 | R_SYSBOOT4.pin2 | J_LCD.
 OPEN system_LCD_D5 has 3 separate CAM networks: U1.T2 | R_SYSBOOT5.pin2 | J_LCD.pin25
 OPEN system_LCD_D6 has 3 separate CAM networks: U1.T3 | R_SYSBOOT6.pin2 | J_LCD.pin24
 OPEN system_LCD_D7 has 3 separate CAM networks: U1.T4 | R_SYSBOOT7.pin2 | J_LCD.pin23
-OPEN system_LCD_D9 has 2 separate CAM networks: U1.U2 | J_LCD.pin21, R_SYSBOOT9.pin2
 OPEN system_LCD_DE has 2 separate CAM networks: U1.R6 | J_LCD.pin9
 OPEN system_LCD_HSYNC has 2 separate CAM networks: U1.R5 | J_LCD.pin11
 OPEN system_LCD_VSYNC has 2 separate CAM networks: U1.U5 | J_LCD.pin10
@@ -170,4 +169,4 @@ OPEN unnamedsubcircuitsubcircuit_source_group_0_connectivity_net124 has 2 separa
 OPEN unnamedsubcircuitsubcircuit_source_group_0_connectivity_net193 has 2 separate CAM networks: R_LIPO_ENABLE.pin2, U_LIPO_BOOST.EN, U_LIPO_UVLO.N_RESET | Q_LIPO_USB_OFF.pin3
 OPEN unnamedsubcircuitsubcircuit_source_group_0_connectivity_net32 has 2 separate CAM networks: U1.N18 | J_USB.A7, J_USB.B7
 OPEN unnamedsubcircuitsubcircuit_source_group_0_connectivity_net34 has 2 separate CAM networks: U1.N17 | J_USB.A6, J_USB.B6
-42 mapped land nets have multiple physical networks.
+41 mapped land nets have multiple physical networks.
