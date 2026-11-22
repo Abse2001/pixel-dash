@@ -25,6 +25,7 @@ def audit(board, microsd=False, full_width=False, raster=False, archive=None, st
     names = {e["source_trace_id"]: e.get("name", "") for e in board if e["type"] == "source_trace"}
     ref = {"top": ("inner1", "GND"), "bottom": ("inner2", "GND" if microsd or raster else "VDDS_DDR")}
     if not microsd and not raster:
+        ref["inner1"] = ("inner2", "VDDS_DDR")
         ref["inner2"] = ("inner1", "GND")
     if raster:
         ref.update(inner1=("inner2", "GND"), inner2=("inner1", "GND"))

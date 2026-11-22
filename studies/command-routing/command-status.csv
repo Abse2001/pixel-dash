@@ -11,12 +11,12 @@ DDR_A2,open,,,,,,OPEN
 DDR_A3,open,,,,,,OPEN
 DDR_A4,open,,,,,,OPEN
 DDR_A5,open,37.535,top-bottom / bottom-top,235.283,CK open,unknown,CONNECTED; TIMING OPEN
-DDR_A6,open,,,,,,OPEN
+DDR_A6,open,39.231,L1>L4 (L1-L4 drill) / L4>L1 (L1-L4 drill) / L1>L4 (L1-L4 drill) / L4>L3 (L3-L4 drill) / L3>L2 (L2-L3 drill) / L2>L4 (L1-L4 drill) / L4>L1 (L1-L4 drill),inner-layer velocity unverified,CK open,unknown,CONNECTED; TIMING OPEN
 DDR_A7,open,37.360,top-inner2 / inner2-top,L3 velocity unverified,CK open,unknown,CONNECTED; TIMING OPEN
-DDR_A8,open,,,,,,OPEN
+DDR_A8,open,27.293,L1>L3 (L1-L4 drill) / L3>L2 (L2-L3 drill) / L2>L1 (L1-L2 drill),inner-layer velocity unverified,CK open,unknown,CONNECTED; TIMING OPEN
 DDR_A9,open,,,,,,OPEN
 DDR_BA0,open,35.538,,205.018,CK open,unknown,CONNECTED; TIMING OPEN
-DDR_BA1,open,,,,,,OPEN
+DDR_BA1,open,24.566,L1>L4 (L1-L4 drill) / L4>L2 (L1-L4 drill) / L2>L3 (L2-L3 drill) / L3>L1 (L1-L4 drill) / L1>L4 (L1-L4 drill) / L4>L2 (L1-L4 drill) / L2>L3 (L2-L3 drill) / L3>L1 (L1-L4 drill),inner-layer velocity unverified,CK open,unknown,CONNECTED; TIMING OPEN
 DDR_BA2,open,38.641,,222.919,CK open,unknown,CONNECTED; TIMING OPEN
 DDR_CASn,open,,,,,,OPEN
 DDR_CK,open,,,,,,OPEN
