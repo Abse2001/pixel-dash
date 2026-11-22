@@ -30,7 +30,7 @@ for i,color in enumerate(colors):
     ball = next(b for b,p in balls.items() if p == f"LCD_DATA{i}") if i < 16 else upper[i-16]
     check(f"LCD_D{i}", ball, int(i >= 16), "J_LCD", f"pin{contacts[color]}")
 for signal,ball,contact,mode in (("PCLK","V5",37,0),("HSYNC","R5",11,0),("VSYNC","U5",10,0),
-                                  ("DE","R6",9,0),("RESET","R13",44,7)):
+                                  ("DE","R6",9,0),("RESET","J18",44,7)):
     check("LCD_"+signal, ball, mode, "J_LCD", f"pin{contact}")
 for sig,ball,mode in (("SCL","D15",3),("SDA","D16",3),("IRQ","V14",7)):
     check("TOUCH_"+sig,ball,mode,"R_TOUCH_"+sig,"pin1")

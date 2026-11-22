@@ -6,8 +6,8 @@
 lands, including both supply balls of VDDSHV1, VDDSHV2 and VDDSHV4.
 Banks 2 and 4 power the upper raster data signals and MMC0 respectively.
 N5 and P5 are open. LDO1 reaches all 16 assigned 1.8 V loads. Only four
-CPU straps reach their bias resistors. CAM finds 5/29 CPU-to-panel and 7/7
-CPU-to-card signal paths, with 39 mapped nets still open across the board.
+CPU straps reach their bias resistors. CAM finds 6/29 CPU-to-panel and 7/7
+CPU-to-card signal paths, with 38 mapped nets still open across the board.
 [PCB snapshot](previews/handheld.png) · [Physical connectivity](checks/current-cam-connectivity.txt)
 
 B4, B5, C5, N5 and P5 cannot accept unrelated copper outside the saved
@@ -67,7 +67,7 @@ The estimates use the engineering cross section and exclude capacitor
 derating, ESR, loop inductance and package drop. Dynamic bypass impedance,
 regulator stability and SRAM inrush remain unverified. The 1 mm L3 supply
 bridge retains the direct DCDC3 feed to all 18 DRAM supply balls and
-preserves full-width signal reference. All 227 fitted placements and 7,698
+preserves full-width signal reference. All 227 fitted placements and 7,716
 routed copper strokes match the engineering export.
 [TI SPRS717L §5.9, Tables 5-14 and 5-15](https://www.ti.com/lit/ds/symlink/am3354.pdf)
 
@@ -76,6 +76,19 @@ below the 0.408 mm saved DDR setback. V2 (bit 12) has 0.0272 mm excess
 at its farthest edge. The sampled blind-via escape search did not find
 a legal launch. The full set of sixteen straps is still a fabrication gate.
 [Physical strap envelope](checks/current-sysboot-envelope.csv)
+
+### Panel reset
+
+J_LCD pin 44 now connects to AM3354 J18 (MII1_TXD3, mode 7, GPIO0_16).
+This spare VDDSHV5 pin has a low reset state in TI Table 4-2. Firmware
+must use GPIO0_16 for panel reset and release it only after valid panel
+bias and the panel’s reset timing. The four copper layers and plated drill
+files verify the connection. The full-width ground-reference screen checks
+L1 against L2, L4 against L3 and the inner reset runs against the adjacent
+inner ground. The routed reset, five other raster signals and all seven
+card signals pass this geometric check. Panel bias sequencing and the
+other 23 panel endpoints remain open.
+[AM3354 pin attributes](https://www.ti.com/lit/ds/symlink/am3354.pdf)
 
 ### Pending cold-boot bench test
 
