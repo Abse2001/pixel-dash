@@ -127,6 +127,11 @@ export function PowerControl() {
     <BackupOutputCapacitor name="C_PMIC_RTC_IO" pcbX={-7.25011} pcbY={28.249932}/>
     <trace from=".U_PMIC > .L6" to=".L_PMIC_RTC_IO > .pin1" thickness={0.23} pcbStraightLine/>
     <trace from=".L_PMIC_RTC_IO > .pin2" to=".C_PMIC_RTC_IO > .pin1" thickness={0.28} pcbStraightLine/>
+    <Pull10k name="R_PMIC_POR" pcbX={-26.9} pcbY={28.05} layer="bottom"/>
+    <trace name="CPU_COLD_RESET" from=".U_PMIC > .PGOOD" to=".U1 > .B15"/>
+    <trace name="CPU_WARM_RESET" from=".U_PMIC > .GPIO3" to=".U1 > .A10"/>
+    <trace from=".U_PMIC > .PGOOD" to=".R_PMIC_POR > .pin1"/>
+    <trace from=".R_PMIC_POR > .pin2" to=".R_PMIC_IRQ > .pin2" thickness={0.15} pcbStraightLine/>
     <trace from=".U1 > .B5" to=".U_PMIC > .PGOOD_BU"/>
     {[
       ["CORE", "FB5", "VDD_RTC_CORE_1V0", -15.35, 26.249934, -8.25011, 22.657482, -8.25011, 25.842642],

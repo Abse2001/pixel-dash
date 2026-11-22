@@ -9,10 +9,25 @@ const supplyOutline = [
     // allowing a ground-referenced I2C escape beside the processor.
     { x: 6.2, y: 18.05 },
     { x: 4.15, y: 18.60 },
-    { x: 4.15, y: 20.75 },
-    { x: 5.15, y: 21.18 },
+    { x: 4.15, y: 21.30 },
+    { x: 4.40, y: 21.57 },
+    { x: 4.64, y: 21.41 },
+    { x: 4.76, y: 21.22 },
+    { x: 5.44, y: 21.12 },
     { x: 6.2, y: 21.50 },
     { x: 6.2, y: 29 },
+    // Ground-reference corridor for the warm reset escape beside A10.
+    { x: 0.80, y: 29 },
+    { x: 0.80, y: 25.05 },
+    { x: 0.03, y: 23.80 },
+    { x: 0.03, y: 23.34 },
+    { x: 1.28, y: 22.33 },
+    { x: 1.08, y: 21.58 },
+    { x: 0.49, y: 21.44 },
+    { x: -0.95, y: 23.18 },
+    { x: -0.95, y: 24.22 },
+    { x: -0.28, y: 25.35 },
+    { x: -0.28, y: 29 },
 	{ x: -27, y: 29 },
 ];
 

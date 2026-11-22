@@ -5,7 +5,7 @@ import placement from "./bypass-placement.json";
 export function DdrBypass() {
 	return (
 		<>
-			{placement.map(({ x, y, rotation, layer, kind }, i) => {
+			{placement.map(({ x, y, rotation, layer, kind, bodyOffsetY = 0 }, i) => {
 				const isBulk = kind === "bulk";
 				const Capacitor = isBulk ? GRM21BC81C226ME44L : CL05B104KO5NNNC;
 				const viaDistance = isBulk ? 2.08 : 1.2;
@@ -16,7 +16,7 @@ export function DdrBypass() {
 						key={name}
 						name={name}
 						pcbX={x}
-						pcbY={y}
+						pcbY={y + bodyOffsetY}
 						layer={side}
 						pcbRotation={rotation}
 					/>,

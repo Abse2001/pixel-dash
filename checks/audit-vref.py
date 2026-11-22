@@ -7,7 +7,7 @@ from shapely import STRtree, affinity, unary_union
 from shapely.geometry import LineString, Point, Polygon, box
 
 
-def verify(elements, check_ddr_power=False, check_ddr_signals=False, check_system_io=False, check_pmic_hold=False, check_pmic_backup=False, check_rtc_filters=False, check_joysticks=False, check_control_bus=False, check_ddr_regulator=False, check_retained_returns=False, check_processor_filters=False):
+def verify(elements, check_ddr_power=False, check_ddr_signals=False, check_system_io=False, check_pmic_hold=False, check_pmic_backup=False, check_rtc_filters=False, check_joysticks=False, check_control_bus=False, check_ddr_regulator=False, check_retained_returns=False, check_processor_filters=False, check_warm_reset=False):
     names = {e["source_component_id"]: e.get("name") for e in elements if e["type"] == "source_component"}
     pins = {e["source_port_id"]: f"{names.get(e['source_component_id'])}.{e['name']}"
             for e in elements if e["type"] == "source_port"}
@@ -100,6 +100,12 @@ def verify(elements, check_ddr_power=False, check_ddr_signals=False, check_syste
                              f"R_PMIC_{signal}.pin1"])
         required.append(["R_PMIC_SCL.pin2", "R_PMIC_SDA.pin2",
                          *(f"R_SYSBOOT{bit}.pin1" for bit in (0, 1, 2, 4, 14))])
+    if check_warm_reset:
+        required.extend([["U1.A10", "U_PMIC.GPIO3"], ["U_PMIC.nINT", "R_PMIC_IRQ.pin1"],
+                         ["R_PMIC_IRQ.pin2", "R_PMIC_POR.pin2"]])
+        por, = [e for e in elements if e["type"] == "source_component" and e.get("name") == "R_PMIC_POR"]
+        if por["resistance"] != 10000 or por["supplier_part_numbers"]["jlcpcb"] != ["C25744"]:
+            raise ValueError("Incorrect open-drain PGOOD pull-up")
     labels = defaultdict(list)
     copper = defaultdict(list)
     parent = []
@@ -236,6 +242,8 @@ def verify(elements, check_ddr_power=False, check_ddr_signals=False, check_syste
         print("DCDC3 switch and output nodes reach separate inductor terminals. FB3 reaches the output capacitor and its return reaches L2. The power key and bias resistor reach PB.")
     if check_processor_filters:
         print("DCDC1 and DCDC2 each reach their inductor, capacitor, feedback and L2 return. CPU supply assignments match the ball map.")
+    if check_warm_reset:
+        print("AM3354 A10 reaches PMIC GPIO3. The IRQ pull-up reaches nINT, and the two bias pads share copper.")
     if check_ddr_signals:
         signal_roots = {}
         opens = []
@@ -295,5 +303,6 @@ if __name__ == "__main__":
     parser.add_argument("--control-bus", action="store_true")
     parser.add_argument("--ddr-regulator", action="store_true")
     parser.add_argument("--processor-filters", action="store_true")
+    parser.add_argument("--warm-reset", action="store_true")
     args = parser.parse_args()
-    verify(json.loads(args.circuit.read_text()), args.ddr_power, args.ddr_signals, args.system_io, args.pmic_hold, args.pmic_backup, args.rtc_filters, args.joysticks, args.control_bus, args.ddr_regulator, args.retained_returns, args.processor_filters)
+    verify(json.loads(args.circuit.read_text()), args.ddr_power, args.ddr_signals, args.system_io, args.pmic_hold, args.pmic_backup, args.rtc_filters, args.joysticks, args.control_bus, args.ddr_regulator, args.retained_returns, args.processor_filters, args.warm_reset)

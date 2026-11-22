@@ -211,20 +211,22 @@ for saved_name, plan in paths.items():
             raise ValueError(f"Saved copper duplicates existing routing on {saved_name}")
     if not sections or any(len(section) < 2 for section in sections):
         raise ValueError(f"Empty route section on {sid}")
-    last_layer = layers[-1] if len(sections) % 2 == 0 else layers[0]
-    for pad, point, layer in ((start, sections[0][0], "top"), (end, sections[-1][-1], last_layer)):
+    first_layer = "top" if "top" in start["layers"] else "bottom"
+    outer_layers = (first_layer, "bottom" if first_layer == "top" else "top")
+    last_layer = outer_layers[(len(sections) - 1) % 2]
+    for pad, point, layer in ((start, sections[0][0], first_layer), (end, sections[-1][-1], last_layer)):
         if layer not in pad["layers"] or dist(point, (pad["x"], pad["y"])) > 1e-5:
             raise ValueError(f"Saved route no longer lands on a terminal of {sid}")
     route = []
     trace_id = "pcb_" + sid
     key = source["subcircuit_connectivity_map_key"]
     for index, section in enumerate(sections):
-        layer = "bottom" if index % 2 else "top"
+        layer = outer_layers[index % 2]
         if index:
             x, y = section[0]
             if dist((x, y), sections[index-1][-1]) > 1e-7:
                 raise ValueError(f"Mismatch at via {index} on {sid}")
-            previous = "top" if index % 2 else "bottom"
+            previous = outer_layers[(index - 1) % 2]
             route.append(dict(route_type="via", x=x, y=y, from_layer=previous, to_layer=layer))
             board.append(dict(type="pcb_via", pcb_via_id=f"{trace_id}_via_{index}", pcb_trace_id=trace_id,
                               source_trace_id=sid, subcircuit_connectivity_map_key=key, x=x, y=y,
