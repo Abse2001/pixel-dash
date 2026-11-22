@@ -2,6 +2,7 @@
 import json
 import sys
 from pathlib import Path
+from plane_fill import connected_fill
 from shapely.geometry import LineString, Point, Polygon
 from shapely.ops import unary_union
 
@@ -55,7 +56,7 @@ for pour in board:
     original=Polygon(coords(shape["outer_ring"]),[coords(r) for r in shape["inner_rings"]])
     if not original.intersects(avoid):continue
     result=original.difference(avoid)
-    if result.geom_type!="Polygon":raise ValueError(f"Support route splits {pour['pcb_copper_pour_id']}")
+    result = connected_fill(result, pour, board)
     def ring(r):
         return {"vertices":[dict(x=x,y=y) for x,y in list(r.coords)[:-1]]}
     pour["brep_shape"]=dict(outer_ring=ring(result.exterior),inner_rings=[ring(r) for r in result.interiors])

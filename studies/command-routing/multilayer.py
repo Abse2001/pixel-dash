@@ -2,6 +2,7 @@
 import json
 import sys
 from pathlib import Path
+from plane_fill import connected_fill
 
 from shapely.geometry import LineString, Point, Polygon
 from shapely.ops import unary_union
@@ -67,15 +68,6 @@ for pour in board:
     reliefs = unary_union(cuts[pour["layer"]])
     if original.intersects(reliefs):
         filled = original.difference(reliefs)
-        if filled.geom_type != "Polygon":
-            if filled.geom_type != "MultiPolygon":
-                raise ValueError(f"Unexpected pour geometry on {pour['pcb_copper_pour_id']}")
-            main, *islands = sorted(filled.geoms, key=lambda region: region.area, reverse=True)
-            detached = unary_union(islands)
-            lands = (Point(v["x"], v["y"]).buffer(v["outer_diameter"]/2) for v in board
-                     if v["type"] == "pcb_via" and pour["layer"] in v["layers"])
-            if detached.area > .01 or any(detached.intersects(land) for land in lands):
-                raise ValueError(f"Plane split on {pour['pcb_copper_pour_id']}")
-            filled = main
+        filled = connected_fill(filled, pour, board)
         pour["brep_shape"] = dict(outer_ring=vertices(filled.exterior), inner_rings=[vertices(r) for r in filled.interiors])
 Path(sys.argv[2]).write_text(json.dumps(board, separators=(",", ":")))
