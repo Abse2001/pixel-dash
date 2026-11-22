@@ -11,8 +11,9 @@ from shapely.ops import unary_union
 
 
 def courtyards(board):
-    names = {e["source_component_id"]: e.get("name") for e in board if e["type"] == "source_component"}
-    placed = {e["pcb_component_id"]: names[e["source_component_id"]] for e in board
+    names = {e["source_component_id"]: e["name"] for e in board if e["type"] == "source_component"
+             and e.get("ftype") not in ("part", "printedpart", "simple_test_point")}
+    placed = {e["pcb_component_id"]: (e["layer"], names[e["source_component_id"]]) for e in board
               if e["type"] == "pcb_component" and not e.get("do_not_place")
               and e.get("source_component_id") in names}
     rings = defaultdict(list)
@@ -29,7 +30,13 @@ def courtyards(board):
             shape = affinity.rotate(box(x-w, y-h, x+w, y+h), e.get("ccw_rotation", 0), origin=(x, y))
         else:
             raise ValueError(f"Unknown courtyard geometry {e['type']}")
-        rings[e["layer"], placed[e["pcb_component_id"]]].append(shape)
+        side, ref = placed[e["pcb_component_id"]]
+        if e["layer"] != side or shape.is_empty or not shape.is_valid or shape.area <= 0:
+            raise ValueError(f"Invalid courtyard for {ref} on {side}")
+        rings[side, ref].append(shape)
+    missing = set(placed.values()) - rings.keys()
+    if missing:
+        raise ValueError(f"Fitted components missing courtyards: {sorted(missing)}")
     return {key: unary_union(shapes) for key, shapes in rings.items()}
 
 
