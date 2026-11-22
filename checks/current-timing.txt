@@ -2,17 +2,17 @@
 BYTE0 [0.000, 20.600] mm: 5/11 routed outside (DDR_D1, DDR_D3, DDR_D4, DDR_D5, DDR_D7)
 BYTE1 [0.000, 23.000] mm: 2/11 routed outside (DDR_D12, DDR_D14)
 ADDR_CTRL_CK [28.550, 31.090] mm: 2/27 routed outside (DDR_A10, DDR_CKE)
-BYTE0 skew across 11/11 signals 7.049 mm, limit 0.635
+BYTE0 skew across 11/11 signals 6.936 mm, limit 0.635
 BYTE0 geometric spread including 1.53 mm per traversal: 7.533 mm
-BYTE1 skew across 11/11 signals 3.468 mm, limit 0.635
-BYTE1 geometric spread including 1.53 mm per traversal: 3.468 mm
+BYTE1 skew across 11/11 signals 3.281 mm, limit 0.635
+BYTE1 geometric spread including 1.53 mm per traversal: 3.281 mm
 DDR_CK skew across 2/2 signals 0.095 mm, limit 0.127
 DDR_CK geometric spread including 1.53 mm per traversal: 0.095 mm
 DDR_DQS0 skew across 2/2 signals 0.110 mm, limit 0.127
 DDR_DQS0 geometric spread including 1.53 mm per traversal: 0.110 mm
 DDR_DQS1 skew across 2/2 signals 0.090 mm, limit 0.127
 DDR_DQS1 geometric spread including 1.53 mm per traversal: 0.090 mm
-BYTE0 planar: DQ/DM spread 6.925 mm (DDR_D5 to DDR_D2), worst DQ/DM-to-DQS mismatch 7.049 mm (DDR_D5 to DDR_DQSn0), limit 0.635 mm each
+BYTE0 planar: DQ/DM spread 6.812 mm (DDR_D5 to DDR_D2), worst DQ/DM-to-DQS mismatch 6.936 mm (DDR_D5 to DDR_DQSn0), limit 0.635 mm each
 BYTE0 estimated with 1.53 mm per traversal: DQ/DM spread 7.392 mm (DDR_D7 to DDR_D6), worst DQ/DM-to-DQS mismatch 7.533 mm (DDR_D7 to DDR_DQSn0), limit 0.635 mm each
-BYTE1 planar: DQ/DM spread 3.413 mm (DDR_D14 to DDR_D15), worst DQ/DM-to-DQS mismatch 3.468 mm (DDR_D14 to DDR_DQS1), limit 0.635 mm each
-BYTE1 estimated with 1.53 mm per traversal: DQ/DM spread 3.413 mm (DDR_D14 to DDR_D15), worst DQ/DM-to-DQS mismatch 3.468 mm (DDR_D14 to DDR_DQS1), limit 0.635 mm each
+BYTE1 planar: DQ/DM spread 3.227 mm (DDR_D12 to DDR_D15), worst DQ/DM-to-DQS mismatch 3.281 mm (DDR_D12 to DDR_DQS1), limit 0.635 mm each
+BYTE1 estimated with 1.53 mm per traversal: DQ/DM spread 3.227 mm (DDR_D12 to DDR_D15), worst DQ/DM-to-DQS mismatch 3.281 mm (DDR_D12 to DDR_DQS1), limit 0.635 mm each
