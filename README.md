@@ -1,6 +1,6 @@
 # Pixel Dash
 
-The latest populated routing study verifies 30/50 distinct CPU–RAM signals, both locked byte lanes, all 18 RAM supply balls and all 21 RAM ground balls. Twenty signal pairs remain open, including CK and CKn. The Gerbers pass the full-width reference, shorts, copper, via-edge, drill and MMC0 gates for the installed routes. [Populated routing checkpoint and per-net status](https://github.com/Abse2001/pixel-dash/tree/d943a3b/studies/command-routing)
+The latest populated routing study verifies 33/50 distinct CPU–RAM signals, both locked byte lanes, all 18 RAM supply balls and all 21 RAM ground balls. Seventeen signal pairs remain open, including CK and CKn. The Gerbers pass the full-width reference, shorts, copper, via-edge, drill and MMC0 gates for the installed routes. [Populated routing checkpoint and per-net status](https://github.com/Abse2001/pixel-dash/tree/bb77857/studies/command-routing)
 
 ## Populated handheld DDR data checkpoint
 
