@@ -2,7 +2,17 @@
 
 The [unrouted handheld example](examples/unrouted-handheld) contains the populated board and a full-board input for testing the Bus Lanes autorouter.
 
-## Current electrical checkpoint
+## Partial DDR breakout study
+
+This branch moves both vias on CPU D1 and remaps three low-byte data bits. CPU D1 reaches RAM DQ2, CPU D5 reaches RAM DQ1 and CPU D2 reaches RAM DQ5. Both byte strobes and masks retain their complete-board routes. Seven DDR connections are open on this study. The complete 50-link handheld remains at `7f2d6bb`.
+
+The routed D1, D2 and D5 paths each measure 19.920 mm. Their two 1.420 mm through-via transitions bring estimated flight to 133.662 ps. The largest modeled difference to either low-byte strobe is +1.935 ps against ±3.663 ps. Each is within 0.3051 mm of both strobes against the TI 0.635 mm data-to-strobe limit. Missing peers prevent whole-byte signoff. D13 also reaches its RAM land via a new CPU-side escape. [Study timing and source-to-RAM topology](studies/ddr-breakout/study-timing.csv)
+
+Drilled CAM verifies 43 distinct package links and seven opens. The routed links pass full-width reference coverage, the copper and via-edge clearances, drill spacing and exported Gerber shorts. Sequenced MMC0 also passes. [Drilled CAM record](studies/ddr-breakout/study-cam.txt)
+
+The native assembly retains the previous full-bus plane protection envelope when rebuilding the incomplete layout. The 50-link release check still fails on this branch. Fabrication remains on hold.
+
+## Complete-board baseline
 
 All 50 DDR ball pairs are distinct in the drilled artwork. The paired byte-1 strobe trunk now follows a common curved path. DQS1 and DQSn1 measure 22.9692 mm and 22.9683 mm. Their 0.0009 mm difference meets the TI 0.127 mm pair limit. Both retain two L1–L4 transitions, 1.420 mm each on the reference stack. The 1.491 mm model gives a joint two-via data interval of 22.3342–22.9981 mm for these strobes. D8, D9 and D15 still fit that interval.
 

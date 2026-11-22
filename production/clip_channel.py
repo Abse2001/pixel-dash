@@ -1,5 +1,8 @@
 """Fill the handheld reference planes and clear board geometry on their own layers."""
 
+import json
+from pathlib import Path
+
 from connectivity import trace_net_keys
 from shapely import affinity
 from shapely.geometry import LineString, Point, Polygon, box
@@ -126,7 +129,11 @@ def clear_handheld_copper_from_ddr(board):
                           and (e.get("name") or "").startswith("DDR_")}
             routes = [LineString([(v["x"], v["y"]) for v in e["route"]]).buffer(.20)
                       for e in board if e["type"] == "pcb_trace" and e["source_trace_id"] in signal_ids]
-            if len(routes) != 50 or unary_union(routes).convex_hull.intersects(discarded):
+            # Preserve the complete 7f2d6bb routing region while data links are
+            # temporarily absent in this breakout study. New routes can expand it.
+            complete_ring = Path(__file__).resolve().parents[1] / "studies/ddr-breakout/complete-envelope.json"
+            reserved = Polygon(json.loads(complete_ring.read_text()))
+            if len(signal_ids) != 50 or unary_union([reserved, *routes]).convex_hull.intersects(discarded):
                 raise ValueError("An isolated L3 fragment overlaps the routed DDR region")
             for v in board:
                 if (v["type"] == "pcb_via" and "inner2" in v["layers"] and

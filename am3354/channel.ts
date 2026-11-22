@@ -51,9 +51,9 @@ const controls: Record<string, string> = {
 	UDQS: "DQS1",
 	"UDQS#": "DQSn1",
 };
-// The AM335x allows data bit swaps inside a byte. Both pins use LDQS/LDM.
+// DQ1, DQ2 and DQ5 share the low-byte strobe and mask, as do DQ3 and DQ7.
 // Memory ball labels stay as marked on the Micron package.
-const cpuBitForRamBit: Readonly<Record<string, number>> = { DQ3: 7, DQ7: 3 };
+const cpuBitForRamBit: Readonly<Record<string, number>> = { DQ1: 5, DQ2: 1, DQ3: 7, DQ5: 2, DQ7: 3 };
 
 function memoryNet(signal: string) {
 	const pin = signal.split("/")[0];
