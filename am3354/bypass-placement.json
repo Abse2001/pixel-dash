@@ -37,5 +37,6 @@
   {"chip": "U1", "x": -1.0, "y": 7.55, "rotation": 0, "layer": "bottom", "kind": "bulk"},
   {"chip": "channel", "x": -13.4, "y": 26.6, "rotation": 0, "layer": "top", "kind": "return"},
   {"chip": "channel", "x": -11.6, "y": 5.6, "rotation": 0, "layer": "top", "kind": "return"},
-  {"chip": "channel", "x": -2.8, "y": 16.7, "rotation": 90, "layer": "bottom", "kind": "return"}
+  {"chip": "channel", "x": -2.8, "y": 16.7, "rotation": 90, "layer": "bottom", "kind": "return"},
+  {"chip": "channel", "x": -10.564, "y": 23.248, "rotation": 0, "layer": "top", "kind": "return", "supplyViaDistance": 0.65, "buriedSupplyOffset": [0.41, 0.0]}
 ]

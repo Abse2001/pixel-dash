@@ -16,6 +16,20 @@ def measurements(board):
     ports = {e["source_port_id"]: e for e in board if e["type"] == "source_port"}
     lands = {e["source_port_id"]: e for e in board if e["type"] == "pcb_port"}
     vias = {p: e for e in board if e["type"] == "pcb_via" for p in e.get("pcb_port_ids", [])}
+    via_at = {(xy(v), layer, v.get("source_net_id")): v
+              for v in board if v["type"] == "pcb_via" for layer in v["layers"]}
+    inner_links = {}
+    for trace in board:
+        if trace["type"] != "pcb_trace" or not trace["route"]:
+            continue
+        route = trace["route"]
+        layer = route[0].get("layer")
+        if layer not in {"inner1", "inner2"} or any(
+            p["route_type"] != "wire" or p["layer"] != layer for p in route
+        ):
+            continue
+        for start, end in ((route[0], route[-1]), (route[-1], route[0])):
+            inner_links.setdefault((xy(start), layer), []).append(xy(end))
     names = {}
     assignments = json.loads((Path(__file__).resolve().parents[1] / "am3354/bypass-placement.json").read_text())
     # Only these loads bridge the DRAM reference rail to ground. The CPU and switch bias use other rails.
@@ -46,12 +60,18 @@ def measurements(board):
             if net not in ("GND", "VDDS_DDR"):
                 raise ValueError(f"Unexpected return rail on {ref}: {net}")
             plane = "inner1" if net == "GND" else "inner2"
+            leg = [xy(via)]
             if plane not in via["layers"]:
-                raise ValueError(f"{ref} bypass via does not reach {plane}")
+                inner, = set(via["layers"]) & {"inner1", "inner2"}
+                mates = [mate for end in inner_links.get((xy(via), inner), [])
+                         if (mate := via_at.get((end, inner, via["source_net_id"]))) and plane in mate["layers"]]
+                if len(mates) != 1:
+                    raise ValueError(f"{ref} lacks a unique routed transition to {plane}")
+                leg.append(xy(mates[0]))
             legs = bypass.setdefault(ref, {})
             if net in legs:
                 raise ValueError(f"Ambiguous {net} via on {ref}")
-            legs[net] = xy(via)
+            legs[net] = leg
     if not high_speed or set(bypass) != high_speed or any(set(legs) != {"GND", "VDDS_DDR"} for legs in bypass.values()):
         raise ValueError("Incomplete high-speed bypass via pair")
     for e in board:
@@ -69,8 +89,8 @@ def measurements(board):
             # Both legs must belong to the same capacitor for a plane-to-plane return.
             choices = []
             for ref, legs in bypass.items():
-                gnd = math.dist(location, legs["GND"])
-                vdd = math.dist(location, legs["VDDS_DDR"])
+                gnd = max(math.dist(location, point) for point in legs["GND"])
+                vdd = max(math.dist(location, point) for point in legs["VDDS_DDR"])
                 choices.append((max(gnd, vdd), ref, gnd, vdd))
             far, ref, gnd, vdd = min(choices)
             yield signal, *location, ref, gnd, vdd, far

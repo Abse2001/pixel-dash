@@ -1,5 +1,5 @@
-Connected inner-layer Gerber copper covers all 70 blind-via lands.
-71 DDR terminals verified through 70 blind vias to their adjacent reference planes.
+Connected inner-layer Gerber copper covers all 71 blind-via lands.
+72 DDR terminals verified through 71 blind vias to their adjacent reference planes.
 
 M6 channel_pcb_via_22 native_plane_uncovered_mm2 0.0 export_uncovered_mm2 0.0 cam_edge_to_center_mm 0.15048
 N7 channel_pcb_via_27 native_plane_uncovered_mm2 0.0 export_uncovered_mm2 0.0 cam_edge_to_center_mm 0.15376

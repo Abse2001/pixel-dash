@@ -6,7 +6,7 @@ import placement from "./bypass-placement.json";
 export function DdrBypass() {
 	return (
 		<>
-			{placement.map(({ chip, x, y, rotation, layer, kind, bodyOffsetY = 0, supplyViaDistance }, i) => {
+			{placement.map(({ chip, x, y, rotation, layer, kind, bodyOffsetY = 0, supplyViaDistance, buriedSupplyOffset }, i) => {
 				const isBulk = kind === "bulk";
 				const bulkCapacitor = chip === "U1" ? CL21A226MAQNNNE : GRM21BC81C226ME44L;
 				const Capacitor = isBulk ? bulkCapacitor : CL05B104KO5NNNC;
@@ -29,19 +29,23 @@ export function DdrBypass() {
 						const planeLayer = side === "top" ? "inner1" : "inner2";
 						const via = "V_" + name + "_" + pin;
 						const distance = p === 0 ? supplyViaDistance ?? viaDistance : viaDistance;
+						const staggered = p === 0 && buriedSupplyOffset !== undefined;
+						const blind = adjacentPlane || staggered;
 						const offset =
 							(p === 0 ? -distance : distance) *
 							(side === "bottom" ? -1 : 1);
+						const viaX = x + (rotation === 0 ? offset : 0);
+						const viaY = y + (rotation === 90 ? offset : 0);
 						return [
 							<via
 								key={via}
 								name={via}
-								pcbX={x + (rotation === 0 ? offset : 0)}
-								pcbY={y + (rotation === 90 ? offset : 0)}
-								fromLayer={adjacentPlane ? side : undefined}
-								toLayer={adjacentPlane ? planeLayer : undefined}
-								holeDiameter={adjacentPlane ? 0.125 : 0.254}
-								outerDiameter={adjacentPlane ? 0.28 : 0.4572}
+								pcbX={viaX}
+								pcbY={viaY}
+								fromLayer={blind ? side : undefined}
+								toLayer={blind ? planeLayer : undefined}
+								holeDiameter={blind ? 0.125 : 0.254}
+								outerDiameter={blind ? 0.28 : 0.4572}
 								connectsTo={"net." + net}
 							/>,
 							<trace
@@ -51,6 +55,14 @@ export function DdrBypass() {
 								pcbStraightLine
 								thickness={0.22}
 							/>,
+							...(staggered ? [
+								<via key={via + "_B"} name={via + "_B"}
+									pcbX={viaX + buriedSupplyOffset[0]} pcbY={viaY + buriedSupplyOffset[1]}
+									fromLayer="inner1" toLayer="inner2" holeDiameter={0.2} outerDiameter={0.36}
+									connectsTo={"net." + net} />,
+								<trace key={via + "_buried_link"} from={"." + via + " > ." + planeLayer}
+									to={"." + via + "_B > ." + planeLayer} pcbStraightLine thickness={0.11} />,
+							] : []),
 						];
 					}),
 				];

@@ -1,9 +1,9 @@
 drill_npth.drl matches 19 round hits and 0 slots
 drill-L1-L4.drl matches 767 round hits and 6 slots
-drill-L1-L2.drl matches 277 round hits and 0 slots
-drill-L2-L3.drl matches 9 round hits and 0 slots
+drill-L1-L2.drl matches 279 round hits and 0 slots
+drill-L2-L3.drl matches 10 round hits and 0 slots
 drill-L3-L4.drl matches 23 round hits and 0 slots
-50 distinct DDR ball pairs connected. 1082 plated barrels checked. No shorts between mapped land nets.
+50 distinct DDR ball pairs connected. 1085 plated barrels checked. No shorts between mapped land nets.
 UART0 RX, TX and ground reach three distinct probe networks.
 PMIC copper verified between U_PMIC.L4A and L_PMIC_IO.pin1.
 PMIC copper verified between U_PMIC.L4B and L_PMIC_IO.pin2.
@@ -46,7 +46,7 @@ DDR memory supply to DCDC3 output capacitor: 18/18 VDD/VDDQ balls connected.
 DDR memory supply isolation from CPU VDDS_DDR: PASS.
 U1 DDR bypass to U_DDR_SWITCH.VOUT1: 22/22 supplied, 0 on copper shared with the other load domain.
 U_DDR DDR bypass to C_PMIC_DDR.pin1: 14/14 supplied, 0 on copper shared with the other load domain.
-DDR reference bypasses with both DCDC3 and ground lands connected: 15/15.
+DDR reference bypasses with both DCDC3 and ground lands connected: 16/16.
 DDR switch C_PMIC_DDR.pin1 all terminals connected
 DDR switch U_PMIC.LS1 all terminals connected
 DDR switch U_DDR_SWITCH.VOUT1 all terminals connected

@@ -165,6 +165,7 @@ C_DDR36,C45783,bottom,0.0,0.0,0.0,2,matches
 C_DDR37,C1525,top,0.0,0.0,0.0,2,matches
 C_DDR38,C1525,top,0.0,0.0,0.0,2,matches
 C_DDR39,C1525,bottom,90.0,90.0,0.0,2,matches
+C_DDR40,C1525,top,0.0,0.0,0.0,2,matches
 R_VTP,C25120,bottom,135.0,135.0,0.0,2,matches
 R_ZQ,C155745,bottom,180.0,180.0,0.0,2,matches
 R_VREF_CA,C21189,top,216.8698976458,216.8698976458,0.0,2,matches
