@@ -4,13 +4,13 @@ BYTE0 [0.000, 20.600] mm: 5/11 routed outside (DDR_D1, DDR_D3, DDR_D4, DDR_D5, D
   DDR_D3 22.535 mm, shorten by 1.935 mm to reach the window
   DDR_D4 21.894 mm, shorten by 1.294 mm to reach the window
   DDR_D5 27.050 mm, shorten by 6.450 mm to reach the window
-  DDR_D7 23.411 mm, shorten by 2.811 mm to reach the window
+  DDR_D7 23.371 mm, shorten by 2.771 mm to reach the window
 BYTE1 [0.000, 23.000] mm: 2/11 routed outside (DDR_D12, DDR_D14)
   DDR_D12 25.791 mm, shorten by 2.792 mm to reach the window
   DDR_D14 25.199 mm, shorten by 2.199 mm to reach the window
 ADDR_CTRL_CK [28.550, 31.090] mm: 2/27 routed outside (DDR_A10, DDR_CKE)
   DDR_A10 33.114 mm, shorten by 2.024 mm to reach the window
-  DDR_CKE 33.923 mm, shorten by 2.833 mm to reach the window
+  DDR_CKE 33.848 mm, shorten by 2.758 mm to reach the window
 BYTE0 skew across 11/11 signals 6.936 mm, limit 0.635
 BYTE0 geometric spread including 1.53 mm per traversal: 6.936 mm, limit 0.635
 BYTE1 skew across 11/11 signals 3.281 mm, limit 0.635
