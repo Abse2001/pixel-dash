@@ -12,6 +12,10 @@ bun route.ts /path/to/bus-lanes-solver /tmp/pixel-dash-routed.json
 
 The runner calls the full pipeline with its default routing configuration. An unsuccessful solve reports the solver error and exits nonzero. The two checked-in inputs stay unrouted.
 
+## Reference solver run
+
+BusLanes commit `55d5f2b` reached `native_fallback_assignment` and reported “No collision-free local dogbone assignment” on attempt 3, after 109 cohort trials, with `fixedTraces=0`. This gives solver changes a reproducible full-board comparison. Completing that stage still leaves electrical and manufacturing checks to run on the routed output.
+
 ## Regenerate and verify
 
 The fixture was extracted from the complete handheld copper checkpoint `66b9fc9`. From the repo root, with the project dependencies installed, run:
