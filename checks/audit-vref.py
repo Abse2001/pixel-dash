@@ -67,6 +67,7 @@ def verify(elements, check_ddr_power=False, check_ddr_signals=False, check_syste
         required[2].extend(["U_JOY_ADC.ADDR", "U_JOY_ADC.GND", "C_JOY_ADC.pin2"])
         required.append(["U_JOY_ADC.VDD", "C_JOY_ADC.pin1"])
         for index, axis in enumerate(("LX", "LY", "RX", "RY")):
+            required[2].append(f"C_JOY_{axis}.pin2")
             required.append([f"U_JOY_ADC.AIN{index}", f"C_JOY_{axis}.pin1", f"R_JOY_{axis}.pin2"])
             connector = "J_JOY_" + axis[0]
             terminal = "pin1" if axis[1] == "X" else "pin4"

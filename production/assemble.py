@@ -204,6 +204,27 @@ for saved_name, plan in paths.items():
     else:
         board = [e for e in board if not (e["type"] == "pcb_trace_missing_error" and e.get("source_trace_id") == sid)]
 gnd = ground(board)
+# These filter returns ended at vias owned by the removed processor circuitry.
+# Terminate each retained top trace in a blind via to the L2 ground plane.
+for number in (1265, 1266, 1267, 1322):
+    trace = one(board, "pcb_trace", pcb_trace_id=f"pcb_trace_{number}")
+    route = trace["route"]
+    transition, endpoint = route[-2:]
+    if (transition["route_type"] != "via" or transition["from_layer"] != "top"
+            or endpoint.get("layer") != "bottom" or route[-3].get("layer") != "top"):
+        raise ValueError(f"Unexpected joystick ground return {number}")
+    if number in (1265, 1266):
+        # Place the via in the grounded capacitor pad, clear of SD_DAT1 and ADC_RX.
+        for point in route[1:]:
+            point.update(x=route[0]["x"], y=route[0]["y"])
+        trace["route"] = [route[0], transition, endpoint]
+    transition["to_layer"] = endpoint["layer"] = "inner1"
+    endpoint.pop("end_pcb_port_id", None)
+    board.append(dict(type="pcb_via", pcb_via_id=f"pcb_joystick_ground_{number}",
+                      pcb_trace_id=trace["pcb_trace_id"], source_trace_id=trace["source_trace_id"],
+                      source_net_id=gnd["source_net_id"], subcircuit_connectivity_map_key=gnd["subcircuit_connectivity_map_key"],
+                      x=transition["x"], y=transition["y"], from_layer="top", to_layer="inner1",
+                      layers=["top", "inner1"], hole_diameter=0.125, outer_diameter=0.28))
 for index, (x, y) in enumerate(json.loads((root / "system-ground-stitches.json").read_text())):
     board.append(dict(type="pcb_via", pcb_via_id=f"pcb_mmc0_return_{index}",
                       source_net_id=gnd["source_net_id"],
