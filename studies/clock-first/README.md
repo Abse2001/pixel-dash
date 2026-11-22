@@ -27,3 +27,7 @@ The same fixed-byte bound yields zero landing area on CPU F1 (CASn) and G2 (RESE
 [Full populated PCB](populated-handheld.png) · [36-link native board](populated-handheld.circuit.json.gz) · [Per-net timing](timing.csv)
 
 [CPU top-copper close-ups of the three blocked launches](blocked-escapes.png) show D12 in amber and D14 in teal. Removing those two nets only from the optimistic geometry calculation opens candidate landing areas at J4, F1 and G2. The saved board retains both exact routes.
+
+A14 now measures 38.67141 mm, previously 39.08410 mm. Its excess over the 38.68999 mm placement ceiling fell from 0.39411 mm to zero. It uses L1–L4–L1, 2.840 mm of contacted barrel, and an estimated 241.839 ps flight time. Its signed arrival relative to mean CK improved from +7.750 to +5.369 ps. Actual receiver setup/hold is still open. The simultaneous A9 shortening trial violated the via-edge and full-width reference gates and was discarded. A9 stays at 39.65733 mm, 0.96734 mm above the upper placement gate. The final A14 export retains all 36 nets, all 44 locked byte vias, the four DDR supply/return counts and both RAM bias feeds. CAM still reports 51 split nets board-wide, including unresolved boot power.
+
+The nearest qualifying rail-to-ground bypass at the clock transitions has a farther-leg distance of 4.834–5.712 mm on this placement. That geometric result leaves launch return inductance open even though the projected copper is fully referenced. [Clock return paths on the final geometry](clock-return-paths.csv)

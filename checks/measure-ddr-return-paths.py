@@ -1,4 +1,5 @@
 """Measure how far each DDR layer transition is from both vias of one high-speed bypass."""
+import argparse
 import csv
 import json
 import math
@@ -10,7 +11,7 @@ def xy(item):
     return item["x"], item["y"]
 
 
-def measurements(board):
+def measurements(board, selected=()):
     parts = {e["source_component_id"]: e for e in board if e["type"] == "source_component"}
     nets = {e["source_net_id"]: e["name"] for e in board if e["type"] == "source_net"}
     ports = {e["source_port_id"]: e for e in board if e["type"] == "source_port"}
@@ -78,7 +79,7 @@ def measurements(board):
         if e["type"] != "pcb_trace":
             continue
         signal = names[e["source_trace_id"]]
-        if not signal.startswith("DDR_"):
+        if not signal.startswith("DDR_") or (selected and signal not in selected):
             continue
         for p in e["route"]:
             if p["route_type"] != "via":
@@ -97,7 +98,13 @@ def measurements(board):
 
 
 if __name__ == "__main__":
-    rows = sorted(measurements(json.loads(Path(sys.argv[1]).read_text())), key=lambda row: -row[-1])
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("board", type=Path)
+    parser.add_argument("--signal", action="append", default=[], help="screen a selected outer-layer signal; repeat for a pair")
+    args = parser.parse_args()
+    rows = sorted(measurements(json.loads(args.board.read_bytes()), args.signal), key=lambda row: -row[-1])
+    if set(args.signal) - {row[0] for row in rows}:
+        raise ValueError("A selected signal has no outer-layer transition")
     out = csv.writer(sys.stdout)
     out.writerow(("signal", "x_mm", "y_mm", "bypass", "to_ground_via_mm", "to_supply_via_mm", "farther_via_mm"))
     for signal, x, y, ref, gnd, vdd, far in rows:

@@ -5,7 +5,7 @@ DDR_A10,36.1208,open,,,,,,,,,,,OPEN
 DDR_A11,open,open,,,,,,,,,,,OPEN
 DDR_A12,open,open,,,,,,,,,,,OPEN
 DDR_A13,open,open,,,,,,,,,,,OPEN
-DDR_A14,open,39.0841,top>bottom/bottom>top,2.84,0,,244.22,7.75,36.14999..38.68999,0.39411,,,OPEN
+DDR_A14,open,38.67141,top>bottom/bottom>top,2.84,0,,241.839,5.369,36.14999..38.68999,0,,,OPEN
 DDR_A15,38.0152,38.01519,top>bottom/bottom>top/top>bottom/bottom>top,5.68,0,,256.798,20.327,36.14999..38.68999,0,,,OPEN
 DDR_A2,open,open,,,,,,,,,,,OPEN
 DDR_A3,open,open,,,,,,,,,,,OPEN
