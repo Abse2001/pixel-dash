@@ -25,3 +25,5 @@ The J4 VREF escape is blocked by the CPU-side D12/D14 geometry. The optimistic f
 The same fixed-byte bound yields zero landing area on CPU F1 (CASn) and G2 (RESETn). Repositioning other components cannot create an exit inside these closed L1 regions. The frozen CPU escapes must be reconsidered before the whole interface can be connected under the existing stack and clearance rules. A positive area for another ball is only a necessary condition for routing.
 
 [Full populated PCB](populated-handheld.png) · [36-link native board](populated-handheld.circuit.json.gz) · [Per-net timing](timing.csv)
+
+[CPU top-copper close-ups of the three blocked launches](blocked-escapes.png) show D12 in amber and D14 in teal. Removing those two nets only from the optimistic geometry calculation opens candidate landing areas at J4, F1 and G2. The saved board retains both exact routes.
