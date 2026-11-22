@@ -81,8 +81,8 @@ def restrict_ground(board, ground_net, layer="inner1"):
 
     pour["brep_shape"] = {"outer_ring": ring(remaining.exterior), "inner_rings": [ring(r) for r in remaining.interiors]}
 
-def clear_handheld_vias_from_ddr(board):
-    """Clear added plated transitions from the already rendered DDR power island."""
+def clear_handheld_copper_from_ddr(board):
+    """Clear added routed copper and plated transitions from the already rendered DDR power island."""
     island, = (e for e in board if e["type"] == "pcb_copper_pour" and e["layer"] == "inner2")
     shape = island["brep_shape"]
     def coords(ring):
@@ -98,10 +98,22 @@ def clear_handheld_vias_from_ddr(board):
         relief = Point(via["x"], via["y"]).buffer(via["outer_diameter"] / 2 + 0.16, quad_segs=96)
         if original.intersects(relief):
             antipads.append(relief)
+    for trace in board:
+        if trace["type"] != "pcb_trace" or trace["pcb_trace_id"].startswith("channel_"):
+            continue
+        if trace.get("subcircuit_connectivity_map_key") == supply["subcircuit_connectivity_map_key"]:
+            continue
+        for a, b in zip(trace["route"], trace["route"][1:]):
+            if a.get("layer") != "inner2" or b.get("layer") != "inner2":
+                continue
+            line = LineString([(a["x"], a["y"]), (b["x"], b["y"])])
+            relief = line.buffer(max(a["width"], b["width"])/2 + 0.16)
+            if original.intersects(relief):
+                antipads.append(relief)
     if antipads:
         result = original.difference(unary_union(antipads))
         if result.geom_type != "Polygon" or not result.is_valid:
-            raise ValueError("A handheld via divides the DDR supply island")
+            raise ValueError("Handheld copper divides the DDR supply island")
         def ring(boundary):
             return {"vertices": [{"x": x, "y": y} for x, y in list(boundary.coords)[:-1]]}
         island["brep_shape"] = {"outer_ring": ring(result.exterior), "inner_rings": [ring(r) for r in result.interiors]}
