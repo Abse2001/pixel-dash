@@ -1,5 +1,7 @@
 # Pixel Dash
 
+The latest populated routing study verifies 30/50 distinct CPU–RAM signals, both locked byte lanes, all 18 RAM supply balls and all 21 RAM ground balls. Twenty signal pairs remain open, including CK and CKn. The Gerbers pass the full-width reference, shorts, copper, via-edge, drill and MMC0 gates for the installed routes. [Populated routing checkpoint and per-net status](https://github.com/Abse2001/pixel-dash/tree/d943a3b/studies/command-routing)
+
 ## Populated handheld DDR data checkpoint
 
 The tagged populated layout preserves all 22 passing byte 0 and byte 1 routes through 44 plated vias. The handheld Gerbers verify each distinct CPU-to-RAM pair, full-width reference coverage and zero mapped-land shorts. All 236 component courtyards clear after relocating eight passives. The other 28 DDR links remain open on this checkpoint. [Saved populated circuit and checks](https://github.com/Abse2001/pixel-dash/tree/pixel-dash-populated-ddr-locked/studies/data-bytes) · [Preserved breakout](https://github.com/Abse2001/pixel-dash/tree/pixel-dash-ddr-bytes-verified-2dc2af8)
