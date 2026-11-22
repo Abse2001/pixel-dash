@@ -175,7 +175,7 @@ apply_wide_layout(board)
 paths = json.loads((root / "system-paths.json").read_text())
 layers = ("top", "inner1", "inner2", "bottom")
 for saved_name, plan in paths.items():
-    if saved_name.startswith("system_"):
+    if saved_name.startswith(("system_", "rail_")):
         source = one(board, "source_trace", source_trace_id=saved_name)
     else:
         source = one(board, "source_trace", display_name=saved_name)
