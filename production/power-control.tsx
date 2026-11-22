@@ -208,5 +208,10 @@ export function PowerControl() {
       outerDiameter={0.30} holeDiameter={0.15} connectsTo="net.VDDS_DDR"/>
     <trace from=".C_PMIC_DDR > .pin1" to=".V_DRAM_OUTPUT > .top" thickness={0.45} pcbStraightLine/>
     <trace from=".V_DRAM_OUTPUT > .bottom" to=".V_DRAM_PLANE > .bottom" thickness={0.45} pcbStraightLine/>
+    <trace from=".U_PMIC > .IN_DCDC4" to="net.VSYS"/>
+    <trace from=".U_PMIC > .DCDC4" to="net.VDD_IO_3V3_SEQ"/>
+    {Object.entries(processorBalls).filter(([, rail]) => rail === "VDDA3P3V_USB0" || rail === "VDDA3P3V_USB1").map(([ball]) => (
+      <trace key={ball} from={".U1 > ." + ball} to="net.VDD_IO_3V3_SEQ"/>
+    ))}
   </>
 }
