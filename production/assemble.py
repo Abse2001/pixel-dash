@@ -122,7 +122,10 @@ def bind_supply(ref, terminal, net):
     return sid
 
 # The old FPC doubled as a ground tie for the right shoulder switch.
-bind_supply("SW_R", "pin4", ground(board))
+bind_supply("SW_R", "pin2", ground(board))
+for shoulder in ("SW_L", "SW_R"):
+    for tab in ("pin3", "pin4"):
+        bind_supply(shoulder, tab, ground(board))
 for name, numbers in panel_rails.items():
     if name == "GND":
         net = ground(board)

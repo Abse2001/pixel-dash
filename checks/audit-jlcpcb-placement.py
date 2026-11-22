@@ -79,6 +79,14 @@ def main():
                 geometry[land["pcb_component_id"]][pin].append(land_center(land))
     writer = csv.writer(sys.stdout)
     writer.writerow(("part", "jlcpcb", "side", "export_deg", "best_deg", "max_error_mm", "matched", "status"))
+    # Omron B3F-3152, PCB Processing Dimensions, top view. The catalog reverses
+    # the two bonded frame tabs and uses a wider pitch. Audit the real drill
+    # pattern independently and retain the supplier land comparison below.
+    shoulder_holes = defaultdict(dict)
+    for land in board:
+        if land["type"] == "pcb_plated_hole":
+            pin = pad_number(land.get("port_hints", []))
+            shoulder_holes[land["pcb_component_id"]][pin] = land
     findings = 0
     tested = set()
     for footprint in board:
@@ -99,6 +107,20 @@ def main():
             pin = pad_number(hints)
             if pin is not None and x is not None and y is not None:
                 supplier[pin].append((x, y))
+        if part.get("manufacturer_part_number") == "B3F-3152":
+            holes = shoulder_holes[footprint["pcb_component_id"]]
+            reference = {1: (-2.25, -1.25), 2: (2.25, -1.25),
+                         3: (-3.50, 1.25), 4: (3.50, 1.25)}
+            if set(holes) != set(reference):
+                raise ValueError(f"Incomplete shoulder drill pattern on {name}")
+            if any(abs(holes[pin]["hole_diameter"] - (1 if pin in (1, 2) else 1.5)) > .05
+                   for pin in reference):
+                raise ValueError(f"Incorrect shoulder drill on {name}")
+            drawing = {pin: [point] for pin, point in reference.items()}
+            result = compare(geometry[footprint["pcb_component_id"]], drawing, angle, side)
+            if result[-1] != "matches":
+                raise ValueError(f"{name} differs from the Omron top view at the placement angle: {result}")
+            print(f"{name} matches the Omron B3F-3152 drill pattern and orientation.", file=sys.stderr)
         result = compare(geometry[footprint["pcb_component_id"]], supplier, angle, side)
         writer.writerow((name, code, side, angle, *result))
         tested.add(name)

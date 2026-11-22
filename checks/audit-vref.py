@@ -91,6 +91,9 @@ def verify(elements, check_ddr_power=False, check_ddr_signals=False, check_syste
             terminal = "pin1" if axis[1] == "X" else "pin4"
             required.append([f"{connector}.{terminal}", f"R_JOY_{axis}.pin1"])
     if check_retained_returns:
+        for switch, ball in (("SW_L", "B17"), ("SW_R", "B13")):
+            required[2].extend(f"{switch}.pin{pin}" for pin in (2, 3, 4))
+            required.append([f"{switch}.pin1", f"U1.{ball}"])
         required[2].extend(f"R_SYSBOOT{b}.pin1" for b in (3,5,6,7,8,9,10,11,12,13,15))
         required[2].extend([*(f"J_LCD.pin{n}" for n in (5, 36, 38, 48)), "C_SD_BULK.pin2", "R_LOGIC_FB_BOTTOM.pin2", "C_AMP_VDD_BULK.pin2", "U_SPK_AMP.PGND2",
                             "J_SPK.pin3", "C_3V3_IN.pin2", "R_LCD_BL_PULLDOWN.pin2"])
