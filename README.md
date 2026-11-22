@@ -16,7 +16,17 @@ DDR envelope at the required 0.408 mm setback. Running
 gives maximum distances of 0.0000, 0.0259, 0.0000, 0.0574 and 0.2086 mm
 over their entire lands. Even a zero-width connection fails this bound on
 the current routing. The older protected copper is available in git.
-The offset placement remains on its own study branch. Würth
+A separate launch search samples a 0.102 mm wire at the edge of each
+power land. For B5 the 25° direction requires relocating A14, A6 and A8.
+For N5 the 353° direction requires relocating A10, D1, D12 and D14.
+B4 and C5 share six blocking command nets. The search tests only the DDR
+envelope and lists candidates for a coordinated reroute. It does not
+establish an obstacle-free route to the PMIC.
+[Boot escape directions and blocking nets](checks/current-boot-escape-corridors.csv)
+
+The [offset placement](https://github.com/Abse2001/pixel-dash/tree/488aee8)
+has cleared all 25 original copper-spacing findings. Its 50 physical DDR
+links pass, with 13 full-width reference gaps and both byte windows still open. Würth
 HDI4_1-2b-1_149_35_2V13 is the pinned engineering cross section.
 DDR timing, hot LS1 margin and supplier acceptance remain open.
 
@@ -318,7 +328,7 @@ microvias, 0.200/0.360 mm buried vias and 0.150/0.300 mm through vias among
 other sizes. The published construction does not grant acceptance of those
 geometries. The stack drawing specifies IPC-4101/21 material and finished
 foil. Lot dielectric constant, etched conductor shape and barrel-wall
-thickness are unconfirmed. The current CAD thickness is still 1.6 mm.
+thickness are unconfirmed. The wide CAD uses the drawing’s 1.491 mm nominal finished thickness. The four copper layers span 1.420 mm between outer copper centerlines.
 
 For board 77e38f1, use --wurth with checks/estimate-ddr-impedance.py,
 checks/estimate-ls1-pours.py --joined, and checks/screen-ls1-drop.py

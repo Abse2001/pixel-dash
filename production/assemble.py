@@ -67,6 +67,15 @@ board_spec = one(board, "pcb_board")
 channel_spec = one(channel, "pcb_board")
 if any(spec["num_layers"] != 4 for spec in (channel_spec, board_spec)):
     raise ValueError("Expected a four-layer board")
+# Retained component models were rendered on the previous board faces.
+# Preserve their seating offsets when applying the wide stack's thickness.
+face_shift = (channel_spec["thickness"] - board_spec["thickness"]) / 2
+mounted_layers = {e["pcb_component_id"]: e["layer"] for e in board
+                  if e["type"] == "pcb_component" and e.get("layer") in ("top", "bottom")}
+for model in board:
+    side = mounted_layers.get(model.get("pcb_component_id"))
+    if model["type"] == "cad_component" and side:
+        model["position"]["z"] += face_shift if side == "top" else -face_shift
 # The retained board has the qualified mechanical notch absent on the older
 # channel outline. Keep the complete retained board contour and all cutouts.
 for k in ("allow_blind_and_buried_vias","is_via_in_pad_allowed","min_via_hole_diameter","min_via_pad_diameter"):

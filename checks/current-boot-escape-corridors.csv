@@ -1,0 +1,7 @@
+ball,direction_degrees_from_positive_x,launch_x_mm,launch_y_mm,number_of_routes_to_move,interfering_routes
+B4,44,-49.10662,21.23893,7,DDR_A13 DDR_A14 DDR_A2 DDR_A6 DDR_A8 DDR_BA2 DDR_CKE
+B5,25,-48.28333,21.20514,3,DDR_A14 DDR_A6 DDR_A8
+C5,40,-48.30023,20.43172,6,DDR_A13 DDR_A14 DDR_A2 DDR_A6 DDR_A8 DDR_CKE
+N5,353,-48.27192,12.33411,4,DDR_A10 DDR_D1 DDR_D12 DDR_D14
+P5,354,-48.27157,11.53741,3,DDR_A10 DDR_D1 DDR_D12
+R1,,,,,fixed lands block all sampled directions
