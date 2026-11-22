@@ -19,7 +19,8 @@ STROBE7. The independent retained regulator has no copper path to the
 socket supply. The 0.75 mm card feed is 74.81 mm with three plated
 transitions. The local 100 nF and 1 µF bypasses and socket VSS reach the
 main return. Run the drilled-Gerber audit with `--mmc0-power` for each
-socket, CPU, capacitor and resistor terminal and rail isolation.
+socket, CPU, capacitor and resistor terminal and rail isolation. Use
+`--mmc0-only` for the focused pass/fail exit code.
 
 TI rates DCDC4 at 1.0 A at 2.8 V input, 1.3 A at 3.6 V and 1.6 A at 5 V
 for 3.3 V output. The six CPU I/O banks total 350 mA at their listed

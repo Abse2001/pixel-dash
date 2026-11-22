@@ -245,7 +245,7 @@ def mmc0_power(terminals):
     for contact, ball in (("CLK", "G17"), ("CD", "C15")):
         signals.append(terminals["J_SD." + contact])
         passed &= signals[-1] == terminals["U1." + ball]
-    passed &= len(set(signals) | {supply, ground, legacy}) == 10
+    passed &= len(set(signals) | {supply, ground, legacy, terminals["U_PMIC.IN_DCDC4"]}) == 11
     print("MMC0 sequenced card power and seven distinct links:", "PASS" if passed else "FAIL")
     return not passed
 
@@ -292,7 +292,11 @@ def main():
     parser.add_argument("--sysboot", action="store_true", help="decode physical reset straps from resistor lands and CPU balls")
     parser.add_argument("--panel-storage", action="store_true", help="verify CPU-to-FPC and CPU-to-card physical endpoints")
     parser.add_argument("--mmc0-power", action="store_true", help="require card supply, ground, pull-ups and all seven links")
+    parser.add_argument("--mmc0-only", action="store_true",
+                        help="return the drilled MMC0 result independently of other open nets")
     args = parser.parse_args()
+    if args.mmc0_only and any((args.pmic_controls, args.handheld_ground, args.cpu_power, args.sysboot, args.panel_storage)):
+        parser.error("--mmc0-only cannot be combined with whole-handheld checks")
     board = json.loads(args.circuit.read_text())
     drill = runpy.run_path(str(CHECKS / "audit-channel-drills.py"))
     expected = drill["expected_drills"](board)
@@ -373,6 +377,9 @@ def main():
     for node, keys in owners.items():
         if len(keys) > 1:
             raise ValueError(f"CAM short at {node} joins {sorted(keys)}")
+    terminals = {port_labels[pid]: node for pid, node in by_pad.items() if pid in port_labels}
+    if args.mmc0_only:
+        return mmc0_power(terminals)
     ports = {e["source_port_id"]: e["pcb_port_id"] for e in board if e["type"] == "pcb_port" and e.get("source_port_id")}
     ddr_nodes = set()
     for trace in board:
@@ -384,7 +391,6 @@ def main():
     if len(ddr_nodes) != 50:
         raise ValueError(f"Expected 50 physically distinct DDR links, found {len(ddr_nodes)}")
     print(f"50 distinct DDR ball pairs connected. {len(plating)} plated barrels checked. No shorts between mapped land nets.")
-    terminals = {port_labels[pid]: node for pid, node in by_pad.items() if pid in port_labels}
     if "TP_UART_RX.pin1" in terminals:
         probes = (("U1.E15", "TP_UART_RX.pin1"), ("U1.E16", "TP_UART_TX.pin1"), ("TP_UART_GND.pin1", "C_DDR25.pin2"))
         networks = {terminals[a] for a, _ in probes}
