@@ -93,6 +93,33 @@ if "via_ddr_supply_output" not in via and any(e.get("name") == "U_DDR_SWITCH" fo
     for pitch in (.08, .055, .040, .030, .025):
         resistance = squares(sheet, first, last, pitch) * .01724 / stack.foil
         print(f"  buffered mesh {pitch:g} mm: {resistance:.4f} mOhm at 20 C")
+    # The rendered row links end at pad edges. Solve the solid artwork through
+    # the BGA lands to a finite E5 contact, including the lands between links.
+    cpu_id, = (e["source_component_id"] for e in board if e["type"] == "source_component" and e.get("name") == "U1")
+    ball_id, = (e["source_port_id"] for e in board if e["type"] == "source_port" and
+                e.get("source_component_id") == cpu_id and e["name"] == "E5")
+    e5, = (e for e in board if e["type"] == "pcb_port" and e.get("source_port_id") == ball_id)
+    terminal = dict(x=e5["x"], y=e5["y"], outer_diameter=.150)
+    crop = box(min(e5["x"],last["x"])-2, min(e5["y"],last["y"])-2,
+               max(e5["x"],last["x"])+2, max(e5["y"],last["y"])+2)
+    top = artwork(archive, "F_Cu.gbr").intersection(crop)
+    with ZipFile(archive) as z:
+        top_bores = []
+        for member, expected in drill["expected_drills"](board).items():
+            if "L1" not in member and "npth" not in member:
+                continue
+            drill["compare"](member, z.read(member).decode().splitlines(), expected.copy())
+            for diameter, points in expected:
+                center = Point(points[0]) if len(points) == 1 else LineString(points)
+                if center.distance(crop) <= diameter/2:
+                    top_bores.append(center.buffer(diameter/2, quad_segs=48))
+    top = top.difference(unary_union(top_bores))
+    row, = (g for g in top.geoms if g.covers(land(terminal)) and g.intersection(land(last)).area > .001)
+    print("Drilled L1 from CPU feed annulus to 0.150 mm E5 contact; all CPU load at E5.")
+    for pitch in (.025, .0175, .0125, .009):
+        resistance = squares(row, last, terminal, pitch) * .01724 / stack.foil
+        print(f"  CPU row mesh {pitch:g} mm: {resistance:.4f} mOhm at 20 C")
+
 else:
     pairs = [("upper", "bridge_upper"), ("bridge_lower", "balls")]
     islands = []
