@@ -1,5 +1,6 @@
 """Walk connected copper and plated barrels in the exported four-layer board."""
 import argparse
+import csv
 import json
 import re
 import runpy
@@ -131,6 +132,28 @@ def sysboot(terminals):
     return word != f"{0x4017:016b}"
 
 
+def panel_and_storage(terminals):
+    with (CHECKS.parent / "production/interface.csv").open() as f:
+        mapped = list(csv.DictReader(f))
+    expected = [{f"LCD_D{i}" for i in range(24)} | {"LCD_PCLK", "LCD_DE", "LCD_HSYNC", "LCD_VSYNC", "LCD_RESET"},
+                {"SD_CLK", "SD_CMD", "SD_DAT0", "SD_DAT1", "SD_DAT2", "SD_DAT3", "SD_DETECT"}]
+    failed = False
+    for names, prefix in zip(expected, ("LCD_", "SD_")):
+        rows = [r for r in mapped if r["Signal"].startswith(prefix)]
+        if {r["Signal"] for r in rows} != names or len(rows) != len(names):
+            raise ValueError(f"Incomplete or duplicate {prefix} interface entries")
+        reached = []
+        for row in rows:
+            source = terminals["U1." + row["Ball"]]
+            target = terminals[row["Peripheral"] + "." + row["Pin"]]
+            if source == target:
+                reached.append(row["Signal"])
+        print(f"{prefix[:-1]} CPU-to-connector copper {len(reached)}/{len(rows)}. Reached " +
+              (", ".join(reached) or "none") + ". Open " + (", ".join(sorted(names - set(reached))) or "none") + ".")
+        failed |= len(reached) != len(rows)
+    return failed
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("circuit", type=Path)
@@ -139,6 +162,7 @@ def main():
     parser.add_argument("--handheld-ground", action="store_true", help="require all mapped ground lands and barrels to share the UART ground network")
     parser.add_argument("--cpu-power", action="store_true", help="check assigned CPU supply domains and returns against their physical sources")
     parser.add_argument("--sysboot", action="store_true", help="decode physical reset straps from resistor lands and CPU balls")
+    parser.add_argument("--panel-storage", action="store_true", help="verify CPU-to-FPC and CPU-to-card physical endpoints")
     args = parser.parse_args()
     board = json.loads(args.circuit.read_text())
     drill = runpy.run_path(str(CHECKS / "audit-channel-drills.py"))
@@ -262,12 +286,13 @@ def main():
     startup_failed = args.cpu_power and rtc_startup(terminals)
     power_failed = args.cpu_power and processor_power(terminals)
     straps_failed = args.sysboot and sysboot(terminals)
+    interfaces_failed = args.panel_storage and panel_and_storage(terminals)
     opens = {k: len(v) for k, v in nodes_by_net.items() if len(v) > 1}
     for key, count in sorted(opens.items()):
         examples = [", ".join(sorted(members[key][node])[:3]) or "via only" for node in sorted(nodes_by_net[key])]
         print(f"OPEN {key} has {count} separate CAM networks: " + " | ".join(examples))
     print(f"{len(opens)} mapped land nets have multiple physical networks.")
-    return bool(opens) or power_failed or startup_failed or straps_failed
+    return bool(opens) or power_failed or startup_failed or straps_failed or interfaces_failed
 
 
 if __name__ == "__main__":

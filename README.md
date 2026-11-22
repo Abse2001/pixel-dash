@@ -379,3 +379,9 @@ DE and HSYNC each have zero legal through-via sites reachable within the
 CPU-side L1 region screened by this router. The display-side regions for
 all four have via candidates. A wider search around the display does not
 resolve these CPU escapes. Five existing raster paths remain in the layout.
+
+The --panel-storage option on the CAM connectivity audit walks all 29 LCD
+connections and all seven microSD connections between the package and their
+connector contacts. At 59b63fc the physical LCD paths are D11, D13, D14,
+D15 and PCLK. All six MMC0 bus signals and card detect reach the card socket.
+Socket power and the physical boot straps still gate card boot.
