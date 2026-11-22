@@ -9,7 +9,7 @@ from shapely.geometry import Point
 from shapely.ops import unary_union
 
 
-def screen(board, ram_y, pins):
+def screen(board, ram_y, pins, routed=False):
     copper = runpy.run_path(str(Path(__file__).with_name("audit-copper-contacts.py")))["copper"](board)
     elements = {e[e["type"] + "_id"]: e for e in board if e["type"] + "_id" in e}
     components = {e["name"]: e["source_component_id"] for e in board if e["type"] == "source_component"}
@@ -37,8 +37,13 @@ def screen(board, ram_y, pins):
     cpu = unary_union(cpu_lands).convex_hull
     ram = unary_union(ram_lands).convex_hull
     print("ram_delta_y_mm,ball,max_pad_edge_distance_mm,required_setback_mm,headroom_mm")
-    for dy in ram_y:
-        hull = cpu.union(translate(ram, yoff=dy)).convex_hull
+    if routed:
+        saved = [shape for layer in ("top", "bottom") for oid, net, shape in copper[layer]
+                 if net in signals or elements[oid].get("pcb_component_id") == pcb[components["U_DDR"]]]
+        trials = [(0, unary_union(saved).convex_hull)]
+    else:
+        trials = [(dy, cpu.union(translate(ram, yoff=dy)).convex_hull) for dy in ram_y]
+    for dy, hull in trials:
         for pin in pins:
             # Distance to a convex set is convex, so its maximum on a polygon is at a vertex.
             distance = max(hull.distance(Point(xy)) for xy in escape_lands[pin].exterior.coords)
@@ -50,5 +55,6 @@ if __name__ == "__main__":
     parser.add_argument("board", type=Path)
     parser.add_argument("--ram-dy", type=float, nargs="+", default=[0, .5, 1, 1.5])
     parser.add_argument("--balls", nargs="+", default=["R1", "B4", "B5", "C5", "C6"])
+    parser.add_argument("--routed", action="store_true", help="bound escapes using both saved copper faces and the current RAM lands")
     args = parser.parse_args()
-    screen(json.loads(args.board.read_text()), args.ram_dy, args.balls)
+    screen(json.loads(args.board.read_text()), args.ram_dy, args.balls, args.routed)

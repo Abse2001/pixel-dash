@@ -1,9 +1,9 @@
 drill_npth.drl matches 19 round hits and 0 slots
 drill-L1-L4.drl matches 677 round hits and 6 slots
-drill-L1-L2.drl matches 247 round hits and 0 slots
+drill-L1-L2.drl matches 249 round hits and 0 slots
 drill-L2-L3.drl matches 9 round hits and 0 slots
 drill-L3-L4.drl matches 23 round hits and 0 slots
-50 distinct DDR ball pairs connected. 962 plated barrels checked. No shorts between mapped land nets.
+50 distinct DDR ball pairs connected. 964 plated barrels checked. No shorts between mapped land nets.
 UART0 RX, TX and ground reach three distinct probe networks.
 PMIC copper verified between U_PMIC.L4A and L_PMIC_IO.pin1.
 PMIC copper verified between U_PMIC.L4B and L_PMIC_IO.pin2.
@@ -40,7 +40,7 @@ Processor supply/return to C_PMIC_MPU.pin1: 7/7 balls connected.
 Processor supply/return to C_PMIC_RTC_CORE.pin1: 1/1 balls connected.
 Processor supply/return to C_PMIC_RTC_IO.pin1: 1/2 balls connected. Open B4
 Processor supply/return to U_PMIC.LS1: 7/7 balls connected.
-Processor supply/return to U_PMIC.DCDC4: 13/15 balls connected. Open N5, P5
+Processor supply/return to U_PMIC.DCDC4: 19/21 balls connected. Open N5, P5
 Processor supply/return to U_PMIC.LDO1: 16/16 balls connected.
 DDR memory supply to DCDC3 output capacitor: 18/18 VDD/VDDQ balls connected.
 DDR memory supply isolation from CPU VDDS_DDR: PASS.
@@ -75,6 +75,8 @@ SYSBOOT13 bias=0 CPU_to_resistor=True sense_isolated=True
 SYSBOOT14 bias=1 CPU_to_resistor=True sense_isolated=True
 SYSBOOT15 bias=0 CPU_to_resistor=True sense_isolated=True
 Physical SYSBOOT[15:0] 010?0???????????, expected 0100000000010111.
+LCD CPU-to-connector copper 5/29. Reached LCD_D11, LCD_D13, LCD_D14, LCD_D15, LCD_PCLK. Open LCD_D0, LCD_D1, LCD_D10, LCD_D12, LCD_D16, LCD_D17, LCD_D18, LCD_D19, LCD_D2, LCD_D20, LCD_D21, LCD_D22, LCD_D23, LCD_D3, LCD_D4, LCD_D5, LCD_D6, LCD_D7, LCD_D8, LCD_D9, LCD_DE, LCD_HSYNC, LCD_RESET, LCD_VSYNC.
+SD CPU-to-connector copper 7/7. Reached SD_CLK, SD_CMD, SD_DAT0, SD_DAT1, SD_DAT2, SD_DAT3, SD_DETECT. Open none.
 OPEN channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net65 has 2 separate CAM networks: U1.C5 | R_PMIC_WAKE.pin1, U_PMIC.nWAKEUP
 OPEN channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net79 has 2 separate CAM networks: U1.B4 | C_PMIC_RTC_IO.pin1, L_PMIC_RTC_IO.pin2, R_PMIC_WAKE.pin2
 OPEN channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net82 has 2 separate CAM networks: U1.B5 | U_PMIC.PGOOD_BU

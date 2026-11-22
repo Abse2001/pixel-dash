@@ -2,7 +2,27 @@
 
 ## Wide handheld checkpoint
 
-All 50 AM3354-to-DDR3L signals reach their intended balls on 50 distinct electrical nodes. The adjacent plane covers the full trace width for all 50 signals outside their own via launch antipads. The board-wide 0.102 mm unrelated-copper, 0.1524 mm via-edge and drill-spacing checks pass. Each of the 7,343 routed strokes matches the copper Gerbers, and all five drill files match the board.
+**Fabrication is on hold.** DCDC4 supplies 19/21 assigned 3.3 V CPU/USB
+lands, including both supply balls of VDDSHV1, VDDSHV2 and VDDSHV4.
+Banks 2 and 4 power the upper raster data signals and MMC0 respectively.
+N5 and P5 are open. LDO1 reaches all 16 assigned 1.8 V loads. Only four
+CPU straps reach their bias resistors. CAM finds 5/29 CPU-to-panel and 7/7
+CPU-to-card signal paths, with 39 mapped nets still open across the board.
+[PCB snapshot](previews/handheld.png) · [Physical connectivity](checks/current-cam-connectivity.txt)
+
+B4, B5, C5, N5 and P5 cannot accept unrelated copper outside the saved
+DDR envelope at the required 0.408 mm setback. Running
+`checks/screen-ddr-placement.py <board.json> --routed --balls B4 B5 C5 N5 P5`
+gives maximum distances of 0.0000, 0.0259, 0.0000, 0.0574 and 0.2086 mm
+over their entire lands. Even a zero-width connection fails this bound on
+the current routing. The older protected copper is available in git.
+The offset placement remains on its own study branch. Würth
+HDI4_1-2b-1_149_35_2V13 is the pinned engineering cross section.
+DDR timing, hot LS1 margin and supplier acceptance remain open.
+
+### Routing and verification history
+
+All 50 AM3354-to-DDR3L signals reach their intended balls on 50 distinct electrical nodes. The adjacent plane covers the full trace width for all 50 signals outside their own via launch antipads. The board-wide 0.102 mm unrelated-copper, 0.1524 mm via-edge and drill-spacing checks pass. Each of the 7,491 routed strokes matches the copper Gerbers, and all five drill files match the board.
 
 The L3 ground pour now clears the DDR island area before the exporter draws the supply copper. In older archives the final clear aperture erased the supply island. To verify a new export, install Gerbonara and Shapely 2 and run both `python checks/audit-ddr-reference-planes.py dist/index.circuit.json --full-width --gerbers engineering.zip` and `python checks/audit-ddr-keepout.py dist/index.circuit.json --envelope --gerbers engineering.zip`. The first check passes on all 50 DDR routes outside their own launches. The second reports zero signal or reference-layer findings across the reconstructed DDR region and setback. [CAM envelope results](checks/current-ddr-cam-envelope.csv) The CPU VREF link formerly cut a 1.152 mm² slot through the L3 reference. Two through vias now carry the link across the outer layers. The 0.32 mm bottom section and both top escapes clear unrelated copper, and all three VREF bypass connections pass continuity. The Gerber polarity check uses the connected reference island, preserving flashed lands, clearance apertures and draw order.
 
@@ -16,7 +36,7 @@ The fitted MT41K512M16VRP-107 IT:P is one rank made from two x8 dies. Its 16 row
 
 Three 1 mm probe lands on the underside expose UART0 RX (U1.E15), UART0 TX (U1.E16) and ground at 2.54 mm pitch. Connect adapter TX to RX, adapter RX to TX, and ground to ground. Use a 3.3 V logic adapter with its supply lead disconnected, and power the board before driving RX. SYSBOOT selects UART0 as a fallback after MMC0 and SPI0. All three lands have mask openings and no stencil apertures. The console still requires powered VDDSHV6, valid reset and boot sequencing. [TI AM335x boot configuration](https://www.ti.com/lit/ug/spruh73q/spruh73q.pdf)
 
-Run `python checks/audit-cam-connectivity.py dist/index.circuit.json engineering.zip --pmic-controls --handheld-ground --cpu-power` to reconstruct the four finished copper layers and walk the plated barrels. The 50 DDR links and the three UART probe connections pass. The whole-board screen reports 39 schematic land nets with multiple disconnected copper networks. [CAM connectivity report](checks/current-cam-connectivity.txt)
+Run `python checks/audit-cam-connectivity.py dist/index.circuit.json engineering.zip --pmic-controls --handheld-ground --cpu-power --sysboot --panel-storage` to reconstruct the four finished copper layers and walk the plated barrels. The 50 DDR links and the three UART probe connections pass. The whole-board screen reports 39 schematic land nets with multiple disconnected copper networks. [CAM connectivity report](checks/current-cam-connectivity.txt)
 
 CAM verifies the 0.30 mm DCDC3 output-capacitor link to IN_LS1, the nWAKEUP pull-up connection, nINT to U1.T14 and PGOOD to U1.B15. The 10 kΩ cold-reset pull-up joins PGOOD to the sequenced 3.3 V rail through its two separate lands. RTC reset and the processor wake signal still need copper. The five routed raster signals pass full-width exported reference coverage. Local changes to CLK, CMD, DAT1, DAT3 and DETECT keep the entire width of each routed microSD trace above connected ground outside its own launches. Run the exported reference check with `--micro-sd --full-width --gerbers engineering.zip`.
 
@@ -40,9 +60,9 @@ The same CAM check audits DDR power separately from its 50 signal nets. TI Figur
 
 Run `python checks/screen-ls1-drop.py dist/index.circuit.json` for the LS1 screening budget. At 300 mA, 1.35 V minus 2%, and 110 mΩ switch resistance, the CPU's 1.283 V minimum leaves 7 mV for the board. With 35 µm foil at 20 °C the widened feed models 9.630 mV of trace drop and 2.798 mV in seven barrel sections. This case misses the minimum by 5.428 mV before plane spreading, return drop and transients. The input feed now widens from 0.30 mm in its constrained sections to 1.40 mm where clearance permits. This lowers its modeled trace resistance from 18.502 to 10.785 mΩ at 35 µm and 20 °C. The 300 mA figure is the switch's recommended operating ceiling. A measured CPU DDR current profile or validated workload estimate is still needed. The switched bank is 46 µF nominal. Its two 22 µF bulk parts are Samsung CL21A226MAQNNNE, 25 V X5R, JLCPCB C45783. As a sensitivity case, 50% retained capacitance would give 4.35 mV ideal droop for 100 mA over 1 µs. DC bias, tolerance, temperature, aging, ESR, ESL and enable inrush require verification with the fitted parts. [TI TPS65218D0 electrical characteristics](https://www.ti.com/lit/ds/symlink/tps65218d0.pdf) · [TI AM335x recommended operating conditions](https://www.ti.com/lit/ds/symlink/am3354.pdf)
 
-The sequenced 3.3 V DCDC4 buck-boost now has its 1.5 µH TDK inductor between L4A and L4B, two 47 µF ceramic output capacitors and eight local ground-return vias. CAM checks both ends of the inductor, both capacitors and the isolation of the two switch nodes, output, input and ground. The output feeds the PGOOD pull-up supply, the boot-high resistor bank and thirteen of the fifteen processor supply lands. Both cold-reset pull-up terminals pass the exported connectivity check. Effective output capacitance, input bypass, source distribution, load capability and startup remain open. [TI DCDC4 pin functions and electrical characteristics](https://www.ti.com/lit/ds/symlink/tps65218d0.pdf)
+The sequenced 3.3 V DCDC4 buck-boost now has its 1.5 µH TDK inductor between L4A and L4B, two 47 µF ceramic output capacitors and eight local ground-return vias. CAM checks both ends of the inductor, both capacitors and the isolation of the two switch nodes, output, input and ground. The output feeds the PGOOD pull-up supply, the boot-high resistor bank and nineteen of the twenty-one processor supply lands. Both cold-reset pull-up terminals pass the exported connectivity check. Effective output capacitance, input bypass, source distribution, load capability and startup remain open. [TI DCDC4 pin functions and electrical characteristics](https://www.ti.com/lit/ds/symlink/tps65218d0.pdf)
 
-A 0.81 mm MPU branch from F10 to F11 opens space for a 0.18 mm 3.3 V link from E12 to E11. E10 and E11 now join the powered I/O bank. CAM verifies every MPU ball and thirteen of fifteen selected 3.3 V balls. The remaining lands are N5 and P5 in VDDSHV6. The SYSBOOT source checker decodes 0x4017, selecting 24 MHz and MMC0, SPI0, UART0 and USB0 in sequence. Open strap copper prevents treating that word as a verified latched boot configuration.
+A 0.81 mm MPU branch from F10 to F11 opens space for a 0.18 mm 3.3 V link from E12 to E11. E10 and E11 now join the powered I/O bank. CAM verifies every MPU ball and nineteen of twenty-one 3.3 V balls. The remaining lands are N5 and P5 in VDDSHV6. The SYSBOOT source checker decodes 0x4017, selecting 24 MHz and MMC0, SPI0, UART0 and USB0 in sequence. Open strap copper prevents treating that word as a verified latched boot configuration.
 
 Two 1.20 mm VSYS routes with 0.35 mm drills and 0.65 mm via lands now connect the battery boost output to the handheld regulator input, amplifier input, power-button bias, backup converter input and DCDC4 input. Four 0.30 mm branches bring VSYS to IN_BIAS, IN_DCDC1, IN_DCDC2 and IN_DCDC3. All nine checked supply endpoints now pass CAM. Local input bypass, distribution losses at load and source changeover still require verification.
 

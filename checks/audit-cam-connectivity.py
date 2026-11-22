@@ -30,7 +30,7 @@ def processor_power(terminals):
         "C_PMIC_RTC_CORE.pin1": {"CAP_VDD_RTC"},
         "C_PMIC_RTC_IO.pin1": {"VDDS_RTC", "RTC_KALDO_ENn"},
         "U_PMIC.LS1": {"VDDS_DDR"},
-        "U_PMIC.DCDC4": {"VDDSHV3", "VDDSHV5", "VDDSHV6", "VDDA3P3V_USB0", "VDDA3P3V_USB1"},
+        "U_PMIC.DCDC4": {"VDDSHV1", "VDDSHV2", "VDDSHV3", "VDDSHV4", "VDDSHV5", "VDDSHV6", "VDDA3P3V_USB0", "VDDA3P3V_USB1"},
         "U_PMIC.LDO1": {"VDDS", "VDDS_PLL_DDR", "VDDS_PLL_MPU", "VDDS_PLL_CORE_LCD",
                         "VDDS_OSC", "VDDS_SRAM_CORE_BG", "VDDS_SRAM_MPU_BB",
                         "VDDA_ADC", "VDDA1P8V_USB0", "VDDA1P8V_USB1"},
