@@ -54,7 +54,7 @@ export function PowerControl() {
     <trace from=".R_PMIC_SCL > .pin2" to=".R_PMIC_SDA > .pin2" thickness={0.2}
       pcbPath={[{x:0.432816,y:-0.63},{x:-2.932816,y:-0.63}]}/>
     <trace from=".R_PMIC_SDA > .pin2" to="net.VDD_IO_3V3_SEQ"/>
-    {Object.entries(processorBalls).filter(([, supply]) => supply === "VDDSHV3" || supply === "VDDSHV6").map(([ball]) => (
+    {Object.entries(processorBalls).filter(([, supply]) => ["VDDSHV3", "VDDSHV5", "VDDSHV6"].includes(supply)).map(([ball]) => (
       <trace key={ball} from={".U1 > ." + ball} to="net.VDD_IO_3V3_SEQ"/>
     ))}
     <DdrSelect name="R_DDR_VSEL" pcbX={-14.4} pcbY={24.25}/>
