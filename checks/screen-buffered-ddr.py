@@ -43,24 +43,17 @@ def trace_r(trace):
     return r
 
 forward = sum(trace_r(traces[n]) for n in (
-    "pcb_ddr_switch_input_trunk", "pcb_ddr_switch_input_local", "pcb_ddr_supply_switch_output", "pcb_ddr_supply_cpu"))
+    "pcb_ddr_switch_input_trunk", "pcb_ddr_switch_input_local", "pcb_ddr_supply_switch_output"))
 for via_name in ("lower_bank", "balls"):
     v = vias["via_ddr_supply_" + via_name]
     assert len(v["layers"]) == 4
     forward += .01724 * WURTH.outer_to_outer / (math.pi * WURTH.wall * (v["hole_diameter"] + WURTH.wall))
-cpu = parts["U1"]["source_component_id"]
-pins = {e["name"]: e["source_port_id"] for e in board if e["type"] == "source_port" and e["source_component_id"] == cpu}
-ball_order = ["L5","K5","J5","H5","G5","F5","E5"]
-for a,b in zip(ball_order,ball_order[1:]):
-    link, = (e for e in board if e["type"] == "source_trace" and
-             set(e["connected_source_port_ids"]) == {pins[a], pins[b]})
-    route, = (t for t in traces.values() if t["source_trace_id"] == link["source_trace_id"])
-    forward += trace_r(route)
-loop = forward + sheet + ret
+row = finest(r"CPU row mesh ([\d.]+) mm: ([\d.]+) mOhm")
+loop = forward + sheet + ret + row
 # Worst bleed current calculated at the high rail and low resistor tolerance.
 total = .250 + 1.350*1.02/(47*.99)
 print(f"Full current to E5 through one VIN and one VOUT land. 20 C traces/barrels {forward:.3f}, "
-      f"drilled L4 feed {sheet:.3f}, CPU-to-regulator return {ret:.3f}, loop {loop:.3f} mOhm.")
+      f"drilled L4 feed {sheet:.3f}, drilled L1 CPU row {row:.3f}, CPU-to-regulator return {ret:.3f}, loop {loop:.3f} mOhm.")
 print(f"CPU 250 mA plus worst output bleed; screen all series sections at {total*1000:.2f} mA.")
 print("TPS22975 upper tabulated hot RON at 5 V VBIAS near this VIN is 25 mOhm; 34/40 mOhm screens "
       "bracket published bias corners and an added sensitivity. Data-sheet test current is 200 mA.")
