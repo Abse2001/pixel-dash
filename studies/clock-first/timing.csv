@@ -26,4 +26,4 @@ DDR_CSn0,open,open,,,,,,,,,,,OPEN
 DDR_ODT,open,open,,,,,,,,,,,OPEN
 DDR_RASn,open,open,,,,,,,,,,,OPEN
 DDR_RESETn,open,open,,,,,,,,,,,OPEN
-DDR_WEn,37.8471,open,,,,,,,,,,,OPEN
+DDR_WEn,37.8471,40.53557,top>inner2/inner2>bottom/bottom>inner2/inner2>top,2.84,19.046,,269.779,33.308,36.14999..38.68999,1.84558,,,OPEN

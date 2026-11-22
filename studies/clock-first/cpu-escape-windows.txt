@@ -1,0 +1,16 @@
+U1.J4: edge of search 9.4754 mm away; candidate via-center area 0.00018491 mm²; with full-width L2 return 0.00000000 mm²
+U1.J3: edge of search 8.4822 mm away; candidate via-center area 0.02108672 mm²; with full-width L2 return 0.01059942 mm²
+U1.G4: edge of search 0.0000 mm away; candidate via-center area 109.47793578 mm²; with full-width L2 return 109.39629191 mm²
+U1.G1: edge of search 8.1103 mm away; candidate via-center area 0.09663446 mm²; with full-width L2 return 0.08655672 mm²
+U1.F1: edge of search 8.0746 mm away; candidate via-center area 0.00004755 mm²; with full-width L2 return 0.00000000 mm²
+U1.H2: edge of search 9.4973 mm away; candidate via-center area 0.00372992 mm²; with full-width L2 return 0.00165100 mm²
+U1.F4: edge of search 0.0000 mm away; candidate via-center area 117.54065887 mm²; with full-width L2 return 117.47792355 mm²
+U1.C3: edge of search 0.0000 mm away; candidate via-center area 161.82871176 mm²; with full-width L2 return 161.76255874 mm²
+U1.F3: edge of search 0.0000 mm away; candidate via-center area 118.15457440 mm²; with full-width L2 return 118.08479592 mm²
+U1.E3: edge of search 0.0000 mm away; candidate via-center area 132.14443900 mm²; with full-width L2 return 132.07526357 mm²
+U1.E4: edge of search 0.0000 mm away; candidate via-center area 131.54106455 mm²; with full-width L2 return 131.47805352 mm²
+U1.H1: edge of search 9.5409 mm away; candidate via-center area 0.01037733 mm²; with full-width L2 return 0.00813417 mm²
+U1.C2: edge of search 0.0000 mm away; candidate via-center area 162.61702195 mm²; with full-width L2 return 162.54477864 mm²
+U1.F2: edge of search 0.0000 mm away; candidate via-center area 119.25883812 mm²; with full-width L2 return 119.15867643 mm²
+U1.G2: edge of search 9.5334 mm away; candidate via-center area 0.00075996 mm²; with full-width L2 return 0.00000000 mm²
+U1.H3: edge of search 9.5121 mm away; candidate via-center area 0.00101958 mm²; with full-width L2 return 0.00013063 mm²
