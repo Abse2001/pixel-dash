@@ -1,5 +1,6 @@
 import { CL05B104KO5NNNC } from "../imports/CL05B104KO5NNNC";
 import { GRM21BC81C226ME44L } from "../imports/GRM21BC81C226ME44L";
+import { CL21A226MAQNNNE } from "../imports/CL21A226MAQNNNE";
 import placement from "./bypass-placement.json";
 
 export function DdrBypass() {
@@ -7,7 +8,8 @@ export function DdrBypass() {
 		<>
 			{placement.map(({ chip, x, y, rotation, layer, kind, bodyOffsetY = 0, supplyViaDistance }, i) => {
 				const isBulk = kind === "bulk";
-				const Capacitor = isBulk ? GRM21BC81C226ME44L : CL05B104KO5NNNC;
+				const bulkCapacitor = chip === "U1" ? CL21A226MAQNNNE : GRM21BC81C226ME44L;
+				const Capacitor = isBulk ? bulkCapacitor : CL05B104KO5NNNC;
 				const viaDistance = isBulk ? 2.08 : 1.2;
 				const name = "C_DDR" + (i + 1);
 				const side = layer === "top" ? "top" : "bottom";

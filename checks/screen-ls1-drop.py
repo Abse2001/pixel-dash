@@ -51,6 +51,9 @@ via_mohm = sum(1000 * rho * depth / (math.pi * .020 * (bore + .020)) for bore, d
 
 assignments = json.loads((Path(__file__).resolve().parents[1] / "am3354/bypass-placement.json").read_text())
 caps = [parts[f"C_DDR{i}"] for i, item in enumerate(assignments, 1) if item["chip"] == "U1"]
+for cap in caps:
+    if cap["manufacturer_part_number"] not in ("CL21A226MAQNNNE", "CL05B104KO5NNNC"):
+        raise ValueError(f"Verify the LS1 X5R/X7R dielectric and derating for {cap['name']}")
 nominal = sum(c["capacitance"] for c in caps) * 1e6
 print(f"LS1 bank: {len(caps)} capacitors, {nominal:.2f} uF nominal. TI nominal window 10–100 uF.")
 if not 10 <= nominal <= 100:

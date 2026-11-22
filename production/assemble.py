@@ -266,6 +266,33 @@ for saved_name, plan in paths.items():
         board.remove(one(board, "pcb_trace_missing_error", pcb_trace_missing_error_id="open_" + sid))
     else:
         board = [e for e in board if not (e["type"] == "pcb_trace_missing_error" and e.get("source_trace_id") == sid)]
+# Land the cold-reset pull-up on the existing reset and sequenced I/O conductors.
+# Recompute the landing on the named trace centerline if its geometry shifts slightly.
+from shapely.geometry import LineString, Point
+from shapely.ops import nearest_points, unary_union
+for terminal, target_id, source_name, anchor, bends in [
+    ("pin1", "pcb_" + one(board, "source_trace", name="CPU_COLD_RESET")["source_trace_id"],
+     ".U_PMIC > .PGOOD to .R_PMIC_POR > .pin1", (-22.495659, 17.932201), []),
+    ("pin2", "pcb_io_feed_U1_L14", ".R_PMIC_POR > .pin2 to net.VDD_IO_3V3_SEQ", (-22.534, 17.244), [(-21.517184, 17.244)]),
+]:
+    source = one(board, "source_trace", display_name=source_name)
+    land = one(board, "pcb_port", source_port_id=port("R_PMIC_POR", terminal)["source_port_id"])
+    target = one(board, "pcb_trace", pcb_trace_id=target_id)
+    key = source["subcircuit_connectivity_map_key"]
+    if target["subcircuit_connectivity_map_key"] != key or land["layers"] != ["bottom"]:
+        raise ValueError(f"Reset pull-up rail or side changed at {terminal}")
+    lines = [LineString([(a["x"], a["y"]), (b["x"], b["y"])]) for a, b in zip(target["route"], target["route"][1:])
+             if a.get("layer") == b.get("layer") == "bottom"]
+    landing = nearest_points(Point(anchor), unary_union(lines))[1]
+    if landing.distance(Point(anchor)) > .20:
+        raise ValueError(f"Reset pull-up tap lost its target at {terminal}")
+    board.append(dict(type="pcb_trace", pcb_trace_id="pcb_por_tap_" + terminal, source_trace_id=source["source_trace_id"],
+                      subcircuit_connectivity_map_key=key,
+                      route=[dict(route_type="wire", layer="bottom", width=.13, x=land["x"], y=land["y"],
+                                  start_pcb_port_id=land["pcb_port_id"]),
+                             *[dict(route_type="wire", layer="bottom", width=.13, x=x, y=y) for x,y in bends],
+                             dict(route_type="wire", layer="bottom", width=.13, x=landing.x, y=landing.y)]))
+    board = [e for e in board if not (e["type"] == "pcb_trace_missing_error" and e.get("source_trace_id") == source["source_trace_id"])]
 gnd = ground(board)
 def add_ground_return(trace, point, via_id):
     board.append(dict(type="pcb_via", pcb_via_id=via_id, pcb_trace_id=trace["pcb_trace_id"],

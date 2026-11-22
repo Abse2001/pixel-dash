@@ -25,7 +25,7 @@ Startup copper OPEN U_PMIC.PGOOD_BU to U1.B5.
 Startup copper OPEN U_PMIC.nWAKEUP to U1.C5.
 Startup copper PASS R_PMIC_WAKE.pin2 to C_PMIC_RTC_IO.pin1.
 Startup copper OPEN U_PMIC.PWR_EN to U1.C6.
-Startup copper OPEN U_PMIC.PGOOD to R_PMIC_POR.pin1.
+Startup copper PASS U_PMIC.PGOOD to R_PMIC_POR.pin1.
 Startup copper PASS R_PMIC_POR.pin2 to U_PMIC.DCDC4.
 Startup copper PASS U_PMIC.PGOOD to U1.B15.
 Startup copper PASS U_PMIC.GPIO3 to U1.A10.
@@ -59,7 +59,6 @@ OPEN channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net63 has 2
 OPEN channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net64 has 2 separate CAM networks: U1.C5 | R_PMIC_WAKE.pin1, U_PMIC.nWAKEUP
 OPEN channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net76 has 2 separate CAM networks: U1.D6 | C_PMIC_RTC_CORE.pin1, L_PMIC_RTC_CORE.pin2, U_PMIC.FB5
 OPEN channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net78 has 2 separate CAM networks: U1.B4 | C_PMIC_RTC_IO.pin1, L_PMIC_RTC_IO.pin2, R_PMIC_WAKE.pin2
-OPEN channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net79 has 2 separate CAM networks: R_PMIC_POR.pin1 | U1.B15, U_PMIC.PGOOD
 OPEN channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net81 has 2 separate CAM networks: U1.B5 | U_PMIC.PGOOD_BU
 OPEN channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net84 has 3 separate CAM networks: U1.G6 | U1.F6 | C_PMIC_CORE.pin1, L_PMIC_CORE.pin2, U1.F7
 OPEN channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net89 has 9 separate CAM networks: C_PMIC_IO_A.pin1, C_PMIC_IO_B.pin1, R_PMIC_IRQ.pin2 | U1.P5 | U1.N5 | U1.E10, U1.E11 | U1.E12, U1.E13 | C_JOY_ADC.pin1, U_JOY_ADC.VDD | R_TOUCH_IRQ.pin2 | R_TOUCH_SDA.pin2 | R_TOUCH_SCL.pin2
@@ -98,4 +97,4 @@ OPEN unnamedsubcircuitsubcircuit_source_group_0_connectivity_net191 has 7 separa
 OPEN unnamedsubcircuitsubcircuit_source_group_0_connectivity_net193 has 2 separate CAM networks: R_LIPO_ENABLE.pin2, U_LIPO_BOOST.EN, U_LIPO_UVLO.N_RESET | Q_LIPO_USB_OFF.pin3
 OPEN unnamedsubcircuitsubcircuit_source_group_0_connectivity_net32 has 2 separate CAM networks: U1.N18 | J_USB.A7, J_USB.B7
 OPEN unnamedsubcircuitsubcircuit_source_group_0_connectivity_net34 has 2 separate CAM networks: U1.N17 | J_USB.A6, J_USB.B6
-43 mapped land nets have multiple physical networks.
+42 mapped land nets have multiple physical networks.
