@@ -14,4 +14,7 @@ Verified 8470 strokes from 633 PCB traces against all four copper Gerbers.
 U1.N2 DDR_D3 -> U_DDR.H7 DQ7
 U1.P4 DDR_D7 -> U_DDR.F8 DQ3
 No shorts detected in index.circuit.json
+
 0 nonlocal same-net DDR copper contacts
+Connected inner-layer Gerber copper covers all 70 blind-via lands.
+71 DDR terminals verified through 70 blind vias to their adjacent reference planes.

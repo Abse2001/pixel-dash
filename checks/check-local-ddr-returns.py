@@ -1,12 +1,16 @@
 """Verify shortened DDR ground and supply escapes against the finished L2 and L3 pours."""
+import argparse
 import json
 import math
-import sys
 from pathlib import Path
 from shapely.geometry import Point, Polygon, box
 from shapely import affinity
 
-a = json.loads(Path(sys.argv[1]).read_text())
+parser = argparse.ArgumentParser(description=__doc__)
+parser.add_argument("circuit", type=Path)
+parser.add_argument("--gerbers", type=Path, help="Verify complete via lands on the connected inner-layer Gerber polygons")
+args = parser.parse_args()
+a = json.loads(args.circuit.read_text())
 def rows(t):
     return [e for e in a if e["type"] == t]
 def xy(e):
@@ -34,6 +38,7 @@ for i, part in enumerate(bypass, 1):
                       "GND" if side == "top" else "VDDS_DDR"))
 ring = lambda r: [xy(p) for p in r["vertices"]]
 locations = set()
+exported = {}
 for ref, terminal, side, net in terminals:
     inner = "inner1" if side == "top" else "inner2"
     supply, = [n for n in rows("source_net") if n["name"] == net]
@@ -68,6 +73,20 @@ for ref, terminal, side, net in terminals:
             and any(math.dist(xy(v),q)<1e-5 for q in ends)]
     via, = vias
     assert plane.covers(Point(*xy(via)).buffer(via["outer_diameter"]/2)), (ref, terminal)
+    if args.gerbers:
+        from ddr_cam import reference
+
+        if inner not in exported:
+            member = {"inner1": "In1_Cu.gbr", "inner2": "In2_Cu.gbr"}[inner]
+            exported[inner] = reference(args.gerbers, member, plane.representative_point())
+        center = Point(*xy(via))
+        face = exported[inner]
+        # Compare against the inscribed radius used to polygonize Gerber round flashes.
+        radius = via["outer_diameter"] / 2
+        if not face.covers(center) or center.distance(face.boundary) < radius * math.cos(math.pi / 384) - 1e-7:
+            raise ValueError(f"{ref}.{terminal} via annulus exceeds connected {inner} Gerber copper")
     locations.add(xy(via))
 assert len(locations) == len(terminals) - sum("shareWith" in f for f in fanout if f["net"] == "GND")
+if args.gerbers:
+    print(f"Connected inner-layer Gerber copper covers all {len(locations)} blind-via lands.")
 print(f"{len(terminals)} DDR terminals verified through {len(locations)} blind vias to their adjacent reference planes.")
