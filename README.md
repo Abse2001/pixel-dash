@@ -244,3 +244,5 @@ Reserved panel contacts 49 and 50 are isolated in the source, schematic and copp
 The approved wide-board lower mounts and rear-carrier bores are at X = ±70 mm, Y = −29 mm. The upper mounts remain at X = ±60 mm, Y = 31 mm. All four physical holes match the Excellon export. The original tub and compact shell are separate fallbacks.
 
 All eleven low SYSBOOT bias terminals reach L2 ground. Two ground vias are offset to clear retained audio routing. The high-side bias, remaining processor sense connections and powered reset sampling still require verification.
+
+The fixed component lands constrain the LCD_DATA0/SYSBOOT0 escape at U1.R1. Run `python checks/screen-ddr-placement.py dist/index.circuit.json` to reproduce the optimistic pad-only bound. With the current RAM placement, even the far edge of R1 lies just 0.334 mm from the convex hull of the CPU DDR lands and RAM lands, inside the 0.408 mm envelope setback. A hypothetical +1.0 mm RAM Y shift raises the upper bound to 0.527 mm. This screen ignores tracks, vias and landing width. A placement change would require a new 50-link route and reference audit.
