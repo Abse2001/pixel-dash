@@ -126,7 +126,8 @@ export function PowerControl() {
     <trace from=".L_PMIC_DDR > .pin2" to=".C_PMIC_DDR > .pin1" thickness={0.60} pcbStraightLine/>
     <trace from=".U_PMIC > .FB3" to=".C_PMIC_DDR > .pin1" thickness={0.15} pcbPath={[{x:-4.5998892,y:1.80721214}]}/>
     <trace from=".C_PMIC_DDR > .pin1" to="net.VDDS_DDR"/>
-    <trace from=".U_PMIC > .LS1" to="net.VDDS_DDR_CPU"/>
+    <net name="DDR_SWITCH_ENABLE"/>
+    <trace from=".U_PMIC > .LS1" to="net.DDR_SWITCH_ENABLE"/>
     <trace from=".U_PMIC > .IN_LS1" to="net.VDDS_DDR"/>
     <trace from=".U_PMIC > .IN_DCDC3" to="net.VSYS"/>
     <trace from=".C_PMIC_DDR > .pin2" to="net.GND"/>

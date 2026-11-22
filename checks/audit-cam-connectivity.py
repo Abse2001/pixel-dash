@@ -25,13 +25,14 @@ CHECKS = Path(__file__).parent
 def processor_power(terminals):
     """Compare package balls with the intended power sources in TI SLVUAA9B Table 1."""
     balls = json.loads((CHECKS.parent / "am3354/processor-balls.json").read_text())
+    cpu_ddr = "U_DDR_SWITCH.VOUT1"
     groups = {
         "TP_UART_GND.pin1": {"VSS", "VSS_OSC", "VSS_RTC", "VSSA_USB", "VSSA_ADC"},
         "C_PMIC_CORE.pin1": {"VDD_CORE"},
         "C_PMIC_MPU.pin1": {"VDD_MPU"},
         "C_PMIC_RTC_CORE.pin1": {"CAP_VDD_RTC"},
         "C_PMIC_RTC_IO.pin1": {"VDDS_RTC", "RTC_KALDO_ENn"},
-        "U_PMIC.LS1": {"VDDS_DDR"},
+        cpu_ddr: {"VDDS_DDR"},
         "U_PMIC.DCDC4": {"VDDSHV1", "VDDSHV2", "VDDSHV3", "VDDSHV4", "VDDSHV5", "VDDSHV6", "VDDA3P3V_USB0", "VDDA3P3V_USB1"},
         "U_PMIC.LDO1": {"VDDS", "VDDS_PLL_DDR", "VDDS_PLL_MPU", "VDDS_PLL_CORE_LCD",
                         "VDDS_OSC", "VDDS_SRAM_CORE_BG", "VDDS_SRAM_MPU_BB",
@@ -57,13 +58,29 @@ def processor_power(terminals):
     print(f"DDR memory supply isolation from CPU VDDS_DDR: {'PASS' if separate else 'SHORT between the two domains'}.")
     failed |= direct != len(dram_balls) or not separate
     bypass = json.loads((CHECKS.parent / "am3354/bypass-placement.json").read_text())
-    for ref, anchor, wrong in (("U1", "U_PMIC.LS1", dram_nodes), ("U_DDR", "C_PMIC_DDR.pin1", cpu_nodes)):
+    for ref, anchor, wrong in (("U1", cpu_ddr, dram_nodes), ("U_DDR", "C_PMIC_DDR.pin1", cpu_nodes)):
         caps = [f"C_DDR{i}.pin1" for i, cap in enumerate(bypass, 1) if cap["chip"] == ref]
         fed = sum(terminals[cap] == terminals[anchor] for cap in caps)
         aliased = [cap for cap in caps if terminals[cap] in wrong]
         print(f"{ref} DDR bypass to {anchor}: {fed}/{len(caps)} supplied, "
               f"{len(aliased)} on copper shared with the other load domain.")
         failed |= fed != len(caps) or bool(aliased)
+    switch_rails = {
+        "C_PMIC_DDR.pin1": ["U_DDR_SWITCH.VIN1", "U_DDR_SWITCH.VIN2", "C_DDR_SW_IN.pin1", "U_PMIC.IN_LS1"],
+        "U_PMIC.LS1": ["U_DDR_SWITCH.ON", "C_DDR_SW_EN.pin1", "R_DDR_SW_EN.pin1"],
+        cpu_ddr: ["U_DDR_SWITCH.VOUT2", "R_DDR_SW_OUT.pin1", "C_DDR_SW_LOAD.pin1"],
+        "C_LIPO_BOOST_OUT.pin1": ["U_DDR_SWITCH.VBIAS", "C_DDR_SW_BIAS.pin1"],
+        "U_DDR_SWITCH.CT": ["C_DDR_SW_CT.pin1"],
+        "TP_UART_GND.pin1": ["U_DDR_SWITCH.EP", "U_DDR_SWITCH.GND", "C_DDR_SW_IN.pin2",
+                             "C_DDR_SW_EN.pin2", "C_DDR_SW_BIAS.pin2", "C_DDR_SW_CT.pin2",
+                             "R_DDR_SW_EN.pin2", "R_DDR_SW_OUT.pin2", "C_DDR_SW_LOAD.pin2"],
+    }
+    if len({terminals[k] for k in switch_rails}) != len(switch_rails):
+        raise ValueError("DDR switch input, output, enable, CT, bias or ground share copper")
+    for anchor, loads in switch_rails.items():
+        missing = [p for p in loads if terminals[p] != terminals[anchor]]
+        print("DDR switch", anchor, "open: " + ", ".join(missing) if missing else "all terminals connected")
+        failed |= bool(missing)
     supply = "C_LIPO_BOOST_OUT.pin1"
     for label in ("C_3V3_IN.pin1", "C_AMP_VDD.pin1", "R_POWER_PB.pin2", "U_PMIC.IN_BU",
                   "U_PMIC.IN_BIAS", "U_PMIC.IN_DCDC1", "U_PMIC.IN_DCDC2", "U_PMIC.IN_DCDC3", "U_PMIC.IN_DCDC4",
@@ -379,12 +396,15 @@ def main():
             print(f"PMIC copper verified between {start} and {end}.")
         if len({terminals["U_PMIC." + name] for name in ("L4A", "L4B", "DCDC4", "IN_DCDC4", "EP")}) != 5:
             raise ValueError("Exported DCDC4 switch, output, input or ground nodes are shorted")
+    ground_failed = False
     if args.handheld_ground:
         ground, = (e for e in board if e["type"] == "source_net" and e["name"] == "GND")
         ground_nodes = nodes_by_net[ground["subcircuit_connectivity_map_key"]]
         if ground_nodes != {terminals["TP_UART_GND.pin1"]}:
-            raise ValueError(f"Handheld ground has {len(ground_nodes)} separate CAM networks")
-        print("All mapped handheld ground lands and barrels join the UART ground probe.")
+            ground_failed = True
+            print(f"Handheld ground has {len(ground_nodes)} separate CAM networks")
+        else:
+            print("All mapped handheld ground lands and barrels join the UART ground probe.")
     startup_failed = args.cpu_power and rtc_startup(terminals)
     power_failed = args.cpu_power and processor_power(terminals)
     straps_failed = args.sysboot and sysboot(terminals)
@@ -396,7 +416,7 @@ def main():
         examples = [", ".join(sorted(members[key][node])[:3]) or "via only" for node in sorted(nodes_by_net[key])]
         print(f"OPEN {key} has {count} separate CAM networks: " + " | ".join(examples))
     print(f"{len(opens)} mapped land nets have multiple physical networks.")
-    return bool(opens) or power_failed or startup_failed or straps_failed or interfaces_failed or caps_failed or card_failed
+    return bool(opens) or power_failed or startup_failed or straps_failed or interfaces_failed or caps_failed or card_failed or ground_failed
 
 
 if __name__ == "__main__":

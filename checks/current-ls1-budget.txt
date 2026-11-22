@@ -1,21 +1,16 @@
-LS1 bank: 22 capacitors, 46.00 uF nominal. TI nominal window 10–100 uF.
-DCDC3 setpoint 1.350 V, screening at -2%; CPU minimum 1.283 V. LS1 110 mOhm at 300 mA.
-Copper screen, 30 um outer foil. Whole CPU load carried through the series feed to L5.
-inner_um,temp_C,input_mOhm,output_mOhm,load_mA,trace_drop_mV,barrel_drop_mV,remaining_mV
-30,20,3.750,21.583,150,3.800,0.674,19.026
-30,20,3.750,21.583,225,5.700,1.011,8.539
-30,20,3.750,21.583,250,6.333,1.123,5.043
-30,20,3.750,21.583,300,7.600,1.348,-1.948
-30,80,4.635,26.672,150,4.696,0.833,17.971
-30,80,4.635,26.672,225,7.044,1.249,6.957
-30,80,4.635,26.672,250,7.827,1.388,3.285
-30,80,4.635,26.672,300,9.392,1.666,-4.058
-L5 to E5 at 20 C and 30 um top copper: additional 0.694 mV with 300 mA split equally across seven balls; 1.505 mV if all current enters E5.
-Both physical feeds with their shared copper counted once, 30 um outer foil, equal ball loads:
-  inner 30 um, 20 C, grid 0.025 mm: 31.973 mOhm; remaining at 250 mA 4.507 mV, at 300 mA -2.592 mV before return and transient losses.
-  inner 30 um, 80 C, grid 0.025 mm: 39.512 mOhm; remaining at 250 mA 2.622 mV, at 300 mA -4.854 mV before return and transient losses.
-Sensitivity to a 100 mA step lasting 1 us, before regulator response, ESR and ESL:
-  50% effective: 23.00 uF, ideal capacitive droop 4.35 mV
-  75% effective: 34.50 uF, ideal capacitive droop 2.90 mV
-  100% effective: 46.00 uF, ideal capacitive droop 2.17 mV
-HDI4_1-2b-1_149_35_2V13. Assumed barrel wall 20 um, full span 1.42 mm, L3-to-L4 0.095 mm. The trace/barrel table excludes L4 spreading, return path, package and transient parasitics. Load, effective capacitance, finished stack and copper temperature are unverified.
+Full current to E5 through one VIN and one VOUT land. 20 C traces/barrels 19.106, drilled L4 feed 11.401, CPU-to-regulator return 6.756, loop 37.263 mOhm.
+CPU 250 mA plus worst output bleed; screen all series sections at 279.59 mA.
+TPS22975 upper tabulated hot RON at 5 V VBIAS near this VIN is 25 mOhm; 34/40 mOhm screens bracket published bias corners and an added sensitivity. Data-sheet test current is 200 mA.
+temp_C,conductance_fraction,switch_mOhm,loop_mOhm,dc_reserve_mV,dynamic_reserve_mV
+80,1.00,34,46.050,17.619,6.718
+80,1.00,40,46.050,15.941,5.041
+80,0.80,34,57.562,14.400,3.499
+80,0.80,40,57.562,12.722,1.822
+105,1.00,34,49.711,16.595,5.694
+105,1.00,40,49.711,14.917,4.017
+105,0.80,34,62.138,13.120,2.220
+105,0.80,40,62.138,11.443,0.542
+Sequenced shutdown, ignoring QOD: control below 0.5 V by 5.94 ms; CPU rail at next 20 ms strobe 96.95 mV. Verify collapse and reverse current during hard VSYS loss.
+1 nF CT: TI typical 10–90% ramp 495–595 us at 1.2–1.5 V and 5 V bias. At 111.6 uF and 495 us, 10–90% average capacitive current 248 mA.
+Engineering headroom screen PASS
+The 80% conductor area, 50% effective capacitance and 2 mV parasitic allowance are sensitivities. Confirm input bias, sequencing, source/load steps, effective impedance and heat on hardware.
