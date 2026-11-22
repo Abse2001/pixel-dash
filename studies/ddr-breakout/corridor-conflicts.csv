@@ -1,0 +1,22 @@
+trial,candidate,baseline_DDR_conflicts
+byte1_mask_escape,DDR_D8,DDR_DQM1
+byte1_strobe_corridor,DDR_D8,DDR_D9 DDR_DQS1 DDR_DQSn1
+byte1_strobe_corridor,DDR_D9,DDR_DQS1 DDR_DQSn1
+byte1_strobe_corridor,DDR_DQS1,DDR_DQSn1
+byte1_strobe_corridor,DDR_DQSn1,DDR_DQS1
+south_escape,DDR_D12,DDR_D14 DDR_D5
+south_escape,DDR_D14,DDR_D5
+south_escape,DDR_D5,DDR_D14
+south_escape,DDR_A10,DDR_D12 DDR_D14 DDR_D5
+byte0_escape,DDR_D7,DDR_D3 DDR_D4 DDR_DQS0 DDR_DQSn0
+byte0_escape,DDR_D5,DDR_D3 DDR_D4 DDR_DQS0 DDR_DQSn0
+byte0_escape,DDR_D3,DDR_D4 DDR_DQS0 DDR_DQSn0
+byte0_escape,DDR_D4,DDR_D3 DDR_DQS0 DDR_DQSn0
+byte0_escape,DDR_D2,DDR_D3 DDR_DQS0 DDR_DQSn0
+byte0_escape,DDR_DQS0,DDR_D3 DDR_DQSn0
+byte0_escape,DDR_DQSn0,DDR_D3 DDR_D4 DDR_DQS0
+command_escape,DDR_CKE,DDR_A13 DDR_A6
+command_escape,DDR_A10,DDR_A14
+command_escape,DDR_A6,DDR_A13 DDR_A14 DDR_CKE
+command_escape,DDR_A13,DDR_A14 DDR_CKE
+command_escape,DDR_A14,DDR_A13 DDR_CKE

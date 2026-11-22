@@ -1,6 +1,30 @@
 # Pixel Dash
 
+## Current DDR group timing pass
+
+Both DQS1 conductors gained 0.125 mm in one shared routing corridor. D8 and D9 each retain four 1.420 mm layer transitions. The strobe legs each retain two. The 0.635 mm TI length budget can offset only 3.663 ps on an isolated trace at the reference-build rate. Two extra full-depth transitions contribute 18.744 ps in the barrel model. The byte still needs a different transition topology to meet both limits.
+
+The byte-1 nominal length ceiling is 23.000 mm. TI limits the mismatch between each data signal and either strobe to 0.635 mm. The separate model screen is ±3.663 ps. Signs in the table are relative to the limiting strobe leg, with positive values indicating later data. Excess is the amount beyond the corresponding limit. The [complete comparison against c28dc8c](checks/current-ddr-change.csv) includes every net, individual span totals, all TI residuals, signed delay and the applicable model window.
+
+| Net | Previous → current length mm | Barrel mm | Flight ps | Worst signed skew ps | Model excess ps | TI data-to-strobe excess mm |
+|---|---:|---:|---:|---:|---:|---:|
+| D8 | 18.992 → 19.315 | 5.680 | 148.916 | +3.031 | 0.000 | 2.775 |
+| D9 | 18.995 → 19.316 | 5.680 | 148.922 | +3.037 | 0.000 | 2.774 |
+| D12 | 23.843 → 23.843 | 2.840 | 156.296 | +10.411 | 6.747 | 0.573 |
+| D14 | 23.459 → 23.459 | 2.840 | 154.082 | +8.197 | 4.534 | 0.190 |
+| D10 | 22.581 → 22.581 | 2.840 | 149.013 | +3.128 | 0.000 | 0.000 |
+| D11 | 22.578 → 22.578 | 2.840 | 148.997 | +3.112 | 0.000 | 0.000 |
+| D13 | 22.586 → 22.586 | 2.840 | 149.044 | +3.159 | 0.000 | 0.000 |
+| D15 | 22.564 → 22.564 | 2.840 | 148.917 | +3.032 | 0.000 | 0.000 |
+| DQM1 | 22.568 → 22.568 | 2.840 | 148.937 | +3.052 | 0.000 | 0.000 |
+
+The separate breakout trials reserved byte 0 and the populated handheld while generating byte-1 options. Two-via D8 occupied the DQM1 route. Two-via D9 occupied both DQS1 routes. The shorter D12 and D14 escapes shared the southern channel with D5. In the byte-0 group, the two-via D7 escape blocked D3, D4 and both DQS0 legs. The alternative CKE route blocked A6 and A13. A finite selection across the tried full-net routes could not retain 50 mutually clear links with an improved transition topology. These trials establish conflicts in the tested corridors only.
+
+The native Gerbers and drills retain 50 distinct DDR pairs, full-width reference coverage, the MMC0 supply and signals, zero detected shorts, 0.102 mm copper spacing and 0.1524 mm via-edge clearance. Fabrication remains on hold.
+
 ## DDR timing study on the 50-link layout
+
+Measurements below describe the earlier c28dc8c checkpoint.
 
 D8 and D9 now measure 18.9920 and 18.9946 mm of planar copper, respectively. Each still traverses four full-depth vias, totaling 5.680 mm in the reference stack. DQS1 and DQSn1 each traverse 2.840 mm. The production checkpoint used 22.5778 and 22.5769 mm on D8 and D9. The shorter traces reduce the worst byte-1 data-to-strobe difference from 22.556 to 11.113 ps in the uniform odd-mode sensitivity. D12 sets that maximum. In the mixed estimate D8 and D9 are within 1.332 ps of either strobe leg. The byte still fails the TI nominal length and skew screens, including the planar DQ spread. Byte 0, A10 and CKE also remain open timing gates.
 
