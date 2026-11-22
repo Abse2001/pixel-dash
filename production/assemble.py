@@ -191,6 +191,28 @@ for side in ("L", "R"):
                  subcircuit_connectivity_map_key=io_rail["subcircuit_connectivity_map_key"],
                  display_name=f".{name} > .pin2 to net.VDD_IO_3V3_SEQ")
 
+# Power the analog sticks from the ADC supply to avoid driving unpowered inputs.
+for side in ("L", "R"):
+    connector = port(f"J_JOY_{side}", "pin5")
+    bypass = port(f"C_JOY_{side}_VDD", "pin1")
+    bulk = port(f"C_JOY_{side}_BULK", "pin1")
+    contacts = {p["source_port_id"] for p in (connector, bypass, bulk)}
+    sources = [s for s in board if s["type"] == "source_trace"
+               and contacts.intersection(s["connected_source_port_ids"])]
+    if {s["name"] for s in sources} != {f"JOY_{side}_{n}" for n in ("VDD", "BULK_VDD", "POWER")}:
+        raise ValueError(f"Unexpected {side} analog stick supply connections")
+    for record in [connector, bypass, bulk, *sources]:
+        if record["subcircuit_connectivity_map_key"] != legacy_3v3["subcircuit_connectivity_map_key"]:
+            raise ValueError(f"Unexpected original {side} analog stick supply")
+        record["subcircuit_connectivity_map_key"] = io_rail["subcircuit_connectivity_map_key"]
+    for source in sources:
+        if not set(source["connected_source_port_ids"]) <= contacts:
+            raise ValueError(f"Additional load on {side} analog stick supply")
+        if source["connected_source_net_ids"]:
+            assert source["connected_source_net_ids"] == [legacy_3v3["source_net_id"]]
+            source["connected_source_net_ids"] = [io_rail["source_net_id"]]
+            source["display_name"] = source["display_name"].replace("net.V3V3", "net.VDD_IO_3V3_SEQ")
+
 for index, axis in enumerate(("LX", "LY", "RX", "RY")):
     interface_trace("ADC_" + axis, "U_JOY_ADC", f"AIN{index}", "C_JOY_" + axis, "pin1")
 # Each LCD_DATA terminal samples its matching SYSBOOT resistor on reset.

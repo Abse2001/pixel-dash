@@ -288,6 +288,15 @@ def panel_and_storage(terminals):
         click_ok = reaches_switch and sequenced and isolated
         print(f"Joystick {side} click input, separate switch and sequenced pull-up: {'PASS' if click_ok else 'OPEN'}")
         failed |= not click_ok
+        grip_supply = {terminals[f"J_JOY_{side}.pin5"], terminals[f"C_JOY_{side}_VDD.pin1"],
+                       terminals[f"C_JOY_{side}_BULK.pin1"], terminals["U_PMIC.DCDC4"], terminals["U_JOY_ADC.VDD"]}
+        grip_return = {terminals[f"J_JOY_{side}.pin2"], terminals[f"C_JOY_{side}_VDD.pin2"],
+                       terminals[f"C_JOY_{side}_BULK.pin2"], terminals["TP_UART_GND.pin1"]}
+        bypass_ok = len(grip_supply) == len(grip_return) == 1 and grip_supply.isdisjoint(grip_return)
+        bypass_ok &= terminals["C_3V3_OUT_A.pin1"] not in grip_supply
+        print(f"Joystick {side} sequenced ADC supply to connector and both bypasses, and ground returns: "
+              f"{'PASS' if bypass_ok else 'OPEN'}")
+        failed |= not bypass_ok
     adc_supply = terminals["U_PMIC.DCDC4"] == terminals["U_JOY_ADC.VDD"] == terminals["C_JOY_ADC.pin1"]
     adc_return = terminals["U_JOY_ADC.GND"] == terminals["C_JOY_ADC.pin2"] == terminals["TP_UART_GND.pin1"]
     print("Joystick ADC supply and bypass return:", "PASS" if adc_supply and adc_return else "OPEN")
