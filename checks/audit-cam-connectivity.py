@@ -25,13 +25,14 @@ CHECKS = Path(__file__).parent
 def processor_power(terminals):
     """Compare package balls with the intended power sources in TI SLVUAA9B Table 1."""
     balls = json.loads((CHECKS.parent / "am3354/processor-balls.json").read_text())
+    cpu_ddr = "U_DDR_SWITCH.VOUT1"
     groups = {
         "TP_UART_GND.pin1": {"VSS", "VSS_OSC", "VSS_RTC", "VSSA_USB", "VSSA_ADC"},
         "C_PMIC_CORE.pin1": {"VDD_CORE"},
         "C_PMIC_MPU.pin1": {"VDD_MPU"},
         "C_PMIC_RTC_CORE.pin1": {"CAP_VDD_RTC"},
         "C_PMIC_RTC_IO.pin1": {"VDDS_RTC", "RTC_KALDO_ENn"},
-        "U_PMIC.LS1": {"VDDS_DDR"},
+        cpu_ddr: {"VDDS_DDR"},
         "U_PMIC.DCDC4": {"VDDSHV1", "VDDSHV2", "VDDSHV3", "VDDSHV4", "VDDSHV5", "VDDSHV6", "VDDA3P3V_USB0", "VDDA3P3V_USB1"},
         "U_PMIC.LDO1": {"VDDS", "VDDS_PLL_DDR", "VDDS_PLL_MPU", "VDDS_PLL_CORE_LCD",
                         "VDDS_OSC", "VDDS_SRAM_CORE_BG", "VDDS_SRAM_MPU_BB",
@@ -57,13 +58,29 @@ def processor_power(terminals):
     print(f"DDR memory supply isolation from CPU VDDS_DDR: {'PASS' if separate else 'SHORT between the two domains'}.")
     failed |= direct != len(dram_balls) or not separate
     bypass = json.loads((CHECKS.parent / "am3354/bypass-placement.json").read_text())
-    for ref, anchor, wrong in (("U1", "U_PMIC.LS1", dram_nodes), ("U_DDR", "C_PMIC_DDR.pin1", cpu_nodes)):
+    for ref, anchor, wrong in (("U1", cpu_ddr, dram_nodes), ("U_DDR", "C_PMIC_DDR.pin1", cpu_nodes)):
         caps = [f"C_DDR{i}.pin1" for i, cap in enumerate(bypass, 1) if cap["chip"] == ref]
         fed = sum(terminals[cap] == terminals[anchor] for cap in caps)
         aliased = [cap for cap in caps if terminals[cap] in wrong]
         print(f"{ref} DDR bypass to {anchor}: {fed}/{len(caps)} supplied, "
               f"{len(aliased)} on copper shared with the other load domain.")
         failed |= fed != len(caps) or bool(aliased)
+    switch_rails = {
+        "C_PMIC_DDR.pin1": ["U_DDR_SWITCH.VIN1", "U_DDR_SWITCH.VIN2", "C_DDR_SW_IN.pin1", "U_PMIC.IN_LS1"],
+        "U_PMIC.LS1": ["U_DDR_SWITCH.ON", "C_DDR_SW_EN.pin1", "R_DDR_SW_EN.pin1"],
+        cpu_ddr: ["U_DDR_SWITCH.VOUT2", "R_DDR_SW_OUT.pin1", "C_DDR_SW_LOAD.pin1"],
+        "C_LIPO_BOOST_OUT.pin1": ["U_DDR_SWITCH.VBIAS", "C_DDR_SW_BIAS.pin1"],
+        "U_DDR_SWITCH.CT": ["C_DDR_SW_CT.pin1"],
+        "TP_UART_GND.pin1": ["U_DDR_SWITCH.EP", "U_DDR_SWITCH.GND", "C_DDR_SW_IN.pin2",
+                             "C_DDR_SW_EN.pin2", "C_DDR_SW_BIAS.pin2", "C_DDR_SW_CT.pin2",
+                             "R_DDR_SW_EN.pin2", "R_DDR_SW_OUT.pin2", "C_DDR_SW_LOAD.pin2"],
+    }
+    if len({terminals[k] for k in switch_rails}) != len(switch_rails):
+        raise ValueError("DDR switch input, output, enable, CT, bias or ground share copper")
+    for anchor, loads in switch_rails.items():
+        missing = [p for p in loads if terminals[p] != terminals[anchor]]
+        print("DDR switch", anchor, "open: " + ", ".join(missing) if missing else "all terminals connected")
+        failed |= bool(missing)
     supply = "C_LIPO_BOOST_OUT.pin1"
     for label in ("C_3V3_IN.pin1", "C_AMP_VDD.pin1", "R_POWER_PB.pin2", "U_PMIC.IN_BU",
                   "U_PMIC.IN_BIAS", "U_PMIC.IN_DCDC1", "U_PMIC.IN_DCDC2", "U_PMIC.IN_DCDC3", "U_PMIC.IN_DCDC4",
@@ -228,7 +245,7 @@ def mmc0_power(terminals):
     for contact, ball in (("CLK", "G17"), ("CD", "C15")):
         signals.append(terminals["J_SD." + contact])
         passed &= signals[-1] == terminals["U1." + ball]
-    passed &= len(set(signals) | {supply, ground, legacy}) == 10
+    passed &= len(set(signals) | {supply, ground, legacy, terminals["U_PMIC.IN_DCDC4"]}) == 11
     print("MMC0 sequenced card power and seven distinct links:", "PASS" if passed else "FAIL")
     return not passed
 
@@ -252,6 +269,16 @@ def panel_and_storage(terminals):
         print(f"{prefix[:-1]} CPU-to-connector copper {len(reached)}/{len(rows)}. Reached " +
               (", ".join(reached) or "none") + ". Open " + (", ".join(sorted(names - set(reached))) or "none") + ".")
         failed |= len(reached) != len(rows)
+    panel_taps = []
+    for bit in range(16):
+        row, = [r for r in mapped if r["Signal"] == f"LCD_D{bit}"]
+        if terminals[f"R_SYSBOOT{bit}.pin2"] == terminals["J_LCD." + row["Pin"]]:
+            panel_taps.append(bit)
+    print(f"Raster data connector to strap sense pads: {len(panel_taps)}/16; bits {panel_taps}.")
+    adc_supply = terminals["U_PMIC.DCDC4"] == terminals["U_JOY_ADC.VDD"] == terminals["C_JOY_ADC.pin1"]
+    adc_return = terminals["U_JOY_ADC.GND"] == terminals["C_JOY_ADC.pin2"] == terminals["TP_UART_GND.pin1"]
+    print("Joystick ADC supply and bypass return:", "PASS" if adc_supply and adc_return else "OPEN")
+    failed |= len(panel_taps) != 16 or not adc_supply or not adc_return
     return failed
 
 
@@ -265,7 +292,11 @@ def main():
     parser.add_argument("--sysboot", action="store_true", help="decode physical reset straps from resistor lands and CPU balls")
     parser.add_argument("--panel-storage", action="store_true", help="verify CPU-to-FPC and CPU-to-card physical endpoints")
     parser.add_argument("--mmc0-power", action="store_true", help="require card supply, ground, pull-ups and all seven links")
+    parser.add_argument("--mmc0-only", action="store_true",
+                        help="return the drilled MMC0 result independently of other open nets")
     args = parser.parse_args()
+    if args.mmc0_only and any((args.pmic_controls, args.handheld_ground, args.cpu_power, args.sysboot, args.panel_storage)):
+        parser.error("--mmc0-only cannot be combined with whole-handheld checks")
     board = json.loads(args.circuit.read_text())
     drill = runpy.run_path(str(CHECKS / "audit-channel-drills.py"))
     expected = drill["expected_drills"](board)
@@ -346,6 +377,9 @@ def main():
     for node, keys in owners.items():
         if len(keys) > 1:
             raise ValueError(f"CAM short at {node} joins {sorted(keys)}")
+    terminals = {port_labels[pid]: node for pid, node in by_pad.items() if pid in port_labels}
+    if args.mmc0_only:
+        return mmc0_power(terminals)
     ports = {e["source_port_id"]: e["pcb_port_id"] for e in board if e["type"] == "pcb_port" and e.get("source_port_id")}
     deferred = set(json.loads((CHECKS.parent / "studies/zoned/deferred.json").read_text()))
     ddr_nodes = set()
@@ -364,7 +398,6 @@ def main():
     if len(ddr_nodes) + len(deferred) != 50 or deferred != seen_open:
         raise ValueError(f"Expected 50 physically distinct DDR links, found {len(ddr_nodes)}")
     print(f"Study: {len(ddr_nodes)}/50 distinct DDR ball pairs connected; {len(seen_open)} explicitly open. {len(plating)} plated barrels checked. No shorts between mapped land nets.")
-    terminals = {port_labels[pid]: node for pid, node in by_pad.items() if pid in port_labels}
     if "TP_UART_RX.pin1" in terminals:
         probes = (("U1.E15", "TP_UART_RX.pin1"), ("U1.E16", "TP_UART_TX.pin1"), ("TP_UART_GND.pin1", "C_DDR25.pin2"))
         networks = {terminals[a] for a, _ in probes}

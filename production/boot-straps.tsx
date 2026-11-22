@@ -12,8 +12,9 @@ export function BootStraps() {
       const name = `R_SYSBOOT${bit}`
       const rail = (strapWord & (1 << bit)) ? "VDD_IO_3V3_SEQ" : "GND"
       return <Fragment key={name}>
-        <Pull10k name={name} pcbX={-34 + (bit % 8) * 1.25}
-          pcbY={6 + Math.floor(bit / 8) * 2.25} pcbRotation={90} />
+        <Pull10k name={name} pcbX={bit === 1 ? -35.52 : -34 + (bit % 8) * 1.25}
+          pcbY={bit === 1 ? 5.28 : 6 + Math.floor(bit / 8) * 2.25}
+          pcbRotation={bit === 1 ? 180 : 90} />
         <trace name={`SYSBOOT${bit}_BIAS`} from={`.${name} > .pin1`} to={`net.${rail}`} />
       </Fragment>
     })}

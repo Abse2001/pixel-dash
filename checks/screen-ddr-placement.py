@@ -53,8 +53,18 @@ def screen(board, ram_y, pins, routed=False, cpu_only=False, corridors=False):
                     for net, shapes in by_net.items()}
         vertices["fixed"] = cpu.union(ram).convex_hull.exterior.coords[:]
         launches = {pin: escape_lands[pin].buffer(-0.051).exterior.coords[:] for pin in pins}
+        # Include a separating plane normal at every launch vertex. A narrow
+        # corridor between package lands can fall between two whole degrees.
+        fixed = cpu.union(ram).convex_hull
+        angles = set(range(360))
+        for ring in launches.values():
+            for x, y in ring:
+                target = Point(x, y)
+                nearest = fixed.exterior.interpolate(fixed.exterior.project(target))
+                if not fixed.covers(target):
+                    angles.add(math.degrees(math.atan2(y - nearest.y, x - nearest.x)) % 360)
         best = {}
-        for angle in range(360):
+        for angle in sorted(angles):
             dx, dy = math.cos(math.radians(angle)), math.sin(math.radians(angle))
             supports = {key: max(x*dx + y*dy for x, y in points) for key, points in vertices.items()}
             for pin in pins:
@@ -71,7 +81,7 @@ def screen(board, ram_y, pins, routed=False, cpu_only=False, corridors=False):
         for pin in pins:
             if pin in best:
                 count, _, angle, x, y, offenders = best[pin]
-                print(f"{pin},{angle},{x:.5f},{y:.5f},{count},{' '.join(offenders)}")
+                print(f"{pin},{angle:.4f},{x:.5f},{y:.5f},{count},{' '.join(offenders)}")
             else:
                 print(f"{pin},,,,,fixed lands block all sampled directions")
         return

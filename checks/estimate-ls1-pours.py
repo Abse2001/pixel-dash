@@ -84,69 +84,79 @@ with ZipFile(archive) as z:
             if args.joined:
                 inner_holes.append(hole)
 image = artwork(archive, "B_Cu.gbr").difference(unary_union(holes))
-pairs = [("upper", "bridge_upper"), ("bridge_lower", "balls")]
-islands = []
-for a, b in pairs:
-    first, last = [via["via_ddr_supply_" + name] for name in (a, b)]
-    def annulus(v):
-        return Point(v["x"], v["y"]).buffer(v["outer_diameter"] / 2)
-    island, = (p for p in image.geoms if p.intersection(annulus(first)).area > .001 and
-               p.intersection(annulus(last)).area > .001)
-    islands.append((island, first, last))
-columns = "pitch_mm,upper_squares,lower_squares,total_mOhm_{foil}um_20C,drop_mV_300mA"
-if "via_ddr_supply_lower_bank" in via:
-    columns += ",direct_lower_squares,direct_lower_mOhm_{foil}um_20C"
-print(columns.format(foil=f"{stack.foil*1000:g}"))
-for pitch in (.080, .055, .040, .030, .025):
-    upper, lower = [squares(*data, pitch) for data in islands]
-    resistance = (upper + lower) * .01724 / stack.foil
-    row = f"{pitch:.3f},{upper:.4f},{lower:.4f},{resistance:.4f},{.300*resistance:.4f}"
+if "via_ddr_supply_output" not in via and any(e.get("name") == "U_DDR_SWITCH" for e in board):
+    first, last = (via["via_ddr_supply_" + n] for n in ("lower_bank", "balls"))
+    def land(v):
+        return Point(v["x"], v["y"]).buffer(v["outer_diameter"]/2)
+    sheet, = (p for p in image.geoms if all(p.intersection(land(v)).area > .001 for v in (first, last)))
+    print("Buffered output L4 sheet to the CPU feed; bores subtracted.")
+    for pitch in (.08, .055, .040, .030, .025):
+        resistance = squares(sheet, first, last, pitch) * .01724 / stack.foil
+        print(f"  buffered mesh {pitch:g} mm: {resistance:.4f} mOhm at 20 C")
+else:
+    pairs = [("upper", "bridge_upper"), ("bridge_lower", "balls")]
+    islands = []
+    for a, b in pairs:
+        first, last = [via["via_ddr_supply_" + name] for name in (a, b)]
+        def annulus(v):
+            return Point(v["x"], v["y"]).buffer(v["outer_diameter"] / 2)
+        island, = (p for p in image.geoms if p.intersection(annulus(first)).area > .001 and
+                   p.intersection(annulus(last)).area > .001)
+        islands.append((island, first, last))
+    columns = "pitch_mm,upper_squares,lower_squares,total_mOhm_{foil}um_20C,drop_mV_300mA"
     if "via_ddr_supply_lower_bank" in via:
-        sheet, _, cpu = islands[1]
-        contact = via["via_ddr_supply_lower_bank"]
-        direct = squares(sheet, contact, cpu, pitch)
-        row += f",{direct:.4f},{direct*.01724/stack.foil:.4f}"
-    print(row)
+        columns += ",direct_lower_squares,direct_lower_mOhm_{foil}um_20C"
+    print(columns.format(foil=f"{stack.foil*1000:g}"))
+    for pitch in (.080, .055, .040, .030, .025):
+        upper, lower = [squares(*data, pitch) for data in islands]
+        resistance = (upper + lower) * .01724 / stack.foil
+        row = f"{pitch:.3f},{upper:.4f},{lower:.4f},{resistance:.4f},{.300*resistance:.4f}"
+        if "via_ddr_supply_lower_bank" in via:
+            sheet, _, cpu = islands[1]
+            contact = via["via_ddr_supply_lower_bank"]
+            direct = squares(sheet, contact, cpu, pitch)
+            row += f",{direct:.4f},{direct*.01724/stack.foil:.4f}"
+        print(row)
 
-if args.joined:
-    inner = artwork(archive, "In2_Cu.gbr").difference(unary_union(inner_holes))
-    sheets = []
-    for layer, image_layer, names in [
-        ("L3", inner, ["output", "upper", "lower_bank"]),
-        ("L3", inner, ["bridge_upper", "bridge_lower"]),
-        ("L4", image, ["upper", "bridge_upper"]),
-        ("L4", image, ["bridge_lower", "lower_bank", "balls"]),
-    ]:
-        contacts = [via["via_ddr_supply_" + name] for name in names]
-        sheet, = (g for g in image_layer.geoms if all(g.intersection(annulus(v)).area > .001 for v in contacts))
-        sheets.append((layer, names, contacts, sheet))
-    # Nodes represent the lands on each side of the four short plated barrel sections.
-    labels = [(layer, name) for layer, names, _, _ in sheets for name in names]
-    high = labels.index(("L3", "output"))
-    low = labels.index(("L4", "balls"))
-    print("pitch_mm,inner_um,outer_um,joined_L3_output_to_L4_balls_mOhm_at_20C")
-    for pitch in (.05, .035, .025):
-        blocks = [sheet_conductance(sheet, contacts, pitch) for _, _, contacts, sheet in sheets]
-        for inner_um in ((30,) if args.wurth else (35, 17.5)):
-            network = np.zeros((len(labels), len(labels)))
-            for (layer, names, _, _), block in zip(sheets, blocks):
-                indices = [labels.index((layer, name)) for name in names]
-                foil_mm = inner_um / 1000 if layer == "L3" else stack.foil
-                network[np.ix_(indices, indices)] += block * foil_mm / .01724
-            for name in ("upper", "bridge_upper", "bridge_lower", "lower_bank"):
-                a, b = (labels.index((layer, name)) for layer in ("L3", "L4"))
-                drill_mm = via["via_ddr_supply_" + name]["hole_diameter"]
-                conductance = np.pi * stack.wall * (drill_mm + stack.wall) / (.01724 * stack.outer_to_inner)
-                network[np.ix_([a,b],[a,b])] += conductance * np.array([[1., -1.], [-1., 1.]])
-            # Apply 1 A between the source and sink lands. Potentials are in millivolts.
-            free = np.arange(len(labels)) != low
-            current = np.zeros(len(labels))
-            current[high] = 1
-            volts = np.zeros(len(labels))
-            volts[free] = np.linalg.solve(network[np.ix_(free,free)], current[free])
-            if not np.allclose(network @ volts, current - (np.arange(len(labels)) == low), atol=1e-7):
-                raise ValueError("Sheet network fails terminal current conservation")
-            print(f"{pitch:.3f},{inner_um:g},{1000*stack.foil:g},{volts[high]:.4f}", flush=True)
+    if args.joined:
+        inner = artwork(archive, "In2_Cu.gbr").difference(unary_union(inner_holes))
+        sheets = []
+        for layer, image_layer, names in [
+            ("L3", inner, ["output", "upper", "lower_bank"]),
+            ("L3", inner, ["bridge_upper", "bridge_lower"]),
+            ("L4", image, ["upper", "bridge_upper"]),
+            ("L4", image, ["bridge_lower", "lower_bank", "balls"]),
+        ]:
+            contacts = [via["via_ddr_supply_" + name] for name in names]
+            sheet, = (g for g in image_layer.geoms if all(g.intersection(annulus(v)).area > .001 for v in contacts))
+            sheets.append((layer, names, contacts, sheet))
+        # Nodes represent the lands on each side of the four short plated barrel sections.
+        labels = [(layer, name) for layer, names, _, _ in sheets for name in names]
+        high = labels.index(("L3", "output"))
+        low = labels.index(("L4", "balls"))
+        print("pitch_mm,inner_um,outer_um,joined_L3_output_to_L4_balls_mOhm_at_20C")
+        for pitch in (.05, .035, .025):
+            blocks = [sheet_conductance(sheet, contacts, pitch) for _, _, contacts, sheet in sheets]
+            for inner_um in ((30,) if args.wurth else (35, 17.5)):
+                network = np.zeros((len(labels), len(labels)))
+                for (layer, names, _, _), block in zip(sheets, blocks):
+                    indices = [labels.index((layer, name)) for name in names]
+                    foil_mm = inner_um / 1000 if layer == "L3" else stack.foil
+                    network[np.ix_(indices, indices)] += block * foil_mm / .01724
+                for name in ("upper", "bridge_upper", "bridge_lower", "lower_bank"):
+                    a, b = (labels.index((layer, name)) for layer in ("L3", "L4"))
+                    drill_mm = via["via_ddr_supply_" + name]["hole_diameter"]
+                    conductance = np.pi * stack.wall * (drill_mm + stack.wall) / (.01724 * stack.outer_to_inner)
+                    network[np.ix_([a,b],[a,b])] += conductance * np.array([[1., -1.], [-1., 1.]])
+                # Apply 1 A between the source and sink lands. Potentials are in millivolts.
+                free = np.arange(len(labels)) != low
+                current = np.zeros(len(labels))
+                current[high] = 1
+                volts = np.zeros(len(labels))
+                volts[free] = np.linalg.solve(network[np.ix_(free,free)], current[free])
+                if not np.allclose(network @ volts, current - (np.arange(len(labels)) == low), atol=1e-7):
+                    raise ValueError("Sheet network fails terminal current conservation")
+                print(f"{pitch:.3f},{inner_um:g},{1000*stack.foil:g},{volts[high]:.4f}", flush=True)
 
 if args.return_path:
     components = {e["name"]: e["source_component_id"] for e in board if e["type"] == "source_component"}
@@ -167,8 +177,8 @@ if args.return_path:
     thermal = [v for v in gnd_vias if abs(v["x"]-ep_land["x"]) + v["outer_diameter"]/2 < ep_land["width"]/2
                and abs(v["y"]-ep_land["y"]) + v["outer_diameter"]/2 < ep_land["height"]/2]
     end = min((v for v in thermal if "bottom" in v["layers"]), key=lambda v: np.hypot(v["x"]-cpu_via["x"], v["y"]-cpu_via["y"]))
-    crop = box(min(cpu_via["x"],end["x"])-4, min(cpu_via["y"],end["y"])-5,
-               max(cpu_via["x"],end["x"])+4, max(cpu_via["y"],end["y"])+5)
+    crop = box(min(cpu_via["x"],end["x"])-12, min(cpu_via["y"],end["y"])-12,
+               max(cpu_via["x"],end["x"])+10, max(cpu_via["y"],end["y"])+12)
     bores = []
     with ZipFile(archive) as z:
         for member, expected in drill["expected_drills"](board).items():

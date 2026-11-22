@@ -1,5 +1,7 @@
 # Pixel Dash
 
+This branch contains the north RAM electrical study. The [current study results](studies/zoned/README.md) supersede the historical routing and margin figures below. The 50-link production checkpoint is on pixel-dash-wide.
+
 ## Wide handheld checkpoint
 
 **Fabrication is on hold.** DCDC4 supplies 19/21 assigned 3.3 V CPU/USB

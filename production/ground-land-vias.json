@@ -79,5 +79,12 @@
   {"terminal": "U_BAT_BUCKBOOST.PGND", "side": "top", "x": -32.149873, "y": -31.052147, "escape": [-32.0648791, -31.052147], "width": 0.25},
   {"terminal": "U_BAT_BUCKBOOST.PGND", "side": "top", "x": -31.774873, "y": -31.202147, "escape": [-31.9348669, -31.202147], "width": 0.25},
   {"terminal": "U_BAT_BUCKBOOST.PGND", "side": "top", "x": -32.449873, "y": -31.352147, "escape": [-32.0648791, -31.2921456], "width": 0.25},
-  {"terminal": "U_BAT_BUCKBOOST.VSEL", "side": "top", "x": -33.400175, "y": -31.8723, "escape": [-33.400175, -31.7873059], "width": 0.15}
+  {"terminal": "U_BAT_BUCKBOOST.VSEL", "side": "top", "x": -33.400175, "y": -31.8723, "escape": [-33.400175, -31.7873059], "width": 0.15},
+  {"terminal": "U_DDR_SWITCH.GND", "side": "top", "x": -35.003, "y": 30.968002},
+  {"terminal": "U_DDR_SWITCH.EP", "side": "top", "x": -35.95296, "y": 31.718064},
+  {"terminal": "C_DDR_SW_IN.pin2", "side": "top", "x": -39.100024, "y": 33.72},
+  {"terminal": "C_DDR_SW_BIAS.pin2", "side": "top", "x": -39.270116, "y": 30.22},
+  {"terminal": "C_DDR_SW_CT.pin2", "side": "top", "x": -32.929884, "y": 31.42},
+  {"terminal": "C_DDR_SW_EN.pin2", "side": "top", "x": -41.150002, "y": 35.9},
+  {"terminal": "R_DDR_SW_EN.pin2", "side": "top", "x": -38.667184, "y": 35.35}
 ]

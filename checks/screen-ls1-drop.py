@@ -4,6 +4,9 @@ from hdi_build import LEGACY, WURTH
 import csv
 import json
 import math
+import subprocess
+import sys
+import re
 from pathlib import Path
 
 parser = argparse.ArgumentParser(description=__doc__)
@@ -12,7 +15,12 @@ parser.add_argument("--pour-mohm", type=float, help="L4 spreading resistance fro
 parser.add_argument("--direct-pour-mohm", type=float, help="Resistance from the direct L4 feed to the CPU supply via in the same export")
 parser.add_argument("--sheet-network-report", type=Path, help="Gerber/drill sheet solve from estimate-ls1-pours.py --joined")
 parser.add_argument("--wurth", action="store_true")
+parser.add_argument("--require-hot-reserve", action="store_true",
+                    help="gate the illustrative 5 mV DC reserve and positive modeled transient headroom")
 args = parser.parse_args()
+if args.require_hot_reserve and (not args.wurth or args.sheet_network_report is None):
+    parser.error("The hot reserve gate requires the matching Würth forward and return mesh report")
+hot_pass = False
 stack = WURTH if args.wurth else LEGACY
 inner_cases = (stack.foil,) if args.wurth else (.035, .0175)
 if args.wurth and (args.pour_mohm is not None or args.direct_pour_mohm is not None):
@@ -23,6 +31,11 @@ if args.pour_mohm is not None and not (math.isfinite(args.pour_mohm) and args.po
     parser.error("Spreading resistance must be positive and finite")
 board = json.loads(args.board.read_text())
 parts = {e["name"]: e for e in board if e["type"] == "source_component"}
+if "U_DDR_SWITCH" in parts:
+    if not args.wurth or args.sheet_network_report is None:
+        parser.error("The buffered layout requires --wurth and a matching --sheet-network-report")
+    checker = Path(__file__).with_name("screen-buffered-ddr.py")
+    raise SystemExit(subprocess.call([sys.executable, checker, args.board, args.sheet_network_report]))
 pmic = parts["U_PMIC"]["source_component_id"]
 source, = (e for e in board if e["type"] == "source_port" and
            e["source_component_id"] == pmic and e["name"] == "IN_LS1")
@@ -157,9 +170,38 @@ if args.sheet_network_report is not None:
         for temp in (20,80):
             board_r = cold*(1+.00393*(temp-20))
             print(f"  inner {foil:g} um, {temp} C, grid {pitch:g} mm: {board_r:.3f} mOhm; remaining at 250 mA {40-.250*(110+board_r):.3f} mV, at 300 mA {40-.300*(110+board_r):.3f} mV before return and transient losses.")
+    # The reported three-via result includes the two-sided CPU-to-EP return.
+    # Evaluate the finest mesh present, on the same foil and barrel assumptions.
+    returns = [re.search(r"three EP returns, mesh ([0-9.]+) mm: ([0-9.]+) mOhm at 20 C", line)
+               for line in lines]
+    returns = sorted((float(m[1]), float(m[2])) for m in returns if m)
+    if args.wurth and returns:
+        return_cold = returns[0][1]
+        print("At 250 mA, 1.350 V -2%, CPU minimum 1.283 V, switch corner 110 mOhm,")
+        print("the forward plus return limit is 50 mOhm for zero DC margin or 30 mOhm for 5 mV reserve.")
+        print("temp_C,conductance_fraction,board_loop_mOhm,dc_mV,dc_less_100mA_1us_50pctC_mV,source_dynamic_corner_mV")
+        margins = []
+        for temp in (80, 105):
+            for conductance in (1., .8):
+                # 80% is a sensitivity on ALL conductor cross sections, including
+                # plating. It is not a supplier tolerance. Use the hot switch max.
+                loop = (cold + return_cold) * (1 + .00393*(temp-20)) / conductance
+                loss = .250 * (110 + loop)
+                dc = 40 - loss
+                transient = dc - 100/(.50*nominal)
+                source_dynamic = 1000*(1.350*.975-1.283) - loss
+                print(f"{temp},{conductance:.2f},{loop:.3f},{dc:.3f},{transient:.3f},{source_dynamic:.3f}")
+                margins.append((dc, transient, source_dynamic))
+        hot_pass = all(dc >= 5 and step > 0 and source > 0 for dc, step, source in margins)
+        print("Hot reserve screen:", "PASS" if hot_pass else "FAIL")
+        print("The separate source dynamic column uses TI's 50–450 mA DCDC3 test at the regulator. "
+              "The local cap sensitivity excludes ESR, ESL, package and control response.")
 print("Sensitivity to a 100 mA step lasting 1 us, before regulator response, ESR and ESL:")
 for retention in (.5, .75, 1.):
     effective = nominal * retention
     print(f"  {retention:.0%} effective: {effective:.2f} uF, ideal capacitive droop {100/effective:.2f} mV")
 print(f"{stack.name}. Assumed barrel wall {stack.wall*1000:g} um, full span {stack.outer_to_outer:g} mm, L3-to-L4 {stack.outer_to_inner:g} mm. The trace/barrel table excludes L4 spreading, return path, package and transient parasitics. "
       "Load, effective capacitance, finished stack and copper temperature are unverified.")
+
+if args.require_hot_reserve and not hot_pass:
+    raise SystemExit(1)
