@@ -1,15 +1,15 @@
 Longest cumulative below-nominal run is 21.730 mm on DDR_A10; TI allowance 31.750 mm.
 0 unrelated copper pairs below 0.102 mm
 0 via drill-spacing findings
-inner1 GND: envelope 387.0191 mm², uncovered 46.1006 mm², uncovered outside nominal via antipads 0.000000004 mm².
-inner2 VDDS_DDR: envelope 387.0191 mm², uncovered 37.6374 mm², uncovered outside nominal via antipads 0.000000003 mm².
+inner1 GND: envelope 387.8678 mm², uncovered 45.5433 mm², uncovered outside nominal via antipads 0.000000004 mm².
+inner2 VDDS_DDR: envelope 387.8678 mm², uncovered 37.0802 mm², uncovered outside nominal via antipads 0.000000003 mm².
 0 findings across signal and reference layers in the conservative envelope screen.
 0 signal/layer reference-coverage findings
 Screened 12 routed raster signals.
 0 signal/layer reference-coverage findings
 0 signal/layer reference-coverage findings
 0 via/layer/unrelated-net pairs below 0.1524 mm
-Verified 8473 strokes from 636 PCB traces against all four copper Gerbers.
+Verified 8774 strokes from 636 PCB traces against all four copper Gerbers.
 50 unique connections match the package functions. 2 within-byte DQ remaps.
 U1.N2 DDR_D3 -> U_DDR.H7 DQ7
 U1.P4 DDR_D7 -> U_DDR.F8 DQ3

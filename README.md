@@ -4,6 +4,15 @@ The [unrouted handheld example](examples/unrouted-handheld) contains the populat
 
 ## Current electrical checkpoint
 
+A6 now meets the 28.550–31.090 mm placement-derived address/command window. Moving A4 and A6 together reduced A6 from four to two full-depth transitions. Both nets remain distinct in the drilled Gerbers. The estimates use the 1.491 mm reference stack.
+
+| Net | Prior → current planar length (mm) | Prior → current total barrel depth (mm) | Prior → current estimated flight (ps) | Prior → current signed skew to CK (ps) | Current length-window error (mm) |
+|---|---:|---:|---:|---:|---:|
+| A6 | 25.3500 → 28.6470 | 5.6800 → 2.8400 | 183.7321 → 184.0084 | +3.8922 → +4.1685 | 0 |
+| A4 | 28.7200 → 28.6500 | 2.8400 → 2.8400 | 184.4298 → 184.0258 | +4.5899 → +4.1859 | 0 |
+
+The Micron AC135/DC90 setup and hold requirements at the CPU balls are recorded in the per-net report. Receiver slew and jitter derating still need to be included. Actual CPU launch and receiver margins remain open. A10 and CKE remain outside the command length window. The ±3.6633 ps data/strobe screen is separate. [Every current and prior result](checks/current-ddr-change.csv)
+
 Drilled CAM verifies 50 distinct AM3354-to-DDR3L connections. The byte-0 strobe legs measure 20.3465 and 20.3320 mm. Their planar mismatch is 0.0145 mm against TI's 0.127 mm limit. Each still traverses two 1.420 mm L1–L4 vias. Three additional byte-0 data or mask paths meet the ±3.6633 ps board-flight screen. Their own copper and via locations are unchanged.
 
 | Net | Length (mm) | Flight (ps) | Prior → current worst signed skew (ps) | Remaining model headroom (ps) | Largest data-to-strobe mismatch (mm) |
@@ -16,7 +25,7 @@ TI limits data-to-data and data-to-either-strobe mismatch to 0.635 mm. The proje
 
 All 72 local DDR return-check terminals reach their adjacent planes through 71 blind vias. Four ground escapes moved by up to 0.042 mm, and the L2 LDO1 feed moved 0.020 mm alongside G12 and H12. At the six corrected sites the nearest connected L2 Gerber edge lies 0.15048–0.15527 mm from the via center, beyond the 0.140 mm land radius. The 50 DDR lengths, drill spans and modeled flight times are unchanged. Reproduce the coverage check with `python checks/check-local-ddr-returns.py dist/index.circuit.json --gerbers /path/to/board.zip`. [Native and Gerber land coverage](checks/current-ddr-return-annuli.txt)
 
-The exported copper and drills connect all 16 DDR reference bypasses to direct DCDC3 and ground. The added 100 nF C_DDR40 uses a staggered blind and buried supply connection, with 0.410 mm between drill centers. It reduces the distance to a verified bypass at 21 of 116 DDR transitions. ODT improves from 9.5043 to 7.1228 mm and RASn from 9.2935 to 7.8447 mm. The longest remaining path by this geometric measure is 8.7178 mm at A1. Distances include the farther end of each staggered leg. AC return impedance and receiver margin remain open. [Every layer transition and its closest verified bypass](checks/current-ddr-transition-returns.csv)
+The exported copper and drills connect all 16 DDR reference bypasses to direct DCDC3 and ground. The added 100 nF C_DDR40 uses a staggered blind and buried supply connection, with 0.410 mm between drill centers. At its introduction it shortened the distance to a verified bypass at 21 of the then 116 DDR transitions. The current board has 114 transitions. ODT improves from 9.5043 to 7.1228 mm and RASn from 9.2935 to 7.8447 mm. The longest remaining path by this geometric measure is 8.7178 mm at A1. Distances include the farther end of each staggered leg. AC return impedance and receiver margin remain open. [Every layer transition and its closest verified bypass](checks/current-ddr-transition-returns.csv)
 
 The assembly export matches all 236 fitted designators, centroids, sides and CAD rotations. The 99 retired designators were checked against the board, BOM and placement file. All 236 fitted courtyards are clear. For the USB-C receptacle, the C165948 footprint names the electrical contacts B8, A5, B7 and so on. Comparing all twelve physical contact names and all four shield slots verifies its exported 180° rotation. The two footprints enumerate those contacts with different synthetic pin numbers. Five other catalog land patterns need review. A placement-angle check does not establish the assembler’s machine pickup datum. [Per-part catalog comparison](checks/current-assembly-angles.csv)
 
