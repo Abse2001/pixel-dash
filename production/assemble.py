@@ -94,24 +94,30 @@ if len(parts)!=len([e for e in board if e["type"]=="source_component"]):
 balls = json.loads((root.parent/"am3354/processor-balls.json").read_text())
 def port(part,pin):
     return pins[parts[part]["source_component_id"],pin]
+def interface_trace(signal, origin, output, destination, terminal):
+    a, b = port(origin, output), port(destination, terminal)
+    sid="system_"+signal
+    key=b.get("subcircuit_connectivity_map_key") or a.get("subcircuit_connectivity_map_key") or sid
+    if any(p.get("subcircuit_connectivity_map_key",key)!=key for p in (a,b)):
+        raise ValueError(f"Would short an assigned processor pin {signal}")
+    a["subcircuit_connectivity_map_key"]=b["subcircuit_connectivity_map_key"]=key
+    board.append(dict(type="source_trace",source_trace_id=sid,name=signal,
+      display_name=f"{origin}.{output} to {destination}.{terminal}",connected_source_port_ids=
+      [p["source_port_id"] for p in (a,b)],connected_source_net_ids=[e["source_net_id"] for e in board if e["type"]=="source_net"
+          and e.get("subcircuit_connectivity_map_key")==key],subcircuit_connectivity_map_key=key))
+    board.append(dict(type="pcb_trace_missing_error",error_type="pcb_trace_missing_error",
+      pcb_trace_missing_error_id="open_"+sid,source_trace_id=sid,
+      message=f'Handheld interface {signal} requires PCB copper'))
+
 with (root/"interface.csv").open() as f:
     for row in csv.DictReader(f):
-        ball=row["Ball"]
-        if balls[ball]!=row["Pad"]:
+        ball = row["Ball"]
+        if balls[ball] != row["Pad"]:
             raise ValueError(f"Wrong processor ball {row}")
-        a,b=port("U1",ball),port(row["Peripheral"],row["Pin"])
-        sid="system_"+row["Signal"]
-        key=b.get("subcircuit_connectivity_map_key") or a.get("subcircuit_connectivity_map_key") or sid
-        if any(p.get("subcircuit_connectivity_map_key",key)!=key for p in (a,b)):
-            raise ValueError(f"Would short an assigned processor pin {row}")
-        a["subcircuit_connectivity_map_key"]=b["subcircuit_connectivity_map_key"]=key
-        board.append(dict(type="source_trace",source_trace_id=sid,name=row["Signal"],
-          display_name=f'U1.{ball} to {row["Peripheral"]}.{row["Pin"]}',connected_source_port_ids=
-          [p["source_port_id"] for p in (a,b)],connected_source_net_ids=[e["source_net_id"] for e in board if e["type"]=="source_net"
-              and e.get("subcircuit_connectivity_map_key")==key],subcircuit_connectivity_map_key=key))
-        board.append(dict(type="pcb_trace_missing_error",error_type="pcb_trace_missing_error",
-          pcb_trace_missing_error_id="open_"+sid,source_trace_id=sid,
-          message=f'Handheld interface {row["Signal"]} requires PCB copper'))
+        interface_trace(row["Signal"], "U1", ball, row["Peripheral"], row["Pin"])
+
+for index, axis in enumerate(("LX", "LY", "RX", "RY")):
+    interface_trace("ADC_" + axis, "U_JOY_ADC", f"AIN{index}", "C_JOY_" + axis, "pin1")
 # Each LCD_DATA terminal samples its matching SYSBOOT resistor on reset.
 # Tie its open resistor terminal to the actual data net after the two source
 # namespaces have been joined; preserve both the LCD and MMC assignments.
