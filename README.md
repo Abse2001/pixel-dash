@@ -10,6 +10,26 @@ CPU straps reach their bias resistors. CAM finds 6/29 CPU-to-panel and 7/7
 CPU-to-card signal paths, with 38 mapped nets still open across the board.
 [PCB snapshot](previews/handheld.png) · [Physical connectivity](checks/current-cam-connectivity.txt)
 
+MMC0 card power, both VDDSHV4 balls (H14/J14) and the five 10 kΩ
+CMD/DAT pulls share DCDC4. Its default SEQ4 setting enables DCDC4 at
+STROBE7. The independent retained regulator has no copper path to the
+socket supply. The 0.75 mm card feed is 74.81 mm with three plated
+transitions. The local 100 nF and 1 µF bypasses and socket VSS reach the
+main return. Run the drilled-Gerber audit with `--mmc0-power` for each
+socket, CPU, capacitor and resistor terminal and rail isolation.
+
+TI rates DCDC4 at 1.0 A at 2.8 V input, 1.3 A at 3.6 V and 1.6 A at 5 V
+for 3.3 V output. The six CPU I/O banks total 350 mA at their listed
+maximums, plus 80 mA for both USB analog supplies. Allocate 200 mA to a
+qualified 3.3 V default-speed card and 50 mA for pull resistors, ADC and
+other low-current loads. This totals 680 mA and leaves 320 mA against
+the lowest listed continuous rating. These are design allocations.
+Qualify the actual card, input sag, inrush, temperature and load steps.
+At reset keep MMC0 at 3.3 V. Hold host lines inactive until VDD settles
+and shut the host down before the common rail falls. Scope both supply
+ends and signal voltages on ramp and discharge to check injection and
+regulator limits. [TPS65218D0 electrical characteristics and SEQ4](https://www.ti.com/lit/ds/symlink/tps65218d0.pdf) · [AM3354 maximum current ratings](https://www.ti.com/lit/ds/symlink/am3354.pdf)
+
 B4, B5, C5, N5 and P5 cannot accept unrelated copper outside the saved
 DDR envelope at the required 0.408 mm setback. Running
 `checks/screen-ddr-placement.py <board.json> --routed --balls B4 B5 C5 N5 P5`
@@ -100,6 +120,14 @@ applicable TI input thresholds and setup/hold limits. Early bring-up firmware
 must log the latched CONTROL_STATUS SYSBOOT field (expected 0x4017) on UART0
 before switching LCD pins to raster. Record the boot source, MMC0 boot
 result, DDR initialization and panel/backlight supply state on each run.
+Use a known-good, write-verified 3.3 V microSD with a recorded image hash,
+a compatible AM335x ROM MLO and a unique early UART build marker. Prove
+the media works on a reference target with its compatible image. With
+USB boot disconnected and no UART download host, capture the ROM MMC0
+clock/CMD exchange, boot-device report and marker on each cold start.
+Repeat without the card as a negative control. Record socket VDD vs VSS,
+VDDSHV4 and the first clock at power-on, then signal and rail discharge
+at shutdown. Repeat this test with the panel fitted and removed.
 This is pending hardware verification. CAM currently confirms only bits
 11, 13, 14 and 15. TI section 5.9 local capacitors have a separate
 endpoint check under `--cpu-power`.

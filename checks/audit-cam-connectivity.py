@@ -200,6 +200,39 @@ def sysboot(terminals):
     return word != f"{0x4017:016b}"
 
 
+def mmc0_power(terminals):
+    """Require the sequenced card supply, pull networks and returns in drilled artwork."""
+    supply = terminals["U_PMIC.DCDC4"]
+    ground = terminals["TP_UART_GND.pin1"]
+    legacy = terminals["C_3V3_OUT_A.pin1"]
+    passed = len({supply, ground, legacy, terminals["U_PMIC.IN_DCDC4"]}) == 4
+    print("MMC0 rail isolation (DCDC4, GND, legacy regulator, VSYS):", "PASS" if passed else "FAIL")
+    for node, labels in (
+        (supply, ["U1.H14", "U1.J14", "J_SD.VDD", "C_SD.pin1", "C_SD_BULK.pin1"]),
+        (ground, ["J_SD.VSS", "C_SD.pin2", "C_SD_BULK.pin2"]),
+    ):
+        for label in labels:
+            ok = terminals[label] == node
+            print("MMC0 " + label, "PASS" if ok else "OPEN")
+            passed &= ok
+    signals = []
+    for suffix, contact, ball in (("CMD", "CMD", "G18"), ("DAT0", "DAT0", "G16"),
+                                 ("DAT1", "DAT1", "G15"), ("DAT2", "DAT2", "F18"),
+                                 ("CS", "CD_DAT3", "F17")):
+        signal = terminals["J_SD." + contact]
+        signals.append(signal)
+        ok = (terminals["R_SD_" + suffix + ".pin2"] == supply
+              and terminals["R_SD_" + suffix + ".pin1"] == signal == terminals["U1." + ball])
+        print("MMC0 " + contact + " pull, socket and CPU", "PASS" if ok else "OPEN")
+        passed &= ok
+    for contact, ball in (("CLK", "G17"), ("CD", "C15")):
+        signals.append(terminals["J_SD." + contact])
+        passed &= signals[-1] == terminals["U1." + ball]
+    passed &= len(set(signals) | {supply, ground, legacy}) == 10
+    print("MMC0 sequenced card power and seven distinct links:", "PASS" if passed else "FAIL")
+    return not passed
+
+
 def panel_and_storage(terminals):
     with (CHECKS.parent / "production/interface.csv").open() as f:
         mapped = list(csv.DictReader(f))
@@ -231,6 +264,7 @@ def main():
     parser.add_argument("--cpu-power", action="store_true", help="check assigned CPU supply domains and returns against their physical sources")
     parser.add_argument("--sysboot", action="store_true", help="decode physical reset straps from resistor lands and CPU balls")
     parser.add_argument("--panel-storage", action="store_true", help="verify CPU-to-FPC and CPU-to-card physical endpoints")
+    parser.add_argument("--mmc0-power", action="store_true", help="require card supply, ground, pull-ups and all seven links")
     args = parser.parse_args()
     board = json.loads(args.circuit.read_text())
     drill = runpy.run_path(str(CHECKS / "audit-channel-drills.py"))
@@ -356,12 +390,13 @@ def main():
     straps_failed = args.sysboot and sysboot(terminals)
     caps_failed = args.cpu_power and internal_bypass(board, terminals, port_labels)
     interfaces_failed = args.panel_storage and panel_and_storage(terminals)
+    card_failed = (args.mmc0_power or args.panel_storage) and mmc0_power(terminals)
     opens = {k: len(v) for k, v in nodes_by_net.items() if len(v) > 1}
     for key, count in sorted(opens.items()):
         examples = [", ".join(sorted(members[key][node])[:3]) or "via only" for node in sorted(nodes_by_net[key])]
         print(f"OPEN {key} has {count} separate CAM networks: " + " | ".join(examples))
     print(f"{len(opens)} mapped land nets have multiple physical networks.")
-    return bool(opens) or power_failed or startup_failed or straps_failed or interfaces_failed or caps_failed
+    return bool(opens) or power_failed or startup_failed or straps_failed or interfaces_failed or caps_failed or card_failed
 
 
 if __name__ == "__main__":
