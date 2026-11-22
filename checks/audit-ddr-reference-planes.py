@@ -20,7 +20,7 @@ def polygon(pour):
     return Polygon(outer, holes)
 
 
-def audit(board, microsd=False, full_width=False, raster=False):
+def audit(board, microsd=False, full_width=False, raster=False, archive=None):
     nets = {e["source_net_id"]: e["name"] for e in board if e["type"] == "source_net"}
     names = {e["source_trace_id"]: e.get("name", "") for e in board if e["type"] == "source_trace"}
     ref = {"top": ("inner1", "GND"), "bottom": ("inner2", "GND" if microsd or raster else "VDDS_DDR")}
@@ -33,7 +33,12 @@ def audit(board, microsd=False, full_width=False, raster=False):
         matches = [p for p in pours if p["layer"] == inner and nets[p["source_net_id"]] == net]
         if len(matches) != 1:
             raise ValueError(f"Expected one finished {inner} {net} pour, found {len(matches)}")
-        planes[layer] = polygon(matches[0])
+        plane = polygon(matches[0])
+        if archive:
+            from ddr_cam import reference
+            member = {"inner1": "In1_Cu.gbr", "inner2": "In2_Cu.gbr"}[inner]
+            plane = reference(archive, member, plane.representative_point())
+        planes[layer] = plane
     seen = set()
     for trace in board:
         if trace["type"] != "pcb_trace":
@@ -91,6 +96,8 @@ def audit(board, microsd=False, full_width=False, raster=False):
                 combined = unary_union(gaps)
                 yield name, layer, ref[layer][0], combined.area if full_width else combined.length
 
+    if not microsd and not raster and len(seen) != 50:
+        raise ValueError(f"Expected 50 routed DDR signals, found {len(seen)}")
     if raster and not seen:
         raise ValueError("The assembled board contains no routed raster signals")
     if raster:
@@ -104,9 +111,10 @@ if __name__ == "__main__":
     group.add_argument("--micro-sd", action="store_true")
     group.add_argument("--raster", action="store_true")
     parser.add_argument("--full-width", action="store_true")
+    parser.add_argument("--gerbers", type=Path, help="Check the connected reference copper reconstructed from the manufacturing archive")
     args = parser.parse_args()
     full_width = args.full_width
-    failures = sorted(audit(json.loads(args.circuit.read_text()), args.micro_sd, full_width, args.raster))
+    failures = sorted(audit(json.loads(args.circuit.read_text()), args.micro_sd, full_width, args.raster, args.gerbers))
     out = csv.writer(sys.stdout)
     out.writerow(("signal", "signal_layer", "reference_layer", "uncovered_copper_mm2" if full_width else "uncovered_centerline_mm"))
     for name, layer, ref, length in failures:

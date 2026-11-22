@@ -83,7 +83,11 @@ def restrict_ground(board, ground_net, layer="inner1"):
 
 def add_inner2_ground(board, ground_net):
     board_outline, = (e for e in board if e["type"] == "pcb_board")
-    board.append(dict(type="pcb_copper_pour", pcb_copper_pour_id="system_inner2_ground",
+    # Gerber clear polarity affects all previously drawn copper on this layer.
+    # Clear the ground keepout before drawing the nested DDR supply island.
+    island_index, = (i for i, e in enumerate(board)
+                     if e["type"] == "pcb_copper_pour" and e["layer"] == "inner2")
+    board.insert(island_index, dict(type="pcb_copper_pour", pcb_copper_pour_id="system_inner2_ground",
                       shape="brep", layer="inner2", source_net_id=ground_net,
                       covered_with_solder_mask=True,
                       brep_shape={"outer_ring": {"vertices": board_outline["outline"]}, "inner_rings": []}))
