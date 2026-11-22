@@ -1,9 +1,9 @@
 drill_npth.drl matches 19 round hits and 0 slots
-drill-L1-L4.drl matches 668 round hits and 6 slots
-drill-L1-L2.drl matches 307 round hits and 0 slots
+drill-L1-L4.drl matches 687 round hits and 6 slots
+drill-L1-L2.drl matches 309 round hits and 0 slots
 drill-L2-L3.drl matches 9 round hits and 0 slots
 drill-L3-L4.drl matches 23 round hits and 0 slots
-Study: 25/50 distinct DDR ball pairs connected; 25 explicitly open. 1013 plated barrels checked. No shorts between mapped land nets.
+Study: 25/50 distinct DDR ball pairs connected; 25 explicitly open. 1034 plated barrels checked. No shorts between mapped land nets.
 UART0 RX, TX and ground reach three distinct probe networks.
 PMIC copper verified between U_PMIC.L4A and L_PMIC_IO.pin1.
 PMIC copper verified between U_PMIC.L4B and L_PMIC_IO.pin2.
@@ -97,9 +97,9 @@ U1.D10 10 uF C_SRAM_MPU_IN: CONNECTED; nearest qualifying C_SRAM_MPU_IN at 7.069
 U1.E9 10 uF C_SRAM_CORE_IN: CONNECTED; nearest qualifying C_SRAM_MPU_IN at 7.661 mm land-center distance
   Dedicated path ['U1.E9', 'C_SRAM_CORE_IN.pin1']: 10.410 mm planar, 4 transitions, 0.200 mm minimum width.
   Forward line and contacted barrel resistance at 20 C: 22.76 mOhm; L1–L2 ground via in capacitor return land: True.
-LCD CPU-to-connector copper 7/29. Reached LCD_D0, LCD_D11, LCD_D13, LCD_D14, LCD_D15, LCD_PCLK, LCD_RESET. Open LCD_D1, LCD_D10, LCD_D12, LCD_D16, LCD_D17, LCD_D18, LCD_D19, LCD_D2, LCD_D20, LCD_D21, LCD_D22, LCD_D23, LCD_D3, LCD_D4, LCD_D5, LCD_D6, LCD_D7, LCD_D8, LCD_D9, LCD_DE, LCD_HSYNC, LCD_VSYNC.
+LCD CPU-to-connector copper 9/29. Reached LCD_D0, LCD_D1, LCD_D2, LCD_D11, LCD_D13, LCD_D14, LCD_D15, LCD_PCLK, LCD_RESET. Open LCD_D10, LCD_D12, LCD_D16, LCD_D17, LCD_D18, LCD_D19, LCD_D20, LCD_D21, LCD_D22, LCD_D23, LCD_D3, LCD_D4, LCD_D5, LCD_D6, LCD_D7, LCD_D8, LCD_D9, LCD_DE, LCD_HSYNC, LCD_VSYNC.
 SD CPU-to-connector copper 7/7. Reached SD_CLK, SD_CMD, SD_DAT0, SD_DAT1, SD_DAT2, SD_DAT3, SD_DETECT. Open none.
-Raster data connector to strap sense pads: 5/16; bits [0, 11, 13, 14, 15].
+Raster data connector to strap sense pads: 7/16; bits [0, 1, 2, 11, 13, 14, 15].
 Joystick ADC supply and bypass return: PASS
 MMC0 rail isolation (DCDC4, GND, legacy regulator, VSYS): PASS
 MMC0 U1.H14 PASS
@@ -142,14 +142,12 @@ OPEN channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net6 has 2 
 OPEN channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net8 has 2 separate CAM networks: U_DDR.C8 | U1.K2
 OPEN channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net9 has 2 separate CAM networks: U_DDR.D3 | U1.J2
 OPEN channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net91 has 4 separate CAM networks: C_JOY_ADC.pin1, C_PMIC_IO_A.pin1, C_PMIC_IO_B.pin1 | R_TOUCH_IRQ.pin2 | R_TOUCH_SDA.pin2 | R_TOUCH_SCL.pin2
-OPEN system_LCD_D1 has 2 separate CAM networks: R_SYSBOOT1.pin2, U1.R2 | J_LCD.pin31
 OPEN system_LCD_D10 has 2 separate CAM networks: R_SYSBOOT10.pin2, U1.U3 | J_LCD.pin20
 OPEN system_LCD_D12 has 2 separate CAM networks: R_SYSBOOT12.pin2, U1.V2 | J_LCD.pin15
 OPEN system_LCD_D16 has 2 separate CAM networks: U1.U13 | J_LCD.pin33
 OPEN system_LCD_D17 has 2 separate CAM networks: U1.V13 | J_LCD.pin17
 OPEN system_LCD_D18 has 2 separate CAM networks: U1.R12 | J_LCD.pin34
 OPEN system_LCD_D19 has 2 separate CAM networks: U1.T12 | J_LCD.pin26
-OPEN system_LCD_D2 has 2 separate CAM networks: R_SYSBOOT2.pin2, U1.R3 | J_LCD.pin30
 OPEN system_LCD_D20 has 2 separate CAM networks: U1.U12 | J_LCD.pin18
 OPEN system_LCD_D21 has 2 separate CAM networks: U1.T11 | J_LCD.pin35
 OPEN system_LCD_D22 has 2 separate CAM networks: U1.T10 | J_LCD.pin27
@@ -170,9 +168,9 @@ OPEN system_TOUCH_SDA has 2 separate CAM networks: U1.D16 | R_TOUCH_SDA.pin1
 OPEN unnamedsubcircuitsubcircuit_source_group_0_connectivity_net124 has 2 separate CAM networks: U1.C18 | Q_LCD_BL.pin1, R_LCD_BL_PULLDOWN.pin1
 OPEN unnamedsubcircuitsubcircuit_source_group_0_connectivity_net137 has 2 separate CAM networks: J_JOY_L.pin3, U1.V17 | R_JOY_L_CLICK.pin1
 OPEN unnamedsubcircuitsubcircuit_source_group_0_connectivity_net139 has 2 separate CAM networks: R_JOY_R_CLICK.pin1 | J_JOY_R.pin3, U1.D18
-OPEN unnamedsubcircuitsubcircuit_source_group_0_connectivity_net140 has 12 separate CAM networks: C_JOY_L_BULK.pin1 | C_JOY_L_VDD.pin1 | J_JOY_L.pin5 | U_SPK_AMP.MUTE | U_SPK_AMP.SHND | C_3V3_OUT_A.pin1, C_3V3_OUT_B.pin1, L_3V3.pin2 | TP_3V3.pin1 | R_JOY_L_CLICK.pin2 | R_JOY_R_CLICK.pin2 | C_JOY_R_BULK.pin1 | C_JOY_R_VDD.pin1 | J_JOY_R.pin5
+OPEN unnamedsubcircuitsubcircuit_source_group_0_connectivity_net140 has 12 separate CAM networks: C_JOY_L_VDD.pin1 | C_JOY_L_BULK.pin1 | J_JOY_L.pin5 | U_SPK_AMP.MUTE | U_SPK_AMP.SHND | C_3V3_OUT_A.pin1, C_3V3_OUT_B.pin1, L_3V3.pin2 | TP_3V3.pin1 | R_JOY_L_CLICK.pin2 | R_JOY_R_CLICK.pin2 | C_JOY_R_BULK.pin1 | C_JOY_R_VDD.pin1 | J_JOY_R.pin5
 OPEN unnamedsubcircuitsubcircuit_source_group_0_connectivity_net191 has 3 separate CAM networks: C_3V3_IN.pin1, C_AMP_VDD.pin1, C_AMP_VDD_BULK.pin1 | via only | via only
 OPEN unnamedsubcircuitsubcircuit_source_group_0_connectivity_net193 has 2 separate CAM networks: R_LIPO_ENABLE.pin2, U_LIPO_BOOST.EN, U_LIPO_UVLO.N_RESET | Q_LIPO_USB_OFF.pin3
 OPEN unnamedsubcircuitsubcircuit_source_group_0_connectivity_net32 has 2 separate CAM networks: U1.N18 | J_USB.A7, J_USB.B7
 OPEN unnamedsubcircuitsubcircuit_source_group_0_connectivity_net34 has 2 separate CAM networks: U1.N17 | J_USB.A6, J_USB.B6
-59 mapped land nets have multiple physical networks.
+57 mapped land nets have multiple physical networks.

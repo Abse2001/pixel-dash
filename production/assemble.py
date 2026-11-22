@@ -276,7 +276,18 @@ for saved_name, plan in paths.items():
             raise ValueError(f"Saved copper duplicates existing routing on {saved_name}")
     if not sections or any(len(section) < 2 for section in sections):
         raise ValueError(f"Empty route section on {sid}")
-    first_layer = "top" if "top" in start["layers"] else "bottom"
+    tap = plan.get("start_on_trace") if isinstance(plan, dict) else None
+    if tap:
+        from shapely.geometry import LineString, Point
+        parent = one(board, "pcb_trace", pcb_trace_id=tap["trace"])
+        a, b = parent["route"][tap["segment"]:tap["segment"] + 2]
+        layer = plan["layers"][0]
+        if (parent.get("subcircuit_connectivity_map_key") != source["subcircuit_connectivity_map_key"]
+                or any(p.get("route_type") != "wire" or p.get("layer") != layer for p in (a, b))
+                or LineString([(a["x"], a["y"]), (b["x"], b["y"])]).distance(Point(sections[0][0])) > 1e-6):
+            raise ValueError(f"Branch is off its same-net copper on {sid}")
+        start = dict(x=sections[0][0][0], y=sections[0][0][1], layers=[layer])
+    first_layer = start["layers"][0] if tap else ("top" if "top" in start["layers"] else "bottom")
     outer_layers = (first_layer, "bottom" if first_layer == "top" else "top")
     routing_layers = [outer_layers[i % 2] for i in range(len(sections))]
     if isinstance(plan, dict) and "layers" in plan:
@@ -338,7 +349,8 @@ for saved_name, plan in paths.items():
             wire_widths = [width] * len(section)
         route.extend(dict(route_type="wire", layer=layer, width=w, x=x, y=y)
                      for (x, y), w in zip(section, wire_widths))
-    route[0]["start_pcb_port_id"] = start["pcb_port_id"]
+    if not tap:
+        route[0]["start_pcb_port_id"] = start["pcb_port_id"]
     route[-1]["end_pcb_port_id"] = end["pcb_port_id"]
     board.append(dict(type="pcb_trace", pcb_trace_id=trace_id, source_trace_id=sid,
                       subcircuit_connectivity_map_key=key, route=route))
