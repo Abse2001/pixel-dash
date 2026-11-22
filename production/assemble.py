@@ -6,6 +6,7 @@ import re
 import sys
 from pathlib import Path
 from build_retained import build
+from processor_power import add_processor_feeds
 from clip_channel import add_inner2_ground, clear_handheld_copper_from_ddr, restrict_ground
 from wide_layout import apply_wide_layout
 
@@ -367,57 +368,7 @@ for index, site in enumerate(json.loads((root / "ground-land-vias.json").read_te
                                       start_pcb_port_id=land["pcb_port_id"]),
                                  dict(route_type="wire", x=site["x"], y=site["y"],
                                       layer=surface, width=site["width"])]))
-# The core feed crosses a DDR supply neck on L1 to keep the L3 island continuous.
-feed = json.loads((root / "core-feed.json").read_text())
-before, after = feed["before"], feed["after"]
-rail = one(board, "source_net", name="VDD_CORE")
-cap, ball = port("C_PMIC_CORE", "pin1"), port("U1", "G7")
-cap_land, ball_land = [one(board, "pcb_port", source_port_id=p["source_port_id"]) for p in (cap, ball)]
-if any(p["subcircuit_connectivity_map_key"] != rail["subcircuit_connectivity_map_key"] for p in (cap, ball)):
-    raise ValueError("The core feed terminals no longer share VDD_CORE")
-source, = (t for t in board if t["type"] == "source_trace"
-           and cap["source_port_id"] in t["connected_source_port_ids"]
-           and rail["source_net_id"] in t["connected_source_net_ids"])
-stages = [
-    ("top", 0.40, [(cap_land["x"], cap_land["y"]), before[0]]),
-    ("inner2", 0.65, before),
-    ("top", 0.65, [before[-1], after[0]]),
-    ("inner2", 0.65, after),
-    ("top", 0.24, [after[-1], (ball_land["x"], ball_land["y"])]),
-]
-route = []
-for index, (layer, width, points) in enumerate(stages):
-    if index:
-        x, y = points[0]
-        hole, outer = [(0.18, 0.38), (0.20, 0.38), (0.20, 0.38), (0.15, 0.30)][index-1]
-        board.append(dict(type="pcb_via", pcb_via_id=f"pcb_core_feed_{index}", x=x, y=y,
-                          from_layer="top", to_layer="bottom", layers=list(layers),
-                          source_net_id=rail["source_net_id"], subcircuit_connectivity_map_key=rail["subcircuit_connectivity_map_key"],
-                          hole_diameter=hole, outer_diameter=outer))
-        route.append(dict(route_type="via", x=x, y=y, from_layer=stages[index-1][0], to_layer=layer))
-    route.extend(dict(route_type="wire", x=x, y=y, width=width, layer=layer) for x, y in points)
-route[0]["start_pcb_port_id"] = cap_land["pcb_port_id"]
-route[-1]["end_pcb_port_id"] = ball_land["pcb_port_id"]
-board.append(dict(type="pcb_trace", pcb_trace_id="pcb_core_supply_feed", source_trace_id=source["source_trace_id"],
-                  subcircuit_connectivity_map_key=rail["subcircuit_connectivity_map_key"], route=route))
-for terminal, branch in feed["branches"].items():
-    ref, pin = terminal.split(".")
-    pad = port(ref, pin)
-    land = one(board, "pcb_port", source_port_id=pad["source_port_id"])
-    source, = (t for t in board if t["type"] == "source_trace"
-               and pad["source_port_id"] in t["connected_source_port_ids"]
-               and rail["source_net_id"] in t["connected_source_net_ids"])
-    start, end = branch["points"]
-    if dist((land["x"], land["y"]), start) > 0.035:
-        raise ValueError(f"Power via is no longer at {terminal}")
-    board.append(dict(type="pcb_via", pcb_via_id="pcb_core_tap_"+pin, x=start[0], y=start[1],
-                      from_layer="top", to_layer="bottom", layers=list(layers),
-                      source_net_id=rail["source_net_id"], subcircuit_connectivity_map_key=rail["subcircuit_connectivity_map_key"],
-                      hole_diameter=0.15, outer_diameter=0.30))
-    board.append(dict(type="pcb_trace", pcb_trace_id="pcb_core_branch_"+pin,
-                      source_trace_id=source["source_trace_id"], subcircuit_connectivity_map_key=rail["subcircuit_connectivity_map_key"],
-                      route=[dict(route_type="wire", x=x, y=y, width=branch["width"], layer="inner2")
-                             for x, y in (start, end)]))
+add_processor_feeds(board, json.loads((root / "processor-feeds.json").read_text()), port)
 # Bare probe lands need exposed copper without stencil apertures.
 probe_parts = {e["source_component_id"] for e in board
                if e["type"] == "source_component" and e.get("ftype") == "simple_test_point"}
