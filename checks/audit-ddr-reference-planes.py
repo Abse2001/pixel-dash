@@ -20,7 +20,7 @@ def polygon(pour):
     return Polygon(outer, holes)
 
 
-def audit(board, microsd=False, full_width=False, raster=False, archive=None):
+def audit(board, microsd=False, full_width=False, raster=False, archive=None, study_open=frozenset()):
     nets = {e["source_net_id"]: e["name"] for e in board if e["type"] == "source_net"}
     names = {e["source_trace_id"]: e.get("name", "") for e in board if e["type"] == "source_trace"}
     ref = {"top": ("inner1", "GND"), "bottom": ("inner2", "GND" if microsd or raster else "VDDS_DDR")}
@@ -98,7 +98,8 @@ def audit(board, microsd=False, full_width=False, raster=False, archive=None):
                 combined = unary_union(gaps)
                 yield name, layer, ref[layer][0], combined.area if full_width else combined.length
 
-    if not microsd and not raster and len(seen) != 50:
+    expected = {n for n in names.values() if n.startswith("DDR_")}
+    if not microsd and not raster and (len(expected)!=50 or expected-seen!=study_open or seen-expected):
         raise ValueError(f"Expected 50 routed DDR signals, found {len(seen)}")
     if raster and not seen:
         raise ValueError("The assembled board contains no routed raster signals")
@@ -112,11 +113,12 @@ if __name__ == "__main__":
     group = parser.add_mutually_exclusive_group()
     group.add_argument("--micro-sd", action="store_true")
     group.add_argument("--raster", action="store_true")
+    parser.add_argument("--study-open-ddr", type=Path, help="exact JSON list of deliberately open study nets")
     parser.add_argument("--full-width", action="store_true")
     parser.add_argument("--gerbers", type=Path, help="Check the connected reference copper reconstructed from the manufacturing archive")
     args = parser.parse_args()
     full_width = args.full_width
-    failures = sorted(audit(json.loads(args.circuit.read_text()), args.micro_sd, full_width, args.raster, args.gerbers))
+    failures = sorted(audit(json.loads(args.circuit.read_text()), args.micro_sd, full_width, args.raster, args.gerbers, set(json.loads(args.study_open_ddr.read_text())) if args.study_open_ddr else set()))
     out = csv.writer(sys.stdout)
     out.writerow(("signal", "signal_layer", "reference_layer", "uncovered_copper_mm2" if full_width else "uncovered_centerline_mm"))
     for name, layer, ref, length in failures:

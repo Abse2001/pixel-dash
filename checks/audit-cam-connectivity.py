@@ -294,7 +294,9 @@ def main():
     parser.add_argument("--mmc0-power", action="store_true", help="require card supply, ground, pull-ups and all seven links")
     parser.add_argument("--mmc0-only", action="store_true",
                         help="return the drilled MMC0 result independently of other open nets")
+    parser.add_argument("--study-open-ddr", type=Path, help="study only: exact JSON list of DDR nets expected physically open")
     args = parser.parse_args()
+    expected_open = set(json.loads(args.study_open_ddr.read_text())) if args.study_open_ddr else set()
     if args.mmc0_only and any((args.pmic_controls, args.handheld_ground, args.cpu_power, args.sysboot, args.panel_storage)):
         parser.error("--mmc0-only cannot be combined with whole-handheld checks")
     board = json.loads(args.circuit.read_text())
@@ -382,15 +384,22 @@ def main():
         return mmc0_power(terminals)
     ports = {e["source_port_id"]: e["pcb_port_id"] for e in board if e["type"] == "pcb_port" and e.get("source_port_id")}
     ddr_nodes = set()
+    observed_open = set()
     for trace in board:
         if trace["type"] == "source_trace" and (trace.get("name") or "").startswith("DDR_"):
             a, z = (by_pad[ports[pid]] for pid in trace["connected_source_port_ids"])
+            if a != z and trace['name'] in expected_open:
+                observed_open.add(trace['name'])
+                continue
             if a != z or a in ddr_nodes:
                 raise ValueError(f"Exported copper opens or aliases {trace['name']}")
             ddr_nodes.add(a)
-    if len(ddr_nodes) != 50:
+    if observed_open != expected_open or len(ddr_nodes) + len(observed_open) != 50:
         raise ValueError(f"Expected 50 physically distinct DDR links, found {len(ddr_nodes)}")
-    print(f"50 distinct DDR ball pairs connected. {len(plating)} plated barrels checked. No shorts between mapped land nets.")
+    print(f"{len(ddr_nodes)} distinct DDR ball pairs connected. {len(plating)} plated barrels checked. No shorts between mapped land nets.")
+    if args.study_open_ddr:
+        print("Expected and observed open DDR nets:", sorted(observed_open))
+        return mmc0_power(terminals)
     if "TP_UART_RX.pin1" in terminals:
         probes = (("U1.E15", "TP_UART_RX.pin1"), ("U1.E16", "TP_UART_TX.pin1"), ("TP_UART_GND.pin1", "C_DDR25.pin2"))
         networks = {terminals[a] for a, _ in probes}
