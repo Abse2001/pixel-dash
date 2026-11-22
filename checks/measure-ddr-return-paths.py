@@ -11,7 +11,8 @@ def xy(item):
     return item["x"], item["y"]
 
 
-def measurements(board, selected=()):
+def measurements(board, selected=(), reference_changes=False):
+    reference = {"top": "GND", "inner2": "GND", "inner1": "VDDS_DDR", "bottom": "VDDS_DDR"}
     parts = {e["source_component_id"]: e for e in board if e["type"] == "source_component"}
     nets = {e["source_net_id"]: e["name"] for e in board if e["type"] == "source_net"}
     ports = {e["source_port_id"]: e for e in board if e["type"] == "source_port"}
@@ -84,7 +85,10 @@ def measurements(board, selected=()):
         for p in e["route"]:
             if p["route_type"] != "via":
                 continue
-            if {p["from_layer"], p["to_layer"]} != {"top", "bottom"}:
+            if reference_changes:
+                if reference[p["from_layer"]] == reference[p["to_layer"]]:
+                    continue
+            elif {p["from_layer"], p["to_layer"]} != {"top", "bottom"}:
                 raise ValueError(f"Review the reference layers for {signal}")
             location = xy(p)
             # Both legs must belong to the same capacitor for a plane-to-plane return.
@@ -101,8 +105,9 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("board", type=Path)
     parser.add_argument("--signal", action="append", default=[], help="screen a selected outer-layer signal; repeat for a pair")
+    parser.add_argument("--reference-changes", action="store_true", help="include inner-layer transitions that change between L2 ground and L3 DDR supply")
     args = parser.parse_args()
-    rows = sorted(measurements(json.loads(args.board.read_bytes()), args.signal), key=lambda row: -row[-1])
+    rows = sorted(measurements(json.loads(args.board.read_bytes()), args.signal, args.reference_changes), key=lambda row: -row[-1])
     if set(args.signal) - {row[0] for row in rows}:
         raise ValueError("A selected signal has no outer-layer transition")
     out = csv.writer(sys.stdout)
