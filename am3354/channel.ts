@@ -26,8 +26,8 @@ export const packages = [
 		rows: "ABCDEFGHJKLMNPRT",
 		columns: 9,
 		x: -20,
-		y: 15.15,
-		rotation: 180,
+		y: 11.55,
+		rotation: 0,
 		diameter: 0.394,
 		width: 8,
 		height: 14,
@@ -53,7 +53,7 @@ const controls: Record<string, string> = {
 };
 // The AM335x allows data bit swaps inside a byte. Both pins use LDQS/LDM.
 // Memory ball labels stay as marked on the Micron package.
-const cpuBitForRamBit: Readonly<Record<string, number>> = { DQ3: 7, DQ7: 3 };
+const cpuBitForRamBit: Readonly<Record<string, number>> = { DQ0: 6, DQ2: 4, DQ3: 7, DQ4: 2, DQ6: 0, DQ7: 3, DQ8: 13, DQ9: 11, DQ10: 12, DQ11: 9, DQ12: 8, DQ13: 15, DQ15: 10 };
 
 function memoryNet(signal: string) {
 	const pin = signal.split("/")[0];

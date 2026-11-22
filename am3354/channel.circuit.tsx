@@ -35,6 +35,7 @@ export default function MemoryChannel({ pcbOffsetX = 0, children }: {
 		<board
 			schAutoLayoutEnabled={false}
 			routeRemaining={false}
+            routingDisabled={true}
 			width={placement.width}
 			height={82}
 			layers={4}
