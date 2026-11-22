@@ -238,6 +238,26 @@ def add_ground_return(trace, point, via_id):
                       x=point["x"], y=point["y"], from_layer="top", to_layer="inner1",
                       layers=["top", "inner1"], hole_diameter=0.125, outer_diameter=0.28))
 
+# Ground the low SYSBOOT strap resistors at their own bias pads.
+for bit in range(16):
+    source = one(board, "source_trace", name=f"SYSBOOT{bit}_BIAS")
+    if source["connected_source_net_ids"] != [gnd["source_net_id"]]:
+        continue
+    land = one(board, "pcb_port", source_port_id=port(f"R_SYSBOOT{bit}", "pin1")["source_port_id"])
+    dx, dy = {5: (-0.25, 0.25), 15: (0.2, -0.1)}.get(bit, (0, 0))
+    x, y = land["x"] + dx, land["y"] + dy
+    if dx or dy:
+        board.append(dict(type="pcb_trace", pcb_trace_id=f"pcb_boot_ground_stub_{bit}",
+                          source_trace_id=source["source_trace_id"], route=[
+                              dict(route_type="wire", x=land["x"], y=land["y"], width=0.24, layer="top",
+                                   start_pcb_port_id=land["pcb_port_id"]),
+                              dict(route_type="wire", x=x, y=y, width=0.24, layer="top")]))
+    board.append(dict(type="pcb_via", pcb_via_id=f"pcb_boot_ground_{bit}",
+                      source_trace_id=source["source_trace_id"], source_net_id=gnd["source_net_id"],
+                      subcircuit_connectivity_map_key=gnd["subcircuit_connectivity_map_key"],
+                      x=x, y=y, from_layer="top", to_layer="inner1",
+                      layers=["top", "inner1"], hole_diameter=0.125, outer_diameter=0.28))
+
 # The microSD bulk capacitor now returns directly to L2 at its ground pad.
 sd_cap_ground = port("C_SD_BULK", "pin2")
 sd_land = one(board, "pcb_port", source_port_id=sd_cap_ground["source_port_id"])

@@ -2,7 +2,7 @@
 
 ## Wide handheld checkpoint
 
-All 50 AM3354-to-DDR3L signals reach their intended balls on 50 distinct electrical nodes. After local changes to 33 routes, the adjacent plane covers the full trace width for all 50 signals outside their own via launch antipads. The board-wide 0.102 mm unrelated-copper, 0.1524 mm via-edge and drill-spacing checks pass. Each of the 6,911 routed strokes matches the copper Gerbers, and all five drill files match the board.
+All 50 AM3354-to-DDR3L signals reach their intended balls on 50 distinct electrical nodes. After local changes to 33 routes, the adjacent plane covers the full trace width for all 50 signals outside their own via launch antipads. The board-wide 0.102 mm unrelated-copper, 0.1524 mm via-edge and drill-spacing checks pass. Each of the 6,913 routed strokes matches the copper Gerbers, and all five drill files match the board.
 
 The byte-0 and byte-1 planar spreads measure 7.091 and 5.347 mm against the 0.635 mm limit. Clock, DQS0 and DQS1 planar mismatch measures 0.095, 0.110 and 0.090 mm against 0.127 mm. Four address/control signals remain outside their length window. Impedance and signal timing still require verification on the finished stackup. The engineering export contains 210 fitted references. The assembly orientation screen flags six references for review. The plated-span audit finds zero missing transitions. The four raster connector ground contacts reach L2. All 24 RGB888 source assignments follow TI SPRZ360 Figure 2; pixel clock, data enable, sync signals and reset have new source assignments. Raster signal copper, panel bias and LED drivers, touch flex, system power, boot-strap copper and the fabrication package remain open.
 
@@ -182,3 +182,5 @@ The independent copper check reconstructs schematic nodes from connected source 
 Reserved panel contacts 49 and 50 are isolated in the source, schematic and copper. The microSD bulk capacitor has a dedicated L1–L2 ground via in its pad. The `--retained-returns` screen walks from that pad to the main ground plane. All 50 DDR signals retain full-width reference coverage.
 
 The approved wide-board lower mounts and rear-carrier bores are at X = ±70 mm, Y = −29 mm. The upper mounts remain at X = ±60 mm, Y = 31 mm. All four physical holes match the Excellon export. The original tub and compact shell are separate fallbacks.
+
+All eleven low SYSBOOT bias terminals reach L2 ground. Two ground vias are offset to clear retained audio routing. The high-side bias, remaining processor sense connections and powered reset sampling still require verification.
