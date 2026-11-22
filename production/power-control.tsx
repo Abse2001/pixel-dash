@@ -1,3 +1,4 @@
+import { CL10A105KB8NNNC as HoldUpCapacitor } from "../imports/CL10A105KB8NNNC"
 import { SKRTLAE010 } from "../imports/SKRTLAE010"
 import { TPS65218D0PHPR } from "../imports/TPS65218D0PHPR"
 import { A_0603WAF1003T5E as Pull100k } from "../imports/A_0603WAF1003T5E"
@@ -66,5 +67,12 @@ export function PowerControl() {
         holeDiameter={0.254} outerDiameter={0.4572} connectsTo="net.GND"/>
     )))}
     <trace from=".U_PMIC > .EP" to="net.GND"/>
+    <HoldUpCapacitor name="C_PMIC_INT_LDO" pcbX={-22.049908} pcbY={30.79989}/>
+    <trace name="PMIC_INTERNAL_LDO" from=".U_PMIC > .INT_LDO" to=".C_PMIC_INT_LDO > .pin1"
+      thickness={0.20} pcbStraightLine/>
+    <trace from=".C_PMIC_INT_LDO > .pin2" to="net.GND"/>
+    <via name="V_PMIC_INT_RETURN" pcbX={-21.349884} pcbY={30.79989}
+      fromLayer="top" toLayer="inner1" holeDiameter={0.125} outerDiameter={0.28}
+      connectsTo={[".C_PMIC_INT_LDO > .pin2", "net.GND"]}/>
   </>
 }

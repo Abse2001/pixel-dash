@@ -7,7 +7,7 @@ from shapely import STRtree, affinity, unary_union
 from shapely.geometry import LineString, Point, Polygon, box
 
 
-def verify(elements, check_ddr_power=False, check_ddr_signals=False, check_system_io=False):
+def verify(elements, check_ddr_power=False, check_ddr_signals=False, check_system_io=False, check_pmic_hold=False):
     names = {e["source_component_id"]: e.get("name") for e in elements if e["type"] == "source_component"}
     pins = {e["source_port_id"]: f"{names.get(e['source_component_id'])}.{e['name']}"
             for e in elements if e["type"] == "source_port"}
@@ -19,6 +19,16 @@ def verify(elements, check_ddr_power=False, check_ddr_signals=False, check_syste
         ["plane.inner1.GND", "R_VREF_LOW.pin2", "C_CPU_VREF.pin2", "C_VREF_DQ.pin2", "C_VREF_CA.pin2"],
         ["plane.inner2.VDDS_DDR", "R_VREF_HIGH.pin2"],
     ]
+    if check_pmic_hold:
+        capacitor, = [e for e in elements if e["type"] == "source_component" and
+                      e.get("name") == "C_PMIC_INT_LDO"]
+        if capacitor["capacitance"] != 1e-6 or capacitor["supplier_part_numbers"]["jlcpcb"] != ["C15849"]:
+            raise ValueError("Unexpected PMIC hold-up capacitor value or order code")
+        pin, = [p for p in elements if p["type"] == "source_port" and
+                names.get(p["source_component_id"]) == "U_PMIC" and
+                "INT_LDO" in (p["name"], *p.get("port_hints", []))]
+        required.append([pins[pin["source_port_id"]], "C_PMIC_INT_LDO.pin1"])
+        required[2].append("C_PMIC_INT_LDO.pin2")
     labels = defaultdict(list)
     copper = defaultdict(list)
     parent = []
@@ -141,6 +151,8 @@ def verify(elements, check_ddr_power=False, check_ddr_signals=False, check_syste
         components.extend(roots)
     if len(set(components)) != len(required):
         raise ValueError("Short between reference, supply, ground or opposite sides of R_VREF_CA")
+    if check_pmic_hold:
+        print("PMIC INT_LDO reaches its 1 µF hold-up capacitor and the opposite land reaches L2 ground.")
     if check_ddr_signals:
         signal_roots = {}
         opens = []
@@ -192,5 +204,6 @@ if __name__ == "__main__":
     parser.add_argument("--ddr-power", action="store_true")
     parser.add_argument("--ddr-signals", action="store_true")
     parser.add_argument("--system-io", action="store_true")
+    parser.add_argument("--pmic-hold", action="store_true")
     args = parser.parse_args()
-    verify(json.loads(args.circuit.read_text()), args.ddr_power, args.ddr_signals, args.system_io)
+    verify(json.loads(args.circuit.read_text()), args.ddr_power, args.ddr_signals, args.system_io, args.pmic_hold)
