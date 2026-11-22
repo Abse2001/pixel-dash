@@ -410,15 +410,22 @@ def main():
         return mmc0_power(terminals)
     ports = {e["source_port_id"]: e["pcb_port_id"] for e in board if e["type"] == "pcb_port" and e.get("source_port_id")}
     ddr_nodes = set()
-    for trace in board:
-        if trace["type"] == "source_trace" and (trace.get("name") or "").startswith("DDR_"):
-            a, z = (by_pad[ports[pid]] for pid in trace["connected_source_port_ids"])
-            if a != z or a in ddr_nodes:
-                raise ValueError(f"Exported copper opens or aliases {trace['name']}")
-            ddr_nodes.add(a)
-    if len(ddr_nodes) != 50:
-        raise ValueError(f"Expected 50 physically distinct DDR links, found {len(ddr_nodes)}")
-    print(f"50 distinct DDR ball pairs connected. {len(plating)} plated barrels checked. No shorts between mapped land nets.")
+    ddr_open = []
+    ddr = [t for t in board if t["type"] == "source_trace" and (t.get("name") or "").startswith("DDR_")]
+    if len(ddr) != 50 or len({t["name"] for t in ddr}) != 50:
+        raise ValueError("Expected 50 uniquely named DDR source links")
+    for trace in ddr:
+        cpu, ram = (ports[pid] for pid in trace["connected_source_port_ids"])
+        a, z = by_pad[cpu], by_pad[ram]
+        if a != z:
+            ddr_open.append(f"{trace['name']} ({port_labels[cpu]} to {port_labels[ram]})")
+            continue
+        if a in ddr_nodes:
+            raise ValueError(f"Exported copper aliases {trace['name']}")
+        ddr_nodes.add(a)
+    print(f"{len(ddr_nodes)} distinct DDR ball pairs connected. {len(plating)} plated barrels checked. No shorts between mapped land nets.")
+    if ddr_open:
+        print("Open DDR links: " + ", ".join(sorted(ddr_open)))
     if "TP_UART_RX.pin1" in terminals:
         probes = (("U1.E15", "TP_UART_RX.pin1"), ("U1.E16", "TP_UART_TX.pin1"), ("TP_UART_GND.pin1", "C_DDR25.pin2"))
         networks = {terminals[a] for a, _ in probes}
@@ -460,7 +467,7 @@ def main():
         examples = [", ".join(sorted(members[key][node])[:3]) or "via only" for node in sorted(nodes_by_net[key])]
         print(f"OPEN {key} has {count} separate CAM networks: " + " | ".join(examples))
     print(f"{len(opens)} mapped land nets have multiple physical networks.")
-    return bool(opens) or power_failed or startup_failed or straps_failed or interfaces_failed or caps_failed or card_failed or ground_failed
+    return bool(ddr_open or opens) or power_failed or startup_failed or straps_failed or interfaces_failed or caps_failed or card_failed or ground_failed
 
 
 if __name__ == "__main__":
