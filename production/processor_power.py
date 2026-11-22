@@ -4,6 +4,20 @@ from math import dist
 LAYERS = ["top", "inner1", "inner2", "bottom"]
 
 
+def routed_sections(stages, widths, plate):
+    route = []
+    for i, (points, width) in enumerate(zip(stages, widths, strict=True)):
+        layer = "inner2" if i % 2 else "top"
+        if i:
+            start = points[0]
+            if start != stages[i-1][-1]:
+                raise ValueError("Open layer transition in saved processor power route")
+            plate(i, start)
+            route.append(dict(route_type="via", x=start[0], y=start[1], from_layer=route[-1]["layer"], to_layer=layer))
+        route.extend(dict(route_type="wire", x=x, y=y, width=width, layer=layer) for x, y in points)
+    return route
+
+
 def add_processor_feeds(board, feeds, port):
     nets = {e["name"]: e for e in board if e["type"] == "source_net"}
     lands = {e["source_port_id"]: e for e in board if e["type"] == "pcb_port" and e.get("source_port_id")}
@@ -38,16 +52,7 @@ def add_processor_feeds(board, feeds, port):
         for point, land in ((stages[0][0], cap), (stages[-1][-1], cpu)):
             if dist(point, (land["x"], land["y"])) > 1e-5:
                 raise ValueError(f"{feed['rail']} feed no longer lands at its terminal")
-        route = []
-        for i, (points, width) in enumerate(zip(stages, feed["widths"])):
-            layer = "inner2" if i % 2 else "top"
-            if i:
-                start = points[0]
-                if start != stages[i-1][-1]:
-                    raise ValueError(f"{feed['rail']} layer change lacks a common via site")
-                via(str(i), start, *feed["vias"][i-1])
-                route.append(dict(route_type="via", x=start[0], y=start[1], from_layer=route[-1]["layer"], to_layer=layer))
-            route.extend(dict(route_type="wire", x=x, y=y, width=width, layer=layer) for x, y in points)
+        route = routed_sections(stages, feed["widths"], lambda i, xy: via(str(i), xy, *feed["vias"][i-1]))
         route[0]["start_pcb_port_id"] = cap["pcb_port_id"]
         route[-1]["end_pcb_port_id"] = cpu["pcb_port_id"]
         board.append(dict(type="pcb_trace", pcb_trace_id=prefix, source_trace_id=source_for(cap),
@@ -55,6 +60,15 @@ def add_processor_feeds(board, feeds, port):
 
         for label, branch in feed["branches"].items():
             land = terminal(label)
+            if "sections" in branch:
+                if dist(branch["sections"][0][0], (land["x"], land["y"])) > 1e-5:
+                    raise ValueError(f"Power tap no longer lands at {label}")
+                route = routed_sections(branch["sections"], branch["widths"],
+                                        lambda i, xy: via(f"{label}_{i}", xy, 0.15, 0.30))
+                route[0]["start_pcb_port_id"] = land["pcb_port_id"]
+                board.append(dict(type="pcb_trace", pcb_trace_id=prefix+"_branch_"+label,
+                                  source_trace_id=source_for(land), subcircuit_connectivity_map_key=key, route=route))
+                continue
             start, end = branch["points"]
             # The BGA land radius is 0.18 mm and the finished via land radius is 0.15 mm.
             if dist((land["x"], land["y"]), start) > 0.030001:
