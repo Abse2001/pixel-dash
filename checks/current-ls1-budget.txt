@@ -1,0 +1,21 @@
+LS1 bank: 22 capacitors, 46.00 uF nominal. TI nominal window 10–100 uF.
+DCDC3 setpoint 1.350 V, screening at -2%; CPU minimum 1.283 V. LS1 110 mOhm at 300 mA.
+Copper screen, 35 um outer foil. Whole CPU load carried through the series feed to L5.
+inner_um,temp_C,input_mOhm,output_mOhm,load_mA,trace_drop_mV,barrel_drop_mV,remaining_mV
+35,20,18.502,21.315,150,5.973,1.399,16.128
+35,20,18.502,21.315,225,8.959,2.099,4.192
+35,20,18.502,21.315,300,11.945,2.798,-7.744
+35,80,22.865,26.341,150,7.381,1.729,14.390
+35,80,22.865,26.341,225,11.071,2.594,1.585
+35,80,22.865,26.341,300,14.762,3.458,-11.220
+17.5,20,18.502,30.914,150,7.412,1.399,14.688
+17.5,20,18.502,30.914,225,11.119,2.099,2.033
+17.5,20,18.502,30.914,300,14.825,2.798,-10.623
+17.5,80,22.865,38.203,150,9.160,1.729,12.611
+17.5,80,22.865,38.203,225,13.740,2.594,-1.084
+17.5,80,22.865,38.203,300,18.320,3.458,-14.779
+Sensitivity to a 100 mA step lasting 1 us, before regulator response, ESR and ESL:
+  50% effective: 23.00 uF, ideal capacitive droop 4.35 mV
+  75% effective: 34.50 uF, ideal capacitive droop 2.90 mV
+  100% effective: 46.00 uF, ideal capacitive droop 2.17 mV
+Barrels assume 20 um plating, 1.530 mm full span, 0.0764 mm L3-to-L4. Excludes L4 spreading, return path, package and transient parasitics. Load, effective capacitance, finished stack and copper temperature are unverified.

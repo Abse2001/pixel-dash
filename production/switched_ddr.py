@@ -26,9 +26,15 @@ def add_switched_ddr_feeds(board, port):
                           subcircuit_connectivity_map_key=key, layers=['top','inner1','inner2','bottom'],
                           from_layer='top', to_layer='bottom', outer_diameter=diameter, hole_diameter=drill))
 
-    trace('ls1', 'U_PMIC.LS1', 'top', .22, [(-20.250064,29.19989),(-20.085,30.055),(-19.805,30.265),(-18.055,30.685)], True)
+    trace('ls1', 'U_PMIC.LS1', 'top', .22, [(-20.250064,29.19989),(-20.085,30.055),(-19.805,30.265)], True)
+    trace('ls1_flare', 'U_PMIC.LS1', 'top', .28, [(-19.805,30.265),(-18.055,30.685)])
     via('output', -18.055,30.685,.38,.18)
-    trace('regulator', 'U_PMIC.LS1','inner2',.46,[(-18.055,30.685),(-19.665,32.645),(-20.05,32.75),(-22.255,32.75),(-26.595,30.79)])
+    trace('regulator', 'U_PMIC.LS1', 'inner2', .80, [(-18.055,30.685),(-19.079545,31.932273)])
+    trace('regulator_neck', 'U_PMIC.LS1', 'inner2', .46, [(-19.079545,31.932273),(-19.665,32.645),(-20.05,32.75),(-22.255,32.75)])
+    trace('regulator_exit', 'U_PMIC.LS1', 'inner2', .60, [(-22.255,32.75),(-22.689,32.554)])
+    trace('regulator_trunk', 'U_PMIC.LS1', 'inner2', 1.00, [(-22.689,32.554),(-24.208,31.868)])
+    trace('regulator_bend', 'U_PMIC.LS1', 'inner2', .60, [(-24.208,31.868),(-24.859,31.574)])
+    trace('regulator_landing', 'U_PMIC.LS1', 'inner2', .80, [(-24.859,31.574),(-26.595,30.79)])
     via('upper', -26.595,30.79,.38,.18)
     trace('bypass_bridge','U_PMIC.LS1','inner2',.60,[(-45.11,23.475),(-46.405,21.62)])
     via('bridge_upper',-45.11,23.475,.45,.20)
