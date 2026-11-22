@@ -1,0 +1,7 @@
+# D12/D1 breakout trial on the populated 50-link board
+
+The fallback is a4a71e2. Run `python studies/d12-d1-breakout/measure.py board.circuit.json` on the rendered fallback to reproduce the geometric lower bounds in [envelope.csv](envelope.csv). The calculation retains all component lands. It suppresses only the selected nets’ traces and vias, then applies the same 0.408 mm keepout margin as the whole-board audit. Negative clearance means the center lies inside the keepout. The exposed-area column measures the actual copper pad outside that margin.
+
+Removing D12 and D1 alone exposes **zero copper** on either N5 or P5. N5 is still 0.515469 mm inside and P5 is 0.367958 mm inside. Their land radius is 0.179997 mm. In the assembled 50-link board, A14 and A10 define the hull edge at N5. A10 defines the edge at P5 after D1 is removed. The earlier D12/D1 edge attribution used the smaller byte-and-clock hull.
+
+In the additional optimistic calculation with A10 and A14 also removed, N5 exposes 0.019415 mm² and P5 exposes 0.077980 mm². These areas precede replacement routing of all four signals and account only for the common envelope. The screened 0.102 mm top feed has just 0.000291 mm² of eligible trace-end centers at N5 after applying unrelated copper, via spacing and terminal overlap. That pocket is isolated from P5 by the switched CPU DDR supply trace. The P5 and P6 pocket does connect. Trial feeds require new power, return and manufacturing checks before adoption.
