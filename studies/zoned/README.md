@@ -19,6 +19,18 @@ All ground lands reach the ground probe. No unrelated copper falls
 below 0.102 mm or the separate 0.1524 mm via-edge rule. Drill spacing,
 Gerber shorts, all routed DDR full-width references, the DDR envelope,
 six raster and seven MMC0 full-width references pass. The full-board
-connectivity and DDR timing gates remain open. B4 and twelve SYSBOOT
-straps remain open. See the explicitly deferred nets, endpoint report
+connectivity and DDR timing gates remain open. B4 now joins D7/DCDC6 and remains isolated from D6/DCDC5. Reset, wake,
+power hold and both RTC returns pass the drilled export. SYSBOOT7, 10 and
+12 now reach their sense resistors. Seven of sixteen straps are physical.
+The C_DDR23 to C_DDR13 ground link keeps the capacitor island on the main
+return. See the explicitly deferred nets, endpoint report
 and incomplete timing screen in this directory.
+
+
+With all movable DDR signal copper removed analytically, the fixed lands
+alone leave only 0.3336 mm at the farthest point on R1 versus the required
+0.408 mm DDR envelope setback. The farthest point on R2 has 0.0763 mm of
+excess. Moving the RAM 1 mm in +Y in the placement calculation leaves
+0.1188 mm of excess at R1 and 0.2083 mm at R2. These are upper bounds
+before routing. The saved board still has the original RAM placement.
+See [fixed-land placement bounds](fixed-land-bounds.csv).
