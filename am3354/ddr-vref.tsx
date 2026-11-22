@@ -13,8 +13,8 @@ export function DdrVref() {
 			<A_0603WAF0000T5E
 				name="R_VREF_CA"
 				pcbX={-11.45511191}
-				pcbY={9.47987461}
-				pcbRotation={-143.1301023542}
+				pcbY={9.52987461}
+				pcbRotation={-148.1301023542}
 			/>
 			<trace from=".R_VREF_CA > .pin1" to="net.DDR_VREF_CA" />
 			<trace from=".R_VREF_CA > .pin2" to="net.DDR_VREF" />
@@ -95,7 +95,7 @@ export function DdrVref() {
 			<TMK063ABJ104KP_F
 				name="C_CPU_VREF"
 				pcbX={-9.122396}
-				pcbY={15.5316415}
+				pcbY={15.5566415}
 				pcbRotation={225}
 			/>
 			<via

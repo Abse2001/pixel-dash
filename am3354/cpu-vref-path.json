@@ -66,7 +66,7 @@
 		{
 			"start": ".V_CPU_VREF_2 > .bottom",
 			"end": ".V_CPU_VREF_3 > .bottom",
-			"width": 0.32,
+			"width": 0.28,
 			"path": []
 		},
 		{

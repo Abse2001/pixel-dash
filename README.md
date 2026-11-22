@@ -2,7 +2,9 @@
 
 ## RAM-offset engineering study
 
-The RAM center has moved 1.5 mm west and 1.0 mm north from 99ad681. The 50 saved signal paths have been translated through the space between the BGAs. Native regeneration and the board-wide 0.102 mm copper screen found 25 failing shape pairs, including physical intersections with retained controls and reference-bias components. This layout is an unfinished routing study. Its local results are in [ram-offset-clearance.csv](checks/ram-offset-clearance.csv). The following measurements describe the parent checkpoint.
+The RAM center is 1.5 mm west and 1.0 mm north of its position at 99ad681. This branch retains all 50 physically distinct DDR connections. Revising the VREF divider placement and sense copper and routing KEY_SELECT and KEY_RIGHT around the channel clears all 25 original spacing findings. The native board now has zero unrelated copper pairs below 0.102 mm, zero via-edge pairs below 0.1524 mm, zero drill-spacing findings and zero courtyard overlaps across 221 placements. Both all-layer Gerber shorts and independent physical CAM pass the short-circuit checks. The drill reconstruction checked 924 plated barrels.
+
+Thirteen signal/layer combinations still lose full-width reference. The largest missing area is 0.0008843 mm² on D5 over L3. The byte-0 and byte-1 geometric spreads including the 1.420 mm full-depth barrels are 6.337 mm and 3.236 mm respectively against a 0.635 mm window. The fixed-escape bound below explains why reshaping only the bends cannot close D1. The study remains separate from production. [Clearance results](checks/ram-offset-clearance.csv) · [Exported reference gaps](checks/ram-offset-reference.csv) · [Escape bounds](checks/ram-offset-escape-bounds.csv)
 
 ## Wide handheld checkpoint
 

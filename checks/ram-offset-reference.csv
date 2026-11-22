@@ -1,0 +1,14 @@
+signal,signal_layer,reference_layer,uncovered_copper_mm2
+DDR_A14,bottom,inner2,0.0000095
+DDR_A4,top,inner1,0.0003662
+DDR_A6,top,inner1,0.0000418
+DDR_CASn,bottom,inner2,0.0002437
+DDR_D0,top,inner1,0.0000609
+DDR_D1,bottom,inner2,0.0001597
+DDR_D10,bottom,inner2,0.0001218
+DDR_D11,bottom,inner2,0.0002749
+DDR_D5,bottom,inner2,0.0008843
+DDR_D6,bottom,inner2,0.0005084
+DDR_D8,bottom,inner2,0.0000609
+DDR_D8,top,inner1,0.0002456
+DDR_WEn,bottom,inner2,0.0000551
