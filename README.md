@@ -274,3 +274,11 @@ those assumptions. This test holds the actual copper contact points fixed.
 Its 49 timed rows cover both byte lanes and command/address/clock. RESETn
 is checked for presence. Stackup-specific flight time, clearance, and
 reference coverage require independent verification.
+
+Separating the BA2, A5 and A3 bottom routes and shifting C_DDR37 by
+−0.75 mm in X and +0.10 mm in Y reduces the assembled study from 25
+clearance findings to 19. All remaining 0.102 mm findings are on L1.
+The independent 6 mil audit still finds six via/layer/net pairs and the
+full-width reference screen finds 14 signal/layer gaps. All 50 saved
+signal paths still land on their assigned package contacts. The placement
+remains a study with shorts and timing failures.
