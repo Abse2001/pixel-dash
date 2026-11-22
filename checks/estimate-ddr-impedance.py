@@ -5,28 +5,29 @@ import math
 from pathlib import Path
 
 import numpy as np
+from hdi_build import LEGACY, WURTH
 from scipy.sparse import diags
 from scipy.sparse.linalg import spsolve
 
 
-def capacitance(width, edge_gap, pitch, dielectric_height, dielectric_er, vacuum):
+def capacitance(width, edge_gap, pitch, dielectric_height, dielectric_er, vacuum, stack=LEGACY):
     # Grid dimensions are millimetres. In a two-dimensional capacitance per
     # unit length, face width divided by cell spacing is dimensionless.
     x = np.arange(-round(1.1 / pitch), round(1.1 / pitch) + 1) * pitch
     y = np.arange(round(0.74 / pitch) + 1) * pitch
     xx, yy = np.meshgrid(x, y)
     ny, nx = xx.shape
-    thickness = 0.035
+    thickness = stack.foil
     trace_centers = [0.] if edge_gap is None else [-(edge_gap + width) / 2, (edge_gap + width) / 2]
     potential = np.zeros_like(xx)
     conductors = []
-    mask = (yy >= dielectric_height) & (yy < dielectric_height + 0.03048)
+    mask = (yy >= dielectric_height) & (yy < dielectric_height + stack.mask)
     for index, center in enumerate(trace_centers):
         above_trace = abs(xx - center) < width / 2
         metal = above_trace & (yy >= dielectric_height) & (yy < dielectric_height + thickness)
         conductors.append(metal)
         potential[metal] = 1 if index == 0 else -1
-        mask |= above_trace & (yy >= dielectric_height + thickness) & (yy < dielectric_height + thickness + 0.01524)
+        mask |= above_trace & (yy >= dielectric_height + thickness) & (yy < dielectric_height + thickness + (.01524 if stack == LEGACY else stack.mask))
 
     er = np.where(yy < dielectric_height, dielectric_er, np.where(mask, 3.8, 1.))
     if vacuum:
@@ -65,12 +66,17 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("circuit", type=Path)
     parser.add_argument("--mesh-mm", type=float, choices=[.002, .003], default=.002)
+    parser.add_argument("--wurth", action="store_true", help="use the documented Würth 1-2b-1 cross section")
+    parser.add_argument("--er", type=float, default=3.91, help="assumed prepreg dielectric constant")
     args = parser.parse_args()
+    if not math.isfinite(args.er) or args.er <= 1:
+        parser.error("Expected a finite dielectric constant above one")
+    stack = WURTH if args.wurth else LEGACY
     width = routed_width(json.loads(args.circuit.read_text()))
-    print("Provisional rectangular copper, JLC04161H-1080, dielectric 0.0764 mm, Er 3.91, copper 0.035 mm.")
+    print(f"{stack.name}: dielectric {stack.prepreg:g} mm, assumed Er {args.er:g}, copper {stack.foil:g} mm.")
     print(f"Measured trace width {width:g} mm. Mesh {args.mesh_mm:g} mm. Ideal solid adjacent reference.")
     for gap, name in [(None, "Isolated"), (.18, "Odd mode, 0.18 mm pair edge gap")]:
-        filled, air = [capacitance(width, gap, args.mesh_mm, .0764, 3.91, vacuum) for vacuum in (False, True)]
+        filled, air = [capacitance(width, gap, args.mesh_mm, stack.prepreg, args.er, vacuum, stack) for vacuum in (False, True)]
         impedance = (1 if gap is None else 2) / (299792458 * math.sqrt(filled * air))
         delay = math.sqrt(filled / air) / 299792458 * 1e9  # ps/mm
         print(f"{name}: {impedance:.2f} ohms, {delay:.3f} ps/mm.")

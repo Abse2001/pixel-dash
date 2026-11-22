@@ -277,3 +277,47 @@ audit, short check, full-width DDR and envelope reference checks passed.
 All 7,350 trace strokes matched the four copper files and all 221 placements
 matched the assembly export. Whole-board CAM still finds 39 disconnected
 mapped nets. Fabrication remains on hold.
+
+### Supplier construction used for electrical screening
+
+The engineering cross section is Würth Elektronik HDI4_1-2b-1_149_35_2V13,
+revision 10/2023. Its drawing shows outer microvias on both faces, a buried
+core and through plating. The supplier separately documents copper-filled
+microvias and IPC-4761 Type VII filled and capped holes. The nominal finished
+board is 1.491 mm including ENIG and mask, with ±10% board thickness tolerance.
+The three dielectric intervals are 0.065, 1.200 and 0.065 mm. All four finished
+copper layers are 0.030 mm. This gives 0.095, 1.230 and 0.095 mm between
+adjacent copper centerlines and 1.420 mm from L1 to L4.
+
+[Supplier buildup drawing](https://www.we-online.com/files/pdf1/en_hdi4_1-2b-1_149_35_2v13.pdf)
+· [HDI via and pad rules](https://www.we-online.com/files/pdf1/design-rules-poster-hdi-microvia-cbt-en.pdf)
+
+Supplier acceptance is open. The ordinary microvia example uses a 0.100 mm
+finished hole and 0.300 mm pad. Pixel Dash uses 0.125/0.280 mm exterior
+microvias, 0.200/0.360 mm buried vias and 0.150/0.300 mm through vias among
+other sizes. The published construction does not grant acceptance of those
+geometries. The stack drawing specifies IPC-4101/21 material and finished
+foil. Lot dielectric constant, etched conductor shape and barrel-wall
+thickness are unconfirmed. The current CAD thickness is still 1.6 mm.
+
+For board 77e38f1, use --wurth with checks/estimate-ddr-impedance.py,
+checks/estimate-ls1-pours.py --joined, and checks/screen-ls1-drop.py
+--sheet-network-report with the corresponding sheet output. At assumed Er
+3.91 and 0.002 mm mesh, the 0.102 mm line screens at 51.53 Ω single-ended.
+The 0.180 mm gap screens at 96.73 Ω differential. The modeled surface rates
+are 5.769 and 5.617 ps/mm. Using 6.60 ps/mm for a barrel as a sensitivity
+case, the worst data-to-strobe differences are 39.729 ps and 22.556 ps for
+uniform odd-mode strobes. D7 and D8 are limiting. A10 and CKE trail the
+modeled clock mean by 65.681 and 53.327 ps. These calculations exclude
+package and launch discontinuities.
+
+On this same export the 0.025 mm CAM sheet mesh gives 12.489 mΩ between
+the L3 source and L4 CPU bank. The loop budget assumes 20 µm barrel walls,
+equally loaded CPU balls, 110 mΩ LS1 and DCDC3 at −2%. With an ideal return
+and before transient droop the remaining 250 mA margin is +0.149 mV at
+20 °C and −2.764 mV at 80 °C. Each additional milliohm of return consumes
+0.250 mV. At 80 °C there is already a deficit with a zero-ohm return.
+A 100 mA increment held for 1 µs requires 2.17–4.35 mV from the capacitors
+alone assuming 46–23 µF effective and no regulator response. Return
+impedance, fitted effective capacitance, package drop and load-step
+response remain unverified. LS1 fails this hot-load screen.

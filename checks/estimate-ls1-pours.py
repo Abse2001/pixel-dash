@@ -1,5 +1,6 @@
 """Estimate L4 spreading resistance on the two LS1 islands in the Gerber/drill export."""
 import argparse
+from hdi_build import LEGACY, WURTH
 import json
 import runpy
 from pathlib import Path
@@ -60,7 +61,9 @@ parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument("board", type=Path)
 parser.add_argument("archive", type=Path)
 parser.add_argument("--joined", action="store_true", help="Also solve both L3/L4 feed paths together")
+parser.add_argument("--wurth", action="store_true")
 args = parser.parse_args()
+stack = WURTH if args.wurth else LEGACY
 board = json.loads(args.board.read_text())
 archive = args.archive
 via = {e["pcb_via_id"]: e for e in board if e["type"] == "pcb_via"}
@@ -89,19 +92,19 @@ for a, b in pairs:
     island, = (p for p in image.geoms if p.intersection(annulus(first)).area > .001 and
                p.intersection(annulus(last)).area > .001)
     islands.append((island, first, last))
-columns = "pitch_mm,upper_squares,lower_squares,total_mOhm_35um_20C,drop_mV_300mA"
+columns = "pitch_mm,upper_squares,lower_squares,total_mOhm_{foil}um_20C,drop_mV_300mA"
 if "via_ddr_supply_lower_bank" in via:
-    columns += ",direct_lower_squares,direct_lower_mOhm_35um_20C"
-print(columns)
+    columns += ",direct_lower_squares,direct_lower_mOhm_{foil}um_20C"
+print(columns.format(foil=f"{stack.foil*1000:g}"))
 for pitch in (.080, .055, .040, .030, .025):
     upper, lower = [squares(*data, pitch) for data in islands]
-    resistance = (upper + lower) * .01724 / .035
+    resistance = (upper + lower) * .01724 / stack.foil
     row = f"{pitch:.3f},{upper:.4f},{lower:.4f},{resistance:.4f},{.300*resistance:.4f}"
     if "via_ddr_supply_lower_bank" in via:
         sheet, _, cpu = islands[1]
         contact = via["via_ddr_supply_lower_bank"]
         direct = squares(sheet, contact, cpu, pitch)
-        row += f",{direct:.4f},{direct*.01724/.035:.4f}"
+        row += f",{direct:.4f},{direct*.01724/stack.foil:.4f}"
     print(row)
 
 if args.joined:
@@ -123,16 +126,16 @@ if args.joined:
     print("pitch_mm,inner_um,outer_um,joined_L3_output_to_L4_balls_mOhm_at_20C")
     for pitch in (.05, .035, .025):
         blocks = [sheet_conductance(sheet, contacts, pitch) for _, _, contacts, sheet in sheets]
-        for inner_um in (35, 17.5):
+        for inner_um in ((30,) if args.wurth else (35, 17.5)):
             network = np.zeros((len(labels), len(labels)))
             for (layer, names, _, _), block in zip(sheets, blocks):
                 indices = [labels.index((layer, name)) for name in names]
-                foil_mm = inner_um / 1000 if layer == "L3" else .035
+                foil_mm = inner_um / 1000 if layer == "L3" else stack.foil
                 network[np.ix_(indices, indices)] += block * foil_mm / .01724
             for name in ("upper", "bridge_upper", "bridge_lower", "lower_bank"):
                 a, b = (labels.index((layer, name)) for layer in ("L3", "L4"))
                 drill_mm = via["via_ddr_supply_" + name]["hole_diameter"]
-                conductance = np.pi * .020 * (drill_mm + .020) / (.01724 * .0764)
+                conductance = np.pi * stack.wall * (drill_mm + stack.wall) / (.01724 * stack.outer_to_inner)
                 network[np.ix_([a,b],[a,b])] += conductance * np.array([[1., -1.], [-1., 1.]])
             # Apply 1 A between the source and sink lands. Potentials are in millivolts.
             free = np.arange(len(labels)) != low
@@ -142,4 +145,4 @@ if args.joined:
             volts[free] = np.linalg.solve(network[np.ix_(free,free)], current[free])
             if not np.allclose(network @ volts, current - (np.arange(len(labels)) == low), atol=1e-7):
                 raise ValueError("Sheet network fails terminal current conservation")
-            print(f"{pitch:.3f},{inner_um:g},35,{volts[high]:.4f}", flush=True)
+            print(f"{pitch:.3f},{inner_um:g},{1000*stack.foil:g},{volts[high]:.4f}", flush=True)
