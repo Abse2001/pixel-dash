@@ -126,7 +126,6 @@ GND|GND_INTERNAL,unnamedsubcircuitsubcircuit_source_group_0_connectivity_net189,
 GND|GND_INTERNAL,unnamedsubcircuitsubcircuit_source_group_0_connectivity_net189,channel_pcb_via_80,L1-L2,-68.43988999999999,5.07001,0.125,0.28
 GND|GND_INTERNAL,unnamedsubcircuitsubcircuit_source_group_0_connectivity_net189,channel_pcb_via_82,L1-L2,-68.67989,6.90996,0.125,0.28
 GND|GND_INTERNAL,unnamedsubcircuitsubcircuit_source_group_0_connectivity_net189,mmc0_dat2_stitch_0,L2-L3,-9.87271362301402,11.381146505234055,0.2,0.36
-GND|GND_INTERNAL,unnamedsubcircuitsubcircuit_source_group_0_connectivity_net189,mmc0_dat2_stitch_1,L2-L3,-8.590323558213985,9.691295419708752,0.2,0.36
 GND|GND_INTERNAL,unnamedsubcircuitsubcircuit_source_group_0_connectivity_net189,pcb_boot_ground_10,L1-L2,-31.5,7.817184,0.125,0.28
 GND|GND_INTERNAL,unnamedsubcircuitsubcircuit_source_group_0_connectivity_net189,pcb_boot_ground_11,L1-L2,-30.25,7.817184,0.125,0.28
 GND|GND_INTERNAL,unnamedsubcircuitsubcircuit_source_group_0_connectivity_net189,pcb_boot_ground_12,L1-L2,-29,7.817184,0.125,0.28
