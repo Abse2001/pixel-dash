@@ -310,6 +310,16 @@ def panel_and_storage(terminals):
                   if terminals[f"R_TOUCH_{pin}.pin2"] == terminals["U_PMIC.DCDC4"]]
     print(f"Touch pull-ups on sequenced DCDC4: {len(touch_bias)}/3 ({', '.join(touch_bias)}).")
     failed |= len(touch_bias) != 3
+    touch_endpoints = {}
+    for name, ball in (("SDA", "D16"), ("SCL", "D15"), ("IRQ", "V14")):
+        source = terminals[f"U1.{ball}"]
+        target = terminals[f"R_TOUCH_{name}.pin1"]
+        reached = source == target
+        print(f"Touch {name} U1.{ball} to R_TOUCH_{name}.pin1: {'PASS' if reached else 'OPEN'}")
+        failed |= not reached
+        touch_endpoints[name] = source
+    if len(set(touch_endpoints.values()) | {terminals["U_PMIC.DCDC4"], terminals["TP_UART_GND.pin1"]}) != 5:
+        raise ValueError("Touch CPU signals, pull-up supply and ground must remain distinct")
     for side, ball in (("L", "V17"), ("R", "D18")):
         sense = terminals[f"U1.{ball}"]
         bias = terminals[f"R_JOY_{side}_CLICK.pin2"]

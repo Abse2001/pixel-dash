@@ -1,0 +1,177 @@
+drill_npth.drl matches 19 round hits and 0 slots
+drill-L1-L4.drl matches 725 round hits and 6 slots
+drill-L1-L2.drl matches 289 round hits and 0 slots
+drill-L2-L3.drl matches 15 round hits and 0 slots
+drill-L3-L4.drl matches 29 round hits and 0 slots
+26 distinct DDR ball pairs connected. 1064 plated barrels checked. No shorts between mapped land nets.
+Open DDR links: DDR_A0 (U1.F3 to U_DDR.N3), DDR_A1 (U1.H1 to U_DDR.P7), DDR_A12 (U1.E3 to U_DDR.N7), DDR_A15 (U1.D3 to U_DDR.M7), DDR_A2 (U1.E4 to U_DDR.P3), DDR_A5 (U1.B1 to U_DDR.P2), DDR_A8 (U1.D4 to U_DDR.T8), DDR_A9 (U1.C1 to U_DDR.R3), DDR_BA0 (U1.C4 to U_DDR.M2), DDR_CASn (U1.F1 to U_DDR.K3), DDR_CKE (U1.G3 to U_DDR.K9), DDR_CSn0 (U1.H2 to U_DDR.L2), DDR_D0 (U1.M3 to U_DDR.F7), DDR_D13 (U1.L3 to U_DDR.B8), DDR_D15 (U1.M1 to U_DDR.A3), DDR_D5 (U1.N4 to U_DDR.H8), DDR_D6 (U1.P3 to U_DDR.H7), DDR_D7 (U1.P4 to U_DDR.F8), DDR_D8 (U1.J1 to U_DDR.D7), DDR_D9 (U1.K1 to U_DDR.C8), DDR_DQM0 (U1.M2 to U_DDR.E7), DDR_DQM1 (U1.J2 to U_DDR.D3), DDR_RASn (U1.G4 to U_DDR.J3), DDR_RESETn (U1.G2 to U_DDR.T2)
+UART0 RX, TX and ground reach three distinct probe networks.
+All mapped handheld ground lands and barrels join the UART ground probe.
+Startup copper PASS U1.B4 to U1.D7.
+Startup copper PASS U1.D7 to C_PMIC_RTC_IO.pin1.
+Startup copper PASS U1.D6 to C_PMIC_RTC_CORE.pin1.
+Startup copper PASS U_PMIC.FB5 to C_PMIC_RTC_CORE.pin1.
+Startup copper PASS U_PMIC.FB6 to C_PMIC_RTC_IO.pin1.
+Startup copper PASS U_PMIC.PGOOD_BU to U1.B5.
+Startup copper PASS U_PMIC.nWAKEUP to U1.C5.
+Startup copper PASS R_PMIC_WAKE.pin2 to C_PMIC_RTC_IO.pin1.
+Startup copper PASS U_PMIC.PWR_EN to U1.C6.
+Startup copper PASS U_PMIC.PGOOD to R_PMIC_POR.pin1.
+Startup copper PASS R_PMIC_POR.pin2 to U_PMIC.DCDC4.
+Startup copper PASS U_PMIC.PGOOD to U1.B15.
+Startup copper PASS U_PMIC.GPIO3 to U1.A10.
+Startup copper PASS C_PMIC_RTC_CORE.pin2 to TP_UART_GND.pin1.
+Startup copper PASS C_PMIC_RTC_IO.pin2 to TP_UART_GND.pin1.
+RTC isolation PASS U1.B4 from U1.D6.
+RTC isolation PASS U1.D7 from U1.D6.
+RTC isolation PASS C_PMIC_RTC_IO.pin1 from C_PMIC_RTC_CORE.pin1.
+DDR VTP, ZQ, VREFDQ, VREFCA, DCDC3 and ground isolation: PASS
+DDR reference/calibration U1.J3: PASS to R_VTP.pin1
+DDR reference/calibration U_DDR.L8: PASS to R_ZQ.pin1
+DDR reference/calibration U1.J4: PASS to U_DDR.H1, R_VREF_HIGH.pin1, R_VREF_LOW.pin1, R_VREF_CA.pin2, C_CPU_VREF.pin1, C_VREF_DQ.pin1
+DDR reference/calibration U_DDR.M8: PASS to R_VREF_CA.pin1, C_VREF_CA.pin1
+DDR reference/calibration C_PMIC_DDR.pin1: PASS to R_VREF_HIGH.pin2
+DDR reference/calibration TP_UART_GND.pin1: PASS to R_VTP.pin2, R_ZQ.pin2, R_VREF_LOW.pin2, C_CPU_VREF.pin2, C_VREF_DQ.pin2, C_VREF_CA.pin2
+Processor supply/return to TP_UART_GND.pin1: 43/43 balls connected.
+Processor supply/return to C_PMIC_CORE.pin1: 20/20 balls connected.
+Processor supply/return to C_PMIC_MPU.pin1: 7/7 balls connected.
+Processor supply/return to C_PMIC_RTC_CORE.pin1: 1/1 balls connected.
+Processor supply/return to C_PMIC_RTC_IO.pin1: 2/2 balls connected.
+Processor supply/return to U_DDR_SWITCH.VOUT1: 7/7 balls connected.
+Processor supply/return to U_PMIC.DCDC4: 21/21 balls connected.
+Processor supply/return to U_PMIC.LDO1: 16/16 balls connected.
+DDR memory supply to DCDC3 output capacitor: 18/18 VDD/VDDQ balls connected.
+DDR memory supply isolation from CPU VDDS_DDR: PASS.
+U1 DDR bypass to U_DDR_SWITCH.VOUT1: 22/22 supplied, 0 on copper shared with the other load domain.
+U_DDR DDR bypass to C_PMIC_DDR.pin1: 14/14 supplied, 0 on copper shared with the other load domain.
+DDR reference bypasses with both DCDC3 and ground lands connected: 15/15.
+DDR switch C_PMIC_DDR.pin1 all terminals connected
+DDR switch U_PMIC.LS1 all terminals connected
+DDR switch U_DDR_SWITCH.VOUT1 all terminals connected
+DDR switch C_LIPO_BOOST_OUT.pin1 all terminals connected
+DDR switch U_DDR_SWITCH.CT all terminals connected
+DDR switch TP_UART_GND.pin1 all terminals connected
+System supply copper PASS C_LIPO_BOOST_OUT.pin1 to C_3V3_IN.pin1.
+System supply copper PASS C_LIPO_BOOST_OUT.pin1 to C_AMP_VDD.pin1.
+System supply copper PASS C_LIPO_BOOST_OUT.pin1 to R_POWER_PB.pin2.
+System supply copper PASS C_LIPO_BOOST_OUT.pin1 to U_PMIC.IN_BU.
+System supply copper PASS C_LIPO_BOOST_OUT.pin1 to U_PMIC.IN_BIAS.
+System supply copper PASS C_LIPO_BOOST_OUT.pin1 to U_PMIC.IN_DCDC1.
+System supply copper PASS C_LIPO_BOOST_OUT.pin1 to U_PMIC.IN_DCDC2.
+System supply copper PASS C_LIPO_BOOST_OUT.pin1 to U_PMIC.IN_DCDC3.
+System supply copper PASS C_LIPO_BOOST_OUT.pin1 to U_PMIC.IN_DCDC4.
+System supply copper PASS C_LIPO_BOOST_OUT.pin1 to U_PMIC.IN_LDO1.
+System supply copper PASS C_LIPO_BOOST_OUT.pin1 to U_PMIC.AC_DET.
+LDO1 output capacitor, ground and input isolation: PASS.
+SYSBOOT00 bias=1 CPU_to_resistor=True sense_isolated=True
+SYSBOOT01 bias=1 CPU_to_resistor=False sense_isolated=True
+SYSBOOT02 bias=1 CPU_to_resistor=False sense_isolated=True
+SYSBOOT03 bias=0 CPU_to_resistor=False sense_isolated=True
+SYSBOOT04 bias=1 CPU_to_resistor=False sense_isolated=True
+SYSBOOT05 bias=0 CPU_to_resistor=False sense_isolated=True
+SYSBOOT06 bias=0 CPU_to_resistor=False sense_isolated=True
+SYSBOOT07 bias=0 CPU_to_resistor=True sense_isolated=True
+SYSBOOT08 bias=0 CPU_to_resistor=False sense_isolated=True
+SYSBOOT09 bias=0 CPU_to_resistor=False sense_isolated=True
+SYSBOOT10 bias=0 CPU_to_resistor=True sense_isolated=True
+SYSBOOT11 bias=0 CPU_to_resistor=True sense_isolated=True
+SYSBOOT12 bias=0 CPU_to_resistor=True sense_isolated=True
+SYSBOOT13 bias=0 CPU_to_resistor=True sense_isolated=True
+SYSBOOT14 bias=1 CPU_to_resistor=True sense_isolated=True
+SYSBOOT15 bias=0 CPU_to_resistor=True sense_isolated=True
+Physical SYSBOOT[15:0] 010000??0??????1, expected 0100000000010111.
+Internal regulator output separation from one another, LDO1 and GND: PASS
+U1.C10 1 uF C_VBB_MPU: CONNECTED; nearest qualifying C_VBB_MPU at 5.308 mm land-center distance
+  Dedicated path ['U1.C10', 'C_VBB_MPU.pin1']: 6.047 mm planar, 2 transitions, 0.110 mm minimum width.
+  Forward line and contacted barrel resistance at 20 C: 15.69 mOhm; L1–L2 ground via in capacitor return land: True.
+U1.D9 1 uF C_SRAM_CORE: CONNECTED; nearest qualifying C_SRAM_CORE at 6.152 mm land-center distance
+  Dedicated path ['U1.D9', 'C_SRAM_CORE.pin1']: 7.398 mm planar, 4 transitions, 0.105 mm minimum width.
+  Forward line and contacted barrel resistance at 20 C: 25.38 mOhm; L1–L2 ground via in capacitor return land: True.
+U1.D11 1 uF C_SRAM_MPU: CONNECTED; nearest qualifying C_SRAM_MPU at 6.150 mm land-center distance
+  Dedicated path ['U1.D11', 'C_SRAM_MPU.pin1']: 6.305 mm planar, 3 transitions, 0.105 mm minimum width.
+  Forward line and contacted barrel resistance at 20 C: 19.70 mOhm; L1–L2 ground via in capacitor return land: True.
+U1.D10 10 uF C_SRAM_MPU_IN: CONNECTED; nearest qualifying C_SRAM_MPU_IN at 7.069 mm land-center distance
+  Dedicated path ['U1.D10', 'C_SRAM_MPU_IN.pin1']: 9.778 mm planar, 4 transitions, 0.200 mm minimum width.
+  Forward line and contacted barrel resistance at 20 C: 20.99 mOhm; L1–L2 ground via in capacitor return land: True.
+U1.E9 10 uF C_SRAM_CORE_IN: CONNECTED; nearest qualifying C_SRAM_MPU_IN at 7.661 mm land-center distance
+  Dedicated path ['U1.E9', 'C_SRAM_CORE_IN.pin1']: 10.410 mm planar, 4 transitions, 0.200 mm minimum width.
+  Forward line and contacted barrel resistance at 20 C: 22.76 mOhm; L1–L2 ground via in capacitor return land: True.
+LCD CPU-to-connector copper 8/29. Reached LCD_D0, LCD_D10, LCD_D11, LCD_D13, LCD_D14, LCD_D15, LCD_PCLK, LCD_RESET. Open LCD_D1, LCD_D12, LCD_D16, LCD_D17, LCD_D18, LCD_D19, LCD_D2, LCD_D20, LCD_D21, LCD_D22, LCD_D23, LCD_D3, LCD_D4, LCD_D5, LCD_D6, LCD_D7, LCD_D8, LCD_D9, LCD_DE, LCD_HSYNC, LCD_VSYNC.
+SD CPU-to-connector copper 7/7. Reached SD_CLK, SD_CMD, SD_DAT0, SD_DAT1, SD_DAT2, SD_DAT3, SD_DETECT. Open none.
+Raster data connector to strap sense pads: 10/16; bits [0, 1, 2, 8, 9, 10, 11, 13, 14, 15].
+Touch pull-ups on sequenced DCDC4: 3/3 (SDA, SCL, IRQ).
+Touch SDA U1.D16 to R_TOUCH_SDA.pin1: OPEN
+Touch SCL U1.D15 to R_TOUCH_SCL.pin1: OPEN
+Touch IRQ U1.V14 to R_TOUCH_IRQ.pin1: PASS
+Joystick L click input, separate switch and sequenced pull-up: PASS
+Joystick L sequenced ADC supply to connector and both bypasses, and ground returns: PASS
+Joystick R click input, separate switch and sequenced pull-up: PASS
+Joystick R sequenced ADC supply to connector and both bypasses, and ground returns: PASS
+Legacy 3.3 V output capacitors to isolated bring-up probe: PASS
+Joystick ADC supply and bypass return: PASS
+MMC0 rail isolation (DCDC4, GND, legacy regulator, VSYS): PASS
+MMC0 U1.H14 PASS
+MMC0 U1.J14 PASS
+MMC0 J_SD.VDD PASS
+MMC0 C_SD.pin1 PASS
+MMC0 C_SD_BULK.pin1 PASS
+MMC0 J_SD.VSS PASS
+MMC0 C_SD.pin2 PASS
+MMC0 C_SD_BULK.pin2 PASS
+MMC0 CMD pull, socket and CPU PASS
+MMC0 DAT0 pull, socket and CPU PASS
+MMC0 DAT1 pull, socket and CPU PASS
+MMC0 DAT2 pull, socket and CPU PASS
+MMC0 CD_DAT3 pull, socket and CPU PASS
+MMC0 sequenced card power and seven distinct links: PASS
+OPEN channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net0 has 2 separate CAM networks: U_DDR.B8 | U1.L3
+OPEN channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net1 has 2 separate CAM networks: U_DDR.A3 | U1.M1
+OPEN channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net10 has 2 separate CAM networks: U_DDR.D7 | U1.J1
+OPEN channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net11 has 2 separate CAM networks: U_DDR.F7 | U1.M3
+OPEN channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net12 has 2 separate CAM networks: U_DDR.E7 | U1.M2
+OPEN channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net16 has 2 separate CAM networks: U_DDR.F8 | U1.P4
+OPEN channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net17 has 2 separate CAM networks: U_DDR.H7 | U1.P3
+OPEN channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net21 has 2 separate CAM networks: U_DDR.H8 | U1.N4
+OPEN channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net22 has 2 separate CAM networks: U_DDR.J3 | U1.G4
+OPEN channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net25 has 2 separate CAM networks: U_DDR.K3 | U1.F1
+OPEN channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net27 has 2 separate CAM networks: U_DDR.K9 | U1.G3
+OPEN channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net28 has 2 separate CAM networks: U_DDR.L2 | U1.H2
+OPEN channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net31 has 2 separate CAM networks: U_DDR.M2 | U1.C4
+OPEN channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net33 has 2 separate CAM networks: U_DDR.M7 | U1.D3
+OPEN channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net35 has 2 separate CAM networks: U_DDR.N3 | U1.F3
+OPEN channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net36 has 2 separate CAM networks: U_DDR.N7 | U1.E3
+OPEN channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net38 has 2 separate CAM networks: U_DDR.P2 | U1.B1
+OPEN channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net39 has 2 separate CAM networks: U_DDR.P3 | U1.E4
+OPEN channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net40 has 2 separate CAM networks: U_DDR.P7 | U1.H1
+OPEN channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net43 has 2 separate CAM networks: U_DDR.R3 | U1.C1
+OPEN channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net46 has 2 separate CAM networks: U_DDR.T2 | U1.G2
+OPEN channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net49 has 2 separate CAM networks: U_DDR.T8 | U1.D4
+OPEN channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net6 has 2 separate CAM networks: U_DDR.C8 | U1.K1
+OPEN channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net9 has 2 separate CAM networks: U_DDR.D3 | U1.J2
+OPEN system_LCD_D1 has 2 separate CAM networks: U1.R2 | J_LCD.pin31, R_SYSBOOT1.pin2
+OPEN system_LCD_D12 has 2 separate CAM networks: R_SYSBOOT12.pin2, U1.V2 | J_LCD.pin15
+OPEN system_LCD_D16 has 2 separate CAM networks: U1.U13 | J_LCD.pin33
+OPEN system_LCD_D17 has 2 separate CAM networks: U1.V13 | J_LCD.pin17
+OPEN system_LCD_D18 has 2 separate CAM networks: U1.R12 | J_LCD.pin34
+OPEN system_LCD_D19 has 2 separate CAM networks: U1.T12 | J_LCD.pin26
+OPEN system_LCD_D2 has 2 separate CAM networks: U1.R3 | J_LCD.pin30, R_SYSBOOT2.pin2
+OPEN system_LCD_D20 has 2 separate CAM networks: U1.U12 | J_LCD.pin18
+OPEN system_LCD_D21 has 2 separate CAM networks: U1.T11 | J_LCD.pin35
+OPEN system_LCD_D22 has 2 separate CAM networks: U1.T10 | J_LCD.pin27
+OPEN system_LCD_D23 has 2 separate CAM networks: U1.U10 | J_LCD.pin19
+OPEN system_LCD_D3 has 3 separate CAM networks: U1.R4 | R_SYSBOOT3.pin2 | J_LCD.pin29
+OPEN system_LCD_D4 has 3 separate CAM networks: U1.T1 | R_SYSBOOT4.pin2 | J_LCD.pin28
+OPEN system_LCD_D5 has 3 separate CAM networks: U1.T2 | R_SYSBOOT5.pin2 | J_LCD.pin25
+OPEN system_LCD_D6 has 3 separate CAM networks: U1.T3 | R_SYSBOOT6.pin2 | J_LCD.pin24
+OPEN system_LCD_D7 has 2 separate CAM networks: R_SYSBOOT7.pin2, U1.T4 | J_LCD.pin23
+OPEN system_LCD_D8 has 2 separate CAM networks: U1.U1 | J_LCD.pin22, R_SYSBOOT8.pin2
+OPEN system_LCD_D9 has 2 separate CAM networks: U1.U2 | J_LCD.pin21, R_SYSBOOT9.pin2
+OPEN system_LCD_DE has 2 separate CAM networks: U1.R6 | J_LCD.pin9
+OPEN system_LCD_HSYNC has 2 separate CAM networks: U1.R5 | J_LCD.pin11
+OPEN system_LCD_VSYNC has 2 separate CAM networks: U1.U5 | J_LCD.pin10
+OPEN system_TOUCH_SCL has 2 separate CAM networks: U1.D15 | R_TOUCH_SCL.pin1
+OPEN system_TOUCH_SDA has 2 separate CAM networks: U1.D16 | R_TOUCH_SDA.pin1
+OPEN unnamedsubcircuitsubcircuit_source_group_0_connectivity_net193 has 2 separate CAM networks: R_LIPO_ENABLE.pin2, U_LIPO_BOOST.EN, U_LIPO_UVLO.N_RESET | Q_LIPO_USB_OFF.pin3
+OPEN unnamedsubcircuitsubcircuit_source_group_0_connectivity_net32 has 2 separate CAM networks: U1.N18 | J_USB.A7, J_USB.B7
+OPEN unnamedsubcircuitsubcircuit_source_group_0_connectivity_net34 has 2 separate CAM networks: U1.N17 | J_USB.A6, J_USB.B6
+50 mapped land nets have multiple physical networks.
