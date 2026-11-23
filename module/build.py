@@ -117,6 +117,9 @@ for p in source:
 for ref,(s,c) in parts.items():
     dx,dy=offset[group(ref)]
     cx,cy=c["center"]["x"],c["center"]["y"]
+    if ref == "C_CPU_VREF":
+        dx += 0.025
+        dy -= 0.1
     if ref == "C_DDR34":
         # Reserve R7 and R8 for address escapes. Give the bulk capacitor dedicated feed vias.
         dx += 2.70
