@@ -25,6 +25,16 @@ DEBUG_UART0_RX end-to-end connected
 THROUGH_X end-to-end connected
 THROUGH_DN end-to-end connected
 J_SD_PIN1 end-to-end connected
+DEBUG_UART0_TX end-to-end connected
+THROUGH_Y end-to-end connected
+THROUGH_SD_CLK end-to-end connected
+THROUGH_SD_MISO end-to-end connected
+SD_DETECT end-to-end connected
+AUDIO_PWM_INTERNAL end-to-end connected
+THROUGH_A end-to-end connected
+THROUGH_B end-to-end connected
+THROUGH_R_SHOULDER end-to-end connected
+JOY_L_CLICK end-to-end connected
 AM3354 J3 calibration to 49.9 ohm resistor connected
 AM3354 calibration resistor return to module ground connected
 MPU buck output and feedback to seven CPU supply balls connected
