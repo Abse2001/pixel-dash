@@ -49,3 +49,7 @@ Drilled CAM connects the CPU's touch SDA signal to its fitted pull-up. The pull-
 ## Touch SCL on the powered handheld
 
 Drilled CAM connects the CPU's touch SCL signal to its fitted pull-up. The pull-up bias is on sequenced DCDC4. All 45 DDR links, 71 reference terminals, all handheld grounds, and the complete published DDR timing CSV are preserved. Full-width DDR, MMC0 and raster references and separate copper, 6 mil via-edge and drill checks pass. The full board has 32 split mapped nets. This measurement covers the CPU and bias resistor. Panel operation requires the remaining touch integration. [Drilled CAM](touch-SCL-cam.txt) · [Geometry checks](touch-SCL-geometry.txt)
+
+## Panel-side LCD D5 connection
+
+R_SYSBOOT5 pin 2 now reaches the panel's LCD D5 contact. The number of panel data contacts connected to their strap sense nodes is 14/16. The CPU land for this bit is still on its own island. Seven strap levels reach the CPU and 32 mapped board nets remain split. All 45 DDR links, the timing CSV, powered lands, 71 local DDR returns, handheld ground, and sequenced MMC0 remain intact. Full-width raster and DDR references, class and copper spacing, and separate drill and via-edge checks pass. [Drilled endpoints](panel-tap-5-cam.txt) · [Physical gates](panel-tap-5-geometry.txt)
