@@ -118,8 +118,8 @@ for ref,(s,c) in parts.items():
     dx,dy=offset[group(ref)]
     cx,cy=c["center"]["x"],c["center"]["y"]
     if ref == "C_CPU_VREF":
-        dx += 0.025
-        dy -= 0.1
+        dx += 0.085
+        dy -= 0.145
     if ref == "C_DDR34":
         # Reserve R7 and R8 for address escapes. Give the bulk capacitor dedicated feed vias.
         dx += 2.70
@@ -268,6 +268,8 @@ for edit in json.loads((here/"escape-edits.json").read_text()):
         board.Remove(track)
     for start,end in zip(edit["new"],edit["new"][1:]):
         add_segment(start,end,layer,net(edit["net"]),.102)
+for feed in json.loads((here/"reference-vias.json").read_text()):
+    add_barrel([*feed["pos"], feed["drill"], feed["diam"]], net(feed["net"]))
 for branch in json.loads((here/"carrier-strap-routes.json").read_text()):
     signal = net(branch["net"])
     for section in branch["sections"]:

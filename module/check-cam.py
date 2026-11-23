@@ -17,6 +17,8 @@ from shapely import make_valid
 from shapely.geometry import GeometryCollection,Polygon
 
 def artwork(path):
+    if not path.read_bytes().rstrip().endswith(b"M02*"):
+        raise ValueError(f"Incomplete Gerber artwork: {path.name}")
     film=GerberFile.open(path)
     copper=GeometryCollection()
     primitives=(g for obj in film.objects for g in obj.to_primitives(unit=MM))
@@ -43,6 +45,7 @@ def artwork(path):
 cam=Path(sys.argv[1]);geom=json.loads(Path(sys.argv[2]).read_text())
 layers=["F.Cu","In1.Cu","In2.Cu","In3.Cu","In4.Cu","B.Cu"]
 drillfile,=cam.glob("*.drl")
+assert drillfile.read_bytes().rstrip().endswith(b"M30"), "Incomplete drill file"
 assert "TF.FileFunction,MixedPlating,1,6" in drillfile.read_text()
 flashes=ExcellonFile.open(drillfile).objects
 drills=[(Point(f.x,f.y),f.aperture.diameter/2) for f in flashes]

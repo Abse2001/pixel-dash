@@ -26,3 +26,4 @@ DRAM divider bottom return False
 DRAM divider to DQ bypass, H1 and CA feed False
 DRAM CA feed to bypass and M8 False
 DRAM DQ/CA bypass returns True
+CPU J4 local reference bypass and return: connected

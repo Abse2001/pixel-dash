@@ -58,5 +58,8 @@ checks = {
 }
 for name, pins in checks.items():
     print(name, connected(*pins))
+assert connected("U1.J4", "C_CPU_VREF.pin1")
+assert connected("C_CPU_VREF.pin2", "U_PMIC.EP")
+print("CPU J4 local reference bypass and return: connected")
 assert pin_net["U1.J4"][0] != pin_net["U_DDR.H1"][0]
 assert pin_net["U_DDR_SWITCH.VOUT1"][0] != pin_net["L_PMIC_DDR.pin2"][0]
