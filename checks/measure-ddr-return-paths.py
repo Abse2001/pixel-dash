@@ -11,8 +11,7 @@ def xy(item):
     return item["x"], item["y"]
 
 
-def measurements(board, selected=(), reference_changes=False):
-    reference = {"top": "GND", "inner2": "GND", "inner1": "VDDS_DDR", "bottom": "VDDS_DDR"}
+def return_network(board):
     parts = {e["source_component_id"]: e for e in board if e["type"] == "source_component"}
     nets = {e["source_net_id"]: e["name"] for e in board if e["type"] == "source_net"}
     ports = {e["source_port_id"]: e for e in board if e["type"] == "source_port"}
@@ -93,6 +92,12 @@ def measurements(board, selected=(), reference_changes=False):
             legs[net] = leg
     if not high_speed or set(bypass) != high_speed or any(set(legs) != {"GND", "VDDS_DDR"} for legs in bypass.values()):
         raise ValueError("Incomplete high-speed bypass via pair")
+    return names, bypass
+
+
+def measurements(board, selected=(), reference_changes=False):
+    reference = {"top": "GND", "inner2": "GND", "inner1": "VDDS_DDR", "bottom": "VDDS_DDR"}
+    names, bypass = return_network(board)
     for e in board:
         if e["type"] != "pcb_trace":
             continue
