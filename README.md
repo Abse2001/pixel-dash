@@ -1,5 +1,11 @@
 # Pixel Dash
 
+## Current powered handheld
+
+Powered checkpoint `4ee21e6` connects the CPU touch SDA and SCL lands to their fitted pull-ups and the panel D5 contact to its strap resistor. Exported CAM verifies 45/50 distinct DDR links, 71/71 local return terminals, 14/16 panel-side strap taps, 8/29 full CPU-to-panel signals and seven physical CPU straps. There are 32 split mapped nets. DDR timing matches powered checkpoint `408d38c`. The board remains on fabrication hold. [Full PCB](https://github.com/Abse2001/pixel-dash/blob/4ee21e6/studies/powered-cpu-io/powered-panel-taps.png) · [Drilled CAM](https://github.com/Abse2001/pixel-dash/blob/4ee21e6/studies/powered-cpu-io/panel-tap-5-cam.txt) · [Spacing and reference checks](https://github.com/Abse2001/pixel-dash/blob/4ee21e6/studies/powered-cpu-io/panel-tap-5-geometry.txt)
+
+The separate DDR3L displacement study verifies a six-barrel D2/D3/D4 arrangement at 1.207477 mm minimum spacing against 0.4020 mm. A different displacement with revised DQM0 gives D5/D7 RAM-side sites 0.4500 mm apart, but the jointly reserved search still fails timing. The SYSBOOT1 resistor trial preserves panel pin 31 and the 10 kΩ high bias at the resistor while CPU R2 stays isolated. Removing backlight PWM still leaves A6 and A8 blocking the archived B4 launch. [Placement and timing](https://github.com/Abse2001/pixel-dash/tree/4ac7776/studies/powered-ddr3l-offset) · [Startup trials](https://github.com/Abse2001/pixel-dash/blob/4ac7776/studies/powered-ddr3l-offset/startup.md)
+
 ## Fully connected DDR candidate
 
 The complete candidate at 4b3d1c5 connects the handheld IRQ pull-up, keeps the 50 DDR routes and their vias identical to a4a71e2 and reduces the whole-board split-net count from 35 to 34. Drilled CAM explicitly verifies J3/VTP, RAM ZQ, the CPU and RAM VREF networks, divider rails, local bypass returns and their mutual isolation. [Complete candidate and physical land groups](https://github.com/Abse2001/pixel-dash/blob/4b3d1c5/checks/current-touch-irq-cam.txt)
