@@ -1,0 +1,3 @@
+west_geometry,current_length_mm,current_vias,current_barrel_mm,current_mixed_flight_ps,current_signed_mixed_skew_ps,placement_nominal_min_mm,placement_nominal_max_mm,placement_nominal_excess_mm,required_source_setup_ps_AC135_800_screen,required_source_hold_ps_DC90_800_screen,receiver_margin_status
+prior,34.9054,4,5.6800,238.8571,47.4947,30.1500,32.6900,2.2154,412.4947,237.5053,open: launch and receiver waveform
+revised,34.9010,4,5.6800,238.8320,47.4696,30.1500,32.6900,2.2110,412.4696,237.5304,open: launch and receiver waveform
