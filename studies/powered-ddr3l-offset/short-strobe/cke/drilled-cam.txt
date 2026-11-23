@@ -153,7 +153,7 @@ OPEN system_LCD_D9 has 2 separate CAM networks: U1.U2 | J_LCD.pin21, R_SYSBOOT9.
 OPEN system_LCD_DE has 2 separate CAM networks: U1.R6 | J_LCD.pin9
 OPEN system_LCD_HSYNC has 2 separate CAM networks: U1.R5 | J_LCD.pin11
 OPEN system_LCD_VSYNC has 2 separate CAM networks: U1.U5 | J_LCD.pin10
-OPEN unnamedsubcircuitsubcircuit_source_group_0_connectivity_net193 has 2 separate CAM networks: R_LIPO_ENABLE.pin2, U_LIPO_BOOST.EN, U_LIPO_UVLO.N_RESET | Q_LIPO_USB_OFF.pin3
+OPEN unnamedsubcircuitsubcircuit_source_group_0_connectivity_net193 has 2 separate CAM networks: Q_LIPO_USB_OFF.pin3 | R_LIPO_ENABLE.pin2, U_LIPO_BOOST.EN, U_LIPO_UVLO.N_RESET
 OPEN unnamedsubcircuitsubcircuit_source_group_0_connectivity_net32 has 2 separate CAM networks: U1.N18 | J_USB.A7, J_USB.B7
 OPEN unnamedsubcircuitsubcircuit_source_group_0_connectivity_net34 has 2 separate CAM networks: U1.N17 | J_USB.A6, J_USB.B6
 36 mapped land nets have multiple physical networks.

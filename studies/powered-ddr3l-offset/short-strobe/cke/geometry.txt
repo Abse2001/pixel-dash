@@ -1,7 +1,7 @@
 Previous local power and strap results retained. Split nets 36 to 36.
 0 signal/layer reference-coverage findings
-inner1 GND: envelope 392.4694 mm², uncovered 36.6270 mm², uncovered outside nominal via antipads 0.000000002 mm².
-inner2 VDDS_DDR: envelope 392.4694 mm², uncovered 28.9928 mm², uncovered outside nominal via antipads 0.000000002 mm².
+inner1 GND: envelope 392.1952 mm², uncovered 36.6082 mm², uncovered outside nominal via antipads 0.000000002 mm².
+inner2 VDDS_DDR: envelope 392.1952 mm², uncovered 28.9554 mm², uncovered outside nominal via antipads 0.000000002 mm².
 0 findings across signal and reference layers in the conservative envelope screen.
 Longest cumulative below-nominal run is 17.893 mm on DDR_WEn; TI allowance 31.750 mm.
 0 unrelated copper pairs below 0.102 mm
@@ -13,4 +13,4 @@ Screened 17 routed raster signals.
 0 signal/layer reference-coverage findings
 Connected inner-layer Gerber copper covers all 70 blind-via lands.
 71 DDR terminals verified through 70 blind vias to their adjacent reference planes.
-Verified 9518 strokes from 641 PCB traces against all four copper Gerbers.
+Verified 9471 strokes from 641 PCB traces against all four copper Gerbers.
