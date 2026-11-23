@@ -114,6 +114,9 @@ for a,b in zip([(left,low),(left,high),(right,high),(right,low)],[(left,high),(r
 pad_by_comp=defaultdict(list)
 for p in source:
     if p["type"]=="pcb_smtpad": pad_by_comp[p["pcb_component_id"]].append(p)
+# Underside 100 nF bypass spanning the H1 reference via and its adjacent ground via.
+parts["C_H1_VREF"] = parts["C_CPU_VREF"]
+h1_bypass = {"pin1": (4.800107, 36.049949), "pin2": (4.942108, 35.519994)}
 for ref,(s,c) in parts.items():
     dx,dy=offset[group(ref)]
     cx,cy=c["center"]["x"],c["center"]["y"]
@@ -137,6 +140,9 @@ for ref,(s,c) in parts.items():
     fp=k.FOOTPRINT(board);fp.SetReference(ref);fp.SetValue(s["manufacturer_part_number"])
     bot=c["layer"]=="bottom"
     fp.SetLayer(k.B_Cu if bot else k.F_Cu);fp.SetPosition(xy(cx+dx,cy+dy))
+    if ref == "C_H1_VREF":
+        mid = [(a+b)/2 for a,b in zip(*h1_bypass.values())]
+        fp.SetPosition(k.VECTOR2I(mm(mid[0]), mm(mid[1])))
     fp.Reference().SetVisible(False);fp.Value().SetVisible(False)
     for p in pad_by_comp[c["pcb_component_id"]]:
         pp=ids.get(p.get("pcb_port_id"),{})
@@ -155,6 +161,11 @@ for ref,(s,c) in parts.items():
         if (ref,pname) in {("U1","J4"),("C_CPU_VREF","pin1")} or (group(ref)=="cpu_ref" and pname=="pin1"):name="CPU_DDR_VREF"
         if ref=="R_CPU_VREF_HIGH" and pname=="pin2":name=netname(balls["U_DDR_SWITCH","VOUT1"])
         if (ref,pname)==("U1","P15"):name="USB0_VBUS_SENSE"
+        if ref == "C_H1_VREF":
+            x,y = h1_bypass[pname]
+            pad.SetPosition(k.VECTOR2I(mm(x),mm(y)))
+            pad.SetOrientationDegrees(-15)
+            name = "DDR_VREF" if pname == "pin1" else "GND_INTERNAL"
         if name:pad.SetNet(net(name))
         fp.Add(pad)
     board.Add(fp)
