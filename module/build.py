@@ -1,0 +1,267 @@
+"""Build the module placement and DDR routing study from the pinned handheld circuit."""
+import csv
+import gzip
+import json
+import math
+import re
+import sys
+from collections import defaultdict
+from pathlib import Path
+import pcbnew as k
+
+here = Path(__file__).resolve().parent
+root = here.parent
+sys.path.insert(0, str(root / "production"))
+from connectivity import trace_net_keys
+
+with gzip.open(root / "studies/four-layer-through/board.circuit.json.gz") as stream:
+    source = json.load(stream)
+ids = {e.get(e["type"] + "_id"): e for e in source}
+traces, keys = trace_net_keys(source)
+ports = {p: keys[i] for i, t in traces.items() for p in t["connected_source_port_ids"]}
+labels = {keys[i]: t["name"] for i, t in traces.items() if t.get("name")}
+labels.update({e["subcircuit_connectivity_map_key"]: e["name"] for e in source
+               if e["type"] == "source_net" and e.get("subcircuit_connectivity_map_key")})
+balls = {(ids[p["source_component_id"]].get("name"), p["name"]): ports.get(p["source_port_id"])
+         for p in source if p["type"] == "source_port" and p.get("source_component_id") in ids}
+parts = {}
+for c in source:
+    if c["type"] != "pcb_component":
+        continue
+    s = ids.get(c.get("source_component_id"), {})
+    ref = s.get("name", "")
+    if (s.get("manufacturer_part_number") and c["pcb_component_id"].startswith("channel_")
+            and ref not in {"SW_POWER", "U_JOY_ADC", "C_JOY_ADC"}):
+        parts[ref] = (s, c)
+for copy, original in (("R_CPU_VREF_HIGH", "R_VREF_HIGH"), ("R_CPU_VREF_LOW", "R_VREF_LOW")):
+    parts[copy] = parts[original]
+
+# Keep the memory, bypass and clock islands rigid. Compact support islands independently.
+def group(ref):
+    if ref.startswith("R_CPU_VREF_"): return "cpu_ref"
+    if ref.startswith("R_SYSBOOT"): return "straps"
+    if "PMIC" in ref or ref in {"R_POWER_PB", "R_DDR_VSEL"}: return "pmic"
+    if ref in {"C_DDR_SW_LOAD", "R_DDR_SW_OUT"}: return "memory"
+    if "DDR_SW" in ref or ref == "U_DDR_SWITCH": return "switch"
+    return "memory"
+
+def rectangle(ref):
+    _, c = parts[ref]
+    x, y = c["center"].values()
+    w, h = c["width"], c["height"]
+    if ref == "U1": w = h = 15
+    if ref == "U_DDR": w, h = max(w, 8), max(h, 14)
+    if ref in {"R_CPU_VREF_LOW", "R_CPU_VREF_HIGH"}:
+        x, y = (0 if ref.endswith("LOW") else 2.2), 0
+    return x-w/2, y-h/2, x+w/2, y+h/2, c["layer"]
+
+def shift(rect, x, y):
+    a,b,c,d,side = rect
+    return a+x,b+y,c+x,d+y,side
+
+def bounds(rects):
+    return (min(r[0] for r in rects),min(r[1] for r in rects),
+            max(r[2] for r in rects),max(r[3] for r in rects))
+
+groups = defaultdict(list)
+for ref in parts: groups[group(ref)].append(rectangle(ref))
+# Connector envelope includes both rows and registration pegs.
+groups["connector"] = [(-9.5,-2.1,9.5,2.1,"bottom")]
+placed = list(groups["memory"])
+offset = {"memory": (0,0)}
+for name in ("pmic","connector","straps","switch","cpu_ref"):
+    fixed = bounds(placed)
+    moving = bounds(groups[name])
+    best = None
+    for x in range(math.floor(fixed[0]-moving[2]-3), math.ceil(fixed[2]-moving[0]+3)):
+        for y in range(math.floor(fixed[1]-moving[3]-3), math.ceil(fixed[3]-moving[1]+3)):
+            rects = [shift(r,x,y) for r in groups[name]]
+            a,b,c,d = bounds([fixed,*rects])
+            score = ((c-a+2)*(d-b+2),max(c-a,d-b),abs(x)+abs(y))
+            if best and score >= best[0]: continue
+            if any(r[4]==q[4] and r[0]<q[2]+.5 and q[0]<r[2]+.5 and
+                   r[1]<q[3]+.5 and q[1]<r[3]+.5 for r in rects for q in placed): continue
+            best = score,(x,y),rects
+    assert best, name
+    _,offset[name],rects=best
+    placed.extend(rects)
+left,low,right,high=bounds(placed)
+left,low,right,high=math.floor(left-1),math.floor(low-1),math.ceil(right+1),math.ceil(high+1)
+mm=k.FromMM
+def xy(x,y): return k.VECTOR2I(mm(x-left),mm(high-y))
+board=k.BOARD()
+board.SetCopperLayerCount(6)
+board.GetDesignSettings().SetBoardThickness(mm(1.6))
+board.GetDesignSettings().m_MinClearance=mm(.102)
+nets={}
+def net(name):
+    if name not in nets:
+        nets[name]=k.NETINFO_ITEM(board,name)
+        board.Add(nets[name])
+    return nets[name]
+def netname(key): return labels.get(key,key)
+def zone(layer):
+    z=k.ZONE(board);z.SetLayer(layer);z.SetNet(net(netname(balls["SW_POWER","pin1"])));z.SetLocalClearance(mm(.13))
+    z.SetMinThickness(mm(.102));z.SetPadConnection(k.ZONE_CONNECTION_FULL)
+    boundary=z.Outline();boundary.NewOutline()
+    for x,y in ((left,low),(left,high),(right,high),(right,low)):
+        p=xy(x,y);boundary.Append(p.x,p.y)
+    board.Add(z)
+for a,b in zip([(left,low),(left,high),(right,high),(right,low)],[(left,high),(right,high),(right,low),(left,low)]):
+    e=k.PCB_SHAPE();e.SetShape(k.SHAPE_T_SEGMENT);e.SetLayer(k.Edge_Cuts);e.SetWidth(mm(.05));e.SetStart(xy(*a));e.SetEnd(xy(*b));board.Add(e)
+
+pad_by_comp=defaultdict(list)
+for p in source:
+    if p["type"]=="pcb_smtpad": pad_by_comp[p["pcb_component_id"]].append(p)
+for ref,(s,c) in parts.items():
+    dx,dy=offset[group(ref)]
+    cx,cy=c["center"]["x"],c["center"]["y"]
+    if group(ref)=="cpu_ref":
+        dx+=(0 if ref.endswith("LOW") else 2.2)-cx
+        dy-=cy
+    fp=k.FOOTPRINT(board);fp.SetReference(ref);fp.SetValue(s["manufacturer_part_number"])
+    bot=c["layer"]=="bottom"
+    fp.SetLayer(k.B_Cu if bot else k.F_Cu);fp.SetPosition(xy(cx+dx,cy+dy))
+    fp.Reference().SetVisible(False);fp.Value().SetVisible(False)
+    for p in pad_by_comp[c["pcb_component_id"]]:
+        pp=ids.get(p.get("pcb_port_id"),{})
+        sp=ids.get(pp.get("source_port_id"),{})
+        pname=sp.get("name",p.get("port_hints",[""])[0])
+        pad=k.PAD(fp);pad.SetNumber(pname);pad.SetAttribute(k.PAD_ATTRIB_SMD)
+        layers=k.LSET()
+        for layer in ((k.B_Cu,k.B_Mask,k.B_Paste) if bot else (k.F_Cu,k.F_Mask,k.F_Paste)):layers.AddLayer(layer)
+        pad.SetLayerSet(layers)
+        shape=p["shape"];w=p.get("width",2*p.get("radius",0));h=p.get("height",w)
+        pad.SetShape({"rect":k.PAD_SHAPE_RECT,"rotated_rect":k.PAD_SHAPE_RECT,"pill":k.PAD_SHAPE_OVAL,"circle":k.PAD_SHAPE_CIRCLE}[shape])
+        pad.SetSize(k.VECTOR2I(mm(w),mm(h)));pad.SetPosition(xy(p["x"]+dx,p["y"]+dy))
+        pad.SetOrientationDegrees(p.get("rect_ccw_rotation",p.get("ccw_rotation",0)))
+        key=ports.get(sp.get("source_port_id"))
+        name=netname(key)
+        if (ref,pname) in {("U1","J4"),("C_CPU_VREF","pin1")} or (group(ref)=="cpu_ref" and pname=="pin1"):name="CPU_DDR_VREF"
+        if ref=="R_CPU_VREF_HIGH" and pname=="pin2":name=netname(balls["U_DDR_SWITCH","VOUT1"])
+        if (ref,pname)==("U1","P15"):name="USB0_VBUS_SENSE"
+        if name:pad.SetNet(net(name))
+        fp.Add(pad)
+    board.Add(fp)
+
+# The module mezzanine carries host I/O only. DDR and its references terminate locally.
+with (root/"production/interface.csv").open() as f:
+    interface=[(r["Signal"],balls["U1",r["Ball"]],f'U1.{r["Ball"]}') for r in csv.DictReader(f)]
+extra=[("UART_RX","U1","E15"),("UART_TX","U1","E16"),("POWER_KEY","U_PMIC","PB")]
+interface.extend((s,balls[r,p],r+"."+p) for s,r,p in extra)
+gnd=("GND",balls["SW_POWER","pin1"],"U_PMIC.EP")
+vsys=("VSYS",balls["U_PMIC","IN_DCDC1"],"U_PMIC.IN_DCDC1")
+io=("3V3_SEQ",balls["U_PMIC","DCDC4"],"U_PMIC.DCDC4")
+assert len({key for _,key,_ in interface})==len(interface) and all(k for _,k,_ in interface)
+pins=[]
+for signal in interface:
+    if signal[0] in {"SD_CLK","USB0_DP","LCD_PCLK","TOUCH_SDA"}:pins.append(gnd)
+    pins.append(signal)
+    if signal[0] in {"SD_DAT3","USB0_DM","LCD_DE"}:pins.append(gnd)
+pins.extend([vsys,gnd,vsys,io,gnd,vsys,io,gnd,vsys,io,gnd,vsys])
+assert len(pins)<=80,len(pins)
+assert len(pins)==79
+pins.append(("USB0_VBUS_SENSE","USB0_VBUS_SENSE","U1.P15"))
+# Manufacturer land pattern in the plug-side view. Pin 1 is at the
+# left end of the lower row. Flip the complete footprint for backside assembly.
+fp=k.FOOTPRINT(board);fp.SetReference("J_CARRIER");fp.SetValue("DF40C-80DP-0.4V(51)")
+fp.SetPosition(xy(*offset["connector"]))
+for i,(_,key,_) in enumerate(pins,1):
+    col=i-1 if i<=40 else 80-i
+    px=(col-19.5)*.4
+    py=1.355 if i<=40 else -1.355
+    pad=k.PAD(fp);pad.SetNumber(str(i));pad.SetAttribute(k.PAD_ATTRIB_SMD)
+    pad.SetShape(k.PAD_SHAPE_RECT);pad.SetSize(k.VECTOR2I(mm(.20),mm(1.0)))
+    copper=k.LSET()
+    for layer in (k.F_Cu,k.F_Mask,k.F_Paste): copper.AddLayer(layer)
+    pad.SetLayerSet(copper);pad.SetPosition(fp.GetPosition()+k.VECTOR2I(mm(px),mm(py)))
+    pad.SetNet(net(netname(key)));fp.Add(pad)
+board.Add(fp);fp.Flip(fp.GetPosition(),k.FLIP_DIRECTION_TOP_BOTTOM)
+def write_csv(name,header,rows):
+    with (here/name).open("w") as stream:
+        writer=csv.writer(stream,lineterminator="\n");writer.writerow(header);writer.writerows(rows)
+write_csv("carrier-pinout.csv",["contact","signal","module_net","module_terminal"],[(i,s,netname(key),t) for i,(s,key,t) in enumerate(pins,1)])
+write_csv("module-bom.csv",["reference","MPN","JLCPCB"],[(r,s["manufacturer_part_number"],",".join(s.get("supplier_part_numbers",{}).get("jlcpcb",[]))) for r,(s,c) in parts.items()]+[("J_CARRIER","DF40C-80DP-0.4V(51)","C294544")])
+
+route_vias={(round(v["x"],6),round(v["y"],6)):v for v in source if v["type"]=="pcb_via"}
+routed=[]
+for t in source:
+    if t["type"]!="pcb_trace":continue
+    st=traces[t["source_trace_id"]];name=st.get("name") or ""
+    if not name.startswith("DDR_"):continue
+    r=t["route"]
+    if any(p.get("layer",p.get("to_layer")) not in ("top","bottom") for p in r):continue
+    n=net(netname(keys[t["source_trace_id"]]))
+    for p,q in zip(r,r[1:]):
+        a,b=xy(p["x"],p["y"]),xy(q["x"],q["y"])
+        if a==b:continue
+        w=k.PCB_TRACK(board);w.SetStart(a);w.SetEnd(b);w.SetNet(n)
+        w.SetWidth(mm(p.get("width",q.get("width",.102))));w.SetLayer(k.F_Cu if p.get("layer",p.get("to_layer"))=="top" else k.B_Cu);board.Add(w)
+    for p in r:
+        if p["route_type"]!="via":continue
+        v=route_vias[round(p["x"],6),round(p["y"],6)];via=k.PCB_VIA(board)
+        via.SetPosition(xy(p["x"],p["y"]));via.SetFrontWidth(mm(v["outer_diameter"]));via.SetDrill(mm(v["hole_diameter"]));via.SetNet(n);board.Add(via)
+    routed.append(name)
+# Saved module coordinates use KiCad's Y-down frame.
+def at(p):
+    return k.VECTOR2I(mm(p[0]),mm(p[1]))
+def add_segment(a,b,layer,n,width):
+    if at(a)==at(b):return
+    t=k.PCB_TRACK(board);t.SetStart(at(a));t.SetEnd(at(b));t.SetLayer(layer)
+    t.SetWidth(mm(width));t.SetNet(n);board.Add(t)
+def add_barrel(v,n):
+    t=k.PCB_VIA(board);t.SetPosition(at(v));t.SetFrontWidth(mm(v[3]));t.SetDrill(mm(v[2]));t.SetNet(n);board.Add(t)
+for path in json.loads((here/"command-routes.json").read_text()):
+    n=net(path["net"])
+    for endpoint,v in zip(path["ends"],path["vias"]):
+        add_segment(endpoint,v,k.F_Cu,n,.102);add_barrel(v,n)
+    for a,b in zip(path["path"],path["path"][1:]):
+        add_segment(a,b,{"In2.Cu":k.In2_Cu,"In3.Cu":k.In3_Cu}[path["inner"]],n,.102)
+    routed.append(path["net"])
+for adjustment in json.loads((here/"via-adjustments.json").read_text()):
+    old=at(adjustment["old"]);new=at(adjustment["new"])
+    hits=0
+    for item in board.GetTracks():
+        if item.GetNetname()!=adjustment["net"]:continue
+        if isinstance(item,k.PCB_VIA):
+            if (item.GetPosition()-old).EuclideanNorm()>3:continue
+            item.SetPosition(new);item.SetFrontWidth(mm(adjustment["diam"]))
+            item.SetDrill(mm(adjustment["drill"]));hits+=1
+        else:
+            if (item.GetStart()-old).EuclideanNorm()<=3:item.SetStart(new)
+            if (item.GetEnd()-old).EuclideanNorm()<=3:item.SetEnd(new)
+    assert hits==1,adjustment
+for path in json.loads((here/"ground-escapes.json").read_text()):
+    n=net(netname(balls["SW_POWER","pin1"]))
+    add_segment(path["start"],path["end"],k.F_Cu if path["layer"]=="F.Cu" else k.B_Cu,n,.20)
+    add_barrel([*path["end"],.20,.45],n)
+for link in json.loads((here/"local-links.json").read_text()):
+    for a,b in zip(link["points"],link["points"][1:]):
+        add_segment(a,b,k.F_Cu if link["layer"]=="F.Cu" else k.B_Cu,net(link["net"]),link["width"])
+for layer in (k.In1_Cu,k.In4_Cu):zone(layer)
+
+board_path=here/"pixel-dash-module.kicad_pcb"
+k.SaveBoard(str(board_path), board)
+# Foil and pressed dielectric thicknesses from JLC06161H-1080, in mm.
+foils=(.035,.0152,.0152,.0152,.0152,.035)
+dielectrics=(.0764,.55,.2104,.55,.0764)
+stack=[]
+for i,foil in enumerate(foils):
+    label=("F.Cu","In1.Cu","In2.Cu","In3.Cu","In4.Cu","B.Cu")[i]
+    stack.append(f'(layer "{label}" (type "copper") (thickness {foil}))')
+    if i<len(dielectrics):
+        kind="core" if i in (1,3) else "prepreg"
+        stack.append(f'(layer "dielectric {i+1}" (type "{kind}") (thickness {dielectrics[i]}) (material "FR4"))')
+board_path.write_text(board_path.read_text().replace("(setup\n", "(setup\n\t\t(stackup "+"\n".join(stack)+")\n",1))
+print(right-left,high-low,len(parts)+1,len(routed),sorted(routed))
+project=here/"pixel-dash-module.kicad_pro"
+settings=json.loads(project.read_text())
+settings["board"]["design_settings"]["rules"].update(
+    min_clearance=.102,min_track_width=.102,min_via_annular_width=.075,
+    min_via_diameter=.30,min_through_hole_diameter=.15,min_hole_clearance=.20,min_hole_to_hole=.25)
+settings["net_settings"]["classes"][0].update(clearance=.102,track_width=.15,via_diameter=.45,via_drill=.2)
+project.write_text(json.dumps(settings,indent=2)+"\n")
+
+# Start a fresh KiCad session so the filler reads the actual project rules.
+import subprocess
+subprocess.run([sys.executable,str(here/"fill-planes.py"),str(board_path)],check=True)

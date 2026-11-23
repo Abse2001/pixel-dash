@@ -1,0 +1,1067 @@
+[
+  {
+    "net": "DDR_SWITCH_ENABLE",
+    "start": "C_DDR_SW_EN.pin1",
+    "end": "U_DDR_SWITCH.ON",
+    "width": 0.15,
+    "layer": "F.Cu",
+    "points": [
+      [
+        6.850002,
+        2.1
+      ],
+      [
+        11.281874,
+        6.531872
+      ],
+      [
+        13.09708,
+        6.531872
+      ]
+    ]
+  },
+  {
+    "net": "DDR_VREF",
+    "start": "C_VREF_DQ.pin1",
+    "end": "R_VREF_CA.pin2",
+    "width": 0.15,
+    "layer": "F.Cu",
+    "points": [
+      [
+        15.849891,
+        39.80005
+      ],
+      [
+        16.677068,
+        40.862058
+      ]
+    ]
+  },
+  {
+    "net": "OSC0_BIAS_IN",
+    "start": "C_OSC0_IN.pin1",
+    "end": "Y_OSC0.pin1",
+    "width": 0.15,
+    "layer": "F.Cu",
+    "points": [
+      [
+        25.799999,
+        44.620116
+      ],
+      [
+        27.799926,
+        44.200011
+      ]
+    ]
+  },
+  {
+    "net": "OSC0_OUT_LOAD",
+    "start": "C_OSC0_OUT.pin1",
+    "end": "Y_OSC0.pin3",
+    "width": 0.15,
+    "layer": "F.Cu",
+    "points": [
+      [
+        32.0,
+        43.079884
+      ],
+      [
+        30.000073,
+        42.499989
+      ]
+    ]
+  },
+  {
+    "net": "OSC0_OUT_LOAD",
+    "start": "R_OSC0_DRIVE.pin2",
+    "end": "C_OSC0_OUT.pin1",
+    "width": 0.15,
+    "layer": "F.Cu",
+    "points": [
+      [
+        33.703364,
+        41.6
+      ],
+      [
+        32.0,
+        43.079884
+      ]
+    ]
+  },
+  {
+    "net": "PMIC_BACKUP_SYSTEM",
+    "start": "U_PMIC.SYS_BU",
+    "end": "C_PMIC_SYS_BU.pin1",
+    "width": 0.15,
+    "layer": "F.Cu",
+    "points": [
+      [
+        23.699889,
+        11.249942
+      ],
+      [
+        25.29989,
+        11.249942
+      ]
+    ]
+  },
+  {
+    "net": "PMIC_I2C_SCL",
+    "start": "U_PMIC.SCL",
+    "end": "R_PMIC_SCL.pin1",
+    "width": 0.15,
+    "layer": "F.Cu",
+    "points": [
+      [
+        17.749939,
+        18.19989
+      ],
+      [
+        17.749939,
+        19.402756
+      ],
+      [
+        18.317183,
+        19.97
+      ]
+    ]
+  },
+  {
+    "net": "PMIC_I2C_SDA",
+    "start": "U_PMIC.SDA",
+    "end": "R_PMIC_SDA.pin1",
+    "width": 0.15,
+    "layer": "F.Cu",
+    "points": [
+      [
+        17.250068,
+        18.19989
+      ],
+      [
+        17.250068,
+        19.402748
+      ],
+      [
+        16.682816,
+        19.97
+      ]
+    ]
+  },
+  {
+    "net": "PMIC_INTERNAL_LDO",
+    "start": "C_PMIC_INT_LDO.pin1",
+    "end": "U_PMIC.INT_LDO",
+    "width": 0.15,
+    "layer": "F.Cu",
+    "points": [
+      [
+        17.250068,
+        8.05011
+      ],
+      [
+        17.250068,
+        9.80011
+      ]
+    ]
+  },
+  {
+    "net": "VDDS_DDR",
+    "start": "U_DDR_SWITCH.VIN2",
+    "end": "U_DDR_SWITCH.VIN1",
+    "width": 0.5,
+    "layer": "F.Cu",
+    "points": [
+      [
+        13.09708,
+        6.031999
+      ],
+      [
+        13.09708,
+        5.531874
+      ]
+    ]
+  },
+  {
+    "net": "VDDS_DDR",
+    "start": "C_DDR_SW_IN.pin1",
+    "end": "U_DDR_SWITCH.VIN1",
+    "width": 0.5,
+    "layer": "F.Cu",
+    "points": [
+      [
+        12.300024,
+        4.28
+      ],
+      [
+        13.09708,
+        5.531874
+      ]
+    ]
+  },
+  {
+    "net": "VDDS_DDR",
+    "start": "C_DDR4.pin1",
+    "end": "C_DDR11.pin1",
+    "width": 0.5,
+    "layer": "B.Cu",
+    "points": [
+      [
+        5.020115,
+        25.65
+      ],
+      [
+        5.020115,
+        24.25
+      ],
+      [
+        4.720115,
+        23.95
+      ]
+    ]
+  },
+  {
+    "net": "VDDS_DDR",
+    "start": "C_DDR2.pin1",
+    "end": "C_DDR7.pin1",
+    "width": 0.5,
+    "layer": "B.Cu",
+    "points": [
+      [
+        3.4,
+        35.629884
+      ],
+      [
+        3.4,
+        34.029885
+      ],
+      [
+        3.020115,
+        33.65
+      ]
+    ]
+  },
+  {
+    "net": "VDDS_DDR",
+    "start": "L_PMIC_DDR.pin2",
+    "end": "C_PMIC_DDR.pin1",
+    "width": 0.5,
+    "layer": "F.Cu",
+    "points": [
+      [
+        10.950137,
+        10.750067
+      ],
+      [
+        8.950109,
+        11.342647
+      ]
+    ]
+  },
+  {
+    "net": "VDDS_DDR",
+    "start": "L_PMIC_DDR.pin2",
+    "end": "U_PMIC.FB3",
+    "width": 0.5,
+    "layer": "F.Cu",
+    "points": [
+      [
+        10.950137,
+        10.750067
+      ],
+      [
+        12.450009,
+        12.249939
+      ],
+      [
+        15.30011,
+        12.249939
+      ]
+    ]
+  },
+  {
+    "net": "VDDS_DDR_CPU",
+    "start": "U_DDR_SWITCH.VOUT2",
+    "end": "U_DDR_SWITCH.VOUT1",
+    "width": 0.5,
+    "layer": "F.Cu",
+    "points": [
+      [
+        14.997,
+        5.531874
+      ],
+      [
+        14.997,
+        6.031999
+      ]
+    ]
+  },
+  {
+    "net": "VDDS_DDR_CPU",
+    "start": "C_DDR23.pin1",
+    "end": "C_DDR17.pin1",
+    "width": 0.5,
+    "layer": "B.Cu",
+    "points": [
+      [
+        29.020116,
+        26.8
+      ],
+      [
+        29.0,
+        28.029884
+      ]
+    ]
+  },
+  {
+    "net": "VDDS_DDR_CPU",
+    "start": "C_DDR25.pin1",
+    "end": "C_DDR19.pin1",
+    "width": 0.5,
+    "layer": "B.Cu",
+    "points": [
+      [
+        31.4,
+        32.029883
+      ],
+      [
+        31.420116,
+        30.45
+      ]
+    ]
+  },
+  {
+    "net": "VDDS_DDR_CPU",
+    "start": "C_DDR30.pin1",
+    "end": "C_DDR24.pin1",
+    "width": 0.5,
+    "layer": "B.Cu",
+    "points": [
+      [
+        29.799999,
+        37.629884
+      ],
+      [
+        28.220115,
+        37.65
+      ]
+    ]
+  },
+  {
+    "net": "VDDS_DDR_CPU",
+    "start": "C_DDR17.pin1",
+    "end": "C_DDR26.pin1",
+    "width": 0.5,
+    "layer": "B.Cu",
+    "points": [
+      [
+        29.0,
+        28.029884
+      ],
+      [
+        30.6,
+        28.029884
+      ]
+    ]
+  },
+  {
+    "net": "VDDS_DDR_CPU",
+    "start": "C_DDR31.pin1",
+    "end": "C_DDR35.pin1",
+    "width": 0.5,
+    "layer": "B.Cu",
+    "points": [
+      [
+        32.220115,
+        26.099999
+      ],
+      [
+        32.399997,
+        24.45
+      ]
+    ]
+  },
+  {
+    "net": "VDDS_DDR_CPU",
+    "start": "C_DDR13.pin1",
+    "end": "C_DDR14.pin1",
+    "width": 0.5,
+    "layer": "B.Cu",
+    "points": [
+      [
+        27.420116,
+        28.85
+      ],
+      [
+        28.2,
+        28.85
+      ],
+      [
+        28.2,
+        30.429884
+      ]
+    ]
+  },
+  {
+    "net": "VDDS_DDR_CPU",
+    "start": "C_DDR13.pin1",
+    "end": "C_DDR17.pin1",
+    "width": 0.5,
+    "layer": "B.Cu",
+    "points": [
+      [
+        27.420116,
+        28.85
+      ],
+      [
+        29.0,
+        28.029884
+      ]
+    ]
+  },
+  {
+    "net": "VDDS_DDR_CPU",
+    "start": "C_DDR30.pin1",
+    "end": "C_DDR21.pin1",
+    "width": 0.5,
+    "layer": "B.Cu",
+    "points": [
+      [
+        29.799999,
+        37.629884
+      ],
+      [
+        30.620116,
+        37.629884
+      ],
+      [
+        30.620116,
+        36.05
+      ]
+    ]
+  },
+  {
+    "net": "VDDS_DDR_CPU",
+    "start": "C_DDR15.pin1",
+    "end": "C_DDR24.pin1",
+    "width": 0.5,
+    "layer": "B.Cu",
+    "points": [
+      [
+        27.420116,
+        36.05
+      ],
+      [
+        28.220115,
+        36.05
+      ],
+      [
+        28.220115,
+        37.65
+      ]
+    ]
+  },
+  {
+    "net": "VDDS_DDR_CPU",
+    "start": "C_DDR36.pin1",
+    "end": "R_DDR_SW_OUT.pin1",
+    "width": 0.5,
+    "layer": "B.Cu",
+    "points": [
+      [
+        27.999997,
+        40.45
+      ],
+      [
+        27.999997,
+        42.5
+      ]
+    ]
+  },
+  {
+    "net": "VDDS_DDR_CPU",
+    "start": "C_DDR31.pin1",
+    "end": "C_DDR26.pin1",
+    "width": 0.5,
+    "layer": "B.Cu",
+    "points": [
+      [
+        32.220115,
+        26.099999
+      ],
+      [
+        32.220115,
+        26.409769
+      ],
+      [
+        30.6,
+        28.029884
+      ]
+    ]
+  },
+  {
+    "net": "VDDS_DDR_CPU",
+    "start": "C_DDR32.pin1",
+    "end": "C_DDR29.pin1",
+    "width": 0.5,
+    "layer": "B.Cu",
+    "points": [
+      [
+        25.420116,
+        23.65
+      ],
+      [
+        27.820116,
+        23.65
+      ],
+      [
+        27.820116,
+        24.45
+      ]
+    ]
+  },
+  {
+    "net": "VDDS_DDR_CPU",
+    "start": "C_DDR23.pin1",
+    "end": "C_DDR29.pin1",
+    "width": 0.5,
+    "layer": "B.Cu",
+    "points": [
+      [
+        29.020116,
+        26.8
+      ],
+      [
+        27.820116,
+        24.45
+      ]
+    ]
+  },
+  {
+    "net": "VDDS_DDR_CPU",
+    "start": "C_DDR36.pin1",
+    "end": "C_DDR24.pin1",
+    "width": 0.5,
+    "layer": "B.Cu",
+    "points": [
+      [
+        27.999997,
+        40.45
+      ],
+      [
+        28.220115,
+        37.65
+      ]
+    ]
+  },
+  {
+    "net": "VDDS_DDR_CPU",
+    "start": "C_DDR22.pin1",
+    "end": "C_DDR27.pin1",
+    "width": 0.5,
+    "layer": "B.Cu",
+    "points": [
+      [
+        23.320116,
+        41.95
+      ],
+      [
+        23.320116,
+        39.229884
+      ],
+      [
+        24.5,
+        39.229884
+      ]
+    ]
+  },
+  {
+    "net": "VDDS_DDR_CPU",
+    "start": "C_DDR32.pin1",
+    "end": "C_DDR16.pin1",
+    "width": 0.5,
+    "layer": "B.Cu",
+    "points": [
+      [
+        25.420116,
+        23.65
+      ],
+      [
+        26.6,
+        26.429884
+      ]
+    ]
+  },
+  {
+    "net": "VDDS_DDR_CPU",
+    "start": "C_DDR36.pin1",
+    "end": "C_DDR27.pin1",
+    "width": 0.5,
+    "layer": "B.Cu",
+    "points": [
+      [
+        27.999997,
+        40.45
+      ],
+      [
+        26.779880999999996,
+        39.229884
+      ],
+      [
+        24.5,
+        39.229884
+      ]
+    ]
+  },
+  {
+    "net": "VDDS_DDR_CPU",
+    "start": "C_DDR31.pin1",
+    "end": "C_DDR19.pin1",
+    "width": 0.5,
+    "layer": "B.Cu",
+    "points": [
+      [
+        32.220115,
+        26.099999
+      ],
+      [
+        32.220115,
+        29.650001
+      ],
+      [
+        31.420116,
+        30.45
+      ]
+    ]
+  },
+  {
+    "net": "VDDS_DDR_CPU",
+    "start": "C_DDR_SW_LOAD.pin1",
+    "end": "C_DDR30.pin1",
+    "width": 0.5,
+    "layer": "B.Cu",
+    "points": [
+      [
+        33.342579,
+        40.5
+      ],
+      [
+        33.342579,
+        37.629884
+      ],
+      [
+        29.799999,
+        37.629884
+      ]
+    ]
+  },
+  {
+    "net": "VDDS_DDR_CPU",
+    "start": "C_DDR28.pin1",
+    "end": "C_DDR27.pin1",
+    "width": 0.5,
+    "layer": "B.Cu",
+    "points": [
+      [
+        21.020116,
+        42.25
+      ],
+      [
+        24.040232000000003,
+        39.229884
+      ],
+      [
+        24.5,
+        39.229884
+      ]
+    ]
+  },
+  {
+    "net": "VDDS_DDR_CPU",
+    "start": "C_DDR22.pin1",
+    "end": "C_DDR20.pin1",
+    "width": 0.5,
+    "layer": "B.Cu",
+    "points": [
+      [
+        23.320116,
+        41.95
+      ],
+      [
+        23.320116,
+        37.629884
+      ],
+      [
+        25.799999,
+        37.629884
+      ]
+    ]
+  },
+  {
+    "net": "VDDS_RTC_1V8",
+    "start": "C_PMIC_RTC_IO.pin1",
+    "end": "L_PMIC_RTC_IO.pin2",
+    "width": 0.5,
+    "layer": "F.Cu",
+    "points": [
+      [
+        31.157309,
+        10.750067
+      ],
+      [
+        28.949889,
+        10.783851
+      ]
+    ]
+  },
+  {
+    "net": "VDDS_RTC_1V8",
+    "start": "U_PMIC.FB6",
+    "end": "L_PMIC_RTC_IO.pin2",
+    "width": 0.5,
+    "layer": "F.Cu",
+    "points": [
+      [
+        23.699889,
+        12.249939
+      ],
+      [
+        27.483801,
+        12.249939
+      ],
+      [
+        28.949889,
+        10.783851
+      ]
+    ]
+  },
+  {
+    "net": "VDD_CORE",
+    "start": "L_PMIC_CORE.pin2",
+    "end": "C_PMIC_CORE.pin1",
+    "width": 0.5,
+    "layer": "F.Cu",
+    "points": [
+      [
+        10.500138,
+        19.050058
+      ],
+      [
+        7.50011,
+        17.457478
+      ]
+    ]
+  },
+  {
+    "net": "VDD_CORE",
+    "start": "U_PMIC.FB1",
+    "end": "L_PMIC_CORE.pin2",
+    "width": 0.5,
+    "layer": "F.Cu",
+    "points": [
+      [
+        15.30011,
+        16.249932
+      ],
+      [
+        13.300263999999999,
+        16.249932
+      ],
+      [
+        10.500138,
+        19.050058
+      ]
+    ]
+  },
+  {
+    "net": "VDD_IO_3V3_SEQ",
+    "start": "R_SYSBOOT1.pin1",
+    "end": "R_SYSBOOT0.pin1",
+    "width": 0.5,
+    "layer": "F.Cu",
+    "points": [
+      [
+        27.25,
+        8.432816
+      ],
+      [
+        26.0,
+        8.432816
+      ]
+    ]
+  },
+  {
+    "net": "VDD_IO_3V3_SEQ",
+    "start": "R_SYSBOOT2.pin1",
+    "end": "R_SYSBOOT1.pin1",
+    "width": 0.5,
+    "layer": "F.Cu",
+    "points": [
+      [
+        28.5,
+        8.432816
+      ],
+      [
+        27.25,
+        8.432816
+      ]
+    ]
+  },
+  {
+    "net": "VDD_IO_3V3_SEQ",
+    "start": "C_PMIC_IO_A.pin1",
+    "end": "C_PMIC_IO_B.pin1",
+    "width": 0.5,
+    "layer": "B.Cu",
+    "points": [
+      [
+        26.7,
+        15.90742
+      ],
+      [
+        29.1,
+        16.39258
+      ]
+    ]
+  },
+  {
+    "net": "VDD_LDO1_1V8",
+    "start": "C_SRAM_CORE_IN.pin1",
+    "end": "C_SRAM_MPU_IN.pin1",
+    "width": 0.15,
+    "layer": "F.Cu",
+    "points": [
+      [
+        24.94995,
+        21.300058
+      ],
+      [
+        26.50005,
+        21.699958
+      ]
+    ]
+  },
+  {
+    "net": "VDD_MPU",
+    "start": "L_PMIC_MPU.pin2",
+    "end": "C_PMIC_MPU.pin1",
+    "width": 0.5,
+    "layer": "F.Cu",
+    "points": [
+      [
+        10.500138,
+        14.850064
+      ],
+      [
+        8.59269,
+        14.850064
+      ]
+    ]
+  },
+  {
+    "net": "VDD_MPU",
+    "start": "U_PMIC.FB2",
+    "end": "L_PMIC_MPU.pin2",
+    "width": 0.5,
+    "layer": "F.Cu",
+    "points": [
+      [
+        15.30011,
+        13.249938
+      ],
+      [
+        12.100264,
+        13.249938
+      ],
+      [
+        10.500138,
+        14.850064
+      ]
+    ]
+  },
+  {
+    "net": "VDD_RTC_CORE_1V0",
+    "start": "C_PMIC_RTC_CORE.pin1",
+    "end": "L_PMIC_RTC_CORE.pin2",
+    "width": 0.5,
+    "layer": "F.Cu",
+    "points": [
+      [
+        31.74989,
+        16.342518
+      ],
+      [
+        29.416106,
+        14.749938
+      ]
+    ]
+  },
+  {
+    "net": "VSYS_INTERNAL",
+    "start": "C_DDR_SW_BIAS.pin1",
+    "end": "U_DDR_SWITCH.VBIAS",
+    "width": 0.5,
+    "layer": "F.Cu",
+    "points": [
+      [
+        11.570115,
+        7.78
+      ],
+      [
+        13.09708,
+        7.031998
+      ]
+    ]
+  },
+  {
+    "net": "VSYS_INTERNAL",
+    "start": "U_PMIC.IN_DCDC3",
+    "end": "U_PMIC.IN_BIAS",
+    "width": 0.5,
+    "layer": "F.Cu",
+    "points": [
+      [
+        15.30011,
+        11.249942
+      ],
+      [
+        16.749942,
+        9.80011
+      ]
+    ]
+  },
+  {
+    "net": "VSYS_INTERNAL",
+    "start": "U_PMIC.IN_DCDC2",
+    "end": "U_PMIC.IN_DCDC1",
+    "width": 0.5,
+    "layer": "F.Cu",
+    "points": [
+      [
+        15.30011,
+        14.249936
+      ],
+      [
+        16.749942,
+        14.249936
+      ],
+      [
+        16.749942,
+        18.19989
+      ]
+    ]
+  },
+  {
+    "net": "VSYS_INTERNAL",
+    "start": "U_PMIC.IN_DCDC2",
+    "end": "U_PMIC.IN_BIAS",
+    "width": 0.5,
+    "layer": "F.Cu",
+    "points": [
+      [
+        15.30011,
+        14.249936
+      ],
+      [
+        16.749942,
+        14.249936
+      ],
+      [
+        16.749942,
+        9.80011
+      ]
+    ]
+  },
+  {
+    "net": "VSYS_INTERNAL",
+    "start": "U_PMIC.IN_DCDC3",
+    "end": "U_DDR_SWITCH.VBIAS",
+    "width": 0.5,
+    "layer": "F.Cu",
+    "points": [
+      [
+        15.30011,
+        11.249942
+      ],
+      [
+        13.09708,
+        7.031998
+      ]
+    ]
+  },
+  {
+    "net": "VSYS_INTERNAL",
+    "start": "U_PMIC.IN_DCDC3",
+    "end": "U_PMIC.IN_BU",
+    "width": 0.5,
+    "layer": "F.Cu",
+    "points": [
+      [
+        15.30011,
+        11.249942
+      ],
+      [
+        21.25006,
+        11.249942
+      ],
+      [
+        21.25006,
+        9.80011
+      ]
+    ]
+  },
+  {
+    "net": "channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net71",
+    "start": "U_PMIC.DC34_SEL",
+    "end": "R_DDR_VSEL.pin1",
+    "width": 0.15,
+    "layer": "F.Cu",
+    "points": [
+      [
+        23.699889,
+        14.750062
+      ],
+      [
+        25.167184,
+        14.75
+      ]
+    ]
+  },
+  {
+    "net": "channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net77",
+    "start": "U_PMIC.L5",
+    "end": "L_PMIC_RTC_CORE.pin1",
+    "width": 0.5,
+    "layer": "F.Cu",
+    "points": [
+      [
+        23.699889,
+        13.249938
+      ],
+      [
+        25.983674,
+        13.249938
+      ],
+      [
+        27.483674,
+        14.749938
+      ]
+    ]
+  },
+  {
+    "net": "channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net97",
+    "start": "C_DDR_SW_CT.pin1",
+    "end": "U_DDR_SWITCH.CT",
+    "width": 0.15,
+    "layer": "F.Cu",
+    "points": [
+      [
+        16.229883,
+        6.579999
+      ],
+      [
+        14.997,
+        6.531872
+      ]
+    ]
+  }
+]
