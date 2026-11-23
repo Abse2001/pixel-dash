@@ -117,6 +117,7 @@ assert cpu_root != power_root
 cpu_balls = sorted(pin for ref,pin in switched if ref == "U1")
 assert len(cpu_balls) == 7
 fed = [pin for pin in cpu_balls if switched["U1",pin] == cpu_root]
+assert len(fed) == 7, ("switched CPU rail connectivity regression", fed)
 print(f"Switched DDR output reaches {len(fed)}/7 CPU DDR balls. Open:", ", ".join(pin for pin in cpu_balls if pin not in fed) or "none")
 planes={}
 for l in ("In1.Cu","In4.Cu"):
