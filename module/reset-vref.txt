@@ -41,6 +41,8 @@ THROUGH_SD_CS end-to-end connected
 PMIC SDA to CPU and pull-up connected
 Sequenced regulator output to both PMIC I2C pull-ups connected
 DCDC4 output to eight CPU IO supply balls connected
+TOUCH_SDA end-to-end connected
+TOUCH_SCL end-to-end connected
 AM3354 J3 calibration to 49.9 ohm resistor connected
 AM3354 calibration resistor return to module ground connected
 MPU buck output and feedback to seven CPU supply balls connected

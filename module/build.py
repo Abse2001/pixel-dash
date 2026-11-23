@@ -126,6 +126,12 @@ for index in range(1, 6):
         dict(donor, manufacturer_part_number="CL05B103KB5NNNC",
              supplier_part_numbers={"jlcpcb": ["C15195"]}), geometry)
 local_bypasses = json.loads((here/"local-bypass-placements.json").read_text())
+# TI ZCZ pin functions, Table 4-49. Keep the module I2C1 bus on its carrier contacts.
+module_ball = {"D16": "B16", "D15": "J15"}
+for original, replacement in module_ball.items():
+    assert balls.get(("U1", replacement)) is None
+    balls["U1", replacement] = balls["U1", original]
+    balls["U1", original] = None
 for ref,(s,c) in parts.items():
     dx,dy=offset[group(ref)]
     cx,cy=c["center"]["x"],c["center"]["y"]
@@ -181,6 +187,8 @@ for ref,(s,c) in parts.items():
         pad.SetSize(k.VECTOR2I(mm(w),mm(h)));pad.SetPosition(xy(p["x"]+dx,p["y"]+dy))
         pad.SetOrientationDegrees(p.get("rect_ccw_rotation",p.get("ccw_rotation",0)))
         key=ports.get(sp.get("source_port_id"))
+        if ref == "U1" and (pname in module_ball or pname in module_ball.values()):
+            key = balls[ref, pname]
         name=netname(key)
         if (ref,pname) in {("U1","J4"),("C_CPU_VREF","pin1")} or (group(ref)=="cpu_ref" and pname=="pin1"):name="CPU_DDR_VREF"
         if ref=="R_CPU_VREF_HIGH" and pname=="pin2":name=netname(balls["U_DDR_SWITCH","VOUT1"])
@@ -212,7 +220,10 @@ for ref,(s,c) in parts.items():
 
 # The module mezzanine carries host I/O only. DDR and its references terminate locally.
 with (root/"production/interface.csv").open() as f:
-    interface=[(r["Signal"],balls["U1",r["Ball"]],f'U1.{r["Ball"]}') for r in csv.DictReader(f)]
+    interface = []
+    for row in csv.DictReader(f):
+        ball = module_ball.get(row["Ball"], row["Ball"])
+        interface.append((row["Signal"], balls["U1", ball], f"U1.{ball}"))
 extra=[("UART_RX","U1","E15"),("UART_TX","U1","E16"),("POWER_KEY","U_PMIC","PB")]
 interface.extend((s,balls[r,p],r+"."+p) for s,r,p in extra)
 gnd=("GND",balls["SW_POWER","pin1"],"U_PMIC.EP")
