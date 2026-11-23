@@ -13,4 +13,4 @@ Screened 17 routed raster signals.
 0 signal/layer reference-coverage findings
 Connected inner-layer Gerber copper covers all 70 blind-via lands.
 71 DDR terminals verified through 70 blind vias to their adjacent reference planes.
-Verified 9201 strokes from 641 PCB traces against all four copper Gerbers.
+Verified 9518 strokes from 641 PCB traces against all four copper Gerbers.
