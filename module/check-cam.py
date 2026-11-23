@@ -114,3 +114,18 @@ print("Full-width ground reference losses outside own launches (mm²):",dict(sor
 
 if miss:
     raise SystemExit("DDR ground coverage failed")
+
+if len(sys.argv) > 3:
+    # Identify individual pads on each physical island for targeted routing.
+    # Stable component/pin labels make the report independent of polygon order.
+    by_island = collections.defaultdict(list)
+    for net_name, endpoints in pads.items():
+        for ref, pin, node in endpoints:
+            by_island[net_name, node].append(f"{ref}.{pin}")
+    islands = collections.defaultdict(list)
+    for (net_name, node), pins in by_island.items():
+        islands[net_name].append(sorted(pins))
+    Path(sys.argv[3]).write_text(json.dumps(
+        {name: sorted(groups) for name, groups in sorted(islands.items())},
+        indent=2
+    ) + "\n")

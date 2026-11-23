@@ -1871,5 +1871,212 @@
         16.750058
       ]
     ]
+  },
+  {
+    "net": "GND_INTERNAL",
+    "start": "R_SYSBOOT11.pin1",
+    "end": "R_SYSBOOT9.pin1",
+    "width": 0.2,
+    "layer": "F.Cu",
+    "points": [
+      [
+        29.75,
+        6.182816
+      ],
+      [
+        27.25,
+        6.182816
+      ]
+    ]
+  },
+  {
+    "net": "GND_INTERNAL",
+    "start": "C_DDR12.pin2",
+    "end": "ground via",
+    "width": 0.2,
+    "layer": "F.Cu",
+    "points": [
+      [
+        2.599999,
+        32.829884
+      ],
+      [
+        3.201039,
+        29.869075
+      ]
+    ]
+  },
+  {
+    "net": "GND_INTERNAL",
+    "start": "R_SYSBOOT10.pin1",
+    "end": "R_SYSBOOT11.pin1",
+    "width": 0.2,
+    "layer": "F.Cu",
+    "points": [
+      [
+        28.5,
+        6.182816
+      ],
+      [
+        29.75,
+        6.182816
+      ]
+    ]
+  },
+  {
+    "net": "GND_INTERNAL",
+    "start": "U1.N7",
+    "end": "U1.M7",
+    "width": 0.2,
+    "layer": "F.Cu",
+    "points": [
+      [
+        26.200004,
+        35.650096
+      ],
+      [
+        26.200004,
+        34.849996
+      ]
+    ]
+  },
+  {
+    "net": "GND_INTERNAL",
+    "start": "C_CPU_VREF.pin2",
+    "end": "ground via",
+    "width": 0.2,
+    "layer": "B.Cu",
+    "points": [
+      [
+        23.31001,
+        31.884002
+      ],
+      [
+        22.530009999999997,
+        34.044002
+      ],
+      [
+        22.890009999999997,
+        35.124002
+      ],
+      [
+        26.603054,
+        35.253046
+      ]
+    ]
+  },
+  {
+    "net": "GND_INTERNAL",
+    "start": "C_DDR39.pin2",
+    "end": "ground via",
+    "width": 0.2,
+    "layer": "B.Cu",
+    "points": [
+      [
+        25.2,
+        31.720116
+      ],
+      [
+        25.802954,
+        32.053154
+      ]
+    ]
+  },
+  {
+    "net": "GND_INTERNAL",
+    "start": "J_CARRIER.54",
+    "end": "ground via",
+    "width": 0.2,
+    "layer": "B.Cu",
+    "points": [
+      [
+        28.6,
+        6.355
+      ],
+      [
+        28.3,
+        4.495000000000001
+      ],
+      [
+        28.2,
+        4.495
+      ]
+    ]
+  },
+  {
+    "net": "GND_INTERNAL",
+    "start": "J_CARRIER.57",
+    "end": "ground via",
+    "width": 0.2,
+    "layer": "B.Cu",
+    "points": [
+      [
+        27.4,
+        6.355
+      ],
+      [
+        27.099999999999998,
+        4.495000000000001
+      ],
+      [
+        27.0,
+        4.495
+      ]
+    ]
+  },
+  {
+    "net": "GND_INTERNAL",
+    "start": "J_CARRIER.61",
+    "end": "ground via",
+    "width": 0.2,
+    "layer": "B.Cu",
+    "points": [
+      [
+        25.8,
+        6.355
+      ],
+      [
+        25.68,
+        5.3950000000000005
+      ],
+      [
+        25.222182,
+        5.404998
+      ]
+    ]
+  },
+  {
+    "net": "GND_INTERNAL",
+    "start": "R_VTP.pin2",
+    "end": "ground via",
+    "width": 0.2,
+    "layer": "B.Cu",
+    "points": [
+      [
+        24.502094,
+        33.023831
+      ],
+      [
+        25.802954,
+        32.853
+      ]
+    ]
+  },
+  {
+    "net": "GND_INTERNAL",
+    "start": "R_ZQ.pin2",
+    "end": "ground via",
+    "width": 0.2,
+    "layer": "B.Cu",
+    "points": [
+      [
+        10.521107,
+        38.971999
+      ],
+      [
+        10.79684,
+        39.653146
+      ]
+    ]
   }
 ]
