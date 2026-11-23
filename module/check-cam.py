@@ -115,7 +115,7 @@ print("DRAM supply balls outside that copper island:", ", ".join(pin for pin in 
 assert rail_pads["C_DDR34", "pin1"] == power_root
 grounds = {(ref,pin):node for ref,pin,node in pads["GND_INTERNAL"]}
 ground_open = sorted(f"{ref}.{pin}" for (ref,pin),node in grounds.items() if node != grounds["U_PMIC","EP"])
-known_open = {"U1.A1", "U_DDR.A9", "U_DDR.B9", "U_DDR.D8", "U_DDR.E8", "U_DDR.J8"}
+known_open = {"U1.A1", "U_DDR.A9", "U_DDR.B9", "U_DDR.J8"}
 assert not set(ground_open) - known_open, ("new ground disconnect", ground_open)
 print(f"Ground reaches {len(grounds)-len(ground_open)}/{len(grounds)} assigned return pads. Open: {', '.join(ground_open) or 'none'}")
 unfed_direct = sorted(pin for pin,node in rail_pads.items() if node != power_root)
