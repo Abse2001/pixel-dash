@@ -1,0 +1,3 @@
+Reserved D7 21.27121686810138 RAM DQ 3
+D5 routed with D7 barrel and trunk reserved, tuned pockets, D7 restoration options [5, 9, 0]
+D5 selected length 21.169495217380604 RAM DQ 2

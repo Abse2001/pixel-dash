@@ -1,0 +1,6 @@
+Reserved D7 21.27121686810138 RAM DQ 3
+D7 vias only [1, 2, 4, 6, 7]
+D7 traces only []
+D7 CPU-side launch only []
+D7 bottom section only [1, 2, 4, 6, 7]
+D7 RAM-side launch only []
