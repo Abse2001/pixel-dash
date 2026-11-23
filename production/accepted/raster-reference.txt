@@ -1,5 +1,5 @@
 Screened 18 routed raster signals.
-24 signal/layer reference-coverage findings
+23 signal/layer reference-coverage findings
 signal,signal_layer,reference_layer,uncovered_copper_mm2
 system_LCD_D0,bottom,inner2,0.2388520
 system_LCD_D0,bottom,inner2,0.2730015
@@ -15,7 +15,6 @@ system_LCD_D14,top,inner1,0.4211898
 system_LCD_D14,top,inner1,0.4231907
 system_LCD_D15,top,inner1,0.1086926
 system_LCD_D15,top,inner1,0.5121299
-system_LCD_D2,bottom,inner2,0.1186424
 system_LCD_D8,bottom,inner2,0.0885761
 system_LCD_D8,bottom,inner2,0.1126840
 system_LCD_D8,inner1,inner2,0.1107473
