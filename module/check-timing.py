@@ -52,6 +52,8 @@ def row(n,skew,lo,hi,mismatch=None,mm=None,ps=None):
     excess=max(0,lo-length,length-hi) if lo is not None else None
     err=max(0,abs(skew)-ps) if ps else None
     status="FAIL" if (excess or 0)>1e-6 or (mm and mismatch>mm+1e-6) or (err or 0)>1e-6 else "PASS"
+    if status == "FAIL":
+        raise ValueError(f"{n} exceeds a matching or project routing gate: length {length}, mismatch {mismatch}, skew {skew}")
     vals=(n,length,";".join(r["spans"]),r["barrel"],r["inner"],r["times"][1],skew,
           f"{lo:.4f}..{hi:.4f}" if lo is not None else "",excess,mismatch,mm,ps,err,status)
     out.writerow(round(v,5) if isinstance(v,float) else v for v in vals)

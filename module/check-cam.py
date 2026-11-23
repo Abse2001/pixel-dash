@@ -106,6 +106,7 @@ assert rail_pads["L_PMIC_DDR", "pin2"] == power_root
 dram_power = sorted(pin for (ref, pin), node in rail_pads.items() if ref == "U_DDR")
 reached = [pin for pin in dram_power if rail_pads["U_DDR", pin] == power_root]
 print(f"DCDC3 post-inductor L3 copper {region.area:.2f} mm², reaches {len(reached)}/{len(dram_power)} DRAM supply balls.")
+assert len(reached) == len(dram_power) == 18, ("DCDC3 supply continuity regression", reached)
 print("DRAM supply balls outside that copper island:", ", ".join(pin for pin in dram_power if pin not in reached) or "none")
 planes={}
 for l in ("In1.Cu","In4.Cu"):
