@@ -1,0 +1,2 @@
+0 unrelated copper pairs below 0.102 mm
+layer,copper_a,copper_b,copper_gap_mm
