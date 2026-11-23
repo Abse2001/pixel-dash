@@ -4,6 +4,8 @@
 
 The four-layer AM3354 handheld at a4a71e2 retains 50 distinct CPU-to-RAM signals. BA2 shortened from 29.7914 to 28.6872 mm inside its 28.550–31.090 mm project window. Modeled arrival relative to mean CK improved from +10.7705 to +4.4005 ps. All DDR vias and the other 49 routes are unchanged. D11 and D15 now have continuous exported raster reference, including the strap traces. Independent CAM passes the common DDR envelope and full-width DDR, MMC0 and raster checks. Data-byte timing, command receiver signoff, N5/P5 power, physical straps and whole-board release remain open. [Full PCB snapshot](https://github.com/Abse2001/pixel-dash/blob/a4a71e2/previews/handheld.png) · [Per-net timing](https://github.com/Abse2001/pixel-dash/blob/a4a71e2/checks/current-ddr-change.csv) · [Physical land report](https://github.com/Abse2001/pixel-dash/blob/a4a71e2/checks/current-raster-taps-cam.txt)
 
+The isolated D12/D1 trial retains all 50 distinct DDR pairs and passes copper, drilling and full-width reference checks. Both shortened signals still miss the TI and model matching targets. On the full board, A10/A14 also bound the N5/P5 escape. With D12/D1 entirely removed, neither supply pad has any exposed copper beyond the DDR margin. [Trial, timing targets and physical lands](https://github.com/Abse2001/pixel-dash/tree/12332c9/studies/d12-d1-breakout)
+
 The separate boot study connects all 21 DCDC4 lands and SYSBOOT12. Its N5 and P5 copper and the V2 strap escape fail the common keepout. Both power pads are wholly inside even the smaller envelope defined by the locked bytes and clock. [Boot study and CAM findings](https://github.com/Abse2001/pixel-dash/tree/8c27acf/studies/complete-boot-escape)
 
 
