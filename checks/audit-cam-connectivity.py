@@ -310,6 +310,11 @@ def panel_and_storage(terminals):
         print(f"{prefix[:-1]} CPU-to-connector copper {len(reached)}/{len(rows)}. Reached " +
               (", ".join(reached) or "none") + ". Open " + (", ".join(sorted(names - set(reached))) or "none") + ".")
         failed |= len(reached) != len(rows)
+    touch_irq = terminals["U1.V14"] == terminals["R_TOUCH_IRQ.pin1"]
+    touch_bias = terminals["U_PMIC.DCDC4"] == terminals["R_TOUCH_IRQ.pin2"]
+    print("Touch IRQ CPU-to-pull-up copper:", "PASS" if touch_irq else "OPEN")
+    print("Touch IRQ pull-up to DCDC4:", "PASS" if touch_bias else "OPEN")
+    failed |= not (touch_irq and touch_bias)
     panel_taps = []
     for bit in range(16):
         row, = [r for r in mapped if r["Signal"] == f"LCD_D{bit}"]
