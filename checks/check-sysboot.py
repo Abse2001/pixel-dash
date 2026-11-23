@@ -1,9 +1,14 @@
 """Decode SYSBOOT from the actual source ports, resistor pins, and rail nets."""
+import argparse
 import json
-import sys
 from pathlib import Path
 
-circuit = json.loads(Path(sys.argv[1]).read_text())
+parser = argparse.ArgumentParser(description=__doc__)
+parser.add_argument("board", type=Path)
+parser.add_argument("--control-status", type=lambda s: int(s, 0),
+                    help="Cold-latched AM3354 CONTROL_STATUS value read at 0x44E10040")
+args = parser.parse_args()
+circuit = json.loads(args.board.read_text())
 parts = {e["name"]:e for e in circuit if e["type"] == "source_component"}
 pins = {(e["source_component_id"],e["name"]):e for e in circuit if e["type"] == "source_port"}
 balls = json.loads((Path(__file__).resolve().parents[1]/"am3354/processor-balls.json").read_text())
@@ -35,3 +40,13 @@ for bit in range(16):
     seen.add(key)
 assert word == 0x4017, hex(word)
 print(f"16 distinct LCD/SYSBOOT signals decode to {word:#06x}: 24 MHz, MMC0 -> SPI0 -> UART0 -> USB0")
+
+if args.control_status is not None:
+    if not 0 <= args.control_status <= 0xffffffff:
+        parser.error("CONTROL_STATUS must be an unsigned 32-bit register value")
+    # TRM Table 9-14 places straps 15:8 in register bits 23:16.
+    latched = ((args.control_status >> 8) & 0xff00) | (args.control_status & 0xff)
+    changed = [bit for bit in range(16) if (latched ^ word) & (1 << bit)]
+    if changed:
+        raise SystemExit(f"Latched SYSBOOT {latched:#06x} differs at bits {changed}")
+    print(f"Latched SYSBOOT {latched:#06x} matches the fitted strap intent.")
