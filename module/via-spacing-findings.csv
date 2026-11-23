@@ -1,1 +1,3 @@
 via_x_mm,via_y_mm,via_net,trace_net,layer,clearance_mm,target_mm
+21.84,45.2,DDR_A7,CPU_DDR_VREF,F.Cu,0.1110578,0.1524
+21.84,45.2,DDR_A7,CPU_DDR_VREF,F.Cu,0.1201535,0.1524
