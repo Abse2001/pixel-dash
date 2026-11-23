@@ -32,10 +32,12 @@ R_SYSBOOT4 pin 2 now reaches the panel's LCD D4 contact. The number of panel dat
 
 R_SYSBOOT3 pin 2 now reaches the panel's LCD D3 contact. The number of panel data contacts connected to their strap sense nodes is 12/16. The CPU land for this bit is still on its own island. Seven strap levels reach the CPU and 35 mapped board nets remain split. All 45 DDR links, the timing CSV, powered lands, 71 local DDR returns, handheld ground, and sequenced MMC0 remain intact. Full-width raster and DDR references, class and copper spacing, and separate drill and via-edge checks pass. [Drilled endpoints](panel-tap-3-cam.txt) · [Physical gates](panel-tap-3-geometry.txt)
 
-![Full powered handheld outer copper, rendered from the front and back Gerbers](powered-panel-taps.png)
-
 On this powered orientation, the archived RTC paths from 25e6cfe were checked with the present pad locations and copper. B4 reaches the intended pin coordinates but the archived path has five layer/object clearance conflicts, including the backlight route. Both archived B5 and C5 paths intersect DDR_A8. All three also enter the common DDR clearance envelope. The archived SYSBOOT0 path has ten layer/object conflicts. Recomputing the SYSBOOT1 approach from U1.R2 at (−50.799988, 10.749958) to R_SYSBOOT1 pin 2 at (−32.750000, 6.432816) still leaves no allowed launch on the CPU land. The same bounded launch search failed at R1, R3, R4 and T1 with the DDR routing fixed. The verified panel contacts for bits 0–4 do not establish a boot strap until their CPU lands connect. Boot qualification and release remain open.
 
 ## Panel-side LCD D7 connection
 
 R_SYSBOOT7 pin 2 now reaches the panel's LCD D7 contact. The number of panel data contacts connected to their strap sense nodes is 13/16. The existing U1.T4 strap now also reaches the panel. Eight of 29 raster CPU-to-connector links close, seven strap levels reach the CPU, and 34 mapped board nets remain split. All 45 DDR links, the timing CSV, powered lands, 71 local DDR returns, handheld ground, and sequenced MMC0 remain intact. Full-width raster and DDR references, class and copper spacing, and separate drill and via-edge checks pass. [Drilled endpoints](panel-tap-7-cam.txt) · [Physical gates](panel-tap-7-geometry.txt)
+
+The initial D7 trial left 0.0098343 mm² of top-layer trace without a connected L2 reference. Rerouting its resistor-side launch around the void removed that finding. The final export checks 1,145 plated barrels.
+
+![Full powered handheld outer copper, rendered from the front and back Gerbers](powered-panel-taps.png)
