@@ -45,6 +45,9 @@ if args.control_status is not None:
     if latched != word:
         raise SystemExit(f"Cold-latched word 0x{latched:04x}. Mismatch mask 0x{latched ^ word:04x}")
     print(f"Supplied cold-latched register matches fitted word 0x{latched:04x}.")
+for switch, terminal in (("L4A","pin1"), ("L4B","pin2")):
+    assert connected("U_PMIC." + switch, "L_PMIC_IO." + terminal)
+print("DCDC4 both switch pins reach the separate inductor terminals.")
 checks = {
     "CPU switched rail to divider": ["U_DDR_SWITCH.VOUT1", "R_CPU_VREF_HIGH.pin2"],
     "CPU divider bottom return": ["R_CPU_VREF_LOW.pin2", "U_PMIC.EP"],

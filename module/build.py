@@ -123,6 +123,9 @@ for ref,(s,c) in parts.items():
     if ref == "C_CPU_VREF":
         dx += 0.085
         dy -= 0.145
+    if ref == "L_PMIC_IO":
+        dx += .95
+        dy -= .15
     if ref == "R_VREF_LOW":
         dx += 1.37
         dy -= 6.06
@@ -296,7 +299,7 @@ for edit in json.loads((here/"escape-edits.json").read_text()):
         board.Remove(track)
     for start,end in zip(edit["new"],edit["new"][1:]):
         add_segment(start,end,layer,net(edit["net"]),.102)
-for feed in json.loads((here/"reference-vias.json").read_text()):
+for feed in json.loads((here/"local-vias.json").read_text()):
     add_barrel([*feed["pos"], feed["drill"], feed["diam"]], net(feed["net"]))
 for branch in json.loads((here/"carrier-strap-routes.json").read_text()):
     signal = net(branch["net"])

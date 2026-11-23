@@ -250,7 +250,9 @@ x_mm,y_mm,net,hole_mm,land_mm,solder_land,face,nominal_bore_to_land_boundary_mm,
 24.174719,38.444586,VDDS_DDR_CPU,0.2,0.45,,,,off-pad
 24.197007,25.646861,GND_INTERNAL,0.2,0.45,,,,off-pad
 24.250058,31.100004,VDDS_DDR_CPU,0.15,0.3,,,,off-pad
+24.3,17.6,DCDC4_SW_A,0.2,0.45,L_PMIC_IO.pin1,B.Cu,0.20003,contained off-center
 24.327184,41.48,CPU_DDR_VREF,0.2,0.45,,,,off-pad
+24.8,15.5,DCDC4_SW_B,0.2,0.45,L_PMIC_IO.pin2,B.Cu,0.20003,contained off-center
 24.810049,42.789934,GND_INTERNAL,0.2,0.45,,,,off-pad
 24.835944,41.227798,GND_INTERNAL,0.2,0.45,,,,off-pad
 24.883343,40.64383,GND_INTERNAL,0.2,0.45,,,,off-pad
