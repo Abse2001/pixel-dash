@@ -16,7 +16,9 @@ At the current package coordinates, an in-memory comparison changes the 41 throu
 
 The reference copper now fills the obsolete antipads of the two removed VREFCA bypass vias. Relative to the accepted MMC0 board the L2 ground plane regains 0.66515 mm² and L3 DDR supply regains 0.66893 mm². Full-width checks on the 36 routed DDR signals and seven MMC0 signals remain clean. The conservative whole DDR envelope still has 57 findings. Outside nominal via antipads, L2 ground coverage misses 2.81516 mm² and L3 DDR supply coverage misses 84.78102 mm². Existing inner traces and the neighboring ground pour account for most of the residual. The 25 raster signal/layer reference findings reproduce. [Whole-envelope CAM](production/accepted/ddr-envelope.txt)
 
-The independent A7/A10 trial connects both nets within their placement window while A14 is open. The default board retains A7 and A14. [Trial board, timing and drilled endpoints](https://github.com/Abse2001/pixel-dash/tree/5030900/studies/accepted-a10-corridor/a7-restored)
+The independent 37-link study retains every accepted signal connection and adds A10. A7, A10 and A14 fit the nominal command length window together. A6 reaches both balls but exceeds its ceiling by 11.45448 mm, so the accepted build retains the shorter A6. The drilled study has 13 DDR opens and both bytes pass unchanged. [Study PCB, clock-relative timing and drilled endpoints](https://github.com/Abse2001/pixel-dash/tree/8df6773/studies/accepted-a10-corridor/37-links)
+
+To verify an intermediate export, pass its native circuit, its Gerber/Excellon ZIP and the independently expected open control names to `python checks/audit-cam-connectivity.py BOARD ZIP --ddr-checkpoint OPEN_CONTROL ...`. This checks exactly which physical DDR pairs connect, rejects aliases and shorts, requires all data, masks, strobes and clocks, and verifies DDR power lands and MMC0. The normal whole-board invocation still requires all 50 DDR pairs. Run the separate timing and reference checks on the same circuit and export.
 
 ## Separate powered routing studies
 

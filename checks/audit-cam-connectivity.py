@@ -336,7 +336,12 @@ def main():
     parser.add_argument("--mmc0-only", action="store_true",
                         help="return the drilled MMC0 result independently of other open nets")
     parser.add_argument("--ddr-power-only", action="store_true", help="check DDR supplies, bypasses and N5/P5 on drilled copper")
+    parser.add_argument("--ddr-checkpoint", nargs="+", metavar="OPEN_CONTROL",
+                        help="verify the exact set of open address/control links on a routing study, DDR power and MMC0")
     args = parser.parse_args()
+    if args.ddr_checkpoint and any((args.ddr_power_only, args.mmc0_only, args.mmc0_power, args.pmic_controls,
+                                    args.handheld_ground, args.cpu_power, args.sysboot, args.panel_storage)):
+        parser.error("--ddr-checkpoint runs independently of whole-handheld signoff")
     if args.ddr_power_only and any((args.mmc0_only, args.mmc0_power, args.pmic_controls, args.handheld_ground, args.cpu_power, args.sysboot, args.panel_storage)):
         parser.error("--ddr-power-only requires a separate invocation")
     if args.mmc0_only and any((args.pmic_controls, args.handheld_ground, args.cpu_power, args.sysboot, args.panel_storage)):
@@ -428,15 +433,41 @@ def main():
         return mmc0_power(terminals)
     ports = {e["source_port_id"]: e["pcb_port_id"] for e in board if e["type"] == "pcb_port" and e.get("source_port_id")}
     ddr_nodes = set()
+    open_links = set()
+    names = set()
     for trace in board:
-        if trace["type"] == "source_trace" and (trace.get("name") or "").startswith("DDR_"):
-            a, z = (by_pad[ports[pid]] for pid in trace["connected_source_port_ids"])
-            if a != z or a in ddr_nodes:
-                raise ValueError(f"Exported copper opens or aliases {trace['name']}")
+        if trace["type"] != "source_trace" or not (trace.get("name") or "").startswith("DDR_"):
+            continue
+        name = trace["name"]
+        if name in names:
+            raise ValueError(f"Duplicate source assignment for {name}")
+        names.add(name)
+        a, z = (by_pad[ports[pid]] for pid in trace["connected_source_port_ids"])
+        if a != z:
+            open_links.add(name)
+        elif a in ddr_nodes:
+            raise ValueError(f"Exported copper aliases {name}")
+        else:
             ddr_nodes.add(a)
-    if len(ddr_nodes) != 50:
-        raise ValueError(f"Expected 50 physically distinct DDR links, found {len(ddr_nodes)}")
-    print(f"50 distinct DDR ball pairs connected. {len(plating)} plated barrels checked. No shorts between mapped land nets.")
+    if len(names) != 50:
+        raise ValueError(f"Expected 50 distinct DDR source assignments, found {len(names)}")
+    print(f"{len(ddr_nodes)} distinct DDR ball pairs connected. {len(plating)} plated barrels checked. No shorts between mapped land nets.")
+    if open_links:
+        print("Physically open DDR links: " + ", ".join(sorted(open_links)))
+    if args.ddr_checkpoint:
+        protected = {f"DDR_D{i}" for i in range(16)} | {"DDR_CK", "DDR_CKn"} | {
+            f"DDR_{kind}{i}" for i in (0, 1) for kind in ("DQS", "DQSn", "DQM")
+        }
+        expected = set(args.ddr_checkpoint)
+        if len(expected) != len(args.ddr_checkpoint) or expected & protected or expected - names:
+            raise ValueError("Checkpoint opens must be distinct, assigned command/address/control signals")
+        if open_links != expected:
+            raise ValueError(f"Physical DDR opens differ from the checkpoint: {sorted(open_links ^ expected)}")
+        power_failed = ddr_power_lands(terminals)
+        card_failed = mmc0_power(terminals)
+        return power_failed or card_failed
+    if open_links:
+        raise ValueError("Whole-board check requires all 50 DDR links")
     if "TP_UART_RX.pin1" in terminals:
         probes = (("U1.E15", "TP_UART_RX.pin1"), ("U1.E16", "TP_UART_TX.pin1"), ("TP_UART_GND.pin1", "C_DDR25.pin2"))
         networks = {terminals[a] for a, _ in probes}
