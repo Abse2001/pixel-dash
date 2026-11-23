@@ -120,6 +120,9 @@ for ref,(s,c) in parts.items():
     if ref == "C_CPU_VREF":
         dx += 0.085
         dy -= 0.145
+    if ref == "R_VREF_LOW":
+        dx += 1.37
+        dy -= 6.06
     if ref == "C_DDR34":
         # Reserve R7 and R8 for address escapes. Give the bulk capacitor dedicated feed vias.
         dx += 2.70

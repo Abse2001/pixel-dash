@@ -58,6 +58,8 @@ checks = {
 }
 for name, pins in checks.items():
     print(name, connected(*pins))
+assert connected(*checks["DRAM divider bottom return"])
+assert connected("R_VREF_LOW.pin1", "C_VREF_DQ.pin1")
 assert connected(*checks["CPU midpoint to bypass and J4"])
 assert connected("C_CPU_VREF.pin2", "U_PMIC.EP")
 print("CPU J4 local reference bypass and return: connected")
