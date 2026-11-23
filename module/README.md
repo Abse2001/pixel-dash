@@ -18,6 +18,8 @@ TI SPRS717L §7.7.2.3.3.5 calls for VDDS_DDR plane coverage across the DDR regio
 
 Whole-module release requires the remaining DDR, rail, boot and carrier routes, receiver setup/hold and impedance at operating corners, PMIC sequencing and bypass, ground return and thermal/connector fit, and all final assembly and manufacturing checks on the same export. Engineering films used by the checker are scratch output. A quotation ZIP is reserved for the completed layout.
 
+[Module cold-reset, carrier-loading and separate receiver-reference checks](reset-and-reference.md) · [Exact board results](reset-vref.txt)
+
 ### Reproduction
 
 Run verify-export.sh to reproduce the checkpoint checks on the saved PCB with KiCad 9, Shapely 2 and Gerbonara installed. The script reports open items and compares measured results to the saved checkpoint. It also writes a per-net list of physical pad islands.

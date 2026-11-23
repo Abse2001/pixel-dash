@@ -1,0 +1,28 @@
+bit  target  CPU ball  contact  pull-to-CPU  CPU-to-carrier  pull-to-source
+0 1 U1.R1 30 False False True
+1 1 U1.R2 31 False False True
+2 1 U1.R3 32 False False True
+3 0 U1.R4 33 False False True
+4 1 U1.T1 34 False False True
+5 0 U1.T2 35 False False True
+6 0 U1.T3 36 False False True
+7 0 U1.T4 37 False False True
+8 0 U1.U1 38 False False True
+9 0 U1.U2 39 False False True
+10 0 U1.U3 40 False False True
+11 0 U1.U4 41 False False True
+12 0 U1.V2 42 False False True
+13 0 U1.V3 43 False False True
+14 1 U1.V4 44 False False True
+15 0 U1.T5 45 False False True
+Fitted word 0x4017. VDDSHV6 N5/P5 to DCDC4: False False
+PGOOD to PWRONRSTn: False
+CPU switched rail to divider False
+CPU divider bottom return True
+CPU midpoint to bypass and J4 False
+CPU reference bypass return True
+DRAM direct DCDC3 to divider True
+DRAM divider bottom return False
+DRAM divider to DQ bypass, H1 and CA feed False
+DRAM CA feed to bypass and M8 False
+DRAM DQ/CA bypass returns True
