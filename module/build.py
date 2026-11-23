@@ -213,8 +213,11 @@ def add_barrel(v,n):
     t=k.PCB_VIA(board);t.SetPosition(at(v));t.SetFrontWidth(mm(v[3]));t.SetDrill(mm(v[2]));t.SetNet(n);board.Add(t)
 for path in json.loads((here/"command-routes.json").read_text()):
     n=net(path["net"])
-    for endpoint,v in zip(path["ends"],path["vias"]):
-        add_segment(endpoint,v,k.F_Cu,n,.102);add_barrel(v,n)
+    leads = path.get("leads") or [[endpoint, via[:2]] for endpoint, via in zip(path["ends"], path["vias"])]
+    for lead, via in zip(leads, path["vias"]):
+        for start, end in zip(lead, lead[1:]):
+            add_segment(start, end, k.F_Cu, n, .102)
+        add_barrel(via, n)
     for a,b in zip(path["path"],path["path"][1:]):
         add_segment(a,b,{"In2.Cu":k.In2_Cu,"In3.Cu":k.In3_Cu}[path["inner"]],n,.102)
     routed.append(path["net"])

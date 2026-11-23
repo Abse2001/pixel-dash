@@ -1,4 +1,4 @@
-34/50 independent drilled DDR pairs. Open: DDR_A0, DDR_A1, DDR_A10, DDR_A11, DDR_A13, DDR_A2, DDR_A3, DDR_A4, DDR_A6, DDR_A7, DDR_CASn, DDR_CKE, DDR_CSn0, DDR_ODT, DDR_RESETn, DDR_WEn
-203 plated through drills. No shorts between mapped lands or vias.
-Drill diameters: {0.2: 154, 0.15: 49}
+35/50 independent drilled DDR pairs. Open: DDR_A0, DDR_A1, DDR_A10, DDR_A11, DDR_A13, DDR_A2, DDR_A3, DDR_A4, DDR_A6, DDR_A7, DDR_CASn, DDR_CKE, DDR_CSn0, DDR_ODT, DDR_RESETn
+205 plated through drills. No shorts between mapped lands or vias.
+Drill diameters: {0.2: 156, 0.15: 49}
 Full-width ground reference losses outside own launches (mm²): {}
