@@ -17,7 +17,7 @@ bit  target  CPU ball  contact  pull-to-CPU  CPU-to-carrier  pull-to-source
 15 0 U1.T5 45 False False True
 Fitted word 0x4017. VDDSHV6 N5/P5 to DCDC4: False False
 PGOOD to PWRONRSTn: False
-CPU switched rail to divider False
+CPU switched rail to divider True
 CPU divider bottom return True
 CPU midpoint to bypass and J4 False
 CPU reference bypass return True

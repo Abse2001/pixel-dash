@@ -272,15 +272,17 @@ for path in json.loads((here/"ground-escapes.json").read_text()):
 for link in json.loads((here/"local-links.json").read_text()):
     for a,b in zip(link["points"],link["points"][1:]):
         add_segment(a,b,{"F.Cu":k.F_Cu,"B.Cu":k.B_Cu,"In3.Cu":k.In3_Cu}[link["layer"]],net(link["net"]),link["width"])
-for feed in json.loads((here/"ddr-plane-feeds.json").read_text()):
-    rail = net("VDDS_DDR")
-    layer = k.F_Cu if feed["layer"] == "F.Cu" else k.B_Cu
-    points = feed.get("points", [feed["start"], feed["end"]])
-    for start, end in zip(points, points[1:]):
-        add_segment(start, end, layer, rail, feed.get("width", .32))
-    add_barrel([*feed["end"], feed.get("drill", .20), feed.get("diam", .45)], rail)
+for name, file in (("VDDS_DDR","ddr-plane-feeds.json"), ("VDDS_DDR_CPU","cpu-ddr-plane-feeds.json")):
+    rail = net(name)
+    for feed in json.loads((here/file).read_text()):
+        layer = k.F_Cu if feed["layer"] == "F.Cu" else k.B_Cu
+        points = feed.get("points", [feed["start"], feed["end"]])
+        for start, end in zip(points, points[1:]):
+            add_segment(start, end, layer, rail, feed.get("width", .32))
+        add_barrel([*feed["end"], feed.get("drill", .20), feed.get("diam", .45)], rail)
 # A wide trunk carries the post-inductor DCDC3 output to the DDR area.
 zone(k.In2_Cu, "VDDS_DDR", [(6,3),(22,3),(22,18),(36.6,18),(36.6,45.6),(.4,45.6),(.4,18),(6,18)])
+zone(k.In3_Cu, "VDDS_DDR_CPU", [(13,3.5),(19,3.5),(26.0,20.8),(36.5,20.8),(36.5,45.6),(19.5,45.6),(19.5,22.2),(13,9)])
 for layer in (k.In1_Cu,k.In4_Cu):zone(layer)
 
 board_path=here/"pixel-dash-module.kicad_pcb"
