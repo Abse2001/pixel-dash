@@ -1,0 +1,7 @@
+### A0 with BA1 installed
+
+A separate circuit snapshot routes the previously open A0 to a length of 36.87396 mm. The placement window is 36.14999–38.68999 mm, leaving 0.72397 mm above its lower bound. Both holes are plated through all four layers. The signal contacts L1–L3 in both directions, totaling 2.7634 mm of traversed barrel and leaving two 0.1015 mm L3–L4 stubs on the JLC04161H-1080 foil-center model. Estimated flight is 262.683 ps and signed skew to CK is +20.686 ps. The delay model includes traversed barrel and omits the electromagnetic response of the residual stubs. Receiver setup and hold remain open.
+
+BA1 stays connected at 48.49726 mm, 9.80727 mm above its project ceiling. A7 is open. Exact CAM counts 37/50 distinct DDR links, the same total as the parent board. The 22 byte routes, clocks and 48 associated transitions match the guard. Full-width DDR and MMC0, power connectivity, 0.102 mm copper, 0.1524 mm unrelated via-edge and drill spacing checks pass. This snapshot is a reversible corridor study only.
+
+Reusing both A7 via launches produced no path across the nine tested inner and bottom entry/exit layer pairs on the 0.035 mm planning grid. In the separate three-net A2/A7/BA1 search, clearing old reference cutouts enabled installation of two nets, but every ordering blocked the third. These bounded searches leave other breakouts possible. [Board and timing](command-timing.csv) · [Drilled export](drilled-cam.txt) · [Reference coverage](reference.txt) · [A7 launch tests](a7-launch-search.txt) · [Three-net search](a2-a7-ba1-search.txt)

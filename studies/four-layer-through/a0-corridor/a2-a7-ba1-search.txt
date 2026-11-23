@@ -1,0 +1,24 @@
+order ('DDR_A2', 'DDR_A7', 'DDR_BA1')
+DDR_A2 candidate 27.52348 [0, 2, 0]
+DDR_A7 candidate 46.34858 [0, 3, 2, 0]
+DDR_BA1 blocked
+order ('DDR_A2', 'DDR_BA1', 'DDR_A7')
+DDR_A2 candidate 27.52348 [0, 2, 0]
+DDR_BA1 candidate 47.63288 [0, 3, 2, 0]
+DDR_A7 blocked
+order ('DDR_A7', 'DDR_A2', 'DDR_BA1')
+DDR_A7 candidate 29.16329 [0, 2, 0]
+DDR_A2 candidate 44.60745 [0, 3, 2, 0]
+DDR_BA1 blocked
+order ('DDR_A7', 'DDR_BA1', 'DDR_A2')
+DDR_A7 candidate 29.16329 [0, 2, 0]
+DDR_BA1 candidate 47.63288 [0, 3, 2, 0]
+DDR_A2 blocked
+order ('DDR_BA1', 'DDR_A2', 'DDR_A7')
+DDR_BA1 candidate 25.36417 [0, 2, 0]
+DDR_A2 candidate 44.6148 [0, 3, 2, 0]
+DDR_A7 blocked
+order ('DDR_BA1', 'DDR_A7', 'DDR_A2')
+DDR_BA1 candidate 25.36417 [0, 2, 0]
+DDR_A7 candidate 46.34858 [0, 3, 2, 0]
+DDR_A2 blocked
