@@ -1,0 +1,50 @@
+signal,command_slew_V_per_ns,differential_clock_slew_V_per_ns,estimated_CA_minus_CK_ps,receiver_setup_min_ps,receiver_hold_min_ps,source_setup_required_ps,source_hold_required_ps,receiver_tVAC_min_ps,margin_status
+DDR_A0,,,,,,,,,open connection
+DDR_A1,,,,,,,,,open connection
+DDR_A10,,,,,,,,,open connection
+DDR_A11,1.0,2.0,0.933,365,285,365.933,284.067,145,source and waveform unverified
+DDR_A11,1.0,1.0,0.933,405,335,405.933,334.067,145,source and waveform unverified
+DDR_A11,2.0,1.0,0.933,473,380,473.933,379.067,213,source and waveform unverified
+DDR_A12,,,,,,,,,open connection
+DDR_A13,,,,,,,,,open connection
+DDR_A14,,,,,,,,,open connection
+DDR_A15,1.0,2.0,20.327,365,285,385.327,264.673,145,source and waveform unverified
+DDR_A15,1.0,1.0,20.327,405,335,425.327,314.673,145,source and waveform unverified
+DDR_A15,2.0,1.0,20.327,473,380,493.327,359.673,213,source and waveform unverified
+DDR_A2,,,,,,,,,open connection
+DDR_A3,,,,,,,,,open connection
+DDR_A4,,,,,,,,,open connection
+DDR_A5,1.0,2.0,-1.187,365,285,363.813,286.187,145,source and waveform unverified
+DDR_A5,1.0,1.0,-1.187,405,335,403.813,336.187,145,source and waveform unverified
+DDR_A5,2.0,1.0,-1.187,473,380,471.813,381.187,213,source and waveform unverified
+DDR_A6,1.0,2.0,38.227,365,285,403.227,246.773,145,source and waveform unverified
+DDR_A6,1.0,1.0,38.227,405,335,443.227,296.773,145,source and waveform unverified
+DDR_A6,2.0,1.0,38.227,473,380,511.227,341.773,213,source and waveform unverified
+DDR_A7,1.0,2.0,29.774,365,285,394.774,255.226,145,source and waveform unverified
+DDR_A7,1.0,1.0,29.774,405,335,434.774,305.226,145,source and waveform unverified
+DDR_A7,2.0,1.0,29.774,473,380,502.774,350.226,213,source and waveform unverified
+DDR_A8,1.0,2.0,-0.107,365,285,364.893,285.107,145,source and waveform unverified
+DDR_A8,1.0,1.0,-0.107,405,335,404.893,335.107,145,source and waveform unverified
+DDR_A8,2.0,1.0,-0.107,473,380,472.893,380.107,213,source and waveform unverified
+DDR_A9,1.0,2.0,11.057,365,285,376.057,273.943,145,source and waveform unverified
+DDR_A9,1.0,1.0,11.057,405,335,416.057,323.943,145,source and waveform unverified
+DDR_A9,2.0,1.0,11.057,473,380,484.057,368.943,213,source and waveform unverified
+DDR_BA0,1.0,2.0,-27.247,365,285,337.753,312.247,145,source and waveform unverified
+DDR_BA0,1.0,1.0,-27.247,405,335,377.753,362.247,145,source and waveform unverified
+DDR_BA0,2.0,1.0,-27.247,473,380,445.753,407.247,213,source and waveform unverified
+DDR_BA1,1.0,2.0,71.911,365,285,436.911,213.089,145,source and waveform unverified
+DDR_BA1,1.0,1.0,71.911,405,335,476.911,263.089,145,source and waveform unverified
+DDR_BA1,2.0,1.0,71.911,473,380,544.911,308.089,213,source and waveform unverified
+DDR_BA2,1.0,2.0,-13.551,365,285,351.449,298.551,145,source and waveform unverified
+DDR_BA2,1.0,1.0,-13.551,405,335,391.449,348.551,145,source and waveform unverified
+DDR_BA2,2.0,1.0,-13.551,473,380,459.449,393.551,213,source and waveform unverified
+DDR_CASn,,,,,,,,,open connection
+DDR_CKE,1.0,2.0,-21.64,365,285,343.36,306.64,145,source and waveform unverified
+DDR_CKE,1.0,1.0,-21.64,405,335,383.36,356.64,145,source and waveform unverified
+DDR_CKE,2.0,1.0,-21.64,473,380,451.36,401.64,213,source and waveform unverified
+DDR_CSn0,,,,,,,,,open connection
+DDR_ODT,,,,,,,,,open connection
+DDR_RASn,,,,,,,,,open connection
+DDR_WEn,1.0,2.0,33.308,365,285,398.308,251.692,145,source and waveform unverified
+DDR_WEn,1.0,1.0,33.308,405,335,438.308,301.692,145,source and waveform unverified
+DDR_WEn,2.0,1.0,33.308,473,380,506.308,346.692,213,source and waveform unverified

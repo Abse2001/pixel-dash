@@ -1,0 +1,50 @@
+22 byte routes, both clocks and 48 plated transitions match e4c906f.
+0 unrelated copper pairs below 0.102 mm
+layer,copper_a,copper_b,copper_gap_mm
+0 via/layer/unrelated-net pairs below 0.1524 mm
+via,layer,unrelated_net,edge_gap_mm,via_x_mm,via_y_mm,trace
+0 via drill-spacing findings
+via_a,via_b,drill_edge_gap_mm,required_mm
+Study reference coverage screened 36 routed DDR signals. Open signals: DDR_A0, DDR_A1, DDR_A10, DDR_A12, DDR_A13, DDR_A14, DDR_A2, DDR_A3, DDR_A4, DDR_CASn, DDR_CSn0, DDR_ODT, DDR_RASn, DDR_RESETn.
+0 signal/layer reference-coverage findings
+signal,signal_layer,reference_layer,uncovered_copper_mm2
+0 signal/layer reference-coverage findings
+signal,signal_layer,reference_layer,uncovered_copper_mm2
+Longest cumulative below-nominal run is 23.162 mm on DDR_CKn; TI allowance 31.750 mm.
+signal,below_nominal_mm,below_1w_mm
+DDR_A11,6.6348,0.0000
+DDR_A15,7.7228,0.0000
+DDR_A5,14.7945,0.0000
+DDR_A6,0.1703,0.0000
+DDR_A7,0.0000,0.0000
+DDR_A8,1.0391,0.0000
+DDR_A9,13.8311,0.0000
+DDR_BA0,4.8888,0.0000
+DDR_BA1,22.8593,0.0000
+DDR_BA2,9.4024,0.0000
+DDR_CK,6.2244,0.0000
+DDR_CKE,12.4424,0.0000
+DDR_CKn,23.1618,0.0000
+DDR_D0,5.4500,0.0000
+DDR_D1,4.0513,0.0000
+DDR_D10,1.8509,0.0000
+DDR_D11,1.7633,0.0000
+DDR_D12,3.9540,0.0000
+DDR_D13,5.3959,0.0000
+DDR_D14,7.9760,0.0000
+DDR_D15,0.7795,0.0000
+DDR_D2,0.3523,0.0000
+DDR_D3,2.5559,0.0000
+DDR_D4,0.6164,0.0000
+DDR_D5,1.3837,0.0000
+DDR_D6,2.1396,0.0000
+DDR_D7,2.3572,0.0000
+DDR_D8,8.9881,0.0000
+DDR_D9,1.5503,0.0000
+DDR_DQM0,1.4363,0.0000
+DDR_DQM1,2.4443,0.0000
+DDR_DQS0,1.0720,0.0000
+DDR_DQS1,3.4848,0.0000
+DDR_DQSn0,2.6826,0.0000
+DDR_DQSn1,6.6565,0.0000
+DDR_WEn,18.5103,0.0000
