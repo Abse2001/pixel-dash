@@ -132,6 +132,10 @@ for ref,(s,c) in parts.items():
     if ref == "C_CPU_VREF":
         dx += 0.085
         dy -= 0.145
+    if ref == "R_PMIC_POR":
+        # Put the reset pull on the existing sequenced IO feed outside the DDR region.
+        dx += 4.5543119
+        dy += 4.8198588
     if ref == "L_PMIC_IO":
         dx += .95
         dy -= .15
