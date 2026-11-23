@@ -1,6 +1,12 @@
 # Pixel Dash
 
-## Current powered handheld
+## Accepted populated handheld
+
+The default build restores the populated AM3354 board from `b5356e7`. Both DDR3L bytes pass all eleven board-routing screens per lane, including the masks and both strobe conductors. The clock pair is preserved. Drilled CAM connects 36 of 50 DDR links. Fourteen address, command or control links and full receiver setup and hold remain open. Fabrication remains on hold. [Full PCB](previews/accepted-handheld.png) · [Editable routing source and reconstruction](https://github.com/Abse2001/pixel-dash/tree/b5356e7/studies/j4-vref)
+
+Run `bun run build` to materialize the exact qualified circuit at `dist/index.circuit.json`. To screen a reroute, run `bun run check:bytes path/to/candidate.circuit.json` with Python 3 and Shapely 2 installed. Both complete lanes must pass on the same populated candidate. Rerun drilled endpoint and short checks, full-width references, copper and via-edge clearance, drill spacing and supply connectivity on its own export before updating the pinned board. Placement ceilings and modeled flight are project screens. Hardware timing signoff remains open.
+
+## Separate powered routing studies
 
 Powered checkpoint `7ac53c5` connects LCD data-enable from U1.R6 to J_LCD pin 9 with a continuous full-width reference. Drilled CAM verifies 12/29 CPU-to-panel signals, 16/16 panel-side strap taps, seven CPU strap states and 45/50 DDR links. Twenty-eight mapped board nets remain split. DE's nominal flight is 0.7635 ns later than PCLK. Panel receiver timing remains open. All 71 local DDR returns, sequenced MMC0, the DDR timing CSV, copper, via-edge and drill checks retain their prior results. [Full PCB](https://github.com/Abse2001/pixel-dash/blob/7ac53c5/studies/powered-cpu-io/powered-panel-taps.png) · [Drilled CAM](https://github.com/Abse2001/pixel-dash/blob/7ac53c5/studies/powered-cpu-io/panel-DE-cam.txt) · [Raster flight](https://github.com/Abse2001/pixel-dash/blob/7ac53c5/studies/powered-cpu-io/panel-clock-flight.csv)
 
@@ -8,7 +14,7 @@ West trial `a466259` restores D0 alongside D5, D7, DQM0 and both shortened strob
 
 The four-route west trial preserves the 20.600104 mm cap with both byte lanes installed. Local D12/D14 changes reduced the 0.102 mm copper findings from 25 to 24, the 6 mil via-edge findings from nine to eight and the full-width return findings from seven to six. Drilled CAM still finds shorts on the trial. The separate clean CKE study shortens CKE from 34.9054 to 34.8683 mm with 40 distinct links and all 71 local returns. Its 32.690 mm upper target and receiver timing remain open. [Four-route mapping, full circuit and physical findings](https://github.com/Abse2001/pixel-dash/tree/dd87640/studies/powered-ddr3l-offset/short-strobe/four-route-recheck) · [CKE timing and drilled CAM](https://github.com/Abse2001/pixel-dash/tree/4dfb0ab/studies/powered-ddr3l-offset/short-strobe/cke)
 
-## Fully connected DDR candidate
+## Separate 50-link routing study
 
 The complete candidate at 4b3d1c5 connects the handheld IRQ pull-up, keeps the 50 DDR routes and their vias identical to a4a71e2 and reduces the whole-board split-net count from 35 to 34. Drilled CAM explicitly verifies J3/VTP, RAM ZQ, the CPU and RAM VREF networks, divider rails, local bypass returns and their mutual isolation. [Complete candidate and physical land groups](https://github.com/Abse2001/pixel-dash/blob/4b3d1c5/checks/current-touch-irq-cam.txt)
 
@@ -279,7 +285,7 @@ All 16 SYSBOOT resistors now have routed bias-side pads. Bits 0, 1, 2, 4 and 14 
 
 The AM3354 warm-reset ball A10 now reaches TPS65218D0 GPIO3. The PMIC interrupt reaches its pull-up, and the new PGOOD pull-up shares its I/O-side copper. Two DDR bypass bodies moved 0.35 mm while their plated returns stayed in place. The L3 outline leaves room for the CPU reset escapes. The current audit checks both supply domains independently and verifies the bypass returns to L2. The exported copper now connects cold-reset PGOOD to B15. Backup reset and regulator input and load distribution still require copper. [TI TPS65218D0 power guide, Figure 7 and Section 12](https://www.ti.com/lit/ug/slvuaa9b/slvuaa9b.pdf)
 
-[Current PCB snapshot, top and bottom copper](previews/handheld.png) · [Current DDR timing measurements](checks/current-timing.txt)
+[Historical PCB snapshot, top and bottom copper](previews/handheld.png) · [Historical DDR timing measurements](checks/current-timing.txt)
 
 I²C0 now reaches the PMIC, joystick ADC and both pull-ups from the processor. The clock escape uses a local recess in the L3 DDR island, and the audio PWM trace still reaches its input resistor. Run `python checks/audit-vref.py dist/index.circuit.json --control-bus` to verify the two bus nodes. Both pull-ups still depend on completion of the sequenced I/O supply.
 
@@ -302,9 +308,9 @@ The first production checkpoint removes 91 old processor and support designators
 
 `python production/build_retained.py /tmp/retained.circuit.json` materializes the retained copper. Run `python checks/audit-via-clearance.py /tmp/retained.circuit.json` with Shapely 2.
 
-## Integrated engineering build
+## Earlier integrated engineering build
 
-Install Bun and Python with Shapely 2. Run `bun install --frozen-lockfile` and `bun run build`. The production design entry is `dist/index.circuit.json`. The build renders the editable processor/memory circuit and combines it with the retained handheld. It keeps the LiPo enclosure, board notch and three NTC cutouts. Legacy ground pours require regeneration with finished system routing. The initial imported L2 ground was limited to the DDR region.
+Install Bun and Python with Shapely 2. Run `bun install --frozen-lockfile` and `bun run build:wide-study` for the earlier study at `dist/wide-study.circuit.json`. This build renders the editable processor/memory circuit and combines it with the retained handheld. It keeps the LiPo enclosure, board notch and three NTC cutouts. Legacy ground pours require regeneration with finished system routing. The initial imported L2 ground was limited to the DDR region.
 
 The original integrated checkpoint has 46 source-level links for the panel, controls, MMC0, USB0, PWM audio and backlight. Their PCB copper is outstanding. The ILI9488 selects 16-bit DBI Type B on IM2:0 = 010. Firmware must select this mode before panel reset release. LCDC LIDD uses the 16 data pins, PCLK for RD, HSYNC for WR and VSYNC for D/C. Panel CS is strapped low. The SYSBOOT resistor network, read-strobe pull-up and the behavior of the panel during strap sampling still require integration. [ILI9488 Table 1](https://www.displayfuture.com/Display/datasheet/controller/ILI9488.pdf) · [TI AM335x TRM, Table 13-6 and Chapter 26](https://www.ti.com/lit/ug/spruh73q/spruh73q.pdf)
 

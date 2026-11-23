@@ -4,7 +4,9 @@
   "private": true,
   "main": "dist/index.circuit.json",
   "scripts": {
-    "build": "bun production/render-channel.tsx && python production/assemble.py dist/channel.circuit.json dist/index.circuit.json"
+    "build": "python3 production/accepted/build.py",
+    "build:wide-study": "bun production/render-channel.tsx && python production/assemble.py dist/channel.circuit.json dist/wide-study.circuit.json",
+    "check:bytes": "PYTHONPATH=checks python3 studies/data-bytes/check-lanes.py dist/index.circuit.json"
   },
   "dependencies": {
     "@tscircuit/copper-pour-solver": "0.0.74",

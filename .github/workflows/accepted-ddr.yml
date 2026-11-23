@@ -1,0 +1,20 @@
+name: Accepted handheld DDR bytes
+on:
+  push:
+    branches: [pixel-dash-wide]
+  pull_request:
+    branches: [pixel-dash-wide]
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install shapely==2.1.2
+      - run: python production/accepted/build.py
+      - name: Check every data, mask and strobe conductor on both bytes
+        env:
+          PYTHONPATH: checks
+        run: python studies/data-bytes/check-lanes.py dist/index.circuit.json dist/index.circuit.json
