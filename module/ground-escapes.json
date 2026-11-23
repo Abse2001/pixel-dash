@@ -2013,5 +2013,22 @@
     ],
     "layer": "B.Cu",
     "fill": true
+  },
+  {
+    "ref": "U_DDR",
+    "pin": "B9",
+    "start": [
+      11.199891,
+      31.250112
+    ],
+    "end": [
+      12.099891,
+      31.250112
+    ],
+    "layer": "F.Cu",
+    "drill": 0.15,
+    "diam": 0.3,
+    "width": 0.102,
+    "fill": false
   }
 ]

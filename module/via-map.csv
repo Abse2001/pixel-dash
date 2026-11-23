@@ -130,6 +130,7 @@ x_mm,y_mm,net,hole_mm,land_mm,solder_land,face,nominal_bore_to_land_boundary_mm,
 12.024999,6.924999,DDR_SWITCH_ENABLE,0.15,0.3,,,,off-pad
 12.024999,14.124999,VDDS_RTC_1V8,0.15,0.3,,,,off-pad
 12.050137,10.750067,VDDS_DDR,0.2,0.45,,,,off-pad
+12.099891,31.250112,GND_INTERNAL,0.15,0.3,,,,off-pad
 12.12,25.44,DDR_CSn0,0.15,0.3,,,,off-pad
 12.249999,42.599999,DDR_VREF_CA,0.15,0.3,,,,off-pad
 12.278754,35.464703,GND_INTERNAL,0.2,0.45,,,,off-pad
