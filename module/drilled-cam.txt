@@ -1,6 +1,7 @@
-40/50 independent drilled DDR pairs. Open: DDR_A1, DDR_A11, DDR_A13, DDR_A3, DDR_A4, DDR_A6, DDR_CKE, DDR_CSn0, DDR_ODT, DDR_RESETn
-253 plated through drills. No shorts between mapped lands or vias.
-Drill diameters: {0.2: 188, 0.15: 65}
-DCDC3 post-inductor L3 copper 949.63 mm², reaches 18/18 DRAM supply balls.
+41/50 independent drilled DDR pairs. Open: DDR_A1, DDR_A11, DDR_A13, DDR_A3, DDR_A4, DDR_CKE, DDR_CSn0, DDR_ODT, DDR_RESETn
+260 plated through drills. No shorts between mapped lands or vias.
+Drill diameters: {0.2: 194, 0.15: 66}
+DCDC3 post-inductor L3 copper 858.53 mm², reaches 18/18 DRAM supply balls.
 DRAM supply balls outside that copper island: none
+Switched DDR output reaches 0/7 CPU DDR balls. Open: E5, F5, G5, H5, J5, K5, L5
 Full-width ground reference losses outside own launches (mm²): {}

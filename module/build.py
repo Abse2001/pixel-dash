@@ -117,6 +117,10 @@ for p in source:
 for ref,(s,c) in parts.items():
     dx,dy=offset[group(ref)]
     cx,cy=c["center"]["x"],c["center"]["y"]
+    if ref == "C_DDR34":
+        # Reserve R7 and R8 for address escapes. Give the bulk capacitor dedicated feed vias.
+        dx += 2.70
+        dy -= 2.34
     if ref == "C_DDR6":
         # Align the underside bypass supply pad to the DRAM N1 through via.
         dx -= .720008

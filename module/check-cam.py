@@ -108,6 +108,16 @@ reached = [pin for pin in dram_power if rail_pads["U_DDR", pin] == power_root]
 print(f"DCDC3 post-inductor L3 copper {region.area:.2f} mm², reaches {len(reached)}/{len(dram_power)} DRAM supply balls.")
 assert len(reached) == len(dram_power) == 18, ("DCDC3 supply continuity regression", reached)
 print("DRAM supply balls outside that copper island:", ", ".join(pin for pin in dram_power if pin not in reached) or "none")
+assert rail_pads["C_DDR34", "pin1"] == power_root
+grounds = {(ref,pin):node for ref,pin,node in pads["GND_INTERNAL"]}
+assert grounds["C_DDR34", "pin2"] == grounds["U_PMIC", "EP"]
+switched = {(ref,pin):node for ref,pin,node in pads["VDDS_DDR_CPU"]}
+cpu_root = switched["U_DDR_SWITCH", "VOUT1"]
+assert cpu_root != power_root
+cpu_balls = sorted(pin for ref,pin in switched if ref == "U1")
+assert len(cpu_balls) == 7
+fed = [pin for pin in cpu_balls if switched["U1",pin] == cpu_root]
+print(f"Switched DDR output reaches {len(fed)}/7 CPU DDR balls. Open:", ", ".join(pin for pin in cpu_balls if pin not in fed) or "none")
 planes={}
 for l in ("In1.Cu","In4.Cu"):
     plane=max(enumerate(pieces[l]),key=lambda a:a[1].area)
