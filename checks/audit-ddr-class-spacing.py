@@ -1,4 +1,5 @@
 """Measure same-layer DDR spacing against TI AM335x Tables 7-68 and 7-69."""
+import argparse
 import csv
 import json
 import re
@@ -44,7 +45,7 @@ def covered_length(line, intersections):
     return total
 
 
-def main(board):
+def main(board, open_controls=()):
     traces, keys = trace_net_keys(board)
     sections = defaultdict(list)
     for trace in board:
@@ -88,8 +89,13 @@ def main(board):
                     below.append(line.intersection(seg.buffer(width, quad_segs=32)))
             restricted[name] += covered_length(line, relaxed)
             below_minimum[name] += covered_length(line, below)
-    if len(restricted) != 49:
-        raise ValueError(f"Expected 49 signals subject to the class spacing tables, found {len(restricted)}")
+    expected = {name for t in board if t["type"] == "source_trace"
+                and net_class(name := t.get("name") or "")}
+    exempt = set(open_controls)
+    if len(expected) != 49 or any(net_class(n) != "ADDR_CTRL" for n in exempt):
+        raise ValueError("Expected 49 DDR signals and only explicitly named open command/address signals")
+    if set(restricted) != expected - exempt or exempt - expected:
+        raise ValueError(f"Unexpected routed set: {set(restricted) ^ (expected - exempt)}")
     out = csv.writer(sys.stdout)
     out.writerow(("signal", "below_nominal_mm", "below_1w_mm"))
     for name in sorted(restricted):
@@ -101,4 +107,8 @@ def main(board):
 
 
 if __name__ == "__main__":
-    sys.exit(main(json.loads(Path(sys.argv[1]).read_text())))
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("board", type=Path)
+    parser.add_argument("--open-controls", nargs="+", default=())
+    args = parser.parse_args()
+    sys.exit(main(json.loads(args.board.read_text()), args.open_controls))
