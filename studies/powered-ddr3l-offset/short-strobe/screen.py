@@ -41,8 +41,10 @@ if lo <= hi:
     print(f"Permitted total data barrel depth across that interval {max(0,(fmin-hi*single)/barrel):.6f} to {(fmax-lo*single)/barrel:.6f} mm.")
 else:
     print("No barrel depth can repair the planar interval.")
-for label, depth in [("outer-layer only",0), ("two L1-L2 transitions",.190),
-                     ("two composite L1-L3 transitions",2.650), ("two L1-L4 transitions",2.840)]:
+depths = model["DEPTH"]
+for label, destination in [("outer-layer only", "top"), ("two L1-L2 transitions", "inner1"),
+                           ("two composite L1-L3 transitions", "inner2"), ("two L1-L4 transitions", "bottom")]:
+    depth = 2 * abs(depths[destination] - depths["top"])
     low, high = max(lo,(fmin-depth*barrel)/single), min(hi,(fmax-depth*barrel)/single)
     print(f"{label}: {depth:.3f} mm, data length {low:.6f} to {high:.6f} mm, feasible {low<=high}.")
 with args.output.open("w") as output:
