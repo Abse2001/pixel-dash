@@ -2,6 +2,10 @@
 
 ## Fully connected DDR candidate
 
+The complete candidate at 4b3d1c5 connects the handheld IRQ pull-up, keeps the 50 DDR routes and their vias identical to a4a71e2 and reduces the whole-board split-net count from 35 to 34. Drilled CAM explicitly verifies J3/VTP, RAM ZQ, the CPU and RAM VREF networks, divider rails, local bypass returns and their mutual isolation. [Complete candidate and physical land groups](https://github.com/Abse2001/pixel-dash/blob/4b3d1c5/checks/current-touch-irq-cam.txt)
+
+The separate four-route breakout moves the switched DDR feed to make room for N5/P5. It physically connects 21/21 DCDC4 lands and 7/7 switched CPU DDR lands, with D1, D12, A10 and A14 lifted. [Boot-power study and screening results](https://github.com/Abse2001/pixel-dash/tree/641ea9a/studies/boot-ddr-breakout)
+
 The four-layer AM3354 handheld at a4a71e2 retains 50 distinct CPU-to-RAM signals. BA2 shortened from 29.7914 to 28.6872 mm inside its 28.550–31.090 mm project window. Modeled arrival relative to mean CK improved from +10.7705 to +4.4005 ps. All DDR vias and the other 49 routes are unchanged. D11 and D15 now have continuous exported raster reference, including the strap traces. Independent CAM passes the common DDR envelope and full-width DDR, MMC0 and raster checks. Data-byte timing, command receiver signoff, N5/P5 power, physical straps and whole-board release remain open. [Full PCB snapshot](https://github.com/Abse2001/pixel-dash/blob/a4a71e2/previews/handheld.png) · [Per-net timing](https://github.com/Abse2001/pixel-dash/blob/a4a71e2/checks/current-ddr-change.csv) · [Physical land report](https://github.com/Abse2001/pixel-dash/blob/a4a71e2/checks/current-raster-taps-cam.txt)
 
 The isolated D12/D1 trial retains all 50 distinct DDR pairs and passes copper, drilling and full-width reference checks. Both shortened signals still miss the TI and model matching targets. On the full board, A10/A14 also bound the N5/P5 escape. With D12/D1 entirely removed, neither supply pad has any exposed copper beyond the DDR margin. [Trial, timing targets and physical lands](https://github.com/Abse2001/pixel-dash/tree/12332c9/studies/d12-d1-breakout)
