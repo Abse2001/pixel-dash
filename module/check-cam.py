@@ -133,6 +133,7 @@ for l in ("In1.Cu","In4.Cu"):
     planes[l]=plane[1]
 miss=collections.Counter()
 strap_branches = json.loads(Path(__file__).with_name("carrier-strap-routes.json").read_text())
+assert {b["net"] for b in strap_branches} == {f"SYSBOOT{bit}_SENSE" for bit in range(16)}
 for branch in strap_branches:
     name = branch["net"]
     strap_nodes = [node for ref,pin,node in pads[name] if ref.startswith("R_SYSBOOT") or ref == "J_CARRIER"]
