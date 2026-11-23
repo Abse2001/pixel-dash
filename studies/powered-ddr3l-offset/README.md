@@ -11,3 +11,11 @@ The three trials retain the RAM rotation and CPU footprint. The trial generator 
 The grid search masks obstacles, reference copper, drill and via clearances, checks connected top/bottom regions and samples up to 36 positions per terminal/component before constructing pairs. The straight-line sum through a pair of vias is only a lower bound on routed length. Failure of this bounded search does not exclude another fanout. The CAM barrel spacing measurement is independent of this sampling limit.
 
 [Assembled six-barrel study](barrel-study.circuit.json.gz) · [Exact via positions and lower bounds](six-centers.json) · [Requested DQ assignments](perm.json)
+
+## West placement with a revised DQM0 path
+
+A smooth local DQM0 detour opens two RAM-side sites 0.4500 mm apart against the 0.4020 mm minimum. DQM0 grows from 21.3183 to 21.5475 mm and its modeled flight is 143.0514 ps. Its worst skew of +3.5165 ps leaves 0.1468 ps against the ±3.6633 ps screen. With D0 and the strobe installed, the two-transition joint window becomes 20.9125–21.5729 mm. All trial data paths use two full-depth transitions totaling 2.840 mm in the model.
+
+The independent D7 example measures 21.561181 mm, with 143.130454 ps modeled flight and +3.595526 ps worst skew. The closest sampled D5 example measures 19.869278 mm, with 133.369865 ps flight and −9.514115 ps worst skew. D5 misses the joint window by 1.043222 mm and the skew screen by 5.850800 ps. Its mismatch to installed D0/DQM0 reaches 1.678201 mm against TI’s 0.635 mm limit. The 338 jointly reserved site trials yielded zero qualifying D5/D7 pairs. D2/D3/D4 and this pair also lacked a common site assignment in the sampled set. Three other retained traces lost some full-width reference on the partial layout. The exact powered baseline stays primary.
+
+[Site coordinates](west-mask/pack-5-7.json) · [Per-route timing and residuals](west-mask/independent-paths.csv) · [Installed paths and limits](west-mask/timing.csv) · [Return gaps](west-mask/reference.csv) · [Partial channel before pair installation](west-mask/channel-before-pair.circuit.json.gz)
