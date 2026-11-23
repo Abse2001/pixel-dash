@@ -1,0 +1,7 @@
+Placement cap 20.600104 mm. TI planar data interval plus cap 19.931078 to 20.600104 mm.
+Data flight interval across both legs and all modeled cases 133.726391 to 137.780675 ps.
+Permitted total data barrel depth across that interval 2.255211 to 3.454286 mm.
+outer-layer only: 0.000 mm, data length 23.180168 to 20.600104 mm, feasible False.
+two L1-L2 transitions: 0.190 mm, data length 22.962800 to 20.600104 mm, feasible False.
+two composite L1-L3 transitions: 2.650 mm, data length 20.148447 to 20.600104 mm, feasible True.
+two L1-L4 transitions: 2.840 mm, data length 19.931078 to 20.600104 mm, feasible True.
