@@ -70,6 +70,7 @@ boot_paths = {
     "JOY_L_CLICK end-to-end": ["J_CARRIER.21", "U1.V17"],
     "THROUGH_SD_CMD end-to-end": ["J_CARRIER.3", "U1.G18"],
     "THROUGH_SD_DAT1_PULLUP end-to-end": ["J_CARRIER.5", "U1.G15"],
+    "THROUGH_SD_CS end-to-end": ["J_CARRIER.7", "U1.F17"],
     "AM3354 J3 calibration to 49.9 ohm resistor": ["U1.J3","R_VTP.pin1"],
     "AM3354 calibration resistor return to module ground": ["R_VTP.pin2","U_PMIC.EP"],
     "MPU buck output and feedback to seven CPU supply balls": ["U_PMIC.FB2","L_PMIC_MPU.pin2","C_PMIC_MPU.pin1", *(f"U1.{pin}" for pin in ("F10","F11","F12","F13","G13","H13","J13"))],
