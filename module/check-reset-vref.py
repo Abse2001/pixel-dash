@@ -51,6 +51,15 @@ print("DCDC4 both switch pins reach the separate inductor terminals.")
 assert connected("U_PMIC.DCDC4","C_PMIC_IO_A.pin1","C_PMIC_IO_B.pin1","J_CARRIER.71","J_CARRIER.74","J_CARRIER.77")
 assert connected("C_PMIC_IO_A.pin2","C_PMIC_IO_B.pin2","U_PMIC.EP")
 print("DCDC4 reaches both output capacitors and the three carrier supply contacts; both bypass returns reach ground.")
+boot_paths = {
+    "RTC wake bias to RTC I/O regulator feedback and bypass": ["R_PMIC_WAKE.pin2","U_PMIC.FB6","C_PMIC_RTC_IO.pin1"],
+    "LS1 to CPU DDR load-switch enable and its RC network": ["U_PMIC.LS1","U_DDR_SWITCH.ON","C_DDR_SW_EN.pin1","R_DDR_SW_EN.pin1"],
+    "Carrier power-key contact to PB and bias resistor": ["J_CARRIER.67","U_PMIC.PB","R_POWER_PB.pin1"],
+    "RTC-core feedback to post-inductor output and capacitor": ["U_PMIC.FB5","L_PMIC_RTC_CORE.pin2","C_PMIC_RTC_CORE.pin1"],
+}
+for name, pins in boot_paths.items():
+    assert connected(*pins), name
+    print(name, "connected")
 checks = {
     "CPU switched rail to divider": ["U_DDR_SWITCH.VOUT1", "R_CPU_VREF_HIGH.pin2"],
     "CPU divider bottom return": ["R_CPU_VREF_LOW.pin2", "U_PMIC.EP"],

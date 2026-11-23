@@ -19,6 +19,10 @@ Fitted word 0x4017. VDDSHV6 N5/P5 to DCDC4: False False
 PGOOD to PWRONRSTn: False
 DCDC4 both switch pins reach the separate inductor terminals.
 DCDC4 reaches both output capacitors and the three carrier supply contacts; both bypass returns reach ground.
+RTC wake bias to RTC I/O regulator feedback and bypass connected
+LS1 to CPU DDR load-switch enable and its RC network connected
+Carrier power-key contact to PB and bias resistor connected
+RTC-core feedback to post-inductor output and capacitor connected
 CPU switched rail to divider True
 CPU divider bottom return True
 CPU midpoint to bypass and J4 True
