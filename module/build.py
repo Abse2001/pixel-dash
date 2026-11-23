@@ -252,7 +252,7 @@ for adjustment in json.loads((here/"via-adjustments.json").read_text()):
             if (item.GetEnd()-old).EuclideanNorm()<=3:item.SetEnd(new)
     assert hits==1,adjustment
 for edit in json.loads((here/"escape-edits.json").read_text()):
-    layer = {"F.Cu":k.F_Cu, "B.Cu":k.B_Cu}[edit["layer"]]
+    layer = {"F.Cu":k.F_Cu, "B.Cu":k.B_Cu, "In2.Cu":k.In2_Cu, "In3.Cu":k.In3_Cu}[edit["layer"]]
     tracks = [t for t in board.GetTracks() if not isinstance(t,k.PCB_VIA)
               and t.GetLayer()==layer and t.GetNetname()==edit["net"]]
     for start, end in zip(edit["old"],edit["old"][1:]):
