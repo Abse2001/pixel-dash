@@ -15,7 +15,7 @@ with opener(args.board, "rt") as source:
     board = json.load(source)
 ports = {p["source_port_id"]: p for p in board if p["type"] == "pcb_port" and p.get("source_port_id")}
 components = {c["source_component_id"]: c["name"] for c in board if c["type"] == "source_component"}
-owners = {p["source_port_id"]: components[p["source_component_id"]] for p in board if p["type"] == "source_port"}
+owners = {p["source_port_id"]: components.get(p["source_component_id"]) for p in board if p["type"] == "source_port"}
 ends = {}
 for t in board:
     if t["type"] != "source_trace" or not t.get("name", "").startswith("DDR_"):
