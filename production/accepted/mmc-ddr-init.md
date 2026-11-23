@@ -13,3 +13,9 @@ Run the command below with the matching board and TI ZCZ IBIS archive. The singl
 ```sh
 python checks/command-source-echo.py dist/index.circuit.json production/accepted/command-timing.csv sprm552.zip --ioctrl 0x18b --receiver-window
 ```
+
+### Reset strap voltage budget
+
+TI lists LCD_DATA0–15 as high-impedance during reset and latches them on the rising PWRONRSTn edge. For these LVCMOS inputs with their I/O rail in the 3.3 V range, VIH(min) is 2.0 V and VIL(max) is 0.8 V. Use 3.135 V at the pull-up for the low-rail corner. The fitted resistors are 10 kΩ. Using 10.1 kΩ (+1%) and allocating 18 µA to CPU high-impedance leakage, a high strap can tolerate another 94.38 µA sinking from the node before reaching VIH. A low strap can tolerate another 61.21 µA sourcing into it before reaching VIL. Both limits have zero voltage reserve at equality. These DC budgets apply only to a connected strap while the rail is valid. An attached unpowered panel can load or clamp the node during ramp. Its transient loading and the reset sampling levels still need verification. [TI AM335x pin attributes, note 5, and §§5.4/5.7](https://www.ti.com/lit/ds/symlink/am3354.pdf) · [Fitted resistor](../../imports/A_0402WGF1002TCE.tsx) · [CPU-to-strap continuity](drilled-cam.txt)
+
+The original eight open CPU taps each have a fixed copper conflict at a centered 0.15/0.30 mm through via. On the touch bus, a D15 via at the ball center also conflicts with the underside UART RX probe. In a separate study, shifting the probe 0.15 mm in both axes and reducing its diameter to 0.70 mm opens access to L2 and L3. A 0.065 mm grid search using through vias and adjacent ground found no connected route from those exits to the pull-up. Removing mechanical card-detect copper allows a touch-clock path in the earlier mixed-via study but loses the seventh MMC0 link. Those trials have no effect on the accepted boot, debug or touch circuits.
