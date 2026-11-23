@@ -61,3 +61,7 @@ U1.V2, R_SYSBOOT12 pin 2 and J_LCD pin 15 now share one drilled CAM island. Loca
 ## All sixteen panel strap taps
 
 R_SYSBOOT6 pin 2 reaches J_LCD pin 24 through a staggered blind/buried transition. All 16 panel-side strap taps are physically connected. The U1.T3 land for bit 6 remains isolated. Nine of 29 CPU-to-panel signals and seven physical CPU strap states are verified. Drilled CAM retains 45 DDR links and counts 1,205 plated barrels. Full-width DDR, MMC0 and raster references, all local power/return checks, 0.102 mm copper, 0.1524 mm via-edge and drill spacing pass. There are 31 split mapped nets. [Physical endpoints](panel-D6-cam.txt) · [Geometry](panel-D6-geometry.txt) · [Full PCB](powered-panel-taps.png)
+
+## Powered LCD D16
+
+U1.U13 reaches J_LCD pin 33 through nine plated transitions. The raster reference check covers the entire D16 trace. Ten of 29 CPU-to-panel signals, all sixteen panel-side strap taps and seven CPU strap states are connected. Drilled CAM finds 30 split mapped nets. The 45 DDR links retain their complete prior timing CSV, physical power lands and 71 local returns. The checks cover physical connection and reference. Panel setup and hold relative to PCLK remain open. [Drilled CAM](panel-D16-cam.txt) · [Geometry](panel-D16-geometry.txt) · [Full PCB](powered-panel-taps.png)
