@@ -114,7 +114,10 @@ assert len(reached) == len(dram_power) == 18, ("DCDC3 supply continuity regressi
 print("DRAM supply balls outside that copper island:", ", ".join(pin for pin in dram_power if pin not in reached) or "none")
 assert rail_pads["C_DDR34", "pin1"] == power_root
 grounds = {(ref,pin):node for ref,pin,node in pads["GND_INTERNAL"]}
-for ref in ("C_DDR5", "C_DDR6", "C_DDR8", "C_DDR33", "C_DDR34", "C_DDR40"):
+unfed_direct = sorted(pin for pin,node in rail_pads.items() if node != power_root)
+assert not unfed_direct, ("direct DDR supply endpoint open", unfed_direct)
+print(f"DCDC3 reaches all {len(rail_pads)} assigned direct DDR rail pads.")
+for ref in sorted({ref for ref,pin in rail_pads if ref.startswith("C_") and (ref, "pin2") in grounds}):
     assert rail_pads[ref, "pin1"] == power_root, ref
     assert grounds[ref, "pin2"] == grounds["U_PMIC", "EP"], ref
 assert grounds["U_DDR", "F9"] == grounds["U_PMIC", "EP"]

@@ -1891,23 +1891,6 @@
   },
   {
     "net": "GND_INTERNAL",
-    "start": "C_DDR12.pin2",
-    "end": "ground via",
-    "width": 0.2,
-    "layer": "F.Cu",
-    "points": [
-      [
-        2.599999,
-        32.829884
-      ],
-      [
-        3.201039,
-        29.869075
-      ]
-    ]
-  },
-  {
-    "net": "GND_INTERNAL",
     "start": "R_SYSBOOT10.pin1",
     "end": "R_SYSBOOT11.pin1",
     "width": 0.2,

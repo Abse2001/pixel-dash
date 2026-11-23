@@ -3,5 +3,6 @@
 Drill diameters: {0.2: 239, 0.15: 130}
 DCDC3 post-inductor L3 copper 758.28 mm², reaches 18/18 DRAM supply balls.
 DRAM supply balls outside that copper island: none
+DCDC3 reaches all 44 assigned direct DDR rail pads.
 Switched DDR output reaches 7/7 CPU DDR balls. Open: none
 Full-width ground reference losses outside own launches (mm²): {}
