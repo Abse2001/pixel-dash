@@ -1,0 +1,10 @@
+cpu_net,original_ram_net,length_cap_mm,relaxed_reachability
+DDR_D2,DDR_D2,20.4313,disconnected
+DDR_D2,DDR_D3,20.4313,disconnected
+DDR_D2,DDR_D4,20.4313,disconnected
+DDR_D3,DDR_D2,20.4313,disconnected
+DDR_D3,DDR_D3,20.4313,disconnected
+DDR_D3,DDR_D4,20.4313,disconnected
+DDR_D4,DDR_D2,20.4313,disconnected
+DDR_D4,DDR_D3,20.4313,disconnected
+DDR_D4,DDR_D4,20.4313,disconnected
