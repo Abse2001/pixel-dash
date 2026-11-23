@@ -1,0 +1,51 @@
+net,prior_clean_mm,trial_mm,vias,total_barrel_mm,nominal_flight_ps,signed_skew_ps,signed_worst_data_or_pair_ps,project_min_mm,project_max_mm,length_miss_mm,TI_peer_limit_mm,TI_strobe_or_pair_limit_mm,TI_strobe_or_pair_miss_mm,model_skew_limit_ps,model_skew_miss_ps,physical_result,receiver_setup_and_hold
+DDR_A0,30.1620,30.1620,2,2.8400,192.7484,1.3860,,30.1500,32.6900,0,,,,,,unverified in shorted CAM export,open
+DDR_A11,29.9838,29.9838,4,5.6800,210.4643,19.1019,,30.1500,32.6900,0.1662,,,,,,unverified in shorted CAM export,open
+DDR_A12,30.1620,30.1620,2,2.8400,192.7483,1.3860,,30.1500,32.6900,0,,,,,,unverified in shorted CAM export,open
+DDR_A13,30.1620,30.1620,2,2.8400,192.7489,1.3865,,30.1500,32.6900,0,,,,,,unverified in shorted CAM export,open
+DDR_A15,30.1620,30.1620,2,2.8400,192.7486,1.3862,,30.1500,32.6900,0,,,,,,unverified in shorted CAM export,open
+DDR_A2,30.1620,30.1620,2,2.8400,192.7484,1.3860,,30.1500,32.6900,0,,,,,,unverified in shorted CAM export,open
+DDR_A3,29.9626,29.9626,2,2.8400,191.5982,0.2358,,30.1500,32.6900,0.1874,,,,,,unverified in shorted CAM export,open
+DDR_A4,30.1620,30.1620,2,2.8400,192.7488,1.3865,,30.1500,32.6900,0,,,,,,unverified in shorted CAM export,open
+DDR_A5,30.1620,30.1620,2,2.8400,192.7487,1.3863,,30.1500,32.6900,0,,,,,,unverified in shorted CAM export,open
+DDR_A6,26.3947,26.3947,4,5.6800,189.7589,-1.6035,,30.1500,32.6900,3.7553,,,,,,unverified in shorted CAM export,open
+DDR_A7,30.1620,30.1620,2,2.8400,192.7485,1.3861,,30.1500,32.6900,0,,,,,,unverified in shorted CAM export,open
+DDR_A8,30.1620,30.1620,2,2.8400,192.7486,1.3862,,30.1500,32.6900,0,,,,,,unverified in shorted CAM export,open
+DDR_A9,30.7446,30.7446,2,2.8400,196.1098,4.7475,,30.1500,32.6900,0,,,,,,unverified in shorted CAM export,open
+DDR_BA0,30.3057,30.3057,2,2.8400,193.5779,2.2155,,30.1500,32.6900,0,,,,,,unverified in shorted CAM export,open
+DDR_BA1,30.1620,30.1620,2,2.8400,192.7485,1.3861,,30.1500,32.6900,0,,,,,,unverified in shorted CAM export,open
+DDR_BA2,30.1620,30.1620,2,2.8400,192.7487,1.3863,,30.1500,32.6900,0,,,,,,unverified in shorted CAM export,open
+DDR_CASn,30.1620,30.1620,2,2.8400,192.7485,1.3861,,30.1500,32.6900,0,,,,,,unverified in shorted CAM export,open
+DDR_CK,30.6625,30.6625,2,2.8400,191.4181,0.1114,0.1505,30.1500,32.6900,0,,0.1270,0,0.7134,0,unverified in shorted CAM export,open
+DDR_CKE,34.9054,34.9054,4,5.6800,238.8571,47.4947,,30.1500,32.6900,2.2154,,,,,,unverified in shorted CAM export,open
+DDR_CKn,30.6364,30.6364,2,2.8400,191.3067,-0.1114,-0.1505,30.1500,32.6900,0,,0.1270,0,0.7134,0,unverified in shorted CAM export,open
+DDR_CSn0,30.1620,30.1620,2,2.8400,192.7486,1.3863,,30.1500,32.6900,0,,,,,,unverified in shorted CAM export,open
+DDR_D0,20.3096,20.3096,2,2.8400,135.9102,-0.4916,1.7928,0.0000,20.6001,0,0.6350,0.6350,0,3.6633,0,unverified in shorted CAM export,open
+DDR_D1,,20.5982,2,2.8400,137.5747,1.2578,3.4574,0.0000,20.6001,0,0.6350,0.6350,0,3.6633,0,copper below 0.102 mm; via edge below 0.1524 mm,open
+DDR_D12,23.7632,23.5896,2,2.8400,154.8326,-1.3575,-4.5232,0.0000,23.7998,0,0.6350,0.6350,0.1491,3.6633,0.8599,copper below 0.102 mm,open
+DDR_D13,23.4251,23.4251,2,2.8400,153.8835,-2.3066,-5.4722,0.0000,23.7998,0,0.6350,0.6350,0.3136,3.6633,1.8089,reference gap; via edge below 0.1524 mm,open
+DDR_D14,23.6585,23.7121,2,2.8400,155.5389,-0.6512,-3.8169,0.0000,23.7998,0,0.6350,0.6350,0.0266,3.6633,0.1536,copper below 0.102 mm; reference gap; via edge below 0.1524 mm,open
+DDR_D15,23.7250,23.7250,2,2.8400,155.6134,-0.5767,-3.7423,0.0000,23.7998,0,0.6350,0.6350,0.0137,3.6633,0.0790,copper below 0.102 mm; reference gap; via edge below 0.1524 mm,open
+DDR_D2,,20.3684,2,2.8400,136.2490,-0.1528,2.1317,0.0000,20.6001,0,0.6350,0.6350,0,3.6633,0,copper below 0.102 mm; via edge below 0.1524 mm,open
+DDR_D4,,20.4937,2,2.8400,136.9724,0.6554,2.8551,0.0000,20.6001,0,0.6350,0.6350,0,3.6633,0,copper below 0.102 mm; via edge below 0.1524 mm,open
+DDR_D5,20.1463,20.1463,2,2.8400,134.9681,-1.4337,-2.4216,0.0000,20.6001,0,0.6350,0.6350,0,3.6633,0,unverified in shorted CAM export,open
+DDR_D6,,20.2351,2,2.8400,135.4803,-0.9215,-1.9094,0.0000,20.6001,0,0.6350,0.6350,0,3.6633,0,copper below 0.102 mm; via edge below 0.1524 mm,open
+DDR_D7,20.3157,20.3157,2,2.8400,135.9454,-0.4565,1.8280,0.0000,20.6001,0,0.6350,0.6350,0,3.6633,0,unverified in shorted CAM export,open
+DDR_D8,23.4098,23.4098,2,2.8400,153.7953,-2.3948,-5.5604,0.0000,23.7998,0,0.6350,0.6350,0.3288,3.6633,1.8971,copper below 0.102 mm,open
+DDR_D9,23.7520,23.7520,2,2.8400,155.7695,-0.4206,-3.5863,0.0000,23.7998,0,0.6350,0.6350,0,3.6633,0,copper below 0.102 mm; reference gap; via edge below 0.1524 mm,open
+DDR_DQM0,20.2546,20.2546,2,2.8400,135.5929,-0.8089,-1.7968,0.0000,20.6001,0,0.6350,0.6350,0,3.6633,0,unverified in shorted CAM export,open
+DDR_DQM1,23.7348,23.7348,2,2.8400,155.6702,-0.5199,-3.6855,0.0000,23.7998,0,0.6350,0.6350,0.0038,3.6633,0.0222,copper below 0.102 mm,open
+DDR_DQS0,20.5661,20.5661,2,2.8400,136.4018,0.0848,0.1503,0.0000,20.6001,0,,0.1270,0,0.7134,0,unverified in shorted CAM export,open
+DDR_DQS1,24.3689,24.3689,2,2.8400,156.1901,0.0435,0.0435,0.0000,23.7998,0.5690,,0.1270,0,0.7134,0,copper below 0.102 mm; reference gap; via edge below 0.1524 mm,open
+DDR_DQSn0,20.5400,20.5400,2,2.8400,136.3170,-0.0848,-0.1503,0.0000,20.6001,0,,0.1270,0,0.7134,0,unverified in shorted CAM export,open
+DDR_DQSn1,24.3737,24.3737,2,2.8400,156.1466,-0.0435,-0.0435,0.0000,23.7998,0.5738,,0.1270,0,0.7134,0,copper below 0.102 mm; reference gap; via edge below 0.1524 mm,open
+DDR_ODT,30.4321,30.4321,2,2.8400,194.3067,2.9443,,30.1500,32.6900,0,,,,,,unverified in shorted CAM export,open
+DDR_RASn,30.1620,30.1620,2,2.8400,192.7485,1.3861,,30.1500,32.6900,0,,,,,,unverified in shorted CAM export,open
+DDR_RESETn,17.750051093634546,17.750051093634546,2,2.84,121.1440447591777,,,,,,,,,,,unverified in shorted CAM export,open
+DDR_WEn,30.1620,30.1620,2,2.8400,192.7487,1.3863,,30.1500,32.6900,0,,,,,,unverified in shorted CAM export,open
+DDR_A1,,,,,,,,,,,,,,,,OPEN,open
+DDR_A10,,,,,,,,,,,,,,,,OPEN,open
+DDR_A14,,,,,,,,,,,,,,,,OPEN,open
+DDR_D10,,,,,,,,,,,,,,,,OPEN,open
+DDR_D11,,,,,,,,,,,,,,,,OPEN,open
+DDR_D3,,,,,,,,,,,,,,,,OPEN,open
