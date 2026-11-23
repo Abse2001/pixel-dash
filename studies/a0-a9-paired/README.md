@@ -1,0 +1,9 @@
+# A0 and A9 paired routing study
+
+The populated export has 38 distinct DDR links. A0 and A9 leave the CPU on separate legal tracks. They coexist with both complete data lanes and CK/CKn. The byte and clock fingerprints, drill spacing, 0.102 mm copper, 0.1524 mm via-edge, full-width routed DDR and MMC0 reference checks, command class spacing and scoped DDR/MMC0 supplies pass on this same board. The exact CAM audit compared 1,128 plated barrels. The all-trace audit matched 5,610 strokes to the four copper layers.
+
+A0 is newly connected. At 51.05487 mm, its five transitions contribute 5.68 mm contacted depth. Board flight is estimated at 336.210 ps, +99.740 ps relative to CK. It is 12.36488 mm above the 38.68999 mm placement ceiling. A9 measures 38.52960 mm, down from 38.60715 mm on the accepted layout. Its two full-depth transitions contribute 2.84 mm, and its estimated flight is 241.021 ps, +4.551 ps relative to CK. Both routes use the 36.14999–38.68999 mm placement window. A3, A5, A6 and all other prior command passes are preserved.
+
+The A11/A14 search first assigned separate layer preferences through the shared downstream corridor while allowing both CPU and RAM vias to move. Neither allocation produced a jointly clear, in-window solution. The A0 pivot isolated a CPU-side A9 segment between (−51.914, 19.963) and (−59.000, 20.142) mm. Moving that segment and restoring A9 with both conductors installed allowed A0 to pass physical CAM. A0 timing and receiver margins remain open. The production branch retains its 37-link board and shorter A9 route relative to the original 7bd7c48 checkpoint.
+
+The conservative envelope retains 57 findings. Reference area outside nominal via relief is 9.045 mm² on L2 and 99.968 mm² on L3. The sheet-path results describe connected reference copper. Actual loop impedance and fabrication signoff remain open.

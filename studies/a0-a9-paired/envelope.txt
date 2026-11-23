@@ -1,0 +1,3 @@
+inner1 GND: envelope 495.3876 mm², uncovered 55.7310 mm², uncovered outside nominal via antipads 9.045385257 mm².
+inner2 VDDS_DDR: envelope 495.3876 mm², uncovered 143.4943 mm², uncovered outside nominal via antipads 99.967968617 mm².
+57 findings across signal and reference layers in the conservative envelope screen.

@@ -1,0 +1,3 @@
+Study reference coverage screened 38 routed DDR signals. Open signals: DDR_A1, DDR_A10, DDR_A11, DDR_A12, DDR_A13, DDR_A2, DDR_A4, DDR_CASn, DDR_CSn0, DDR_ODT, DDR_RASn, DDR_RESETn.
+0 signal/layer reference-coverage findings
+signal,signal_layer,reference_layer,uncovered_copper_mm2
