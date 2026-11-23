@@ -73,7 +73,7 @@ boot_paths = {
     "THROUGH_SD_CS end-to-end": ["J_CARRIER.7", "U1.F17"],
     "PMIC SDA to CPU and pull-up": ["U_PMIC.SDA", "U1.C17", "R_PMIC_SDA.pin1"],
     "Sequenced regulator output to both PMIC I2C pull-ups": ["U_PMIC.DCDC4", "R_PMIC_POR.pin2", "R_PMIC_SCL.pin2", "R_PMIC_SDA.pin2"],
-    "DCDC4 output to eight CPU IO supply balls": ["U_PMIC.DCDC4", *(f"U1.{ball}" for ball in ("E12","E13","F14","G14","H14","J14","K14","L14"))],
+    "DCDC4 output to ten CPU IO supply balls": ["U_PMIC.DCDC4", *(f"U1.{ball}" for ball in ("E10","E11","E12","E13","F14","G14","H14","J14","K14","L14"))],
     "TOUCH_SDA end-to-end": ["J_CARRIER.62", "U1.B16"],
     "TOUCH_SCL end-to-end": ["J_CARRIER.63", "U1.J15"],
     "AM3354 J3 calibration to 49.9 ohm resistor": ["U1.J3","R_VTP.pin1"],
