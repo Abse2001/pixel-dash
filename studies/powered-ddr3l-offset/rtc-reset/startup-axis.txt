@@ -1,0 +1,1 @@
+minimum signal set on 0.1-degree sampled separating axes, angle degrees, B4 launch xy, directional excess mm ((6, 5.340909), np.float64(43.2), [-49.10661900808342, 21.23893408242627], [('DDR_A13', 0.9158), ('DDR_A2', 0.20782), ('DDR_A6', 1.537535), ('DDR_A8', 1.555335), ('DDR_BA2', 0.161369), ('DDR_CKE', 0.96305)])

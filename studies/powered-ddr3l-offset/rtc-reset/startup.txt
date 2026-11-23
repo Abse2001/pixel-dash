@@ -1,0 +1,4 @@
+Lifted [] B4 legal launch center area mm2 0.0 center to margin boundary mm 1.242206 center inside True
+Lifted ['DDR_A6'] B4 legal launch center area mm2 0.0 center to margin boundary mm 1.014771 center inside True
+Lifted ['DDR_A8'] B4 legal launch center area mm2 0.0 center to margin boundary mm 1.196996 center inside True
+Lifted ['DDR_A6', 'DDR_A8'] B4 legal launch center area mm2 0.0 center to margin boundary mm 0.654024 center inside True

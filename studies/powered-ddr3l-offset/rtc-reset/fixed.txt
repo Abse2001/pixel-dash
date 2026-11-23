@@ -1,0 +1,2 @@
+all fixed DDR lands (CPU and RAM) B4 usable area mm2 0.00827307 center inside True distance to boundary mm 0.022421
+CPU DDR lands alone B4 usable area mm2 0.00827307 center inside True distance to boundary mm 0.022421
