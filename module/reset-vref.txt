@@ -35,6 +35,8 @@ THROUGH_A end-to-end connected
 THROUGH_B end-to-end connected
 THROUGH_R_SHOULDER end-to-end connected
 JOY_L_CLICK end-to-end connected
+THROUGH_SD_CMD end-to-end connected
+THROUGH_SD_DAT1_PULLUP end-to-end connected
 AM3354 J3 calibration to 49.9 ohm resistor connected
 AM3354 calibration resistor return to module ground connected
 MPU buck output and feedback to seven CPU supply balls connected
