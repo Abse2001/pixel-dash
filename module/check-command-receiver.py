@@ -24,7 +24,9 @@ out = csv.writer(sys.stdout, lineterminator="\n")
 out.writerow(("net", "cpu_fixture_V", "dram_VDD_V", "dram_VREFCA_V", "ioctrl_assumed",
               "valid_cases", "total_cases", "common_capture_start_ps", "common_capture_end_ps",
               "minimum_VIX_headroom_mV", "receiver_signoff"))
-for supply in (1.35, 1.377):
+# DCDC3 output tolerance only. Local drop, transients and the independent
+# AM3354 transmitting supply require additional channel and PDN analysis.
+for supply in (1.323, 1.350, 1.377):
     for fraction in (.49, .50, .51):
         vref = supply * fraction
         response = io.StringIO()

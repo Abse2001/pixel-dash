@@ -55,7 +55,7 @@ def row(n,skew,lo,hi,mismatch=None,mm=None,ps=None):
     if status == "FAIL":
         raise ValueError(f"{n} exceeds a matching or project routing gate: length {length}, mismatch {mismatch}, skew {skew}")
     vals=(n,length,";".join(r["spans"]),r["barrel"],r["inner"],r["times"][1],skew,
-          f"{lo:.4f}..{hi:.4f}" if lo is not None else "",excess,mismatch,mm,ps,err,status)
+          f"{lo:.4f}..{hi:.4f}" if lo is not None else "",excess,mismatch,mm,ps,err,"ASYNC" if n == "DDR_RESETn" else status)
     out.writerow(round(v,5) if isinstance(v,float) else v for v in vals)
 excluded=set()
 for lane in range(2):
