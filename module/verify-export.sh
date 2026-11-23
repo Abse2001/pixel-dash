@@ -22,6 +22,8 @@ python3 check-cam.py "$out/films" "$out/geometry.json" "$out/pad-islands.json" >
 python3 check-via-spacing.py "$out/geometry.json" > "$out/via-spacing-findings.csv"
 python3 check-timing.py "$out/geometry.json" > "$out/timing.csv"
 python3 check-reset-vref.py "$out/pad-islands.json" > "$out/reset-vref.txt"
+python3 check-bypass-placement.py "$out/geometry.json" "$out/pad-islands.json" > "$out/bypass-placement.csv"
+diff -u bypass-placement.csv "$out/bypass-placement.csv"
 diff -u reset-vref.txt "$out/reset-vref.txt"
 diff -u drilled-cam.txt "$out/drilled-cam.txt"
 diff -u timing.csv "$out/timing.csv"
