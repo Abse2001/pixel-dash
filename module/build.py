@@ -297,7 +297,10 @@ for edit in json.loads((here/"escape-edits.json").read_text()):
                   (near(t.GetEnd(),start) and near(t.GetStart(),end))]
         tracks.remove(track)
         board.Remove(track)
-    for start,end in zip(edit["new"],edit["new"][1:]):
+    if "destination_layer" in edit:
+        layer = {"F.Cu":k.F_Cu, "B.Cu":k.B_Cu, "In2.Cu":k.In2_Cu, "In3.Cu":k.In3_Cu}[edit["destination_layer"]]
+    replacement = edit.get("new", edit["old"])
+    for start,end in zip(replacement,replacement[1:]):
         add_segment(start,end,layer,net(edit["net"]),.102)
 for feed in json.loads((here/"local-vias.json").read_text()):
     add_barrel([*feed["pos"], feed["drill"], feed["diam"]], net(feed["net"]))
