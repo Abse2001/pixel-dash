@@ -1,0 +1,36 @@
+drill_npth.drl matches 19 round hits and 0 slots
+drill-L1-L4.drl matches 863 round hits and 6 slots
+drill-L1-L2.drl matches 239 round hits and 0 slots
+drill-L2-L3.drl matches 32 round hits and 0 slots
+drill-L3-L4.drl matches 44 round hits and 0 slots
+through_via,closest_component_hole_or_slot,drill_edge_gap_mm
+pcb_raster_ground_5,pcb_plated_hole_8,13.9525
+pcb_raster_ground_36,pcb_plated_hole_8,23.12351
+pcb_raster_ground_38,pcb_plated_hole_8,23.9348
+pcb_raster_ground_48,pcb_plated_hole_8,28.17003
+pcb_boot_ground_8,channel_pcb_hole_0,31.48547
+pcb_boot_ground_15,channel_pcb_hole_1,29.99532
+pcb_handheld_ground_land_1,pcb_hole_0,20.84707
+pcb_handheld_ground_land_2,pcb_hole_0,20.06238
+pcb_handheld_ground_land_4,pcb_hole_0,25.55312
+pcb_handheld_ground_land_5,pcb_hole_0,25.80889
+pcb_handheld_ground_land_7,pcb_hole_0,35.02897
+pcb_handheld_ground_land_8,pcb_hole_0,35.62385
+pcb_handheld_ground_land_10,pcb_hole_0,20.24029
+pcb_handheld_ground_land_11,pcb_hole_0,21.2214
+pcb_handheld_ground_land_13,pcb_hole_0,31.27734
+pcb_handheld_ground_land_14,pcb_hole_0,32.38206
+pcb_handheld_ground_land_41,pcb_plated_hole_4,29.76316
+pcb_handheld_ground_land_45,pcb_plated_hole_1,18.96718
+pcb_handheld_ground_land_46,pcb_plated_hole_1,6.26963
+pcb_handheld_ground_land_59,pcb_hole_1,26.96566
+pcb_handheld_ground_land_60,pcb_hole_1,26.35234
+pcb_handheld_ground_land_66,pcb_plated_hole_25,39.19385
+pcb_handheld_ground_land_67,pcb_plated_hole_25,37.32547
+pcb_handheld_ground_land_69,pcb_plated_hole_24,29.56843
+pcb_handheld_ground_land_70,pcb_plated_hole_24,28.32133
+pcb_handheld_ground_land_72,pcb_plated_hole_25,24.90517
+pcb_handheld_ground_land_73,pcb_plated_hole_25,24.47479
+pcb_handheld_ground_land_75,pcb_plated_hole_25,20.40576
+pcb_handheld_ground_land_76,pcb_plated_hole_25,18.56916
+pcb_handheld_ground_land_87,channel_pcb_hole_0,11.66625
