@@ -27,6 +27,9 @@ function processorPin(signal: string) {
 	return ".U1 > ." + connection.cpuBall;
 }
 
+// Preserve the electrical netlist while reserving the N5/P5 breakout on this study.
+const liftedSignals = new Set(["DDR_D1", "DDR_D12", "DDR_A10", "DDR_A14"]);
+
 export default function MemoryChannel({ pcbOffsetX = 0, children }: {
     pcbOffsetX?: number
     children?: import("react").ReactNode
@@ -68,7 +71,9 @@ export default function MemoryChannel({ pcbOffsetX = 0, children }: {
 						name={s.name}
 						thickness={0.102}
 						pcbPath={
-							routes[s.name as keyof typeof routes] as TraceProps["pcbPath"]
+							liftedSignals.has(s.name)
+                                ? undefined
+                                : routes[s.name as keyof typeof routes] as TraceProps["pcbPath"]
 						}
 						from={".U1 > ." + s.cpuBall}
 						to={".U_DDR > ." + s.ramBall}

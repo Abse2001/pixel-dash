@@ -126,7 +126,12 @@ def clear_handheld_copper_from_ddr(board):
                           and (e.get("name") or "").startswith("DDR_")}
             routes = [LineString([(v["x"], v["y"]) for v in e["route"]]).buffer(.20)
                       for e in board if e["type"] == "pcb_trace" and e["source_trace_id"] in signal_ids]
-            if len(routes) != 50 or unary_union(routes).convex_hull.intersects(discarded):
+            routed_ids = {e["source_trace_id"] for e in board if e["type"] == "pcb_trace"}
+            missing = {e["name"] for e in board if e["type"] == "source_trace"
+                       and e["source_trace_id"] in signal_ids - routed_ids}
+            if missing != {"DDR_D1", "DDR_D12", "DDR_A10", "DDR_A14"}:
+                raise ValueError(f"Unexpected open nets on the four-route breakout study: {sorted(missing)}")
+            if unary_union(routes).convex_hull.intersects(discarded):
                 raise ValueError("An isolated L3 fragment overlaps the routed DDR region")
             for v in board:
                 if (v["type"] == "pcb_via" and "inner2" in v["layers"] and

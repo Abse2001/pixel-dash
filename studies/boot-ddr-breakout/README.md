@@ -1,0 +1,9 @@
+# N5/P5 and switched DDR power breakout
+
+The wide handheld stays at four layers. This study moves the 0.38/0.18 mm switched DDR through via toward L5, uses a 0.26 mm L1 feed and a 0.40 mm L4 connection to its existing buffered supply. An independent 0.102 mm DCDC4 branch joins N5 and P5 to the existing P6 land. Both offset launches retain at least one quarter trace width of endpoint-center overlap inside the CPU pad. Four logical DDR links retain their pin assignments while their stored paths are lifted for the breakout.
+
+The first drilled export connects 21/21 DCDC4 lands, 7/7 switched DDR lands and all 22 CPU-side bypasses. All 18 DRAM supply lands remain on direct DCDC3. The signal count is 46/50. A10, A14, D1 and D12 are open. A check of the remaining 46 routes finds full-width signal reference throughout, with no mapped shorts, drill-spacing, 0.102 mm copper or 0.1524 mm via-edge findings. The first export retained eight obsolete signal antipads on each inner layer from the input board. Its common envelope fails with 2.025413 mm² residual on each plane. Rebuilding the channel from source repours both planes. See [first physical audit](physical-lands-before-refill.txt).
+
+On the first export the drilled feed and return sheet model gives 27.927 mΩ at 20 °C against 32.380 mΩ on the complete fallback. At the selected 105 °C, 80% conductor-area, 40 mΩ switch corner the modeled DC and dynamic reserves are 15.796 and 4.895 mV. Component, stackup and transient measurements remain open.
+
+The present reserved two-via search found no path for any of the four lifted nets. Allowing additional through transitions within the same supporting halfplanes also leaves the CPU and DRAM in separate routing regions on each net. These bounds pertain to the tested launch geometry and reference model. Restoring all four nets and checking timing, return coverage and drilled copper on that same complete board are acceptance requirements.

@@ -310,11 +310,13 @@ for saved_name, plan in paths.items():
     last_layer = routing_layers[-1]
     for pad, point, layer in ((start, sections[0][0], first_layer), (end, sections[-1][-1], last_layer)):
         allowed = 1e-5
-        if isinstance(plan, dict) and plan.get("offset_ball"):
-            ref, terminal = plan["offset_ball"].split(".")
-            if ref != "U1":
+        if isinstance(plan, dict):
+            offset_balls = plan.get("offset_balls", [])
+            if "offset_ball" in plan:
+                offset_balls = [plan["offset_ball"]]
+            if any(label.split(".")[0] != "U1" for label in offset_balls):
                 raise ValueError(f"Offset landing is only defined for processor balls on {sid}")
-            if pad["source_port_id"] == port(ref, terminal)["source_port_id"]:
+            if any(pad["source_port_id"] == port(*label.split("."))["source_port_id"] for label in offset_balls):
                 copper_land = one(board, "pcb_smtpad", pcb_port_id=pad["pcb_port_id"], shape="circle")
                 # Keep the center of the trace end at least a quarter-width inside the ball land.
                 allowed = copper_land["radius"] - plan["width"] / 4
