@@ -1,0 +1,28 @@
+Screened 18 routed raster signals.
+25 signal/layer reference-coverage findings
+signal,signal_layer,reference_layer,uncovered_copper_mm2
+system_LCD_D0,bottom,inner2,0.2388520
+system_LCD_D0,bottom,inner2,0.2730015
+system_LCD_D0,inner2,inner1,0.1628409
+system_LCD_D0,top,inner1,0.0918620
+system_LCD_D1,bottom,inner2,0.1229004
+system_LCD_D10,bottom,inner2,0.0895370
+system_LCD_D10,top,inner1,0.0551560
+system_LCD_D11,top,inner1,0.0441200
+system_LCD_D11,top,inner1,0.2747701
+system_LCD_D12,bottom,inner2,0.0966121
+system_LCD_D12,inner1,inner2,0.3673661
+system_LCD_D14,top,inner1,0.4211898
+system_LCD_D14,top,inner1,0.4231907
+system_LCD_D15,top,inner1,0.1086926
+system_LCD_D15,top,inner1,0.5121299
+system_LCD_D2,bottom,inner2,0.1186424
+system_LCD_D8,bottom,inner2,0.0885761
+system_LCD_D8,bottom,inner2,0.1126840
+system_LCD_D8,inner1,inner2,0.1107473
+system_LCD_D8,inner1,inner2,0.9107407
+system_LCD_D8,top,inner1,0.0556933
+system_LCD_D9,bottom,inner2,0.0888725
+system_LCD_D9,bottom,inner2,0.4277236
+system_LCD_D9,inner2,inner1,0.2017375
+system_LCD_D9,top,inner1,0.0470616

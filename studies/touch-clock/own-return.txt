@@ -1,0 +1,6 @@
+Screened 1 routed raster signals.
+3 signal/layer reference-coverage findings
+signal,signal_layer,reference_layer,uncovered_copper_mm2
+system_TOUCH_SCL,bottom,inner2,0.1680938
+system_TOUCH_SCL,inner2,inner1,0.1134530
+system_TOUCH_SCL,top,inner1,0.0944683
