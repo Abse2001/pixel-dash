@@ -34,22 +34,30 @@ def main():
         raise ValueError("Missing CPU or RAM body")
     transitions = {(v["x"], v["y"]) for t in board if t["type"] == "pcb_trace" and t.get("source_trace_id") in signals
                    for v in t["route"] if v["route_type"] == "via"}
-    vias = {(e["x"], e["y"]): e for e in board if e["type"] == "pcb_via" and set(e["layers"]) == {"top", "inner1", "inner2", "bottom"}}
+    vias = {}
+    for e in board:
+        if e["type"] != "pcb_via" or (e["x"], e["y"]) not in transitions:
+            continue
+        pos = e["x"], e["y"]
+        if pos in vias:
+            raise ValueError(f"Ambiguous drilled transition at {pos}")
+        vias[pos] = e
+    through = {"top", "inner1", "inner2", "bottom"}
     counts = Counter()
     candidate = []
     for pos in sorted(transitions):
         via = vias[pos]
         name = next((n for n, body in outlines.items() if body.covers(Point(pos))), "outside both bodies")
-        counts[name, via["outer_diameter"], via["hole_diameter"]] += 1
-        if name in bodies:
+        counts[name, "/".join(via["layers"]), via["outer_diameter"], via["hole_diameter"]] += 1
+        if name in bodies and set(via["layers"]) == through:
             candidate.append(via)
-    for (name, pad, hole), count in sorted(counts.items()):
-        print(f"{name}: {count} DDR through vias, {pad:g} mm land, {hole:g} mm drill.")
+    for (name, span, pad, hole), count in sorted(counts.items()):
+        print(f"{name}: {count} DDR {span} vias, {pad:g} mm land, {hole:g} mm drill.")
     for via in candidate:
         via["outer_diameter"], via["hole_diameter"] = 0.4572, 0.254
     edge = runpy.run_path(str(CHECKS / "audit-via-clearance.py"))["audit"]
     drills = runpy.run_path(str(CHECKS / "audit-via-hole-spacing.py"))["audit"]
-    print(f"In-memory comparison with 18 mil lands and 10 mil holes at {len(candidate)} in-package sites:")
+    print(f"In-memory comparison with 18 mil lands and 10 mil holes at {len(candidate)} in-package through sites:")
     print(f"  {len(edge(board))} via/layer/unrelated-net pairs below 6 mil.")
     print(f"  Drill-edge spacing findings: {sum(1 for _ in drills(board))}.")
 

@@ -1,0 +1,14 @@
+U1: 1 DDR bottom/inner2/inner1/top vias, 0.3 mm land, 0.15 mm drill.
+U1: 1 DDR inner1/inner2 vias, 0.36 mm land, 0.2 mm drill.
+U1: 1 DDR top/inner1 vias, 0.28 mm land, 0.125 mm drill.
+U1: 20 DDR top/inner1/inner2/bottom vias, 0.3 mm land, 0.15 mm drill.
+U_DDR: 13 DDR bottom/inner2/inner1/top vias, 0.3 mm land, 0.15 mm drill.
+U_DDR: 2 DDR inner1/inner2 vias, 0.36 mm land, 0.2 mm drill.
+U_DDR: 7 DDR top/inner1/inner2/bottom vias, 0.3 mm land, 0.15 mm drill.
+outside both bodies: 8 DDR bottom/inner2/inner1/top vias, 0.3 mm land, 0.15 mm drill.
+outside both bodies: 1 DDR inner1/inner2 vias, 0.36 mm land, 0.2 mm drill.
+outside both bodies: 3 DDR inner2/bottom vias, 0.28 mm land, 0.125 mm drill.
+outside both bodies: 27 DDR top/inner1/inner2/bottom vias, 0.3 mm land, 0.15 mm drill.
+In-memory comparison with 18 mil lands and 10 mil holes at 41 in-package through sites:
+  52 via/layer/unrelated-net pairs below 6 mil.
+  Drill-edge spacing findings: 2.
