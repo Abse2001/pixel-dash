@@ -218,8 +218,15 @@ for path in json.loads((here/"command-routes.json").read_text()):
         for start, end in zip(lead, lead[1:]):
             add_segment(start, end, k.F_Cu, n, .102)
         add_barrel(via, n)
-    for a,b in zip(path["path"],path["path"][1:]):
-        add_segment(a,b,{"In2.Cu":k.In2_Cu,"In3.Cu":k.In3_Cu}[path["inner"]],n,.102)
+    if "sections" in path:
+        add_barrel(path["middle"], n)
+        sections = path["sections"]
+    else:
+        sections = [{"layer": path["inner"], "points": path["path"]}]
+    for section in sections:
+        layer = {"In2.Cu": k.In2_Cu, "In3.Cu": k.In3_Cu}[section["layer"]]
+        for start, end in zip(section["points"], section["points"][1:]):
+            add_segment(start, end, layer, n, .102)
     routed.append(path["net"])
 for adjustment in json.loads((here/"via-adjustments.json").read_text()):
     old=at(adjustment["old"]);new=at(adjustment["new"])
