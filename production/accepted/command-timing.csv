@@ -8,13 +8,13 @@ DDR_A13,open,open,,,,,,,,,,,,,OPEN
 DDR_A14,38.6714,38.67141,top>bottom/bottom>top,2.84,0,,241.839,5.369,36.14999..38.68999,0,,,370.369,279.631,OPEN
 DDR_A15,38.0152,38.01519,top>bottom/bottom>top/top>bottom/bottom>top,5.68,0,,256.798,20.327,36.14999..38.68999,0,,,385.327,264.673,OPEN
 DDR_A2,open,open,,,,,,,,,,,,,OPEN
-DDR_A3,open,38.1485,top>bottom/bottom>top/top>inner1/inner1>inner2/inner2>top,5.49,10.2707,,265.58,29.11,36.14999..38.68999,0,,,394.11,255.89,OPEN
+DDR_A3,38.1485,38.1485,top>bottom/bottom>top/top>inner1/inner1>inner2/inner2>top,5.49,10.2707,,265.58,29.11,36.14999..38.68999,0,,,394.11,255.89,OPEN
 DDR_A4,open,open,,,,,,,,,,,,,OPEN
-DDR_A5,37.5349,37.21347,top>inner2/inner2>inner1/inner1>top/top>inner2/inner2>top,5.3,15.5196,,263.668,27.197,36.14999..38.68999,0,,,392.197,257.803,OPEN
-DDR_A6,36.1111,36.67605,top>inner2/inner2>top/top>inner2/inner2>inner1/inner1>inner2/inner2>top,7.76,18.056,,279.092,42.622,36.14999..38.68999,0,,,407.622,242.378,OPEN
+DDR_A5,37.2135,37.21347,top>inner2/inner2>inner1/inner1>top/top>inner2/inner2>top,5.3,15.5196,,263.668,27.197,36.14999..38.68999,0,,,392.197,257.803,OPEN
+DDR_A6,36.676,36.67605,top>inner2/inner2>top/top>inner2/inner2>inner1/inner1>inner2/inner2>top,7.76,18.056,,279.092,42.622,36.14999..38.68999,0,,,407.622,242.378,OPEN
 DDR_A7,37.3597,37.35967,top>inner2/inner2>top,2.65,36.8242,,266.244,29.774,36.14999..38.68999,0,,,394.774,255.226,OPEN
 DDR_A8,36.533,36.53305,top>inner2/inner2>inner1/inner1>top,2.65,8.9927,,236.363,-0.107,36.14999..38.68999,0,,,364.893,285.107,OPEN
-DDR_A9,39.6573,39.65733,top>bottom/bottom>top,2.84,0,,247.527,11.057,36.14999..38.68999,0.96734,,,376.057,273.943,OPEN
+DDR_A9,39.6573,38.60715,top>bottom/bottom>top,2.84,0,,241.469,4.999,36.14999..38.68999,0,,,369.999,280.001,OPEN
 DDR_BA0,36.2668,36.26684,,0,0,,209.223,-27.247,36.14999..38.68999,0,,,337.753,312.247,OPEN
 DDR_BA1,48.5128,48.51285,top>bottom/bottom>inner2/inner2>top,2.84,10.8242,,308.381,71.911,36.14999..38.68999,9.82286,,,436.911,213.089,OPEN
 DDR_BA2,38.6409,38.64092,,0,0,,222.919,-13.551,36.14999..38.68999,0,,,351.449,298.551,OPEN
@@ -26,4 +26,4 @@ DDR_CSn0,open,open,,,,,,,,,,,,,OPEN
 DDR_ODT,open,open,,,,,,,,,,,,,OPEN
 DDR_RASn,open,open,,,,,,,,,,,,,OPEN
 DDR_RESETn,open,open,,,,,,,,,,,,,OPEN
-DDR_WEn,40.5356,40.50792,top>inner1/inner1>inner2/inner2>bottom/bottom>inner2/inner2>top,2.84,20.4164,,270.856,34.385,36.14999..38.68999,1.81794,,,399.385,250.615,OPEN
+DDR_WEn,40.5079,40.50792,top>inner1/inner1>inner2/inner2>bottom/bottom>inner2/inner2>top,2.84,20.4164,,270.856,34.385,36.14999..38.68999,1.81794,,,399.385,250.615,OPEN

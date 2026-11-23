@@ -28,9 +28,9 @@ DDR_A7,2.0,1.0,29.774,473,380,502.774,350.226,213,source and waveform unverified
 DDR_A8,1.0,2.0,-0.107,365,285,364.893,285.107,145,source and waveform unverified
 DDR_A8,1.0,1.0,-0.107,405,335,404.893,335.107,145,source and waveform unverified
 DDR_A8,2.0,1.0,-0.107,473,380,472.893,380.107,213,source and waveform unverified
-DDR_A9,1.0,2.0,11.057,365,285,376.057,273.943,145,source and waveform unverified
-DDR_A9,1.0,1.0,11.057,405,335,416.057,323.943,145,source and waveform unverified
-DDR_A9,2.0,1.0,11.057,473,380,484.057,368.943,213,source and waveform unverified
+DDR_A9,1.0,2.0,4.999,365,285,369.999,280.001,145,source and waveform unverified
+DDR_A9,1.0,1.0,4.999,405,335,409.999,330.001,145,source and waveform unverified
+DDR_A9,2.0,1.0,4.999,473,380,477.999,375.001,213,source and waveform unverified
 DDR_BA0,1.0,2.0,-27.247,365,285,337.753,312.247,145,source and waveform unverified
 DDR_BA0,1.0,1.0,-27.247,405,335,377.753,362.247,145,source and waveform unverified
 DDR_BA0,2.0,1.0,-27.247,473,380,445.753,407.247,213,source and waveform unverified
