@@ -1,11 +1,11 @@
 50/50 independent drilled DDR pairs. Open: none
-403 plated through drills. No shorts between mapped lands or vias.
-Drill diameters: {0.2: 251, 0.15: 152}
+404 plated through drills. No shorts between mapped lands or vias.
+Drill diameters: {0.2: 251, 0.15: 153}
 DCDC3 post-inductor L3 copper 745.18 mm², reaches 18/18 DRAM supply balls.
 DRAM supply balls outside that copper island: none
-Ground reaches 164/166 assigned return pads. Open: U1.A1, U_DDR.J8
+Ground reaches 165/166 assigned return pads. Open: U1.A1
 DCDC3 reaches all 44 assigned direct DDR rail pads.
 Switched DDR output reaches 7/7 CPU DDR balls. Open: none
 All 50 timed track geometries reproduced on their assigned drilled copper islands within 0.001 mm.
-L3 direct-supply area missing under projected DDR traces away from vias: 104.7248 mm².
+L3 direct-supply area missing under projected DDR traces away from vias: 104.7301 mm².
 Full-width ground reference losses outside own launches (mm²): {}
