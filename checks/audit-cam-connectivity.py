@@ -22,6 +22,28 @@ MEMBERS = ("F_Cu.gbr", "In1_Cu.gbr", "In2_Cu.gbr", "B_Cu.gbr")
 CHECKS = Path(__file__).parent
 
 
+def ddr_reference_and_calibration(terminals):
+    groups = {
+        "U1.J3": ("R_VTP.pin1",),
+        "U_DDR.L8": ("R_ZQ.pin1",),
+        "U1.J4": ("U_DDR.H1", "R_VREF_HIGH.pin1", "R_VREF_LOW.pin1",
+                  "R_VREF_CA.pin2", "C_CPU_VREF.pin1", "C_VREF_DQ.pin1"),
+        "U_DDR.M8": ("R_VREF_CA.pin1", "C_VREF_CA.pin1"),
+        "C_PMIC_DDR.pin1": ("R_VREF_HIGH.pin2",),
+        "TP_UART_GND.pin1": ("R_VTP.pin2", "R_ZQ.pin2", "R_VREF_LOW.pin2",
+                            "C_CPU_VREF.pin2", "C_VREF_DQ.pin2", "C_VREF_CA.pin2"),
+    }
+    separate = len({terminals[anchor] for anchor in groups}) == len(groups)
+    print("DDR VTP, ZQ, VREFDQ, VREFCA, DCDC3 and ground isolation:", "PASS" if separate else "FAIL")
+    passed = separate
+    for anchor, lands in groups.items():
+        missing = [land for land in lands if terminals[land] != terminals[anchor]]
+        passed &= not missing
+        print(f"DDR reference/calibration {anchor}:",
+              "open to " + ", ".join(missing) if missing else "PASS to " + ", ".join(lands))
+    return not passed
+
+
 def processor_power(terminals):
     """Compare package balls with the intended power sources in TI SLVUAA9B Table 1."""
     balls = json.loads((CHECKS.parent / "am3354/processor-balls.json").read_text())
@@ -466,6 +488,7 @@ def main():
         else:
             print("All mapped handheld ground lands and barrels join the UART ground probe.")
     startup_failed = args.cpu_power and rtc_startup(terminals)
+    calibration_failed = args.cpu_power and ddr_reference_and_calibration(terminals)
     power_failed = args.cpu_power and processor_power(terminals)
     straps_failed = args.sysboot and sysboot(terminals)
     caps_failed = args.cpu_power and internal_bypass(board, terminals, port_labels)
@@ -476,7 +499,7 @@ def main():
         examples = [", ".join(sorted(members[key][node])[:3]) or "via only" for node in sorted(nodes_by_net[key])]
         print(f"OPEN {key} has {count} separate CAM networks: " + " | ".join(examples))
     print(f"{len(opens)} mapped land nets have multiple physical networks.")
-    return bool(ddr_open or opens) or power_failed or startup_failed or straps_failed or interfaces_failed or caps_failed or card_failed or ground_failed
+    return bool(ddr_open or opens) or power_failed or calibration_failed or startup_failed or straps_failed or interfaces_failed or caps_failed or card_failed or ground_failed
 
 
 if __name__ == "__main__":
