@@ -65,3 +65,7 @@ R_SYSBOOT6 pin 2 reaches J_LCD pin 24 through a staggered blind/buried transitio
 ## Powered LCD D16
 
 U1.U13 reaches J_LCD pin 33 through nine plated transitions. The raster reference check covers the entire D16 trace. Ten of 29 CPU-to-panel signals, all sixteen panel-side strap taps and seven CPU strap states are connected. Drilled CAM finds 30 split mapped nets. The 45 DDR links retain their complete prior timing CSV, physical power lands and 71 local returns. The checks cover physical connection and reference. Panel setup and hold relative to PCLK remain open. [Drilled CAM](panel-D16-cam.txt) · [Geometry](panel-D16-geometry.txt) · [Full PCB](powered-panel-taps.png)
+
+## Powered LCD D17
+
+U1.V13 reaches J_LCD pin 17 through thirteen plated transitions. The raster reference check covers the entire D17 trace. Eleven of 29 CPU-to-panel signals, all sixteen panel-side strap taps and seven CPU strap states are connected. Drilled CAM finds 29 split mapped nets. The 45 DDR links retain their complete prior timing CSV, physical power lands and 71 local returns. The checks cover physical connection and reference. Panel setup and hold relative to PCLK remain open. [Drilled CAM](panel-D17-cam.txt) · [Geometry](panel-D17-geometry.txt) · [Full PCB](powered-panel-taps.png)
