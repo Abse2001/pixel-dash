@@ -12,9 +12,9 @@ from shapely.ops import unary_union
 PAIRS = (("DDR_CK", "DDR_CKn"), ("DDR_DQS0", "DDR_DQSn0"), ("DDR_DQS1", "DDR_DQSn1"))
 
 
-def pair_segments(elements):
+def pair_segments(elements, pairs=PAIRS):
     names = {e["source_trace_id"]: e.get("name") for e in elements if e["type"] == "source_trace"}
-    wanted = {name for pair in PAIRS for name in pair}
+    wanted = {name for pair in pairs for name in pair}
     segments = {}
     for trace in elements:
         if trace["type"] != "pcb_trace":

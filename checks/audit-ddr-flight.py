@@ -18,8 +18,14 @@ DEPTH = {"top": 0., "inner1": WURTH.outer_to_inner,
 
 def flights(board, proximity, study_open=()):
     pair_audit = runpy.run_path(str(Path(__file__).with_name("measure-ddr-pair-spacing.py")))
-    pairs = pair_audit["PAIRS"]
-    segments = pair_audit["pair_segments"](board)
+    pairs = []
+    for pair in pair_audit["PAIRS"]:
+        missing = set(pair).intersection(study_open)
+        if len(missing) == 1:
+            raise ValueError(f"Unpaired reference conductor in {pair}")
+        if not missing:
+            pairs.append(pair)
+    segments = pair_audit["pair_segments"](board, pairs)
     coupled = {}
     for positive, negative in pairs:
         for name, mate in ((positive, negative), (negative, positive)):
