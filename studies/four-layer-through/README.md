@@ -1,0 +1,7 @@
+## First through-via conversion
+
+The trial board changes six L1–L2 ground vias to conventional 0.20 mm drilled, 0.45 mm land through vias at their original centers. The six locations clear solderable component lands. Their full spans clear all unrelated copper and the protected reference region. The circuit snapshot differs from ca10e34 in exactly those six via objects. The production build continues to reproduce the accepted fallback.
+
+Drilled CAM still finds 37 independent DDR links, seven MMC0 connections, the DDR supplies and ground, and 38 split handheld nets. All 22 data routes and their 44 vias match the baseline. DDR/MMC0 full-width checks pass and the selected reference-plane paths, raster findings, clock and command timing measures retain the baseline values. The unchanged engineering stack was used to compare geometry. Four-layer JLCPCB stack qualification and receiver validation remain open. Remaining non-through vias on this board comprise 301 L1–L2, 44 L3–L4 and 34 L2–L3.
+
+To reproduce this trial, decompress the saved circuit into an isolated export directory, export its Gerbers with the project exporter, and compare the drilled file spans to the included CAM report. The converted-via list contains every changed coordinate. [Board](board.png) · [Drill and connectivity report](drilled-cam.txt) · [Power and MMC0](power-and-mmc0.txt) · [Via coordinates](converted.csv)

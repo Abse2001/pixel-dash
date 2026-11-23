@@ -1,0 +1,7 @@
+via,x_mm,y_mm,original_span,original_drill_mm,original_land_mm,through_drill_mm,through_land_mm
+channel_pcb_via_55,-37.5799,7.9499,top-inner1,0.125,0.28,0.2,0.45
+channel_pcb_via_163,-26.575,36.75,top-inner1,0.125,0.28,0.2,0.45
+pcb_joystick_ground_1322,-7.900000000003658,17.49999999999646,top-inner1,0.125,0.28,0.2,0.45
+pcb_retained_ground_3_2,-13.6,-16.0,top-inner1,0.125,0.28,0.2,0.45
+pcb_retained_ground_98_6,-32.8,-9.3,top-inner1,0.125,0.28,0.2,0.45
+pcb_retained_ground_109_2,-0.6999999999999993,-19.700000000000003,top-inner1,0.125,0.28,0.2,0.45
