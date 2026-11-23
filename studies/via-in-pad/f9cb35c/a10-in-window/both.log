@@ -1,0 +1,28 @@
+landing 0 [-49.224907, 17.934998] legal exits by layer [90, 47, 98, 47]
+landing 1 [-63.400054, 9.550004000000001] legal exits by layer [43, 36, 84, 75]
+reachable graph islands [(0, np.int32(330), np.int64(1)), (1, np.int32(572), np.int64(1)), (2, np.int32(704), np.int64(1)), (3, np.int32(864), np.int64(1)), (0, np.int32(1), np.int64(183)), (2, np.int32(1), np.int64(183)), (1, np.int32(1), np.int64(183)), (3, np.int32(1), np.int64(183)), (1, np.int32(1), np.int64(183)), (3, np.int32(1), np.int64(183))]
+reachable graph islands [(0, np.int32(84), np.int64(1)), (1, np.int32(461), np.int64(1)), (2, np.int32(1), np.int64(183)), (3, np.int32(771), np.int64(1)), (0, np.int32(1), np.int64(183)), (1, np.int32(1), np.int64(183)), (3, np.int32(1), np.int64(183)), (1, np.int32(460), np.int64(1))]
+end-to-end 0 2 687
+end-to-end 0 0 665
+end-to-end 0 1 665
+end-to-end 0 3 664
+end-to-end 2 2 686
+end-to-end 2 0 664
+end-to-end 2 1 664
+end-to-end 2 3 663
+end-to-end 1 2 682
+end-to-end 1 0 660
+end-to-end 1 1 660
+end-to-end 1 3 659
+end-to-end 3 2 686
+end-to-end 3 0 664
+end-to-end 3 1 664
+end-to-end 3 3 663
+end-to-end 1 2 714
+end-to-end 1 0 692
+end-to-end 1 1 692
+end-to-end 1 3 691
+end-to-end 3 2 713
+end-to-end 3 0 691
+end-to-end 3 1 691
+end-to-end 3 3 690

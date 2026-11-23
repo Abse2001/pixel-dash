@@ -1,0 +1,2 @@
+vip_A10_U1 four copper layers meet 0.150 mm plated bore; top BGA land joins wall
+vip_A10_U_DDR four copper layers meet 0.150 mm plated bore; top BGA land joins wall

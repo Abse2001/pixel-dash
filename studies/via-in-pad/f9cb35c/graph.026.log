@@ -1,0 +1,4 @@
+landing 0 [-49.224907, 17.934998] legal exits by layer [42, 9, 20, 12]
+landing 1 [-63.400054, 9.550004000000001] legal exits by layer [15, 15, 37, 29]
+reachable graph islands [(0, np.int32(306), np.int64(11)), (2, np.int32(306), np.int64(11)), (1, np.int32(306), np.int64(11)), (3, np.int32(306), np.int64(11)), (0, np.int32(353), np.int64(1)), (1, np.int32(615), np.int64(1)), (2, np.int32(767), np.int64(1)), (3, np.int32(929), np.int64(1)), (1, np.int32(306), np.int64(11)), (2, np.int32(306), np.int64(11)), (3, np.int32(306), np.int64(11))]
+reachable graph islands [(0, np.int32(86), np.int64(6)), (1, np.int32(86), np.int64(6)), (2, np.int32(86), np.int64(6)), (3, np.int32(86), np.int64(6))]

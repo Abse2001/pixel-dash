@@ -1,0 +1,5 @@
+layer,retained_net,retained_object,trial_object,edge_gap_mm,required_mm,overlap_mm2
+top,DDR_A6,pcb_command_DDR_A6,pcb_command_DDR_A10_via_2,0.0,0.1524,0.018723
+top,DDR_A6,pcb_command_DDR_A6,pcb_command_DDR_A10_via_3,0.076516,0.1524,0.0
+top,DDR_A6,pcb_command_DDR_A6,pcb_command_DDR_A10,0.0,0.102,0.165057
+inner2,DDR_A7,pcb_command_DDR_A7,pcb_command_DDR_A10,0.0,0.102,0.426801

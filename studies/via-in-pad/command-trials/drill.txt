@@ -1,0 +1,3 @@
+1 via drill-spacing findings
+via_a,via_b,drill_edge_gap_mm,required_mm
+pcb_command_DDR_BA1_via_1,pcb_command_DDR_BA1_via_2,-0.121799,0.13
