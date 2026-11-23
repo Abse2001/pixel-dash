@@ -320,6 +320,15 @@ for saved_name, plan in paths.items():
                 copper_land = one(board, "pcb_smtpad", pcb_port_id=pad["pcb_port_id"], shape="circle")
                 # Keep the center of the trace end at least a quarter-width inside the ball land.
                 allowed = copper_land["radius"] - plan["width"] / 4
+        if isinstance(plan, dict) and plan.get("inset_start") and pad is start:
+            land = one(board, "pcb_smtpad", pcb_port_id=start["pcb_port_id"], shape="rect")
+            inset = plan.get("width", 0.102) / 2
+            if any(abs(value - land[axis]) + inset > land[dimension] / 2
+                   for value, axis, dimension in zip(point, ("x", "y"), ("width", "height"))):
+                raise ValueError(f"Start stroke lies outside its rectangular pad on {sid}")
+            if layer not in pad["layers"]:
+                raise ValueError(f"Incorrect start layer on {sid}")
+            continue
         if layer not in pad["layers"] or dist(point, (pad["x"], pad["y"])) > allowed:
             raise ValueError(f"Saved route no longer lands on a terminal of {sid}")
     width = plan.get("width", 0.102) if isinstance(plan, dict) else 0.102

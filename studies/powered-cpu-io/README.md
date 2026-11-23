@@ -53,3 +53,7 @@ Drilled CAM connects the CPU's touch SCL signal to its fitted pull-up. The pull-
 ## Panel-side LCD D5 connection
 
 R_SYSBOOT5 pin 2 now reaches the panel's LCD D5 contact. The number of panel data contacts connected to their strap sense nodes is 14/16. The CPU land for this bit is still on its own island. Seven strap levels reach the CPU and 32 mapped board nets remain split. All 45 DDR links, the timing CSV, powered lands, 71 local DDR returns, handheld ground, and sequenced MMC0 remain intact. Full-width raster and DDR references, class and copper spacing, and separate drill and via-edge checks pass. [Drilled endpoints](panel-tap-5-cam.txt) · [Physical gates](panel-tap-5-geometry.txt)
+
+## Powered LCD D12
+
+U1.V2, R_SYSBOOT12 pin 2 and J_LCD pin 15 now share one drilled CAM island. Local changes to D4, D11 and PCLK retain their full-width return around the new D12 transitions. All 45 DDR links, their timing CSV, 71 local return terminals, the sequenced MMC0 supply and seven signals retain their prior results. The full panel has 9/29 end-to-end signals and 15/16 strap taps. Seven CPU boot straps are physically resolved. There are 31 split mapped nets. [Drilled CAM](panel-D12-cam.txt) · [Physical checks](panel-D12-geometry.txt) · [Full-board PCB](powered-panel-taps.png)
