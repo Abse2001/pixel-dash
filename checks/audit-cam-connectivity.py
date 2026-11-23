@@ -38,9 +38,13 @@ def ddr_power_lands(terminals):
         "U_PMIC.L4B": ["L_PMIC_IO.pin2"],
         "U_PMIC.L3": ["L_PMIC_DDR.pin1"],
         "L_PMIC_DDR.pin2": ["U_PMIC.FB3", "C_PMIC_DDR.pin1", "U_DDR_SWITCH.VIN1",
-                            "U_DDR_SWITCH.VIN2", *balls(ram, "U_DDR", {"VDD", "VDDQ"}, 18)],
+                            "U_DDR_SWITCH.VIN2", "R_VREF_HIGH.pin2", *balls(ram, "U_DDR", {"VDD", "VDDQ"}, 18)],
         "U_DDR_SWITCH.VOUT1": ["U_DDR_SWITCH.VOUT2", *balls(cpu, "U1", {"VDDS_DDR"}, 7)],
-        "TP_UART_GND.pin1": ["C_PMIC_DDR.pin2", *balls(ram, "U_DDR", {"VSS", "VSSQ"}, 21)],
+        "R_VREF_HIGH.pin1": ["R_VREF_LOW.pin1", "R_VREF_CA.pin2", "U1.J4",
+                             "U_DDR.H1", "C_CPU_VREF.pin1", "C_VREF_DQ.pin1"],
+        "R_VREF_CA.pin1": ["U_DDR.M8", "C_VREF_CA.pin1"],
+        "TP_UART_GND.pin1": ["C_PMIC_DDR.pin2", "R_VREF_LOW.pin2", "C_VREF_CA.pin2",
+                             "C_VREF_DQ.pin2", "C_CPU_VREF.pin2", *balls(ram, "U_DDR", {"VSS", "VSSQ"}, 21)],
     }
     caps = json.loads((CHECKS.parent / "am3354/bypass-placement.json").read_text())
     cpu_caps = {i for i, cap in enumerate(caps, 1) if cap["chip"] == "U1"}
@@ -53,7 +57,7 @@ def ddr_power_lands(terminals):
         groups[supply].append(f"C_DDR{i}.pin1")
         groups["TP_UART_GND.pin1"].append(f"C_DDR{i}.pin2")
     if len({terminals[anchor] for anchor in groups}) != len(groups):
-        raise ValueError("DDR supply, switching node, I/O or ground share exported copper")
+        raise ValueError("DDR supply, reference, switching node, I/O or ground share exported copper")
     failed = False
     for anchor, lands in groups.items():
         for land in lands:

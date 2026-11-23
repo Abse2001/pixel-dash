@@ -250,13 +250,9 @@ VDDS_DDR,channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net75,c
 VDDS_DDR,channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net75,channel_pcb_via_11,L1-L2,-67.400046,15.149942,0.125,0.28
 VDDS_DDR,channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net75,channel_pcb_via_12,L2-L3,-67.800046,15.078532,0.2,0.36
 VDDS_DDR,channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net75,channel_pcb_via_129,L3-L4,-61.32,6.35,0.125,0.28
-VDDS_DDR,channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net75,channel_pcb_via_13,L1-L2,-66.987106,11.571791,0.125,0.28
 VDDS_DDR,channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net75,channel_pcb_via_137,L3-L4,-47.8,17.9,0.125,0.28
 VDDS_DDR,channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net75,channel_pcb_via_139,L1-L2,-56.214,23.248,0.125,0.28
-VDDS_DDR,channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net75,channel_pcb_via_14,L2-L3,-67.274596,11.753311,0.2,0.36
 VDDS_DDR,channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net75,channel_pcb_via_140,L2-L3,-55.804,23.248,0.2,0.36
-VDDS_DDR,channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net75,channel_pcb_via_153,L1-L2,-57.694476,12.24995,0.125,0.28
-VDDS_DDR,channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net75,channel_pcb_via_154,L2-L3,-57.334476,12.24995,0.2,0.36
 VDDS_DDR,channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net75,channel_pcb_via_17,L1-L2,-62.599954,17.549988,0.125,0.28
 VDDS_DDR,channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net75,channel_pcb_via_5,L1-L2,-68.199892,7.950058,0.125,0.28
 VDDS_DDR,channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net75,channel_pcb_via_6,L2-L3,-68.539892,7.950058,0.2,0.36

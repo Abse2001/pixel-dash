@@ -1,0 +1,6 @@
+source,front_via,buried_via,legal_sites,shortest_lead_mm,x_mm,y_mm
+U_DDR.N1,5,6,0,,,
+U_DDR.D2,11,12,5,1.453444,-68.700046,15.799942
+U_DDR.H2,13,14,2,0.531507,-67.000046,11.60005
+C_DDR40.pin1,139,140,0,,,
+R_VREF_HIGH.pin2,153,154,5,0.60208,-57.744476,11.64995
