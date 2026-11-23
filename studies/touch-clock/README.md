@@ -7,3 +7,5 @@ The independent CAM audit recovers the same 37 DDR links, both locked bytes and 
 The I²C clock itself has three signal-layer combinations with exposed trace area lacking adjacent connected ground. Those areas are 0.0944683 mm² on top, 0.1134530 mm² on L3 and 0.1680938 mm² on bottom. They were measured on the exported copper using the full-width raster ground-reference algorithm restricted to system_TOUCH_SCL. A strict four-layer escape search on a 50 µm grid found no complete path with full adjacent ground. The geometry is held on this branch for further routing. [Clock ground coverage](own-return.txt)
 
 Decompress study.circuit.json.gz and export Gerbers from that circuit to reproduce the copper. The production build at this commit still loads the accepted handheld.
+
+Run `python checks/audit-ddr-reference-planes.py study.circuit.json --touch SCL --full-width --gerbers study.zip` to reproduce the three findings. Local same-layer repairs with the 14 installed transitions fixed left four disconnected route sections on a 25 µm search grid.

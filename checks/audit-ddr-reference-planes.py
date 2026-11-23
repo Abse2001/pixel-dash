@@ -21,7 +21,9 @@ def polygon(pour):
     return Polygon(outer, holes)
 
 
-def audit(board, microsd=False, full_width=False, raster=False, archive=None, study_open=()):
+def audit(board, microsd=False, full_width=False, raster=False, archive=None, study_open=(), touch=None):
+    if touch:
+        raster = True
     nets = {e["source_net_id"]: e["name"] for e in board if e["type"] == "source_net"}
     names = {e["source_trace_id"]: e.get("name", "") for e in board if e["type"] == "source_trace"}
     ref = {"top": ("inner1", "GND"), "bottom": ("inner2", "GND" if microsd or raster else "VDDS_DDR")}
@@ -34,7 +36,7 @@ def audit(board, microsd=False, full_width=False, raster=False, archive=None, st
         sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "production"))
         from connectivity import trace_net_keys
         _, keys = trace_net_keys(board)
-        by_key = {key: source for source, key in keys.items() if source.startswith("system_LCD_")}
+        by_key = {key: source for source, key in keys.items() if (source == "system_TOUCH_" + touch if touch else source.startswith("system_LCD_"))}
         raster_by_source = {source: by_key[key] for source, key in keys.items() if key in by_key}
         for trace in board:
             if trace["type"] != "pcb_trace" or trace["source_trace_id"] not in raster_by_source:
@@ -141,7 +143,7 @@ def audit(board, microsd=False, full_width=False, raster=False, archive=None, st
     if raster and not seen:
         raise ValueError("The assembled board contains no routed raster signals")
     if raster:
-        print(f"Screened {len(seen)} routed raster signals.", file=sys.stderr)
+        print(f"Screened {len(seen)} routed {touch or 'raster'} signals.", file=sys.stderr)
 
 
 if __name__ == "__main__":
@@ -154,9 +156,10 @@ if __name__ == "__main__":
                        help="Partial DDR study only: require exactly these source signals to be open")
     parser.add_argument("--full-width", action="store_true")
     parser.add_argument("--gerbers", type=Path, help="Check the connected reference copper reconstructed from the manufacturing archive")
+    group.add_argument("--touch", choices=("SCL", "SDA", "IRQ"), help="Audit the selected touch signal against adjacent connected ground on all four routing layers")
     args = parser.parse_args()
     full_width = args.full_width
-    failures = sorted(audit(json.loads(args.circuit.read_text()), args.micro_sd, full_width, args.raster, args.gerbers, args.study_open))
+    failures = sorted(audit(json.loads(args.circuit.read_text()), args.micro_sd, full_width, args.raster, args.gerbers, args.study_open, args.touch))
     out = csv.writer(sys.stdout)
     out.writerow(("signal", "signal_layer", "reference_layer", "uncovered_copper_mm2" if full_width else "uncovered_centerline_mm"))
     for name, layer, ref, length in failures:
