@@ -13,3 +13,5 @@ With these 26 links frozen, a two-transition search on a 0.045 mm grid found no 
 The project command window and actual receiver timing remain open. An isolated B4-to-D7 RTC supply path passed physical continuity but cut off the G12 ground return. That power path is excluded from this checkpoint. No fabrication release.
 
 [Board circuit](handheld.circuit.json.gz) · [Byte 0 prior/current and limits](byte0.csv) · [Byte 1 prior/current and limits](byte1.csv) · [All 50 signals with timing and command residuals](timing.csv) · [Drilled CAM](drilled-cam.txt) · [Geometry checks](geometry-checks.txt)
+
+The rotated byte-1 placement gate is 14.2000 mm. All four routed data traces and both strobes exceed it. Their relative length matching and skew screens still pass. Across every same-byte DQ permutation with the mask and strobes fixed, the largest possible project gate is 14.99986 mm. Holding the 16.8141 mm strobe length would still miss by at least 1.81424 mm. Completing byte 1 therefore requires shorter geometry or a different placement. These placement gates are project criteria. TI specifies DQLM1 as a typical value. [Per-net remap bound](remap-length-bound.csv)
