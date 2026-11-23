@@ -111,7 +111,7 @@ assert len(reached) == len(dram_power) == 18, ("DCDC3 supply continuity regressi
 print("DRAM supply balls outside that copper island:", ", ".join(pin for pin in dram_power if pin not in reached) or "none")
 assert rail_pads["C_DDR34", "pin1"] == power_root
 grounds = {(ref,pin):node for ref,pin,node in pads["GND_INTERNAL"]}
-for ref in ("C_DDR5", "C_DDR6", "C_DDR34"):
+for ref in ("C_DDR5", "C_DDR6", "C_DDR34", "C_DDR40"):
     assert rail_pads[ref, "pin1"] == power_root, ref
     assert grounds[ref, "pin2"] == grounds["U_PMIC", "EP"], ref
 switched = {(ref,pin):node for ref,pin,node in pads["VDDS_DDR_CPU"]}

@@ -270,8 +270,8 @@ for edit in json.loads((here/"escape-edits.json").read_text()):
         add_segment(start,end,layer,net(edit["net"]),.102)
 for path in json.loads((here/"ground-escapes.json").read_text()):
     n=net(netname(balls["SW_POWER","pin1"]))
-    add_segment(path["start"],path["end"],k.F_Cu if path["layer"]=="F.Cu" else k.B_Cu,n,.20)
-    add_barrel([*path["end"],.20,.45],n)
+    add_segment(path["start"],path["end"],k.F_Cu if path["layer"]=="F.Cu" else k.B_Cu,n,path.get("width", .20))
+    add_barrel([*path["end"],path.get("drill", .20),path.get("diam", .45)],n)
 for link in json.loads((here/"local-links.json").read_text()):
     for a,b in zip(link["points"],link["points"][1:]):
         add_segment(a,b,{"F.Cu":k.F_Cu,"B.Cu":k.B_Cu,"In3.Cu":k.In3_Cu}[link["layer"]],net(link["net"]),link["width"])
