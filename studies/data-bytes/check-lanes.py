@@ -59,7 +59,10 @@ for lane in (0,1):
     ceiling = max(cur[n]['manhattan'] for n in data+pair)
     for n,m in [pair,pair[::-1]]:
         r=cur[n]
-        near=sum(line.intersection(union_all(cur[m]['layers'].get(layer,[])).buffer(.42,quad_segs=48)).length for layer,lines in r['layers'].items() for line in lines)
+        near = 0.
+        for layer, lines in r['layers'].items():
+            mate_corridor = union_all(cur[m]['layers'].get(layer, [])).buffer(.42, quad_segs=48)
+            near += sum(line.intersection(mate_corridor).length for line in lines)
         r['modes']=[r['flight'],r['flight']-near*(single-odd),r['flight']-r['length']*(single-odd)]
     for n in data+pair:
         r=cur[n]; st=[p for p in pair if p!=n]; isdata=n in data
