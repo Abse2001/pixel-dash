@@ -1,0 +1,1 @@
+ValueError: CAM short at ('top', 28) joins ['channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net13', 'channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net4']

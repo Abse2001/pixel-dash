@@ -1,0 +1,8 @@
+signal,signal_layer,reference_layer,uncovered_copper_mm2
+DDR_D13,top,inner1,0.0063582
+DDR_D14,bottom,inner2,0.0392865
+DDR_D14,top,inner1,0.0276439
+DDR_D15,bottom,inner2,0.0297647
+DDR_D9,bottom,inner2,0.0680233
+DDR_DQS1,bottom,inner2,0.1133954
+DDR_DQSn1,bottom,inner2,0.1390145

@@ -1,0 +1,5 @@
+best [(12, 12, 22.476)]
+best [(12, 14, 23.628)]
+individual feasible [(12, 12), (12, 14), (14, 12), (14, 14)]
+ordered continuations 4
+via configurations 54 50 best length residual sum None
