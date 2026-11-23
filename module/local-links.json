@@ -717,7 +717,7 @@
     "net": "VDDS_RTC_1V8",
     "start": "U_PMIC.FB6",
     "end": "L_PMIC_RTC_IO.pin2",
-    "width": 0.5,
+    "width": 0.18,
     "layer": "F.Cu",
     "points": [
       [
@@ -4146,6 +4146,40 @@
       [
         13.432816,
         12.0
+      ]
+    ]
+  },
+  {
+    "net": "channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net79",
+    "start": "U_PMIC.L6",
+    "end": "L_PMIC_RTC_IO.pin1",
+    "width": 0.3,
+    "layer": "B.Cu",
+    "points": [
+      [
+        23.699889,
+        11.750067
+      ],
+      [
+        27.869889,
+        12.536284
+      ]
+    ]
+  },
+  {
+    "net": "channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net79",
+    "start": "U_PMIC.L6",
+    "end": "L_PMIC_RTC_IO.pin1",
+    "width": 0.3,
+    "layer": "F.Cu",
+    "points": [
+      [
+        27.869889,
+        12.536284
+      ],
+      [
+        28.949889,
+        12.716284
       ]
     ]
   }

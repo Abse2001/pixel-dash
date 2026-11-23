@@ -241,5 +241,23 @@
     ],
     "drill": 0.15,
     "diam": 0.3
+  },
+  {
+    "net": "channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net79",
+    "pos": [
+      23.699889,
+      11.750067
+    ],
+    "drill": 0.15,
+    "diam": 0.3
+  },
+  {
+    "net": "channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net79",
+    "pos": [
+      27.869889,
+      12.536284
+    ],
+    "drill": 0.2,
+    "diam": 0.45
   }
 ]

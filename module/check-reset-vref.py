@@ -52,6 +52,7 @@ assert connected("U_PMIC.DCDC4","C_PMIC_IO_A.pin1","C_PMIC_IO_B.pin1","J_CARRIER
 assert connected("C_PMIC_IO_A.pin2","C_PMIC_IO_B.pin2","U_PMIC.EP")
 print("DCDC4 reaches both output capacitors and the three carrier supply contacts; both bypass returns reach ground.")
 boot_paths = {
+    "RTC I/O DCDC6 switch node to inductor input": ["U_PMIC.L6","L_PMIC_RTC_IO.pin1"],
     "PMIC wake output to RTC wake pull": ["U_PMIC.nWAKEUP","R_PMIC_WAKE.pin1"],
     "PMIC interrupt output to IRQ pull": ["U_PMIC.nINT","R_PMIC_IRQ.pin1"],
     "All five VSYS contacts to PMIC inputs and DDR switch bias": [*(f"J_CARRIER.{pin}" for pin in (68,70,73,76,79)), "C_PMIC_IN_BU.pin1", "U_DDR_SWITCH.VBIAS", *(f"U_PMIC.{pin}" for pin in ("IN_BU","IN_BIAS","IN_DCDC1","IN_DCDC2","IN_DCDC3","IN_DCDC4","IN_LDO1"))],
