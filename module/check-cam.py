@@ -92,7 +92,8 @@ assert all(len(n)==1 for n in owners.values()),[n for n in owners.values() if le
 signals={n:ends for n,ends in pads.items() if len(ends)==2 and {a for a,b,c in ends}=={"U1","U_DDR"} and n.startswith("DDR_")}
 assert len(signals)==50
 opens=sorted(n for n,ends in signals.items() if ends[0][2]!=ends[1][2])
-print(f"{50-len(opens)}/50 independent drilled DDR pairs. Open: {', '.join(opens)}")
+print(f"{50-len(opens)}/50 independent drilled DDR pairs. Open: {', '.join(opens) or 'none'}")
+assert not opens, ("DDR signal continuity regression", opens)
 assert len({ends[0][2] for n,ends in signals.items() if n not in opens})==50-len(opens)
 print(f"{len(drills)} plated through drills. No shorts between mapped lands or vias.")
 print("Drill diameters:",dict(collections.Counter(v["drill"] for v in vias)))
@@ -110,7 +111,9 @@ assert len(reached) == len(dram_power) == 18, ("DCDC3 supply continuity regressi
 print("DRAM supply balls outside that copper island:", ", ".join(pin for pin in dram_power if pin not in reached) or "none")
 assert rail_pads["C_DDR34", "pin1"] == power_root
 grounds = {(ref,pin):node for ref,pin,node in pads["GND_INTERNAL"]}
-assert grounds["C_DDR34", "pin2"] == grounds["U_PMIC", "EP"]
+for ref in ("C_DDR5", "C_DDR6", "C_DDR34"):
+    assert rail_pads[ref, "pin1"] == power_root, ref
+    assert grounds[ref, "pin2"] == grounds["U_PMIC", "EP"], ref
 switched = {(ref,pin):node for ref,pin,node in pads["VDDS_DDR_CPU"]}
 cpu_root = switched["U_DDR_SWITCH", "VOUT1"]
 assert cpu_root != power_root
