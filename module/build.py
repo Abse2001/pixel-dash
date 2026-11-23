@@ -321,6 +321,13 @@ for edit in json.loads((here/"escape-edits.json").read_text()):
     replacement = edit.get("new", edit["old"])
     for start,end in zip(replacement,replacement[1:]):
         add_segment(start,end,layer,net(edit["net"]),.102)
+# Both launch traces have already been rebuilt to the center of U1.D1.
+# Move only the matching plated barrel after replacing the two track ends.
+clock_pad = next(p for p in board.GetPads() if p.GetParentFootprint().GetReference() == "U1" and p.GetNumber() == "D1")
+clock_barrel, = [v for v in board.GetTracks() if isinstance(v, k.PCB_VIA)
+                 and v.GetNetname() == clock_pad.GetNetname()
+                 and (v.GetPosition() - at([21.262094, 28.387825])).EuclideanNorm() <= 3]
+clock_barrel.SetPosition(clock_pad.GetPosition())
 for feed in json.loads((here/"local-vias.json").read_text()):
     add_barrel([*feed["pos"], feed["drill"], feed["diam"]], net(feed["net"]))
 for branch in json.loads((here/"carrier-strap-routes.json").read_text()):

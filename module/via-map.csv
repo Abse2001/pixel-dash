@@ -28,8 +28,8 @@ x_mm,y_mm,net,hole_mm,land_mm,solder_land,face,nominal_bore_to_land_boundary_mm,
 4.765999,28.868999,DDR_A9,0.15,0.3,,,,off-pad
 4.800107,36.049949,DDR_VREF,0.15,0.3,U_DDR.H1,F.Cu,0.12199,centered
 4.800107,36.049949,DDR_VREF,0.15,0.3,C_H1_VREF.pin1,B.Cu,0.087,centered
-4.800107,40.049942,VDDS_DDR,0.15,0.3,U_DDR.N1,F.Cu,0.12199,centered
 4.800107,40.049942,VDDS_DDR,0.15,0.3,C_DDR6.pin1,B.Cu,0.175,centered
+4.800107,40.049942,VDDS_DDR,0.15,0.3,U_DDR.N1,F.Cu,0.12199,centered
 4.942108,35.519993,GND_INTERNAL,0.15,0.3,U_DDR.G1,F.Cu,-0.18297,annulus only
 4.942108,35.519993,GND_INTERNAL,0.15,0.3,C_H1_VREF.pin2,B.Cu,0.087,centered
 5.199953,37.929896,VDDS_DDR,0.15,0.3,,,,off-pad
@@ -227,8 +227,8 @@ x_mm,y_mm,net,hole_mm,land_mm,solder_land,face,nominal_bore_to_land_boundary_mm,
 21.0,4.495,GND_INTERNAL,0.2,0.45,,,,off-pad
 21.09,31.185,DDR_D11,0.15,0.3,,,,off-pad
 21.24,40.2,DDR_CKE,0.2,0.45,,,,off-pad
-21.262094,28.387825,DDR_CKn,0.15,0.3,U1.D1,F.Cu,-0.04619,bore crosses edge
 21.3,40.9,DDR_VTP,0.15,0.3,R_VTP.pin1,B.Cu,0.195,centered
+21.399912,28.449958,DDR_CKn,0.15,0.3,U1.D1,F.Cu,0.10498,centered
 21.399912,29.250058,DDR_BA1,0.15,0.3,U1.E1,F.Cu,0.10498,centered
 21.399912,30.850004,DDR_ODT,0.15,0.3,U1.G1,F.Cu,0.10498,centered
 21.399912,31.650104,DDR_A1,0.15,0.3,U1.H1,F.Cu,0.10498,centered
