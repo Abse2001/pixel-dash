@@ -22,7 +22,7 @@ MEMBERS = ("F_Cu.gbr", "In1_Cu.gbr", "In2_Cu.gbr", "B_Cu.gbr")
 CHECKS = Path(__file__).parent
 
 
-def ddr_power_lands(terminals):
+def ddr_power_lands(terminals, additional_return=False):
     """Walk each mapped BGA supply land to the source or return in drilled artwork."""
     cpu = json.loads((CHECKS.parent / "am3354/processor-balls.json").read_text())
     ram = json.loads((CHECKS.parent / "am3354/memory-balls.json").read_text())
@@ -46,7 +46,7 @@ def ddr_power_lands(terminals):
     cpu_caps = {i for i, cap in enumerate(caps, 1) if cap["chip"] == "U1"}
     # The populated board adds C_DDR40 to the direct-supply channel return network.
     installed = {int(m[1]) for land in terminals if (m := re.fullmatch(r"C_DDR(\d+)\.pin1", land))}
-    if installed != set(range(1, 41)) or len(cpu_caps) != 22:
+    if installed != set(range(1, 42 if additional_return else 41)) or len(cpu_caps) != 22:
         raise ValueError("Unexpected fitted DDR bypass population")
     for i in sorted(installed):
         supply = "U_DDR_SWITCH.VOUT1" if i in cpu_caps else "L_PMIC_DDR.pin2"
@@ -335,6 +335,7 @@ def main():
     parser.add_argument("--mmc0-power", action="store_true", help="require card supply, ground, pull-ups and all seven links")
     parser.add_argument("--mmc0-only", action="store_true",
                         help="return the drilled MMC0 result independently of other open nets")
+    parser.add_argument("--with-c-ddr41", action="store_true", help="require the added C_DDR41 lands on direct DCDC3 and ground")
     parser.add_argument("--ddr-power-only", action="store_true", help="check DDR supplies, bypasses and N5/P5 on drilled copper")
     parser.add_argument("--ddr-checkpoint", nargs="+", metavar="OPEN_CONTROL",
                         help="verify the exact set of open address/control links on a routing study, DDR power and MMC0")
@@ -428,7 +429,7 @@ def main():
             raise ValueError(f"CAM short at {node} joins {sorted(keys)}")
     terminals = {port_labels[pid]: node for pid, node in by_pad.items() if pid in port_labels}
     if args.ddr_power_only:
-        return ddr_power_lands(terminals)
+        return ddr_power_lands(terminals, args.with_c_ddr41)
     if args.mmc0_only:
         return mmc0_power(terminals)
     ports = {e["source_port_id"]: e["pcb_port_id"] for e in board if e["type"] == "pcb_port" and e.get("source_port_id")}
@@ -463,7 +464,7 @@ def main():
             raise ValueError("Checkpoint opens must be distinct, assigned command/address/control signals")
         if open_links != expected:
             raise ValueError(f"Physical DDR opens differ from the checkpoint: {sorted(open_links ^ expected)}")
-        power_failed = ddr_power_lands(terminals)
+        power_failed = ddr_power_lands(terminals, args.with_c_ddr41)
         card_failed = mmc0_power(terminals)
         return power_failed or card_failed
     if open_links:
