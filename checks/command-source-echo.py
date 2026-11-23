@@ -58,7 +58,7 @@ def dwell_after_crossing(wave, level, start):
     return end - start, "recrossing"
 
 
-def screen(board, timing, archive, out, ioctrl, dwell=False, launch_window=False):
+def screen(board, timing, archive, out, ioctrl, dwell=False, launch_window=False, slew_screen=False):
     edges = model["fixture"](archive, board, with_reflection=True, ioctrl=ioctrl)
     rows = {row["net"]: row for row in csv.DictReader(timing)}
     @lru_cache(None)
@@ -66,7 +66,12 @@ def screen(board, timing, archive, out, ioctrl, dwell=False, launch_window=False
         return at_receiver(edges[up], cap, float(rows[name]["estimated_flight_ps"]))
 
     writer = csv.writer(out, lineterminator="\n")
-    if launch_window:
+    if slew_screen:
+        writer.writerow(("net", "ioctrl", "load_CK_CKn_CA_pF", "edge", "clock_slew_V_ns",
+                         "nominal_CA_setup_V_ns", "nominal_CA_hold_V_ns", "setup_lag_mV",
+                         "hold_lead_mV", "setup_needs_tangent", "hold_needs_tangent",
+                         "nominal_setup_in_table62", "nominal_hold_in_table62"))
+    elif launch_window:
         writer.writerow(("net", "ioctrl", "load_polarity_cases", "max_source_setup_ps",
                          "max_source_hold_ps", "earliest_capture_ps", "latest_capture_ps",
                          "setup_limiting_load_edge", "hold_limiting_load_edge"))
@@ -78,7 +83,7 @@ def screen(board, timing, archive, out, ioctrl, dwell=False, launch_window=False
                      "echo_setup_ps","setup_delta_ps","first_hold_ps","echo_hold_ps","hold_delta_ps"))
     cross = model["crossing"]
     names = ("DDR_BA0", "DDR_CKE", "DDR_WEn")
-    if launch_window:
+    if launch_window or slew_screen:
         names = sorted(name for name, row in rows.items() if row["current_mm"] != "open"
                        and name not in ("DDR_CK", "DDR_CKn", "DDR_RESETn"))
     for name in names:
@@ -87,6 +92,31 @@ def screen(board, timing, archive, out, ioctrl, dwell=False, launch_window=False
             clock = [cross(time, p+n, vdd) for p,n in zip(pin("DDR_CK",True,ck), pin("DDR_CKn",False,ckn))]
             for up in (True,False):
                 ac, dc = zip(*[(cross(time,w,vdd/2+.135),cross(time,w,vdd/2-.090)) for w in pin(name,up,cap)])
+                if slew_screen:
+                    # Falling pin() gives the positive voltage change from the high state.
+                    wave = pin(name, up, cap)[1]
+                    mid = cross(time, wave, vdd / 2)
+                    t_ac, t_dc = ac[1], dc[1]
+                    clock_wave = pin("DDR_CK", True, ck)[1] + pin("DDR_CKn", False, ckn)[1] - vdd
+                    t_lo = cross(time, clock_wave, -.180)
+                    t_hi = cross(time, clock_wave, .180)
+                    ck_rate = 360 / (t_hi - t_lo)
+                    setup_rate, hold_rate = 135 / (t_ac - mid), 90 / (mid - t_dc)
+                    # The model linearly interpolates waveform samples. Interior extrema
+                    # of the difference from the secant occur at sample times.
+                    setup_samples = (time > mid) & (time < t_ac)
+                    hold_samples = (time > t_dc) & (time < mid)
+                    lag = max(0., np.max((vdd/2 - wave[setup_samples])*1000 +
+                                         (time[setup_samples]-mid)*setup_rate, initial=0.))
+                    lead = max(0., np.max((wave[hold_samples]-vdd/2)*1000 -
+                                          (time[hold_samples]-mid)*hold_rate, initial=0.))
+                    writer.writerow((name, hex(ioctrl), f"{ck:g}/{ckn:g}/{cap:g}",
+                                     "rise" if up else "fall", *(round(x, 6) for x in
+                                     (ck_rate, setup_rate, hold_rate, lag, lead)),
+                                     lag > 1e-8, lead > 1e-8,
+                                     1 <= ck_rate <= 4 and .4 <= setup_rate <= 2,
+                                     1 <= ck_rate <= 4 and .4 <= hold_rate <= 2))
+                    continue
                 if dwell:
                     # Table 64 lists 213 ps as the largest AC135 tVAC requirement at DDR3L-800.
                     duration, reason = dwell_after_crossing(pin(name, up, cap)[1], vdd/2+.135, ac[1])
@@ -122,7 +152,8 @@ if __name__ == "__main__":
                         help="Low ten bits of all three command IOCTRL registers")
     modes = parser.add_mutually_exclusive_group()
     modes.add_argument("--launch-window", action="store_true", help="Screen capture phase for all routed synchronous commands at DDR3L-800")
+    modes.add_argument("--slew-screen", action="store_true", help="Check nominal receiver slopes and the Micron tangent-line conditions")
     modes.add_argument("--dwell", action="store_true", help="Report receiver AC135 threshold dwell for isolated edges")
     args = parser.parse_args()
     with args.timing.open() as timing:
-        screen(json.loads(args.board.read_bytes()),timing,args.ti_ibis,sys.stdout,args.ioctrl,args.dwell,args.launch_window)
+        screen(json.loads(args.board.read_bytes()),timing,args.ti_ibis,sys.stdout,args.ioctrl,args.dwell,args.launch_window,args.slew_screen)
