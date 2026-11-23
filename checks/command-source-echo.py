@@ -59,7 +59,7 @@ def screen(board, timing, archive, out, ioctrl):
     writer.writerow(("net","load_CK_CKn_CA_pF","edge","first_echo_headroom_ps","first_setup_ps",
                      "echo_setup_ps","setup_delta_ps","first_hold_ps","echo_hold_ps","hold_delta_ps"))
     cross = model["crossing"]
-    for name in ("DDR_BA0", "DDR_CKE"):
+    for name in ("DDR_BA0", "DDR_CKE", "DDR_WEn"):
         for ck, ckn, cap in model["capacitances"]():
             clock = [cross(time, p+n, vdd) for p,n in zip(pin("DDR_CK",True,ck), pin("DDR_CKn",False,ckn))]
             for up in (True,False):
