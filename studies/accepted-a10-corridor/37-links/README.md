@@ -11,4 +11,6 @@ Drilled CAM connects every DDR ball pair present on the accepted board plus A10.
 
 A6 has four adjacent L1/L2 transitions. On the accepted board A6 measured 36.11105 mm with 7.950 mm contacted barrel and +36.726 ps skew. The replacement recovers the terminal pair while losing timing margin. A14 also has greater delay despite fitting the nominal length window. Full-width routed DDR and MMC0 reference checks, both byte groups, copper, drill, via-edge and DDR class spacing pass on this export. Main ground and DDR power land checks pass. The accepted board stays on its separate branch.
 
-[Drilled endpoints and open nets](cam.txt) · [All byte checks](bytes.txt) · [All command lengths, transitions, skew and required receiver timing](command-timing.csv)
+[Full populated PCB](populated-handheld.png) · [Drilled endpoints and open nets](cam.txt) · [All byte checks](bytes.txt) · [All command lengths, transitions, skew and required receiver timing](command-timing.csv)
+
+On the tested 0.030 mm grid the shorter A6 corridor required temporarily lifting 19 support copper objects together. These include RTC B4, LDO1, CPU core power, DRAM bypass and raster copper. Restoring any one of the 19 exceeded the 38.690 mm project ceiling in that search. The short path is a feasibility study. All of that support copper is present in the saved 37-link board.
