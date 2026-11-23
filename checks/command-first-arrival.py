@@ -23,7 +23,7 @@ def number(text):
     return float(text[:-1]) * scale[text[-1]] if text[-1] in scale else float(text)
 
 
-def fixture(archive, board):
+def fixture(archive, board, *, with_reflection=False, ioctrl=0x273):
     """Get precharged-line edges. Rising uses a grounded fixture, falling a VDD fixture."""
     with ZipFile(archive) as files:
         source = files.read("sprm552c.ibs").decode("latin1")
@@ -50,27 +50,50 @@ def fixture(archive, board):
     if len(checked) != 28:
         raise ValueError(f"Expected 28 clock, address and control nets, found {len(checked)}")
     selector = re.search(r"(?ims)^\[Model Selector\]\s+Selector_4\s*$(.*?)^\[", source)[1]
-    if not re.search(r"(?im)^Model_364 3-STATE,1\.35V,ODT off,fast, 1\.00\*RExt", selector):
-        raise ValueError("Unexpected 1.35 V command driver selector")
-    model = re.search(r"(?ims)^\[model\]\s+Model_364\s*$(.*?)^\[model\]", source)[1]
-    result = {}
+    # TRM Tables 9-7/8 and register fields. These cases assume identical
+    # command and clock settings in all three macros, with 10% calibration.
+    driver, description = {
+        0x273: ("Model_364", "fast, 1.00*RExt,IND,10%,SR10"),
+        0x000: ("Model_370", "fastest, 1.60*RExt,IND,10%,SR00"),
+    }[ioctrl]
+    label = f"{driver} 3-STATE,1.35V,ODT off,{description}"
+    if not re.search(r"(?im)^" + re.escape(label), selector):
+        raise ValueError(f"Unexpected 1.35 V command driver selector for {ioctrl:#x}")
+    model = re.search(r"(?ims)^\[model\]\s+" + driver + r"\s*$(.*?)^\[model\]", source)[1]
+    fixtures = {}
     for name, table in re.findall(r"(?ims)^\[(Rising Waveform|Falling Waveform)\](.*?)(?=^\[|\Z)", model):
         bias = float(re.search(r"(?im)^V_fixture\s*=\s*([.\d]+)", table)[1])
         up = name.lower().startswith("rising")
-        if bias != (0 if up else VDD):
-            continue
         if float(re.search(r"(?im)^R_fixture\s*=\s*([.\d]+)", table)[1]) != Z:
             raise ValueError("Unexpected IBIS fixture impedance")
         data = [line.split() for line in table.splitlines() if re.match(r"^\s*\d", line)]
         t = np.array([number(row[0]) * 1e12 for row in data])
         volts = np.array([number(row[1]) for row in data])
+        if (up, bias) in fixtures:
+            raise ValueError("Duplicate fixture bias for this driver edge")
+        fixtures[up, bias] = t, volts
+    if set(fixtures) != {(up, bias) for up in (False, True) for bias in (0., VDD)}:
+        raise ValueError("Missing complementary 50-ohm fixture")
+    result = {}
+    for up in (False, True):
+        t, volts = fixtures[up, 0. if up else VDD]
         change = (volts - volts[0]) * (1 if up else -1)
         mid = crossing(t, change, change[-1]/2)
         # Refer both edge times to their own incident 50% swing. The IBIS
         # time axes do not specify the controller's relative launch time.
-        t -= mid
+        t = t - mid
         first = np.flatnonzero(change != 0)[0]
-        result[up] = np.interp(TIME, t, change), t[first-1]
+        incident = np.interp(TIME, t, change)
+        if with_reflection:
+            # The reflection of an incident perturbation at the source is the
+            # secant between the two V/T fixtures on their supplied time axes.
+            low, high = (np.interp(TIME + mid, *fixtures[up, rail]) for rail in (0., VDD))
+            reflection = 2 * (high - low) / VDD - 1
+            if np.max(np.abs(reflection)) >= 1:
+                raise ValueError("Fixture secant implies an active or singular source")
+            result[up] = incident, t[first-1], reflection
+        else:
+            result[up] = incident, t[first-1]
     if set(result) != {False, True}:
         raise ValueError("Missing precharged rising/falling 50-ohm fixtures")
     return result
