@@ -23,7 +23,7 @@ def number(text):
     return float(text[:-1]) * scale[text[-1]] if text[-1] in scale else float(text)
 
 
-def fixture(archive, board, *, with_reflection=False, ioctrl=0x273):
+def fixture(archive, board, *, with_reflection=False, ioctrl=0x273, clock=False):
     """Get precharged-line edges. Rising uses a grounded fixture, falling a VDD fixture."""
     with ZipFile(archive) as files:
         source = files.read("sprm552c.ibs").decode("latin1")
@@ -50,12 +50,14 @@ def fixture(archive, board, *, with_reflection=False, ioctrl=0x273):
     if len(checked) != 28:
         raise ValueError(f"Expected 28 clock, address and control nets, found {len(checked)}")
     selector = re.search(r"(?ims)^\[Model Selector\]\s+Selector_4\s*$(.*?)^\[", source)[1]
-    # TRM Tables 9-7/8 and register fields. These cases assume identical
-    # command and clock settings in all three macros, with 10% calibration.
+    # TRM Table 9-97 assigns independent five-bit drive fields to CA and CK.
+    field = ((ioctrl >> 5) if clock else ioctrl) & 0x1f
     driver, description = {
-        0x273: ("Model_364", "fast, 1.00*RExt,IND,10%,SR10"),
-        0x000: ("Model_370", "fastest, 1.60*RExt,IND,10%,SR00"),
-    }[ioctrl]
+        0x13: ("Model_364", "fast, 1.00*RExt,IND,10%,SR10"),
+        0x00: ("Model_370", "fastest, 1.60*RExt,IND,10%,SR00"),
+        0x0b: ("Model_366", "slow, 1.00*RExt,IND,10%,SR01"),
+        0x0c: ("Model_359", "slow, 0.88*RExt,IND,10%,SR01"),
+    }[field]
     label = f"{driver} 3-STATE,1.35V,ODT off,{description}"
     if not re.search(r"(?im)^" + re.escape(label), selector):
         raise ValueError(f"Unexpected 1.35 V command driver selector for {ioctrl:#x}")

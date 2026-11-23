@@ -58,15 +58,22 @@ def dwell_after_crossing(wave, level, start):
     return end - start, "recrossing"
 
 
-def screen(board, timing, archive, out, ioctrl, dwell=False, launch_window=False, slew_screen=False):
+def screen(board, timing, archive, out, ioctrl, dwell=False, launch_window=False, slew_screen=False, receiver_window=False):
     edges = model["fixture"](archive, board, with_reflection=True, ioctrl=ioctrl)
+    clock_edges = edges if ioctrl & 31 == (ioctrl >> 5) & 31 else model["fixture"](
+        archive, board, with_reflection=True, ioctrl=ioctrl, clock=True)
     rows = {row["net"]: row for row in csv.DictReader(timing)}
     @lru_cache(None)
     def pin(name, up, cap):
-        return at_receiver(edges[up], cap, float(rows[name]["estimated_flight_ps"]))
+        driver = clock_edges if name in ("DDR_CK", "DDR_CKn") else edges
+        return at_receiver(driver[up], cap, float(rows[name]["estimated_flight_ps"]))
 
     writer = csv.writer(out, lineterminator="\n")
-    if slew_screen:
+    if receiver_window:
+        writer.writerow(("net", "load_CK_CKn_CA_pF", "edge", "clock_V_ns", "effective_setup_V_ns",
+                         "effective_hold_V_ns", "ac_dwell_ps", "earliest_capture_ps",
+                         "latest_capture_ps", "scope"))
+    elif slew_screen:
         writer.writerow(("net", "ioctrl", "load_CK_CKn_CA_pF", "edge", "clock_slew_V_ns",
                          "nominal_CA_setup_V_ns", "nominal_CA_hold_V_ns", "setup_lag_mV",
                          "hold_lead_mV", "setup_needs_tangent", "hold_needs_tangent",
@@ -83,7 +90,7 @@ def screen(board, timing, archive, out, ioctrl, dwell=False, launch_window=False
                      "echo_setup_ps","setup_delta_ps","first_hold_ps","echo_hold_ps","hold_delta_ps"))
     cross = model["crossing"]
     names = ("DDR_BA0", "DDR_CKE", "DDR_WEn")
-    if launch_window or slew_screen:
+    if launch_window or slew_screen or receiver_window:
         names = sorted(name for name, row in rows.items() if row["current_mm"] != "open"
                        and name not in ("DDR_CK", "DDR_CKn", "DDR_RESETn"))
     for name in names:
@@ -92,7 +99,7 @@ def screen(board, timing, archive, out, ioctrl, dwell=False, launch_window=False
             clock = [cross(time, p+n, vdd) for p,n in zip(pin("DDR_CK",True,ck), pin("DDR_CKn",False,ckn))]
             for up in (True,False):
                 ac, dc = zip(*[(cross(time,w,vdd/2+.135),cross(time,w,vdd/2-.090)) for w in pin(name,up,cap)])
-                if slew_screen:
+                if slew_screen or receiver_window:
                     # Falling pin() gives the positive voltage change from the high state.
                     wave = pin(name, up, cap)[1]
                     mid = cross(time, wave, vdd / 2)
@@ -110,6 +117,28 @@ def screen(board, timing, archive, out, ioctrl, dwell=False, launch_window=False
                                          (time[setup_samples]-mid)*setup_rate, initial=0.))
                     lead = max(0., np.max((wave[hold_samples]-vdd/2)*1000 -
                                           (time[hold_samples]-mid)*hold_rate, initial=0.))
+                    if receiver_window:
+                        # Figures 36/37 anchor the enclosing tangent at AC (setup)
+                        # or DC (hold). Each secant extremum of piecewise-linear
+                        # samples is attained at a vertex or at the other endpoint.
+                        setup_eff = max(setup_rate, np.max(
+                            1000 * (vdd/2 + .135 - wave[setup_samples]) /
+                            (t_ac - time[setup_samples]), initial=setup_rate))
+                        hold_eff = max(hold_rate, np.max(
+                            1000 * (wave[hold_samples] - (vdd/2 - .090)) /
+                            (time[hold_samples] - t_dc), initial=hold_rate))
+                        duration, _ = dwell_after_crossing(wave, vdd/2+.135, t_ac)
+                        valid = (1 <= ck_rate <= 4 and .4 <= setup_eff <= 2
+                                 and .4 <= hold_eff <= 2 and duration >= 213)
+                        # Conservative upper envelopes of Tables 62 and 64.
+                        earliest = 365 + 108 + t_ac - clock[1]
+                        latest = 2500 - (285 + 95 + clock[1] - t_dc)
+                        writer.writerow((name, f"{ck:g}/{ckn:g}/{cap:g}", "rise" if up else "fall",
+                                         *(round(x, 6) for x in (ck_rate, setup_eff, hold_eff, duration)),
+                                         round(earliest, 3) if valid else "",
+                                         round(latest, 3) if valid else "",
+                                         "conditional source window" if valid else "outside slew/dwell screen"))
+                        continue
                     writer.writerow((name, hex(ioctrl), f"{ck:g}/{ckn:g}/{cap:g}",
                                      "rise" if up else "fall", *(round(x, 6) for x in
                                      (ck_rate, setup_rate, hold_rate, lag, lead)),
@@ -131,7 +160,7 @@ def screen(board, timing, archive, out, ioctrl, dwell=False, launch_window=False
                     setup_bounds.append((setup[1] + 108, case))
                     hold_bounds.append((hold[1] + 95, case))
                     continue
-                earliest = min(edges[e][1]+3*float(rows[n]["estimated_flight_ps"])-arrival
+                earliest = min((clock_edges if n in ("DDR_CK", "DDR_CKn") else edges)[e][1]+3*float(rows[n]["estimated_flight_ps"])-arrival
                                for e,n,arrival in [(True,"DDR_CK",clock[0]),(False,"DDR_CKn",clock[0]),(up,name,ac[0])])
                 writer.writerow((name,f"{ck:g}/{ckn:g}/{cap:g}","rise" if up else "fall",
                                  *(round(x,4) for x in (earliest,*setup,setup[1]-setup[0],*hold,hold[1]-hold[0]))))
@@ -148,12 +177,13 @@ if __name__ == "__main__":
     parser.add_argument("board",type=Path)
     parser.add_argument("timing",type=Path)
     parser.add_argument("ti_ibis",type=Path)
-    parser.add_argument("--ioctrl", type=lambda s: int(s, 0), choices=(0, 0x273), default=0x273,
+    parser.add_argument("--ioctrl", type=lambda s: int(s, 0), choices=(0, 0x18b, 0x273), default=0x273,
                         help="Low ten bits of all three command IOCTRL registers")
     modes = parser.add_mutually_exclusive_group()
     modes.add_argument("--launch-window", action="store_true", help="Screen capture phase for all routed synchronous commands at DDR3L-800")
     modes.add_argument("--slew-screen", action="store_true", help="Check nominal receiver slopes and the Micron tangent-line conditions")
+    modes.add_argument("--receiver-window", action="store_true", help="Bound source phase only inside the slew and dwell screens")
     modes.add_argument("--dwell", action="store_true", help="Report receiver AC135 threshold dwell for isolated edges")
     args = parser.parse_args()
     with args.timing.open() as timing:
-        screen(json.loads(args.board.read_bytes()),timing,args.ti_ibis,sys.stdout,args.ioctrl,args.dwell,args.launch_window,args.slew_screen)
+        screen(json.loads(args.board.read_bytes()),timing,args.ti_ibis,sys.stdout,args.ioctrl,args.dwell,args.launch_window,args.slew_screen,args.receiver_window)
