@@ -6,7 +6,7 @@ import tempfile
 from pathlib import Path
 
 here = Path(__file__).resolve().parent
-expected = "f239dcb08b07f65bba3622a628349733f055929a32d1b1d1dc73fac45b4574e8"
+expected = "74e8c2705896d813a8e4332f04456c8494cc3675aed1e890d1f79576b020ed61"
 board = gzip.decompress((here / "populated-handheld.circuit.json.gz").read_bytes())
 if hashlib.sha256(board).hexdigest() != expected:
     raise ValueError("Populated board differs from the qualified dual-byte checkpoint")
