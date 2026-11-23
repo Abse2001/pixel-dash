@@ -117,6 +117,10 @@ for p in source:
 for ref,(s,c) in parts.items():
     dx,dy=offset[group(ref)]
     cx,cy=c["center"]["x"],c["center"]["y"]
+    if ref == "C_DDR6":
+        # Align the underside bypass supply pad to the DRAM N1 through via.
+        dx -= .720008
+        dy += .150058
     if group(ref)=="cpu_ref":
         dx+=(0 if ref.endswith("LOW") else 2.2)-cx
         dy-=cy
