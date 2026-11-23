@@ -13,6 +13,7 @@ import numpy as np
 from scipy.signal import lfilter
 
 VDD = 1.35
+FIXTURE_CORNERS = {"typ": (1, VDD), "min": (2, 1.215), "max": (3, 1.485)}
 Z = 50.0
 DT_PS = 1.0
 TIME = np.arange(-1000., 2001., DT_PS)
@@ -23,7 +24,7 @@ def number(text):
     return float(text[:-1]) * scale[text[-1]] if text[-1] in scale else float(text)
 
 
-def fixture(archive, board, *, with_reflection=False, ioctrl=0x273, clock=False):
+def fixture(archive, board, *, with_reflection=False, ioctrl=0x273, clock=False, corner="typ"):
     """Get precharged-line edges. Rising uses a grounded fixture, falling a VDD fixture."""
     with ZipFile(archive) as files:
         source = files.read("sprm552c.ibs").decode("latin1")
@@ -53,6 +54,8 @@ def fixture(archive, board, *, with_reflection=False, ioctrl=0x273, clock=False)
     # TRM Table 9-97 assigns independent five-bit drive fields to CA and CK.
     field = ((ioctrl >> 5) if clock else ioctrl) & 0x1f
     driver, description = {
+        0x08: ("Model_356", "slow, 1.60*RExt,IND,10%,SR01"),
+        0x18: ("Model_357", "slowest, 1.60*RExt,IND,10%,SR11"),
         0x13: ("Model_364", "fast, 1.00*RExt,IND,10%,SR10"),
         0x00: ("Model_370", "fastest, 1.60*RExt,IND,10%,SR00"),
         0x0b: ("Model_366", "slow, 1.00*RExt,IND,10%,SR01"),
@@ -62,23 +65,25 @@ def fixture(archive, board, *, with_reflection=False, ioctrl=0x273, clock=False)
     if not re.search(r"(?im)^" + re.escape(label), selector):
         raise ValueError(f"Unexpected 1.35 V command driver selector for {ioctrl:#x}")
     model = re.search(r"(?ims)^\[model\]\s+" + driver + r"\s*$(.*?)^\[model\]", source)[1]
+    column, supply = FIXTURE_CORNERS[corner]
+    bias_field = "V_fixture" if corner == "typ" else f"V_fixture_{corner}"
     fixtures = {}
     for name, table in re.findall(r"(?ims)^\[(Rising Waveform|Falling Waveform)\](.*?)(?=^\[|\Z)", model):
-        bias = float(re.search(r"(?im)^V_fixture\s*=\s*([.\d]+)", table)[1])
+        bias = float(re.search(rf"(?im)^{bias_field}\s*=\s*([.\d]+)", table)[1])
         up = name.lower().startswith("rising")
         if float(re.search(r"(?im)^R_fixture\s*=\s*([.\d]+)", table)[1]) != Z:
             raise ValueError("Unexpected IBIS fixture impedance")
         data = [line.split() for line in table.splitlines() if re.match(r"^\s*\d", line)]
         t = np.array([number(row[0]) * 1e12 for row in data])
-        volts = np.array([number(row[1]) for row in data])
+        volts = np.array([number(row[column]) for row in data])
         if (up, bias) in fixtures:
             raise ValueError("Duplicate fixture bias for this driver edge")
         fixtures[up, bias] = t, volts
-    if set(fixtures) != {(up, bias) for up in (False, True) for bias in (0., VDD)}:
+    if set(fixtures) != {(up, bias) for up in (False, True) for bias in (0., supply)}:
         raise ValueError("Missing complementary 50-ohm fixture")
     result = {}
     for up in (False, True):
-        t, volts = fixtures[up, 0. if up else VDD]
+        t, volts = fixtures[up, 0. if up else supply]
         change = (volts - volts[0]) * (1 if up else -1)
         mid = crossing(t, change, change[-1]/2)
         # Refer both edge times to their own incident 50% swing. The IBIS
@@ -89,8 +94,8 @@ def fixture(archive, board, *, with_reflection=False, ioctrl=0x273, clock=False)
         if with_reflection:
             # The reflection of an incident perturbation at the source is the
             # secant between the two V/T fixtures on their supplied time axes.
-            low, high = (np.interp(TIME + mid, *fixtures[up, rail]) for rail in (0., VDD))
-            reflection = 2 * (high - low) / VDD - 1
+            low, high = (np.interp(TIME + mid, *fixtures[up, rail]) for rail in (0., supply))
+            reflection = 2 * (high - low) / supply - 1
             if np.max(np.abs(reflection)) >= 1:
                 raise ValueError("Fixture secant implies an active or singular source")
             result[up] = incident, t[first-1], reflection

@@ -13,7 +13,6 @@ from scipy.signal import lfilter
 model = runpy.run_path(str(Path(__file__).with_name("command-first-arrival.py")))
 time = model["TIME"]
 dt = model["DT_PS"]
-vdd = model["VDD"]
 
 
 def delay(wave, ps):
@@ -58,10 +57,11 @@ def dwell_after_crossing(wave, level, start):
     return end - start, "recrossing"
 
 
-def screen(board, timing, archive, out, ioctrl, dwell=False, launch_window=False, slew_screen=False, receiver_window=False):
-    edges = model["fixture"](archive, board, with_reflection=True, ioctrl=ioctrl)
+def screen(board, timing, archive, out, ioctrl, dwell=False, launch_window=False, slew_screen=False, receiver_window=False, corner="typ"):
+    _, vdd = model["FIXTURE_CORNERS"][corner]
+    edges = model["fixture"](archive, board, with_reflection=True, corner=corner, ioctrl=ioctrl)
     clock_edges = edges if ioctrl & 31 == (ioctrl >> 5) & 31 else model["fixture"](
-        archive, board, with_reflection=True, ioctrl=ioctrl, clock=True)
+        archive, board, with_reflection=True, corner=corner, ioctrl=ioctrl, clock=True)
     rows = {row["net"]: row for row in csv.DictReader(timing)}
     @lru_cache(None)
     def pin(name, up, cap):
@@ -177,8 +177,9 @@ if __name__ == "__main__":
     parser.add_argument("board",type=Path)
     parser.add_argument("timing",type=Path)
     parser.add_argument("ti_ibis",type=Path)
-    parser.add_argument("--ioctrl", type=lambda s: int(s, 0), choices=(0, 0x18b, 0x273), default=0x273,
+    parser.add_argument("--ioctrl", type=lambda s: int(s, 0), choices=(0, 0x108, 0x18b, 0x273, 0x308, 0x30b, 0x318), default=0x273,
                         help="Low ten bits of all three command IOCTRL registers")
+    parser.add_argument("--fixture-corner", choices=model["FIXTURE_CORNERS"], default="typ")
     modes = parser.add_mutually_exclusive_group()
     modes.add_argument("--launch-window", action="store_true", help="Screen capture phase for all routed synchronous commands at DDR3L-800")
     modes.add_argument("--slew-screen", action="store_true", help="Check nominal receiver slopes and the Micron tangent-line conditions")
@@ -186,4 +187,4 @@ if __name__ == "__main__":
     modes.add_argument("--dwell", action="store_true", help="Report receiver AC135 threshold dwell for isolated edges")
     args = parser.parse_args()
     with args.timing.open() as timing:
-        screen(json.loads(args.board.read_bytes()),timing,args.ti_ibis,sys.stdout,args.ioctrl,args.dwell,args.launch_window,args.slew_screen,args.receiver_window)
+        screen(json.loads(args.board.read_bytes()),timing,args.ti_ibis,sys.stdout,args.ioctrl,args.dwell,args.launch_window,args.slew_screen,args.receiver_window,args.fixture_corner)
