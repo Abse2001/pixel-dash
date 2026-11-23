@@ -19,3 +19,13 @@ python checks/screen-ddr-two-transition.py dist/index.circuit.json --bits DDR_D2
 ```
 
 [Fixed-neighbor screen](fixed.csv) · [D0 movable](D0.csv) · [A1 movable](A1.csv) · [Independent sampled route lengths](sampled-two-via-lengths.csv)
+
+## Simultaneous landing bound on powered d8461d7
+
+The two-transition data search on the populated 45-link board uses a 20.4313 mm upper limit, 0.30 mm full-through lands, center launches and every same-byte permutation among the lifted bits. Removing A1 completely allows any subsequent four-transition A1 geometry. D0 remains fixed. The RAM-side landing regions of two different data conductors have a maximum possible center spacing of 0.233563 mm in every permutation. Two 0.30 mm lands with the required 0.102 mm copper gap need 0.402000 mm. The deficit is at least 0.168437 mm even before attempting to insert A1. A separate sampled four-transition A1 restoration with its original outer launch sections and a replacement D2 installed found zero common L1 bridge options. The geometric data bound is independent of that sampling result and of the choice of A1 launches.
+
+The calculation intersects each terminal's L1 land region with L4 components accessible to its mate, then bounds the distance between distinct vias using their enclosing boxes. It ignores return-plane obstacles, exact path cost and mutual trace interference. The individual two-transition screen can therefore pass while simultaneous placement is impossible. This result applies to the published center-launch and full-through construction.
+
+In the independent D0 fallback, A1 is fixed and all four data nets move. All 24 assignments survive this necessary spacing test. Survival is inconclusive. The production D0 route remains in place.
+
+Run the original command on d8461d7 with the additional flags `--also-move DDR_A1 --packing`. For the D0 fallback use `--bits DDR_D0 DDR_D2 DDR_D3 DDR_D4 --packing` with the same length limit. [A1 released, six permutations](powered-packing-A1.csv) · [D0 released, 24 permutations](powered-packing-D0.csv)
