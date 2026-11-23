@@ -17,3 +17,9 @@ Drilled CAM joins U1.V2 to R_SYSBOOT12.pin2 and confirms isolated low bias. The 
 ## SYSBOOT7 CPU tap
 
 U1.T4 now reaches R_SYSBOOT7.pin2. Drilled CAM confirms an isolated low strap and seven resolved strap states. The remaining panel-side LCD D7 land is listed in the physical report. The exported board retains the same 45 DDR links and timing, powered N5/P5, calibration and all 71 reference terminals. Full-width DDR, MMC0 and raster coverage pass, as do copper, drill, via-edge, self-contact and common-envelope checks. [Exact boot straps and physical land groups](sysboot7-cam.txt)
+
+## Touch IRQ on the powered 45-link orientation
+
+The exported copper connects U1.V14 to R_TOUCH_IRQ.pin1, and the resistor bias joins the sequenced 3.3 V rail. The IRQ route from the rotated study clears the powered board's SYSBOOT10 and SYSBOOT12 traces. Reusing the IRQ from 4b3d1c5 instead crossed both traces on L3. The verified export has 35 split mapped nets, previously 36. All mapped ground lands and barrels still join the UART ground probe. The IRQ connection alone does not qualify the touch panel.
+
+The previous 45 DDR links, full timing CSV, N5/P5, VTP, MMC0 and 71 DDR local return terminals remain intact. All full-width reference, class spacing, drill, 0.102 mm copper and separate 6 mil via-edge checks pass on this partial DDR design. [Drilled endpoint audit](touch-irq-powered-cam.txt) · [Geometry and regression checks](touch-irq-powered-checks.txt)
