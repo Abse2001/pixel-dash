@@ -108,19 +108,25 @@ def run(board, bits, additionally_movable, limit):
 def packing(board, bits, additionally_movable, limit):
     lands = {(i,j): (a,b) for i,j,a,b in landing_regions(board, bits, additionally_movable, limit)}
     required = 2*VIA_RADIUS + .102
-    for ram_order in permutations(bits):
-        assignment = list(zip(bits, ram_order))
+    region_bounds = {key: [None if r.is_empty else r.bounds for r in ends] for key, ends in lands.items()}
+    pair_limits = {}
+    for i,j in combinations(lands, 2):
+        if i[0] == j[0] or i[1] == j[1]:
+            continue
         bounds = []
-        for i,j in combinations(assignment, 2):
-            for side, label in enumerate(("CPU", "RAM")):
-                a,b = lands[i][side], lands[j][side]
-                upper = 0.
-                if not a.is_empty and not b.is_empty:
-                    # All attainable center distances are bounded above by the farthest box corners.
-                    ax,ay,az,aw = a.bounds
-                    bx,by,bz,bw = b.bounds
-                    upper = math.hypot(max(az-bx, bz-ax), max(aw-by, bw-ay))
-                bounds.append((upper, label, i[0], j[0]))
+        for side, label in enumerate(("CPU", "RAM")):
+            a,b = region_bounds[i][side], region_bounds[j][side]
+            upper = 0.
+            if a is not None and b is not None:
+                # All attainable center distances are bounded above by the farthest box corners.
+                ax,ay,az,aw = a
+                bx,by,bz,bw = b
+                upper = math.hypot(max(az-bx, bz-ax), max(aw-by, bw-ay))
+            bounds.append((upper, label, i[0], j[0]))
+        pair_limits[i,j] = pair_limits[j,i] = min(bounds)
+    for ram_order in permutations(bits):
+        assignment = zip(bits, ram_order)
+        bounds = (pair_limits[i,j] for i,j in combinations(assignment, 2))
         upper, label, a, b = min(bounds)
         yield "/".join(ram_order), label, a, b, f"{upper:.6f}", f"{required:.6f}", "excluded" if upper < required else "unresolved"
 
