@@ -1,4 +1,5 @@
 """Measure the partial bus from actual route and via geometry on the reference stack."""
+import argparse
 import csv
 import gzip
 import json
@@ -70,8 +71,17 @@ def measure(board):
     nominal = max(v for n,v in spans.items() if n != "DDR_RESETn") + 7.62
     return spans, results, nominal
 
-names, now, nominal = measure(load(Path(sys.argv[1])))
-_, prior, _ = measure(load(Path(sys.argv[2])))
+args = argparse.ArgumentParser(description=__doc__)
+args.add_argument("candidate", type=Path)
+args.add_argument("baseline", type=Path)
+args.add_argument("--jlc1080", action="store_true", help="use public JLC04161H-1080 foil-center depths and modeled outer delays")
+options = args.parse_args()
+if options.jlc1080:
+    from hdi_build import JLC1080_DEPTH
+    depth = JLC1080_DEPTH
+    model.update(SINGLE=5.884, ODD=5.739)
+names, now, nominal = measure(load(options.candidate))
+_, prior, _ = measure(load(options.baseline))
 lo, hi = nominal-1.27, nominal+1.27
 ck_mean = sum(now[n]["flight"] for n in clock)/2
 writer = csv.writer(sys.stdout, lineterminator="\n")

@@ -23,8 +23,8 @@ parser.add_argument("--jlc1080", action="store_true", help="screen outer-layer b
 args = parser.parse_args()
 if args.jlc1080:
     single, odd = 5.884, 5.739
-    # Only the L1–L4 depth is qualified for this comparison.
-    depth = {"top": 0., "bottom": 1.530}
+    from hdi_build import JLC1080_DEPTH
+    depth = JLC1080_DEPTH
 names = [f"DDR_D{i}" for i in range(16)] + [f"DDR_{s}{i}" for i in (0,1) for s in ("DQS","DQSn","DQM")]
 
 def extract(board):
