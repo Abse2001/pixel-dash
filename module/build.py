@@ -140,6 +140,8 @@ for ref,(s,c) in parts.items():
     fp=k.FOOTPRINT(board);fp.SetReference(ref);fp.SetValue(s["manufacturer_part_number"])
     bot=c["layer"]=="bottom" or ref=="C_DDR12"
     fp.SetLayer(k.B_Cu if bot else k.F_Cu);fp.SetPosition(xy(cx+dx,cy+dy))
+    if ref == "R_ZQ":
+        fp.SetPosition(k.VECTOR2I(mm(10.825285),mm(38.956776)))
     if ref == "C_DDR12":
         fp.SetPosition(k.VECTOR2I(mm(3.412306),mm(37.691513)))
     if ref == "C_H1_VREF":
@@ -163,6 +165,11 @@ for ref,(s,c) in parts.items():
         if (ref,pname) in {("U1","J4"),("C_CPU_VREF","pin1")} or (group(ref)=="cpu_ref" and pname=="pin1"):name="CPU_DDR_VREF"
         if ref=="R_CPU_VREF_HIGH" and pname=="pin2":name=netname(balls["U_DDR_SWITCH","VOUT1"])
         if (ref,pname)==("U1","P15"):name="USB0_VBUS_SENSE"
+        if ref == "R_ZQ":
+            positions = {"pin1": (10.670017,38.771735), "pin2": (10.980553,39.141817)}
+            x,y = positions[pname]
+            pad.SetPosition(k.VECTOR2I(mm(x),mm(y)))
+            pad.SetOrientationDegrees(-50)
         if ref == "C_DDR12":
             positions = {"pin1": (3.519901, 38.097617), "pin2": (3.304710, 37.285409)}
             x,y = positions[pname]

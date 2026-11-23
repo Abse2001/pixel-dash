@@ -114,6 +114,10 @@ assert len(reached) == len(dram_power) == 18, ("DCDC3 supply continuity regressi
 print("DRAM supply balls outside that copper island:", ", ".join(pin for pin in dram_power if pin not in reached) or "none")
 assert rail_pads["C_DDR34", "pin1"] == power_root
 grounds = {(ref,pin):node for ref,pin,node in pads["GND_INTERNAL"]}
+ground_open = sorted(f"{ref}.{pin}" for (ref,pin),node in grounds.items() if node != grounds["U_PMIC","EP"])
+known_open = {"U1.A1", "U_DDR.A9", "U_DDR.B9", "U_DDR.D8", "U_DDR.E8", "U_DDR.J8"}
+assert not set(ground_open) - known_open, ("new ground disconnect", ground_open)
+print(f"Ground reaches {len(grounds)-len(ground_open)}/{len(grounds)} assigned return pads. Open: {', '.join(ground_open) or 'none'}")
 unfed_direct = sorted(pin for pin,node in rail_pads.items() if node != power_root)
 assert not unfed_direct, ("direct DDR supply endpoint open", unfed_direct)
 print(f"DCDC3 reaches all {len(rail_pads)} assigned direct DDR rail pads.")
@@ -160,7 +164,7 @@ for branch in strap_branches:
     name = branch["net"]
     strap_nodes = [node for ref,pin,node in pads[name] if ref.startswith("R_SYSBOOT") or ref == "J_CARRIER"]
     assert len(strap_nodes) == 2 and len(set(strap_nodes)) == 1, name
-for n in [*signals, "CPU_DDR_VREF", "DDR_VREF", *(branch["net"] for branch in strap_branches)]:
+for n in [*signals, "CPU_DDR_VREF", "DDR_VREF", "DDR_VREF_CA", "DDR_ZQ", *(branch["net"] for branch in strap_branches)]:
     launches=union_all([point(v["pos"]).buffer(v["diam"]/2+.155,quad_segs=64) for v in vias if v["net"]==n])
     for t in geom:
         if t["kind"]!="track" or t["net"]!=n:continue
