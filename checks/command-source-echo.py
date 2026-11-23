@@ -63,7 +63,7 @@ def dwell_after_crossing(wave, level, start):
     return end - start, "recrossing"
 
 
-def screen(board, timing, archive, out, ioctrl, dwell=False, launch_window=False, slew_screen=False, receiver_window=False, corner="typ", jlc_channel=False):
+def screen(board, timing, archive, out, ioctrl, dwell=False, launch_window=False, slew_screen=False, receiver_window=False, corner="typ", jlc_channel=False, receiver_vref=None):
     _, vdd = model["FIXTURE_CORNERS"][corner]
     edges = model["fixture"](archive, board, with_reflection=True, corner=corner, ioctrl=ioctrl)
     clock_edges = edges if ioctrl & 31 == (ioctrl >> 5) & 31 else model["fixture"](
@@ -81,7 +81,8 @@ def screen(board, timing, archive, out, ioctrl, dwell=False, launch_window=False
     if receiver_window:
         writer.writerow(("net", "load_CK_CKn_CA_pF", "edge", "clock_V_ns", "effective_setup_V_ns",
                          "effective_hold_V_ns", "ac_dwell_ps", "earliest_capture_ps",
-                         "latest_capture_ps", "scope"))
+                         "latest_capture_ps", "scope", *(("clock_crossing_V", "VIX_margin_mV")
+                         if receiver_vref is not None else ())))
     elif slew_screen:
         writer.writerow(("net", "ioctrl", "load_CK_CKn_CA_pF", "edge", "clock_slew_V_ns",
                          "nominal_CA_setup_V_ns", "nominal_CA_hold_V_ns", "setup_lag_mV",
@@ -107,11 +108,12 @@ def screen(board, timing, archive, out, ioctrl, dwell=False, launch_window=False
         for ck, ckn, cap in model["capacitances"]():
             clock = [cross(time, p+n, vdd) for p,n in zip(pin("DDR_CK",True,ck), pin("DDR_CKn",False,ckn))]
             for up in (True,False):
-                ac, dc = zip(*[(cross(time,w,vdd/2+.135),cross(time,w,vdd/2-.090)) for w in pin(name,up,cap)])
+                dc_ref = vdd/2 if receiver_vref is None else (receiver_vref if up else vdd - receiver_vref)
+                ac, dc = zip(*[(cross(time,w,dc_ref+.135),cross(time,w,dc_ref-.090)) for w in pin(name,up,cap)])
                 if slew_screen or receiver_window:
                     # Falling pin() gives the positive voltage change from the high state.
                     wave = pin(name, up, cap)[1]
-                    mid = cross(time, wave, vdd / 2)
+                    mid = cross(time, wave, dc_ref)
                     t_ac, t_dc = ac[1], dc[1]
                     clock_wave = pin("DDR_CK", True, ck)[1] + pin("DDR_CKn", False, ckn)[1] - vdd
                     t_lo = cross(time, clock_wave, -.180)
@@ -122,23 +124,27 @@ def screen(board, timing, archive, out, ioctrl, dwell=False, launch_window=False
                     # of the difference from the secant occur at sample times.
                     setup_samples = (time > mid) & (time < t_ac)
                     hold_samples = (time > t_dc) & (time < mid)
-                    lag = max(0., np.max((vdd/2 - wave[setup_samples])*1000 +
+                    lag = max(0., np.max((dc_ref - wave[setup_samples])*1000 +
                                          (time[setup_samples]-mid)*setup_rate, initial=0.))
-                    lead = max(0., np.max((wave[hold_samples]-vdd/2)*1000 -
+                    lead = max(0., np.max((wave[hold_samples]-dc_ref)*1000 -
                                           (time[hold_samples]-mid)*hold_rate, initial=0.))
                     if receiver_window:
                         # Figures 36/37 anchor the enclosing tangent at AC (setup)
                         # or DC (hold). Each secant extremum of piecewise-linear
                         # samples is attained at a vertex or at the other endpoint.
                         setup_eff = max(setup_rate, np.max(
-                            1000 * (vdd/2 + .135 - wave[setup_samples]) /
+                            1000 * (dc_ref + .135 - wave[setup_samples]) /
                             (t_ac - time[setup_samples]), initial=setup_rate))
                         hold_eff = max(hold_rate, np.max(
-                            1000 * (wave[hold_samples] - (vdd/2 - .090)) /
+                            1000 * (wave[hold_samples] - (dc_ref - .090)) /
                             (time[hold_samples] - t_dc), initial=hold_rate))
-                        duration, _ = dwell_after_crossing(wave, vdd/2+.135, t_ac)
+                        duration, _ = dwell_after_crossing(wave, dc_ref+.135, t_ac)
+                        crossing_v = np.interp(clock[1], time, pin("DDR_CK", True, ck)[1])
+                        crossing_margin = .150 - abs(crossing_v - (receiver_vref if receiver_vref is not None else vdd/2))
                         valid = (1 <= ck_rate <= 4 and .4 <= setup_eff <= 2
                                  and .4 <= hold_eff <= 2 and duration >= 213)
+                        if receiver_vref is not None:
+                            valid = valid and crossing_margin >= 0
                         # Conservative upper envelopes of Tables 62 and 64.
                         earliest = 365 + 108 + t_ac - clock[1]
                         latest = 2500 - (285 + 95 + clock[1] - t_dc)
@@ -146,7 +152,11 @@ def screen(board, timing, archive, out, ioctrl, dwell=False, launch_window=False
                                          *(round(x, 6) for x in (ck_rate, setup_eff, hold_eff, duration)),
                                          round(earliest, 3) if valid else "",
                                          round(latest, 3) if valid else "",
-                                         "conditional source window" if valid else "outside slew/dwell screen"))
+                                         "conditional source window" if valid else (
+                                             "outside receiver limits" if receiver_vref is not None
+                                             else "outside slew/dwell screen"),
+                                         *((round(crossing_v, 6), round(crossing_margin*1000, 4))
+                                           if receiver_vref is not None else ())))
                         continue
                     writer.writerow((name, hex(ioctrl), f"{ck:g}/{ckn:g}/{cap:g}",
                                      "rise" if up else "fall", *(round(x, 6) for x in
@@ -157,7 +167,7 @@ def screen(board, timing, archive, out, ioctrl, dwell=False, launch_window=False
                     continue
                 if dwell:
                     # Table 64 lists 213 ps as the largest AC135 tVAC requirement at DDR3L-800.
-                    duration, reason = dwell_after_crossing(pin(name, up, cap)[1], vdd/2+.135, ac[1])
+                    duration, reason = dwell_after_crossing(pin(name, up, cap)[1], dc_ref+.135, ac[1])
                     writer.writerow((name, f"{ck:g}/{ckn:g}/{cap:g}", "rise" if up else "fall",
                                      round(duration, 4), reason, 213, round(duration - 213, 4)))
                     continue

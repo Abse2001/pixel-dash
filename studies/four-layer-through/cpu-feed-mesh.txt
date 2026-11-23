@@ -1,0 +1,22 @@
+drill_npth.drl matches 19 round hits and 0 slots
+drill-L1-L4.drl matches 872 round hits and 6 slots
+drill-L2-L3.drl matches 29 round hits and 0 slots
+drill-L3-L4.drl matches 44 round hits and 0 slots
+Buffered output L4 sheet to the CPU feed; bores subtracted.
+  buffered mesh 0.08 mm: 8.2000 mOhm at 20 C
+  buffered mesh 0.055 mm: 8.0862 mOhm at 20 C
+  buffered mesh 0.04 mm: 7.9791 mOhm at 20 C
+  buffered mesh 0.03 mm: 7.8955 mOhm at 20 C
+  buffered mesh 0.025 mm: 7.8736 mOhm at 20 C
+drill_npth.drl matches 19 round hits and 0 slots
+drill-L1-L4.drl matches 872 round hits and 6 slots
+drill-L1-L2.drl matches 231 round hits and 0 slots
+Drilled L1 from CPU feed annulus to 0.150 mm E5 contact; all CPU load at E5.
+  CPU row mesh 0.025 mm: 6.4358 mOhm at 20 C
+  CPU row mesh 0.0175 mm: 6.4167 mOhm at 20 C
+  CPU row mesh 0.0125 mm: 6.3559 mOhm at 20 C
+  CPU row mesh 0.009 mm: 6.3468 mOhm at 20 C
+  switch input mesh 0.035 mm: 2.4835 mOhm at 20 C
+  switch input mesh 0.025 mm: 2.4738 mOhm at 20 C
+  switch input mesh 0.02 mm: 2.4656 mOhm at 20 C
+  switch input mesh 0.015 mm: 2.4609 mOhm at 20 C
