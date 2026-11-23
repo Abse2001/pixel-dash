@@ -1,0 +1,10 @@
+DDR_A6 6 0.16 5.51 split
+DDR_A6 0 True 36.67604689704233
+DDR_A7 1 1.43 5.0 split
+DDR_A7 1 5.5 11.71 split
+DDR_A7 1 12.53 17.37 split
+DDR_A7 1 replaced 2.308 by 2.115
+DDR_A7 1 replaced 1.649 by 2.636
+DDR_A7 1 26.44 27.76 split
+DDR_A7 1 28.36 30.12 split
+DDR_A7 2 True 38.15323599115269
