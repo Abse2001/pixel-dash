@@ -129,6 +129,25 @@ assert len(cpu_balls) == 7
 fed = [pin for pin in cpu_balls if switched["U1",pin] == cpu_root]
 assert len(fed) == 7, ("switched CPU rail connectivity regression", fed)
 print(f"Switched DDR output reaches {len(fed)}/7 CPU DDR balls. Open:", ", ".join(pin for pin in cpu_balls if pin not in fed) or "none")
+# Verify the entire timed track body against the island of its measured receiver.
+# One micrometre covers the independent Gerber/arc polygonization on either edge.
+signal_shapes = collections.defaultdict(list)
+for track in geom:
+    if track["kind"] == "track" and track["net"] in signals:
+        wire = LineString([point(track["start"]), point(track["end"])])
+        signal_shapes[track["net"],track["layer"]].append(wire.buffer(track["width"]/2,quad_segs=48))
+for (name,layer), traces in signal_shapes.items():
+    receiver = signals[name][0][2]
+    copper = union_all([poly for index,poly in enumerate(pieces[layer]) if root((layer,index)) == receiver])
+    residual = union_all(traces).difference(bores).difference(copper.buffer(.001)).area
+    assert residual < 1e-7, ("timed copper missing from drilled net", name, layer, residual)
+print("All 50 timed track geometries reproduced on their assigned drilled copper islands within 0.001 mm.")
+# This lower bound excludes the ordinary local antipads. Missing supply directly
+# under DDR trace bodies also proves coverage is incomplete over the larger TI region.
+all_via_voids = union_all([point(v["pos"]).buffer(v["diam"]/2+.155) for v in vias])
+routed_footprint = union_all([shape for traces in signal_shapes.values() for shape in traces])
+uncovered = routed_footprint.difference(all_via_voids).difference(region).area
+print(f"L3 direct-supply area missing under projected DDR traces away from vias: {uncovered:.4f} mm².")
 planes={}
 for l in ("In1.Cu","In4.Cu"):
     plane=max(enumerate(pieces[l]),key=lambda a:a[1].area)
