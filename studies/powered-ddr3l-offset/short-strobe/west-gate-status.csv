@@ -1,0 +1,51 @@
+signal,routed_gate_status,prior_west_mm,current_west_mm,transitions,barrel_mm,mixed_flight_ps,signed_skew_vs_strobe_or_clock_ps,signed_worst_data_or_strobe_ps,project_min_mm,project_max_mm,project_window_miss_mm,TI_peer_limit_mm,TI_peer_excess_mm,TI_strobe_or_pair_limit_mm,TI_strobe_or_pair_excess_mm,board_model_limit_ps,board_model_excess_ps,receiver_signoff
+DDR_A0,PASS reported local gates,29.8378,30.1620,2,2.8400,192.7484,1.3860,,30.1500,32.6900,0,,,,,,,open
+DDR_A11,FAIL project length,29.9838,29.9838,4,5.6800,210.4643,19.1019,,30.1500,32.6900,0.1662,,,,,,,open
+DDR_A12,PASS reported local gates,29.8753,30.1620,2,2.8400,192.7483,1.3860,,30.1500,32.6900,0,,,,,,,open
+DDR_A13,PASS reported local gates,29.7464,30.1620,2,2.8400,192.7489,1.3865,,30.1500,32.6900,0,,,,,,,open
+DDR_A15,PASS reported local gates,29.5757,30.1620,2,2.8400,192.7486,1.3862,,30.1500,32.6900,0,,,,,,,open
+DDR_A2,PASS reported local gates,29.8166,30.1620,2,2.8400,192.7484,1.3860,,30.1500,32.6900,0,,,,,,,open
+DDR_A3,FAIL project length,29.7496,29.9626,2,2.8400,191.5982,0.2358,,30.1500,32.6900,0.1874,,,,,,,open
+DDR_A4,PASS reported local gates,29.9165,30.1620,2,2.8400,192.7488,1.3865,,30.1500,32.6900,0,,,,,,,open
+DDR_A5,PASS reported local gates,30.1479,30.1620,2,2.8400,192.7487,1.3863,,30.1500,32.6900,0,,,,,,,open
+DDR_A6,FAIL project length,26.3947,26.3947,4,5.6800,189.7589,-1.6035,,30.1500,32.6900,3.7553,,,,,,,open
+DDR_A7,PASS reported local gates,30.0488,30.1620,2,2.8400,192.7485,1.3861,,30.1500,32.6900,0,,,,,,,open
+DDR_A8,PASS reported local gates,29.9558,30.1620,2,2.8400,192.7486,1.3862,,30.1500,32.6900,0,,,,,,,open
+DDR_A9,PASS reported local gates,30.7446,30.7446,2,2.8400,196.1098,4.7475,,30.1500,32.6900,0,,,,,,,open
+DDR_BA0,PASS reported local gates,30.3057,30.3057,2,2.8400,193.5779,2.2155,,30.1500,32.6900,0,,,,,,,open
+DDR_BA1,PASS reported local gates,29.7457,30.1620,2,2.8400,192.7485,1.3861,,30.1500,32.6900,0,,,,,,,open
+DDR_BA2,PASS reported local gates,29.8057,30.1620,2,2.8400,192.7487,1.3863,,30.1500,32.6900,0,,,,,,,open
+DDR_CASn,PASS reported local gates,29.8494,30.1620,2,2.8400,192.7485,1.3861,,30.1500,32.6900,0,,,,,,,open
+DDR_CK,PASS reported local gates,30.6625,30.6625,2,2.8400,191.4181,0.1114,0.1505,30.1500,32.6900,0,,,0.1270,0,0.7134,0,open
+DDR_CKE,FAIL project length,34.9054,34.9054,4,5.6800,238.8571,47.4947,,30.1500,32.6900,2.2154,,,,,,,open
+DDR_CKn,PASS reported local gates,30.6364,30.6364,2,2.8400,191.3067,-0.1114,-0.1505,30.1500,32.6900,0,,,0.1270,0,0.7134,0,open
+DDR_CSn0,PASS reported local gates,30.0186,30.1620,2,2.8400,192.7486,1.3863,,30.1500,32.6900,0,,,,,,,open
+DDR_D0,PASS reported local gates,20.3096,20.3096,2,2.8400,135.9102,-0.4916,1.7928,0.0000,20.6001,0,0.6350,,0.6350,0,3.6633,0,open
+DDR_D12,PASS reported local gates,23.7632,23.7632,2,2.8400,155.8342,-0.3560,-3.5216,0.0000,23.7998,0,0.6350,,0.6350,0,3.6633,0,open
+DDR_D13,"FAIL TI strobe or pair, board delay",23.4251,23.4251,2,2.8400,153.8835,-2.3066,-5.4722,0.0000,23.7998,0,0.6350,,0.6350,0.3136,3.6633,1.8089,open
+DDR_D14,"FAIL TI strobe or pair, board delay",23.6585,23.6585,2,2.8400,155.2299,-0.9602,-4.1258,0.0000,23.7998,0,0.6350,,0.6350,0.0802,3.6633,0.4625,open
+DDR_D15,"FAIL TI strobe or pair, board delay",23.7250,23.7250,2,2.8400,155.6134,-0.5767,-3.7423,0.0000,23.7998,0,0.6350,,0.6350,0.0137,3.6633,0.0790,open
+DDR_D5,PASS reported local gates,20.1463,20.1463,2,2.8400,134.9681,-1.4337,-2.4216,0.0000,20.6001,0,0.6350,,0.6350,0,3.6633,0,open
+DDR_D7,PASS reported local gates,20.3157,20.3157,2,2.8400,135.9454,-0.4565,1.8280,0.0000,20.6001,0,0.6350,,0.6350,0,3.6633,0,open
+DDR_D8,"FAIL TI strobe or pair, board delay",23.4098,23.4098,2,2.8400,153.7953,-2.3948,-5.5604,0.0000,23.7998,0,0.6350,,0.6350,0.3288,3.6633,1.8971,open
+DDR_D9,PASS reported local gates,23.7520,23.7520,2,2.8400,155.7695,-0.4206,-3.5863,0.0000,23.7998,0,0.6350,,0.6350,0,3.6633,0,open
+DDR_DQM0,PASS reported local gates,20.2546,20.2546,2,2.8400,135.5929,-0.8089,-1.7968,0.0000,20.6001,0,0.6350,,0.6350,0,3.6633,0,open
+DDR_DQM1,"FAIL TI strobe or pair, board delay",23.7348,23.7348,2,2.8400,155.6702,-0.5199,-3.6855,0.0000,23.7998,0,0.6350,,0.6350,0.0038,3.6633,0.0222,open
+DDR_DQS0,PASS reported local gates,20.5661,20.5661,2,2.8400,136.4018,0.0848,0.1503,0.0000,20.6001,0,,,0.1270,0,0.7134,0,open
+DDR_DQS1,FAIL project length,24.3689,24.3689,2,2.8400,156.1901,0.0435,0.0435,0.0000,23.7998,0.5690,,,0.1270,0,0.7134,0,open
+DDR_DQSn0,PASS reported local gates,20.5400,20.5400,2,2.8400,136.3170,-0.0848,-0.1503,0.0000,20.6001,0,,,0.1270,0,0.7134,0,open
+DDR_DQSn1,FAIL project length,24.3737,24.3737,2,2.8400,156.1466,-0.0435,-0.0435,0.0000,23.7998,0.5738,,,0.1270,0,0.7134,0,open
+DDR_ODT,PASS reported local gates,30.4321,30.4321,2,2.8400,194.3067,2.9443,,30.1500,32.6900,0,,,,,,,open
+DDR_RASn,PASS reported local gates,29.8874,30.1620,2,2.8400,192.7485,1.3861,,30.1500,32.6900,0,,,,,,,open
+DDR_RESETn,"routed, no applicable length result",17.750051093634546,17.750051093634546,2,2.84,121.1440447591777,,,,,,,,,,,,open
+DDR_WEn,PASS reported local gates,29.9726,30.1620,2,2.8400,192.7487,1.3863,,30.1500,32.6900,0,,,,,,,open
+DDR_A1,OPEN,,,,,,,,,,,,,,,,,open
+DDR_A10,OPEN,,,,,,,,,,,,,,,,,open
+DDR_A14,OPEN,,,,,,,,,,,,,,,,,open
+DDR_D1,OPEN,,,,,,,,,,,,,,,,,open
+DDR_D10,OPEN,,,,,,,,,,,,,,,,,open
+DDR_D11,OPEN,,,,,,,,,,,,,,,,,open
+DDR_D2,OPEN,,,,,,,,,,,,,,,,,open
+DDR_D3,OPEN,,,,,,,,,,,,,,,,,open
+DDR_D4,OPEN,,,,,,,,,,,,,,,,,open
+DDR_D6,OPEN,,,,,,,,,,,,,,,,,open
