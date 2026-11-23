@@ -1,0 +1,5 @@
+U1: 20 high-speed 0402 capacitors, 2.00 uF nominal; maximum distance to nearest supply and ground balls 9.124 mm at C_DDR28 (limit 10.16 mm).
+Traceback (most recent call last):
+  File "/workspace/pixel-dash-github/checks/check-ddr-bypass-placement.py", line 40, in <module>
+    raise ValueError(f"{ref}: capacitor-to-ball distance exceeds {limit:g} mm: {violations}")
+ValueError: U_DDR: capacitor-to-ball distance exceeds 3.81 mm: {'C_DDR3': 3.8627851123519656, 'C_DDR4': 5.6036860747375945, 'C_DDR10': 6.390760457426645, 'C_DDR11': 7.317222370832253}

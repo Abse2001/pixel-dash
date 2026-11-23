@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/workspace/pixel-dash-github/checks/check-local-ddr-returns.py", line 69, in <module>
+    via, = vias
+    ^^^^
+ValueError: not enough values to unpack (expected 1, got 0)

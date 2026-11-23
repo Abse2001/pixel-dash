@@ -1,0 +1,14 @@
+signal,corner_edges,max_setup_at_reference_slew_ps,setup_CA_edge,setup_loads_CK_CKn_CA_pF,min_pre_echo_headroom_for_setup_case_ps,max_hold_at_reference_slew_ps,hold_CA_edge,hold_loads_CK_CKn_CA_pF,min_pre_echo_headroom_for_hold_case_ps,setup_cases_after_echo,hold_cases_after_echo,scope
+DDR_A14,32,459.283,rise,3.95/3.65/4.6,57.684,340.921,fall,4/4/3.2,102.055,0,0,first incident; launch/receiver margin open
+DDR_A15,32,474.242,rise,3.95/3.65/4.6,87.602,325.962,fall,4/4/3.2,102.055,0,0,first incident; launch/receiver margin open
+DDR_A3,32,483.024,rise,3.95/3.65/4.6,105.166,317.18,fall,4/4/3.2,102.055,0,0,first incident; launch/receiver margin open
+DDR_A5,32,481.112,rise,3.95/3.65/4.6,101.342,319.092,fall,4/4/3.2,102.055,0,0,first incident; launch/receiver margin open
+DDR_A6,32,496.536,rise,3.95/3.65/4.6,109.329,303.668,fall,4/4/3.2,102.055,0,0,first incident; launch/receiver margin open
+DDR_A7,32,483.688,rise,3.95/3.65/4.6,106.494,316.516,fall,4/4/3.2,102.055,0,0,first incident; launch/receiver margin open
+DDR_A8,32,453.807,rise,3.95/3.65/4.6,46.732,346.397,fall,4/4/3.2,102.055,0,0,first incident; launch/receiver margin open
+DDR_A9,32,464.971,rise,3.95/3.65/4.6,69.06,335.233,fall,4/4/3.2,102.055,0,0,first incident; launch/receiver margin open
+DDR_BA0,32,426.667,rise,3.95/3.65/4.6,-7.548,373.537,fall,4/4/3.2,102.055,10,0,first incident; launch/receiver margin open
+DDR_BA1,32,525.825,rise,3.95/3.65/4.6,109.329,274.379,fall,4/4/3.2,102.055,0,0,first incident; launch/receiver margin open
+DDR_BA2,32,440.363,rise,3.95/3.65/4.6,19.844,359.841,fall,4/4/3.2,102.055,0,0,first incident; launch/receiver margin open
+DDR_CKE,32,432.274,rise,3.95/3.65/4.6,3.666,367.93,fall,4/4/3.2,102.055,5,0,first incident; launch/receiver margin open
+DDR_WEn,32,488.3,rise,3.95/3.65/4.6,109.329,311.904,fall,4/4/3.2,102.055,0,0,first incident; launch/receiver margin open

@@ -1,0 +1,5 @@
+inner1 GND: envelope 483.6738 mm², uncovered 45.3750 mm², uncovered outside nominal via antipads 2.815159928 mm².
+inner1 outside via relief 2.815159927774701 within track and its clearance 2.814692873217784 remaining 0.00046705455680519955
+inner2 VDDS_DDR: envelope 483.6738 mm², uncovered 125.2594 mm², uncovered outside nominal via antipads 84.781018769 mm².
+inner2 outside via relief 84.78101876942675 within track and its clearance 34.8564178738801 remaining 49.92460089556676
+57 findings across signal and reference layers in the conservative envelope screen.

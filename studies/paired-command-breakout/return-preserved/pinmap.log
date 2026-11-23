@@ -1,0 +1,15 @@
+50 unique connections match the package functions. 13 within-byte DQ remaps.
+U1.M3 DDR_D0 -> U_DDR.G2 DQ6
+U1.N1 DDR_D2 -> U_DDR.H3 DQ4
+U1.N2 DDR_D3 -> U_DDR.H7 DQ7
+U1.N3 DDR_D4 -> U_DDR.F2 DQ2
+U1.P3 DDR_D6 -> U_DDR.E3 DQ0
+U1.P4 DDR_D7 -> U_DDR.F8 DQ3
+U1.J1 DDR_D8 -> U_DDR.A7 DQ12
+U1.K1 DDR_D9 -> U_DDR.C2 DQ11
+U1.K2 DDR_D10 -> U_DDR.A3 DQ15
+U1.K3 DDR_D11 -> U_DDR.C3 DQ9
+U1.K4 DDR_D12 -> U_DDR.C8 DQ10
+U1.L3 DDR_D13 -> U_DDR.D7 DQ8
+U1.M1 DDR_D15 -> U_DDR.A2 DQ13
+All 50 DDR signal balls match TI's ZCZ pin table, package pin list and 1.35 V selector coverage.
