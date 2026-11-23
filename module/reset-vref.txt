@@ -23,7 +23,7 @@ CPU midpoint to bypass and J4 True
 CPU reference bypass return True
 DRAM direct DCDC3 to divider True
 DRAM divider bottom return True
-DRAM divider to DQ bypass, H1 and CA feed False
+DRAM divider to DQ bypass, H1 and CA feed True
 DRAM CA feed to bypass and M8 False
 DRAM DQ/CA bypass returns True
 DRAM H1 local DQ reference bypass and return: connected
