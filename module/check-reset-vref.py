@@ -67,6 +67,10 @@ boot_paths = {
 for name, pins in boot_paths.items():
     assert connected(*pins), name
     print(name, "connected")
+for ref in ["C_MPU_LOCAL", *(f"C_MPU_HF{i}" for i in range(1, 6))]:
+    assert connected(ref+".pin1", "L_PMIC_MPU.pin2", "U1.F13"), ref
+    assert connected(ref+".pin2", "U_PMIC.EP"), ref
+print("All six CPU-side MPU bypasses reach the supply and ground.")
 checks = {
     "CPU switched rail to divider": ["U_DDR_SWITCH.VOUT1", "R_CPU_VREF_HIGH.pin2"],
     "CPU divider bottom return": ["R_CPU_VREF_LOW.pin2", "U_PMIC.EP"],

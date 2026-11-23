@@ -118,6 +118,13 @@ for p in source:
 # Underside 100 nF bypass spanning the H1 reference via and its adjacent ground via.
 parts["C_H1_VREF"] = parts["C_CPU_VREF"]
 h1_bypass = {"pin1": (4.800107, 36.049949), "pin2": (4.942108, 35.519994)}
+# TI Table 5-13 recommends one 10 µF and five 10 nF capacitors on VDD_MPU.
+parts["C_MPU_LOCAL"] = parts["C_SRAM_CORE_IN"]
+for index in range(1, 6):
+    donor, geometry = parts["C_DDR3"]
+    parts[f"C_MPU_HF{index}"] = (
+        dict(donor, manufacturer_part_number="CL05B103KB5NNNC",
+             supplier_part_numbers={"jlcpcb": ["C15195"]}), geometry)
 local_bypasses = json.loads((here/"local-bypass-placements.json").read_text())
 for ref,(s,c) in parts.items():
     dx,dy=offset[group(ref)]
@@ -143,7 +150,7 @@ for ref,(s,c) in parts.items():
         dx+=(0 if ref.endswith("LOW") else 2.2)-cx
         dy-=cy
     fp=k.FOOTPRINT(board);fp.SetReference(ref);fp.SetValue(s["manufacturer_part_number"])
-    bot=c["layer"]=="bottom" or ref=="C_DDR12"
+    bot=c["layer"]=="bottom" or ref=="C_DDR12" or ref.startswith("C_MPU_")
     fp.SetLayer(k.B_Cu if bot else k.F_Cu);fp.SetPosition(xy(cx+dx,cy+dy))
     if ref in local_bypasses:
         site = local_bypasses[ref]
@@ -184,6 +191,8 @@ for ref,(s,c) in parts.items():
             x,y = positions[pname]
             pad.SetPosition(k.VECTOR2I(mm(x),mm(y)))
             pad.SetOrientationDegrees(194.839306)
+        if ref.startswith("C_MPU_"):
+            name = "VDD_MPU" if pname == "pin1" else "GND_INTERNAL"
         if ref in local_bypasses:
             x,y = local_bypasses[ref][pname]
             pad.SetPosition(k.VECTOR2I(mm(x),mm(y)))

@@ -304,5 +304,113 @@
     ],
     "drill": 0.2,
     "diam": 0.45
+  },
+  {
+    "net": "VDD_MPU",
+    "pos": [
+      35.5,
+      30.6
+    ],
+    "drill": 0.2,
+    "diam": 0.45
+  },
+  {
+    "net": "GND_INTERNAL",
+    "pos": [
+      35.5,
+      32.000048
+    ],
+    "drill": 0.2,
+    "diam": 0.45
+  },
+  {
+    "net": "VDD_MPU",
+    "pos": [
+      29.2,
+      25.5
+    ],
+    "drill": 0.2,
+    "diam": 0.45
+  },
+  {
+    "net": "GND_INTERNAL",
+    "pos": [
+      29.2,
+      24.659768
+    ],
+    "drill": 0.2,
+    "diam": 0.45
+  },
+  {
+    "net": "VDD_MPU",
+    "pos": [
+      35.5,
+      29.6
+    ],
+    "drill": 0.2,
+    "diam": 0.45
+  },
+  {
+    "net": "GND_INTERNAL",
+    "pos": [
+      35.5,
+      28.759768
+    ],
+    "drill": 0.2,
+    "diam": 0.45
+  },
+  {
+    "net": "VDD_MPU",
+    "pos": [
+      35.5,
+      33.5
+    ],
+    "drill": 0.2,
+    "diam": 0.45
+  },
+  {
+    "net": "GND_INTERNAL",
+    "pos": [
+      35.5,
+      34.340232
+    ],
+    "drill": 0.2,
+    "diam": 0.45
+  },
+  {
+    "net": "VDD_MPU",
+    "pos": [
+      33.0,
+      25.6
+    ],
+    "drill": 0.2,
+    "diam": 0.45
+  },
+  {
+    "net": "GND_INTERNAL",
+    "pos": [
+      33.0,
+      26.440232
+    ],
+    "drill": 0.2,
+    "diam": 0.45
+  },
+  {
+    "net": "VDD_MPU",
+    "pos": [
+      35.5,
+      27.9
+    ],
+    "drill": 0.2,
+    "diam": 0.45
+  },
+  {
+    "net": "GND_INTERNAL",
+    "pos": [
+      35.5,
+      27.059768
+    ],
+    "drill": 0.2,
+    "diam": 0.45
   }
 ]
