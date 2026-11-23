@@ -1,0 +1,9 @@
+cpu_bit,ram_bit_before_remap,length_mm,vias,total_barrel_mm,strobe_skew_ps
+0,0,13.78784,2 x L1-L4,2.84,unavailable - DQS0 pair open
+1,5,19.89527,2 x L1-L4,2.84,unavailable - DQS0 pair open
+2,3,14.45238,2 x L1-L4,2.84,unavailable - DQS0 pair open
+3,4,15.93764,2 x L1-L4,2.84,unavailable - DQS0 pair open
+4,1,16.4253,2 x L1-L4,2.84,unavailable - DQS0 pair open
+5,2,16.3746,2 x L1-L4,2.84,unavailable - DQS0 pair open
+6,6,16.44622,2 x L1-L4,2.84,unavailable - DQS0 pair open
+7,7,14.38406,2 x L1-L4,2.84,unavailable - DQS0 pair open
