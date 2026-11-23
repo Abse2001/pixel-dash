@@ -41,3 +41,7 @@ R_SYSBOOT7 pin 2 now reaches the panel's LCD D7 contact. The number of panel dat
 The initial D7 trial left 0.0098343 mm² of top-layer trace without a connected L2 reference. Rerouting its resistor-side launch around the void removed that finding. The final export checks 1,145 plated barrels.
 
 ![Full powered handheld outer copper, rendered from the front and back Gerbers](powered-panel-taps.png)
+
+## Touch SDA on the powered handheld
+
+Drilled CAM connects the CPU's touch SDA signal to its fitted pull-up. The pull-up bias is on sequenced DCDC4. All 45 DDR links, 71 reference terminals, all handheld grounds, and the complete published DDR timing CSV are preserved. Full-width DDR, MMC0 and raster references and separate copper, 6 mil via-edge and drill checks pass. The full board has 33 split mapped nets. This measurement covers the CPU and bias resistor. Panel operation requires the remaining touch integration. [Drilled CAM](touch-SDA-cam.txt) · [Geometry checks](touch-SDA-geometry.txt)
