@@ -19,3 +19,9 @@ PYTHONPATH=checks python studies/via-in-pad/barrel.py /tmp/a10.circuit.json /tmp
 ### A12 corridor with BA1 temporarily removed
 
 With the existing bytes and clocks held, the search connected A12 to RAM ball N7 by two different landings. The route using the L1–L2 blind landing measured 44.81553 mm. The through-via alternative measured 44.77700 mm. Their excess over the 38.68999 mm project placement ceiling was 6.12554 mm and 6.08701 mm respectively. The search also failed to restore BA1 alongside the blind-landing route. Both outcomes are exploratory and the accepted board retains BA1.
+
+### Sharing the corridor between clock enable and bank address 1
+
+A two-net trial removes CKE and BA1 from d8b00c0, preserves the bytes and clocks, and reinstalls both commands using the staged paths below. The CKE flight estimate changes from 214.830 to 240.383 ps, or +3.912 ps relative to CK. Its 27.94050 mm length falls 8.20949 mm short of the project window. BA1 rises to 49.12547 mm and 328.055 ps, or +91.585 ps relative to CK. It exceeds the 38.68999 mm ceiling by 10.43548 mm. The window starts at 36.14999 mm. The clock-relative flight values use the board model. Receiver setup and hold remain open. The pour rebuild also reported a floating L3 region of approximately 98.51 mm². The accepted board retains both original commands. [Trial lengths, layer spans and receiver screens](command-trials/paired-command-timing.csv) · [Trial path coordinates](command-trials/pair-1.json)
+
+The reconstructed trial passes 0.102 mm unrelated-copper and 0.1524 mm via-edge clearance in the layout checks. BA1's first two drilled transitions overlap, with −0.121799 mm edge clearance against a required +0.130 mm. The hole collision is present even though those two checks report zero findings. [Drill-spacing result](command-trials/drill.txt)
