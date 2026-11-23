@@ -1,0 +1,12 @@
+inner1 GND: envelope 261.8161 mm², uncovered 24.7581 mm², uncovered outside nominal via antipads 0.000000002 mm².
+inner2 VDDS_DDR: envelope 261.8161 mm², uncovered 18.1521 mm², uncovered outside nominal via antipads 0.000000002 mm².
+0 findings across signal and reference layers in the conservative envelope screen.
+0 signal/layer reference-coverage findings
+Connected inner-layer Gerber copper covers all 70 blind-via lands.
+71 DDR terminals verified through 70 blind vias to their adjacent reference planes.
+0 unrelated copper pairs below 0.102 mm
+0 via/layer/unrelated-net pairs below 0.1524 mm
+0 via drill-spacing findings
+0 nonlocal same-net DDR copper contacts
+Longest cumulative below-nominal run is 26.231 mm on DDR_A6; TI allowance 31.750 mm.
+Verified 4677 strokes from 618 PCB traces against all four copper Gerbers.
