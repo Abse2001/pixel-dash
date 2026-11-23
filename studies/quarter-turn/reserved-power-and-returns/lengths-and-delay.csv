@@ -1,0 +1,9 @@
+cpu,ram_bit_before_remap,powered_prior_mm,study_current_mm,via_spans,barrel_sum_mm,estimated_flight_ps,prior_signed_worst_ps,study_signed_skew_ps,TI_DQ_to_DQS_limit_mm,separate_model_limit_ps,residual
+DDR_D0,1,20.2857,16.8221,2 x L1-L4,2.84,115.7906,2.8233,unknown: DQS0 open,0.635,3.6633,unknown: DQS0 open
+DDR_D1,7,,14.506,2 x L1-L4,2.84,102.429,,unknown: DQS0 open,0.635,3.6633,unknown: DQS0 open
+DDR_D2,0,20.2383,15.7769,2 x L1-L4,2.84,109.7607,21.2937,unknown: DQS0 open,0.635,3.6633,unknown: DQS0 open
+DDR_D3,3,25.9353,14.4091,2 x L1-L4,2.84,101.87,54.1593,unknown: DQS0 open,0.635,3.6633,unknown: DQS0 open
+DDR_D4,2,21.7026,15.1922,2 x L1-L4,2.84,106.3876,29.7413,unknown: DQS0 open,0.635,3.6633,unknown: DQS0 open
+DDR_D5,5,25.7789,18.3738,2 x L1-L4,2.84,124.7422,34.5131,unknown: DQS0 open,0.635,3.6633,unknown: DQS0 open
+DDR_D6,4,20.2549,17.1197,2 x L1-L4,2.84,117.5075,2.6456,unknown: DQS0 open,0.635,3.6633,unknown: DQS0 open
+DDR_D7,6,22.6639,20.1035,2 x L1-L4,2.84,134.7211,16.5431,unknown: DQS0 open,0.635,3.6633,unknown: DQS0 open

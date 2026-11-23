@@ -15,3 +15,9 @@ The drilled export resolves all eight remapped lower-byte data lands as distinct
 Two independent gates reject this geometry. N5 copper has 0.011965 mm² in the 0.408 mm envelope margin. A signal antipad cuts into the required L3 reference land at C_DDR6 pin 1. DQS0 and CK are open, so the signed strobe skew, TI data matching and receiver timing cannot be evaluated. The original 45-link layout's 19.7115–20.4313 mm joint window cannot qualify this rotated placement.
 
 [Eight physical routes and lengths](byte0-escape.csv) · [Exact drilled CAM](byte0-drilled-cam.txt) · [Envelope finding](byte0-envelope.csv) · [Assembled study](byte0-study.circuit.json.gz)
+
+## Breakout with power and return clearances reserved
+
+A second export removes both findings above. Its legal routing area includes the existing CPU-to-RAM VREF track, protects the full blind-via reference lands from new antipads and reserves the 0.408 mm envelope clearance to N5. All eight lower-byte data signals connect with two full-depth transitions each. All 71 return terminals pass. Full-width reference, envelope, copper, 6 mil via-edge, drill and class spacing pass. The longest cumulative run below nominal class spacing is 2.707 mm on D2, within the 31.750 mm allowance. The byte strobes, masks, clock and command group still need routes. This study does not supersede the powered 45-link board.
+
+[Verified eight-link study](reserved-power-and-returns/byte0.circuit.json.gz) · [Prior and current lengths, flight estimates and limits](reserved-power-and-returns/lengths-and-delay.csv) · [Drilled CAM](reserved-power-and-returns/drilled-cam.txt) · [Geometry checks](reserved-power-and-returns/geometry-checks.txt)
