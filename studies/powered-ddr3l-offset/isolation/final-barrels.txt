@@ -1,0 +1,25 @@
+min center-to-center 1.2074767078499227
+F_Cu.gbr channel_study_barrel_3_cpu 0.07068 land covers 0.149 mm radius True gap 0.90748
+F_Cu.gbr channel_study_barrel_3_ram 0.07068 land covers 0.149 mm radius True gap 0.16846
+F_Cu.gbr channel_study_barrel_4_cpu 0.07068 land covers 0.149 mm radius True gap 0.26803
+F_Cu.gbr channel_study_barrel_4_ram 0.19229 land covers 0.149 mm radius True gap 0.16269
+F_Cu.gbr channel_study_barrel_2_cpu 0.07068 land covers 0.149 mm radius True gap 0.79655
+F_Cu.gbr channel_study_barrel_2_ram 0.07068 land covers 0.149 mm radius True gap 0.44774
+In1_Cu.gbr channel_study_barrel_3_cpu 0.07068 land covers 0.149 mm radius True gap 0.15851
+In1_Cu.gbr channel_study_barrel_3_ram 0.07068 land covers 0.149 mm radius True gap 0.15851
+In1_Cu.gbr channel_study_barrel_4_cpu 0.07068 land covers 0.149 mm radius True gap 0.15851
+In1_Cu.gbr channel_study_barrel_4_ram 0.07068 land covers 0.149 mm radius True gap 0.15851
+In1_Cu.gbr channel_study_barrel_2_cpu 0.07068 land covers 0.149 mm radius True gap 0.15851
+In1_Cu.gbr channel_study_barrel_2_ram 0.07068 land covers 0.149 mm radius True gap 0.15851
+In2_Cu.gbr channel_study_barrel_3_cpu 0.07068 land covers 0.149 mm radius True gap 0.15851
+In2_Cu.gbr channel_study_barrel_3_ram 0.07068 land covers 0.149 mm radius True gap 0.15851
+In2_Cu.gbr channel_study_barrel_4_cpu 0.07068 land covers 0.149 mm radius True gap 0.15851
+In2_Cu.gbr channel_study_barrel_4_ram 0.07068 land covers 0.149 mm radius True gap 0.15851
+In2_Cu.gbr channel_study_barrel_2_cpu 0.07068 land covers 0.149 mm radius True gap 0.15851
+In2_Cu.gbr channel_study_barrel_2_ram 0.07068 land covers 0.149 mm radius True gap 0.15851
+B_Cu.gbr channel_study_barrel_3_cpu 0.07068 land covers 0.149 mm radius True gap 0.34195
+B_Cu.gbr channel_study_barrel_3_ram 0.07068 land covers 0.149 mm radius True gap 0.31715
+B_Cu.gbr channel_study_barrel_4_cpu 0.07068 land covers 0.149 mm radius True gap 0.20755
+B_Cu.gbr channel_study_barrel_4_ram 0.07068 land covers 0.149 mm radius True gap 0.47971
+B_Cu.gbr channel_study_barrel_2_cpu 0.07068 land covers 0.149 mm radius True gap 0.1699
+B_Cu.gbr channel_study_barrel_2_ram 0.07068 land covers 0.149 mm radius True gap 0.27995

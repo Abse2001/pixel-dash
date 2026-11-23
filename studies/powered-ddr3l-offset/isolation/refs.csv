@@ -1,0 +1,17 @@
+signal,signal_layer,reference_layer,uncovered_copper_mm2
+DDR_A0,bottom,inner2,0.0045881
+DDR_A11,top,inner1,0.0019223
+DDR_A2,bottom,inner2,0.0091371
+DDR_A4,bottom,inner2,0.0054034
+DDR_A4,top,inner1,0.0056361
+DDR_A6,top,inner1,0.0082044
+DDR_A7,top,inner1,0.0110560
+DDR_BA0,top,inner1,0.0002689
+DDR_BA1,bottom,inner2,0.0004128
+DDR_BA2,bottom,inner2,0.0001469
+DDR_CASn,bottom,inner2,0.0029449
+DDR_CSn0,top,inner1,0.0013795
+DDR_D15,top,inner1,0.0073995
+DDR_RASn,top,inner1,0.0096476
+DDR_WEn,bottom,inner2,0.0087170
+DDR_WEn,top,inner1,0.0059215

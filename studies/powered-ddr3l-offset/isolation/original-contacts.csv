@@ -1,0 +1,10 @@
+layer,copper_a,copper_b,copper_gap_mm
+bottom,channel_pcb_trace_21,channel_pcb_trace_41,0.0
+bottom,channel_pcb_trace_31,channel_pcb_trace_41,0.0
+bottom,channel_pcb_trace_6,channel_pcb_trace_19,0.0
+top,channel_pcb_smtpad_492,pcb_system_KEY_SELECT,0.0
+top,channel_pcb_smtpad_493,pcb_system_KEY_SELECT,0.0
+top,channel_pcb_trace_175,pcb_system_KEY_SELECT,0.0
+top,channel_pcb_trace_176,pcb_system_KEY_SELECT,0.0
+top,channel_pcb_via_133,pcb_system_KEY_SELECT,0.0
+top,channel_pcb_via_134,pcb_system_KEY_SELECT,0.0

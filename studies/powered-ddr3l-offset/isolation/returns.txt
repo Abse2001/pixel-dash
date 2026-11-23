@@ -1,0 +1,2 @@
+Connected inner-layer Gerber copper covers all 70 blind-via lands.
+71 DDR terminals verified through 70 blind vias to their adjacent reference planes.
