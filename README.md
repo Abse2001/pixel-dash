@@ -4,7 +4,7 @@
 
 The complete candidate at 4b3d1c5 connects the handheld IRQ pull-up, keeps the 50 DDR routes and their vias identical to a4a71e2 and reduces the whole-board split-net count from 35 to 34. Drilled CAM explicitly verifies J3/VTP, RAM ZQ, the CPU and RAM VREF networks, divider rails, local bypass returns and their mutual isolation. [Complete candidate and physical land groups](https://github.com/Abse2001/pixel-dash/blob/4b3d1c5/checks/current-touch-irq-cam.txt)
 
-The powered byte-1 routing study brings D12 and D14 inside the 0.635 mm TI strobe match and ±3.6633 ps model window on exported, connected copper. D12 measures 22.6622 mm and D14 measures 22.5901 mm. N5/P5 and the VTP return pass. The 43-link intermediate layout keeps the complete candidate separate. [Power, timing and CAM measurements](https://github.com/Abse2001/pixel-dash/tree/ea0e0fd/studies/powered-byte1)
+The powered byte-1 study at 178dd63 has 45/50 distinct DDR connections. D12, D13 and D14 meet their TI strobe matching and model skew gates. D13 has just 0.0977 ps of modeled headroom. D15 is connected and retains full reference coverage, but its +5.4050 ps worst modeled skew exceeds the ±3.6633 ps screen. A10, A14, D1, D10 and D11 still need copper. Both N5/P5 and the VTP resistor return pass drilled CAM. [Timing, exact physical lands and intermediate fallbacks](https://github.com/Abse2001/pixel-dash/tree/178dd63/studies/powered-byte1)
 
 The separate four-route breakout moves the switched DDR feed to make room for N5/P5. It physically connects 21/21 DCDC4 lands and 7/7 switched CPU DDR lands, with D1, D12, A10 and A14 lifted. [Boot-power study and screening results](https://github.com/Abse2001/pixel-dash/tree/ff755ca/studies/boot-ddr-breakout)
 
