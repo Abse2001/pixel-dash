@@ -100,12 +100,13 @@ def net(name):
         board.Add(nets[name])
     return nets[name]
 def netname(key): return labels.get(key,key)
-def zone(layer):
-    z=k.ZONE(board);z.SetLayer(layer);z.SetNet(net(netname(balls["SW_POWER","pin1"])));z.SetLocalClearance(mm(.13))
+def zone(layer, rail=None, corners=None):
+    z=k.ZONE(board);z.SetLayer(layer);z.SetNet(net(rail or netname(balls["SW_POWER","pin1"])));z.SetLocalClearance(mm(.13))
     z.SetMinThickness(mm(.102));z.SetPadConnection(k.ZONE_CONNECTION_FULL)
     boundary=z.Outline();boundary.NewOutline()
-    for x,y in ((left,low),(left,high),(right,high),(right,low)):
-        p=xy(x,y);boundary.Append(p.x,p.y)
+    points = [xy(x,y) for x,y in ((left,low),(left,high),(right,high),(right,low))] if corners is None else [at(p) for p in corners]
+    for p in points:
+        boundary.Append(p.x,p.y)
     board.Add(z)
 for a,b in zip([(left,low),(left,high),(right,high),(right,low)],[(left,high),(right,high),(right,low),(left,low)]):
     e=k.PCB_SHAPE();e.SetShape(k.SHAPE_T_SEGMENT);e.SetLayer(k.Edge_Cuts);e.SetWidth(mm(.05));e.SetStart(xy(*a));e.SetEnd(xy(*b));board.Add(e)
@@ -248,6 +249,13 @@ for path in json.loads((here/"ground-escapes.json").read_text()):
 for link in json.loads((here/"local-links.json").read_text()):
     for a,b in zip(link["points"],link["points"][1:]):
         add_segment(a,b,k.F_Cu if link["layer"]=="F.Cu" else k.B_Cu,net(link["net"]),link["width"])
+for feed in json.loads((here/"ddr-plane-feeds.json").read_text()):
+    rail = net("VDDS_DDR")
+    layer = k.F_Cu if feed["layer"] == "F.Cu" else k.B_Cu
+    add_segment(feed["start"], feed["end"], layer, rail, .32)
+    add_barrel([*feed["end"], .20, .45], rail)
+# A wide trunk carries the post-inductor DCDC3 output to the DDR area.
+zone(k.In2_Cu, "VDDS_DDR", [(6,3),(22,3),(22,18),(36.6,18),(36.6,45.6),(.4,45.6),(.4,18),(6,18)])
 for layer in (k.In1_Cu,k.In4_Cu):zone(layer)
 
 board_path=here/"pixel-dash-module.kicad_pcb"

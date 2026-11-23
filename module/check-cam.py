@@ -96,6 +96,17 @@ print(f"{50-len(opens)}/50 independent drilled DDR pairs. Open: {', '.join(opens
 assert len({ends[0][2] for n,ends in signals.items() if n not in opens})==50-len(opens)
 print(f"{len(drills)} plated through drills. No shorts between mapped lands or vias.")
 print("Drill diameters:",dict(collections.Counter(v["drill"] for v in vias)))
+supply = "VDDS_DDR"
+power_layer = "In2.Cu"
+index, region = max(enumerate(pieces[power_layer]), key=lambda item: item[1].area)
+power_root = root((power_layer, index))
+assert owners[power_root] == {supply}, owners[power_root]
+rail_pads = {(ref, pin): node for ref, pin, node in pads[supply]}
+assert rail_pads["L_PMIC_DDR", "pin2"] == power_root
+dram_power = sorted(pin for (ref, pin), node in rail_pads.items() if ref == "U_DDR")
+reached = [pin for pin in dram_power if rail_pads["U_DDR", pin] == power_root]
+print(f"DCDC3 post-inductor L3 copper {region.area:.2f} mm², reaches {len(reached)}/{len(dram_power)} DRAM supply balls.")
+print("DRAM supply balls outside that copper island:", ", ".join(pin for pin in dram_power if pin not in reached) or "none")
 planes={}
 for l in ("In1.Cu","In4.Cu"):
     plane=max(enumerate(pieces[l]),key=lambda a:a[1].area)

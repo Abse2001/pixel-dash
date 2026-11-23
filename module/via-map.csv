@@ -1,12 +1,16 @@
 x_mm,y_mm,net,hole_mm,land_mm,solder_land,face,nominal_bore_to_land_boundary_mm,classification
 1.747999,34.147,DDR_A15,0.15,0.3,,,,off-pad
 2.557999,27.268999,DDR_A9,0.15,0.3,,,,off-pad
+2.599999,38.760116,VDDS_DDR,0.2,0.45,,,,off-pad
 2.652118,34.356749,GND_INTERNAL,0.2,0.45,,,,off-pad
 2.723258,36.604728,GND_INTERNAL,0.2,0.45,,,,off-pad
+2.826285,26.84654,VDDS_DDR,0.2,0.45,,,,off-pad
 2.983342,26.24383,GND_INTERNAL,0.2,0.45,,,,off-pad
 3.201039,29.869075,GND_INTERNAL,0.2,0.45,,,,off-pad
+3.289999,24.829884,VDDS_DDR,0.2,0.45,,,,off-pad
 3.289999,37.229884,GND_INTERNAL,0.2,0.45,,,,off-pad
 3.4,28.760116,GND_INTERNAL,0.2,0.45,,,,off-pad
+3.534612,38.153142,VDDS_DDR,0.2,0.45,,,,off-pad
 3.647999,26.097,DDR_A15,0.15,0.3,,,,off-pad
 3.973714,40.053459,GND_INTERNAL,0.2,0.45,,,,off-pad
 4.014809,38.924815,GND_INTERNAL,0.2,0.45,,,,off-pad
@@ -15,8 +19,10 @@ x_mm,y_mm,net,hole_mm,land_mm,solder_land,face,nominal_bore_to_land_boundary_mm,
 4.183342,32.24383,GND_INTERNAL,0.2,0.45,,,,off-pad
 4.199066,34.250944,GND_INTERNAL,0.2,0.45,,,,off-pad
 4.263227,24.523714,GND_INTERNAL,0.2,0.45,,,,off-pad
+4.273495,41.431758,VDDS_DDR,0.2,0.45,,,,off-pad
 4.765999,28.868999,DDR_A9,0.15,0.3,,,,off-pad
 5.203157,31.653162,GND_INTERNAL,0.2,0.45,,,,off-pad
+5.203157,32.453008,VDDS_DDR,0.2,0.45,,,,off-pad
 5.203157,33.253107,GND_INTERNAL,0.2,0.45,,,,off-pad
 5.203157,41.253092,GND_INTERNAL,0.2,0.45,,,,off-pad
 5.203157,42.853038,GND_INTERNAL,0.2,0.45,,,,off-pad
@@ -24,6 +30,8 @@ x_mm,y_mm,net,hole_mm,land_mm,solder_land,face,nominal_bore_to_land_boundary_mm,
 5.575,30.425,DDR_D15,0.2,0.45,U_DDR.A2,F.Cu,0.06166,contained off-center
 5.599953,40.850042,DDR_A5,0.2,0.45,U_DDR.P2,F.Cu,0.09699,centered
 5.615,32.04,DDR_D9,0.2,0.45,U_DDR.C2,F.Cu,0.07894,contained off-center
+5.710064,24.939949,VDDS_DDR,0.2,0.45,,,,off-pad
+6.003003,33.253107,VDDS_DDR,0.2,0.45,,,,off-pad
 6.003003,34.052954,GND_INTERNAL,0.2,0.45,,,,off-pad
 6.003003,36.446998,GND_INTERNAL,0.2,0.45,,,,off-pad
 6.395,33.665,DDR_D6,0.2,0.45,U_DDR.E3,F.Cu,0.08107,contained off-center
@@ -32,6 +40,7 @@ x_mm,y_mm,net,hole_mm,land_mm,solder_land,face,nominal_bore_to_land_boundary_mm,
 6.752999,26.097,DDR_A15,0.15,0.3,,,,off-pad
 6.803103,30.847061,GND_INTERNAL,0.2,0.45,,,,off-pad
 6.816266,26.610952,GND_INTERNAL,0.2,0.45,,,,off-pad
+6.816266,28.570949,VDDS_DDR,0.2,0.45,,,,off-pad
 6.824102,37.133389,DDR_RASn,0.2,0.45,,,,off-pad
 6.920052,40.770042,DDR_A2,0.2,0.45,,,,off-pad
 7.320053,41.169942,DDR_A0,0.2,0.45,,,,off-pad
@@ -46,6 +55,7 @@ x_mm,y_mm,net,hole_mm,land_mm,solder_land,face,nominal_bore_to_land_boundary_mm,
 8.950109,8.157488,GND_INTERNAL,0.2,0.45,C_PMIC_DDR.pin2,F.Cu,0.64251,centered
 9.1,34.95,DDR_D4,0.15,0.3,,,,off-pad
 9.120952,42.666267,GND_INTERNAL,0.2,0.45,,,,off-pad
+9.164708,12.42151,VDDS_DDR,0.2,0.45,,,,off-pad
 9.239946,38.049996,DDR_A10,0.2,0.45,,,,off-pad
 9.255,33.73,DDR_DQM0,0.2,0.45,U_DDR.E7,F.Cu,-0.25713,annulus only
 9.597999,39.247,DDR_A15,0.15,0.3,U_DDR.M7,F.Cu,0.11833,contained off-center
@@ -60,11 +70,17 @@ x_mm,y_mm,net,hole_mm,land_mm,solder_land,face,nominal_bore_to_land_boundary_mm,
 11.113226,8.353714,GND_INTERNAL,0.2,0.45,,,,off-pad
 11.332816,2.649999,GND_INTERNAL,0.2,0.45,R_DDR_SW_EN.pin2,F.Cu,0.17,centered
 11.725,31.65,DDR_D12,0.15,0.3,,,,off-pad
+11.726502,36.268078,VDDS_DDR,0.2,0.45,,,,off-pad
+11.769891,40.049942,VDDS_DDR,0.2,0.45,,,,off-pad
 11.769891,42.449988,GND_INTERNAL,0.2,0.45,,,,off-pad
 11.811018,41.764658,GND_INTERNAL,0.2,0.45,,,,off-pad
+12.050137,10.750067,VDDS_DDR,0.2,0.45,,,,off-pad
 12.278754,35.464703,GND_INTERNAL,0.2,0.45,,,,off-pad
+12.40708,6.031999,VDDS_DDR,0.2,0.45,,,,off-pad
 12.765,31.195,DDR_D14,0.15,0.3,,,,off-pad
 13.0,36.15,DDR_D4,0.2,0.45,,,,off-pad
+13.003436,5.061097,VDDS_DDR,0.2,0.45,,,,off-pad
+13.150024,4.28,VDDS_DDR,0.2,0.45,,,,off-pad
 13.195976,41.921235,GND_INTERNAL,0.2,0.45,,,,off-pad
 13.545,32.754999,DDR_D1,0.15,0.3,,,,off-pad
 14.04704,6.281936,GND_INTERNAL,0.2,0.45,U_DDR_SWITCH.EP,F.Cu,0.35,centered
@@ -72,10 +88,14 @@ x_mm,y_mm,net,hole_mm,land_mm,solder_land,face,nominal_bore_to_land_boundary_mm,
 14.15,32.0,DDR_A0,0.2,0.45,,,,off-pad
 14.39,29.115,DDR_DQM1,0.15,0.3,,,,off-pad
 14.39,32.754998,DDR_D1,0.2,0.45,,,,off-pad
+14.563227,21.973714,VDDS_DDR,0.2,0.45,,,,off-pad
 14.783523,39.687433,GND_INTERNAL,0.2,0.45,,,,off-pad
 15.090643,7.502774,GND_INTERNAL,0.2,0.45,,,,off-pad
 15.284167,22.037476,GND_INTERNAL,0.2,0.45,,,,off-pad
 15.495,33.86,DDR_D9,0.15,0.3,,,,off-pad
+15.569575,36.387526,VDDS_DDR,0.2,0.45,,,,off-pad
+16.325883,24.752,VDDS_DDR,0.2,0.45,,,,off-pad
+16.363226,42.973714,VDDS_DDR,0.2,0.45,,,,off-pad
 16.535,36.525,DDR_D7,0.15,0.3,,,,off-pad
 16.7,37.7,DDR_D0,0.15,0.3,,,,off-pad
 16.86,37.305,DDR_D7,0.15,0.3,,,,off-pad
