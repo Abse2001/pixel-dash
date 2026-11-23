@@ -58,7 +58,7 @@ def dwell_after_crossing(wave, level, start):
     return end - start, "recrossing"
 
 
-def screen(board, timing, archive, out, ioctrl, dwell=False):
+def screen(board, timing, archive, out, ioctrl, dwell=False, launch_window=False):
     edges = model["fixture"](archive, board, with_reflection=True, ioctrl=ioctrl)
     rows = {row["net"]: row for row in csv.DictReader(timing)}
     @lru_cache(None)
@@ -66,14 +66,23 @@ def screen(board, timing, archive, out, ioctrl, dwell=False):
         return at_receiver(edges[up], cap, float(rows[name]["estimated_flight_ps"]))
 
     writer = csv.writer(out, lineterminator="\n")
-    if dwell:
+    if launch_window:
+        writer.writerow(("net", "ioctrl", "load_polarity_cases", "max_source_setup_ps",
+                         "max_source_hold_ps", "earliest_capture_ps", "latest_capture_ps",
+                         "setup_limiting_load_edge", "hold_limiting_load_edge"))
+    elif dwell:
         writer.writerow(("net", "load_CK_CKn_CA_pF", "edge", "modeled_tVAC_ps", "interval_end",
                          "table64_largest_tVAC_ps", "modeled_excess_over_213_ps"))
     else:
         writer.writerow(("net","load_CK_CKn_CA_pF","edge","first_echo_headroom_ps","first_setup_ps",
                      "echo_setup_ps","setup_delta_ps","first_hold_ps","echo_hold_ps","hold_delta_ps"))
     cross = model["crossing"]
-    for name in ("DDR_BA0", "DDR_CKE", "DDR_WEn"):
+    names = ("DDR_BA0", "DDR_CKE", "DDR_WEn")
+    if launch_window:
+        names = sorted(name for name, row in rows.items() if row["current_mm"] != "open"
+                       and name not in ("DDR_CK", "DDR_CKn", "DDR_RESETn"))
+    for name in names:
+        setup_bounds, hold_bounds = [], []
         for ck, ckn, cap in model["capacitances"]():
             clock = [cross(time, p+n, vdd) for p,n in zip(pin("DDR_CK",True,ck), pin("DDR_CKn",False,ckn))]
             for up in (True,False):
@@ -86,10 +95,22 @@ def screen(board, timing, archive, out, ioctrl, dwell=False):
                     continue
                 setup = [365+a-c for a,c in zip(ac,clock)]
                 hold = [285+c-d for c,d in zip(clock,dc)]
+                if launch_window:
+                    case = f"{ck:g}/{ckn:g}/{cap:g} " + ("rise" if up else "fall")
+                    # Upper envelope of the tabulated DDR3L-800 slew deratings.
+                    setup_bounds.append((setup[1] + 108, case))
+                    hold_bounds.append((hold[1] + 95, case))
+                    continue
                 earliest = min(edges[e][1]+3*float(rows[n]["estimated_flight_ps"])-arrival
                                for e,n,arrival in [(True,"DDR_CK",clock[0]),(False,"DDR_CKn",clock[0]),(up,name,ac[0])])
                 writer.writerow((name,f"{ck:g}/{ckn:g}/{cap:g}","rise" if up else "fall",
                                  *(round(x,4) for x in (earliest,*setup,setup[1]-setup[0],*hold,hold[1]-hold[0]))))
+
+        if launch_window:
+            setup, setup_case = max(setup_bounds)
+            hold, hold_case = max(hold_bounds)
+            writer.writerow((name, hex(ioctrl), len(setup_bounds), round(setup, 3), round(hold, 3),
+                             round(setup, 3), round(2500 - hold, 3), setup_case, hold_case))
 
 
 if __name__ == "__main__":
@@ -99,7 +120,9 @@ if __name__ == "__main__":
     parser.add_argument("ti_ibis",type=Path)
     parser.add_argument("--ioctrl", type=lambda s: int(s, 0), choices=(0, 0x273), default=0x273,
                         help="Low ten bits of all three command IOCTRL registers")
-    parser.add_argument("--dwell", action="store_true", help="Report receiver AC135 threshold dwell for isolated edges")
+    modes = parser.add_mutually_exclusive_group()
+    modes.add_argument("--launch-window", action="store_true", help="Screen capture phase for all routed synchronous commands at DDR3L-800")
+    modes.add_argument("--dwell", action="store_true", help="Report receiver AC135 threshold dwell for isolated edges")
     args = parser.parse_args()
     with args.timing.open() as timing:
-        screen(json.loads(args.board.read_bytes()),timing,args.ti_ibis,sys.stdout,args.ioctrl,args.dwell)
+        screen(json.loads(args.board.read_bytes()),timing,args.ti_ibis,sys.stdout,args.ioctrl,args.dwell,args.launch_window)
