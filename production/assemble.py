@@ -491,19 +491,22 @@ for index, (x, y) in enumerate(json.loads((root / "system-ground-stitches.json")
                       subcircuit_connectivity_map_key=gnd["subcircuit_connectivity_map_key"],
                       x=x, y=y, from_layer="top", to_layer="bottom", layers=list(layers),
                       hole_diameter=0.20, outer_diameter=0.40))
-# Filled blind vias connect the retained handheld ground lands to the adjacent plane.
+# Ground each retained land using its saved escape and plated span.
 for index, site in enumerate(json.loads((root / "ground-land-vias.json").read_text())):
     ref, terminal = site["terminal"].split(".")
     source = port(ref, terminal)
     if source["subcircuit_connectivity_map_key"] != gnd["subcircuit_connectivity_map_key"]:
         raise ValueError(f"Return via terminal is no longer ground: {site['terminal']}")
     surface = site["side"]
-    adjacent = {"top": "inner1", "bottom": "inner2"}[surface]
+    through = site.get("through", False)
+    end_layer = ({"top": "bottom", "bottom": "top"} if through else
+                 {"top": "inner1", "bottom": "inner2"})[surface]
     board.append(dict(type="pcb_via", pcb_via_id=f"pcb_handheld_ground_land_{index}",
                       source_net_id=gnd["source_net_id"],
                       subcircuit_connectivity_map_key=gnd["subcircuit_connectivity_map_key"],
-                      x=site["x"], y=site["y"], from_layer=surface, to_layer=adjacent,
-                      layers=[surface, adjacent], hole_diameter=0.125, outer_diameter=0.28))
+                      x=site["x"], y=site["y"], from_layer=surface, to_layer=end_layer,
+                      layers=list(layers) if through else [surface, end_layer],
+                      hole_diameter=0.20 if through else 0.125, outer_diameter=0.45 if through else 0.28))
     if "escape" in site:
         land = one(board, "pcb_port", source_port_id=source["source_port_id"])
         connection, = (t for t in board if t["type"] == "source_trace"

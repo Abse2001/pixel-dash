@@ -22,6 +22,50 @@ MEMBERS = ("F_Cu.gbr", "In1_Cu.gbr", "In2_Cu.gbr", "B_Cu.gbr")
 CHECKS = Path(__file__).parent
 
 
+def ddr_power_lands(terminals):
+    """Walk each mapped BGA supply land to the source or return in drilled artwork."""
+    cpu = json.loads((CHECKS.parent / "am3354/processor-balls.json").read_text())
+    ram = json.loads((CHECKS.parent / "am3354/memory-balls.json").read_text())
+    def balls(mapping, part, labels, count):
+        lands = sorted(f"{part}.{ball}" for ball, label in mapping.items() if label in labels)
+        if len(lands) != count:
+            raise ValueError(f"Unexpected {part} package map for {labels}: {lands}")
+        return lands
+
+    groups = {
+        "U_PMIC.DCDC4": ["U1.N5", "U1.P5", "C_PMIC_IO_A.pin1", "C_PMIC_IO_B.pin1"],
+        "U_PMIC.L4A": ["L_PMIC_IO.pin1"],
+        "U_PMIC.L4B": ["L_PMIC_IO.pin2"],
+        "U_PMIC.L3": ["L_PMIC_DDR.pin1"],
+        "L_PMIC_DDR.pin2": ["U_PMIC.FB3", "C_PMIC_DDR.pin1", "U_DDR_SWITCH.VIN1",
+                            "U_DDR_SWITCH.VIN2", "R_VREF_HIGH.pin2", *balls(ram, "U_DDR", {"VDD", "VDDQ"}, 18)],
+        "U_DDR_SWITCH.VOUT1": ["U_DDR_SWITCH.VOUT2", *balls(cpu, "U1", {"VDDS_DDR"}, 7)],
+        "R_VREF_HIGH.pin1": ["R_VREF_LOW.pin1", "R_VREF_CA.pin2", "U1.J4",
+                             "U_DDR.H1", "C_CPU_VREF.pin1", "C_VREF_DQ.pin1"],
+        "R_VREF_CA.pin1": ["U_DDR.M8", "C_VREF_CA.pin1"],
+        "TP_UART_GND.pin1": ["C_PMIC_DDR.pin2", "R_VREF_LOW.pin2", "C_VREF_CA.pin2",
+                             "C_VREF_DQ.pin2", "C_CPU_VREF.pin2", *balls(ram, "U_DDR", {"VSS", "VSSQ"}, 21)],
+    }
+    caps = json.loads((CHECKS.parent / "am3354/bypass-placement.json").read_text())
+    cpu_caps = {i for i, cap in enumerate(caps, 1) if cap["chip"] == "U1"}
+    installed = {int(m[1]) for land in terminals if (m := re.fullmatch(r"C_DDR(\d+)\.pin1", land))}
+    if installed != set(range(1, len(caps) + 1)) or len(caps) != 39 or len(cpu_caps) != 22:
+        raise ValueError("Unexpected fitted DDR bypass population")
+    for i in sorted(installed):
+        supply = "U_DDR_SWITCH.VOUT1" if i in cpu_caps else "L_PMIC_DDR.pin2"
+        groups[supply].append(f"C_DDR{i}.pin1")
+        groups["TP_UART_GND.pin1"].append(f"C_DDR{i}.pin2")
+    if len({terminals[anchor] for anchor in groups}) != len(groups):
+        raise ValueError("DDR supply, reference, switching node, I/O or ground share exported copper")
+    failed = False
+    for anchor, lands in groups.items():
+        for land in lands:
+            connected = terminals[land] == terminals[anchor]
+            print(f"{anchor} to {land}: {'PASS' if connected else 'OPEN'}")
+            failed |= not connected
+    return failed
+
+
 def processor_power(terminals):
     """Compare package balls with the intended power sources in TI SLVUAA9B Table 1."""
     balls = json.loads((CHECKS.parent / "am3354/processor-balls.json").read_text())
@@ -329,9 +373,13 @@ def main():
     parser.add_argument("--sysboot", action="store_true", help="decode physical reset straps from resistor lands and CPU balls")
     parser.add_argument("--panel-storage", action="store_true", help="verify CPU-to-FPC and CPU-to-card physical endpoints")
     parser.add_argument("--mmc0-power", action="store_true", help="require card supply, ground, pull-ups and all seven links")
+    parser.add_argument("--ddr-power-only", action="store_true", help="check fitted DDR supplies, VREF and N5/P5 in drilled CAM")
     parser.add_argument("--mmc0-only", action="store_true",
                         help="return the drilled MMC0 result independently of other open nets")
     args = parser.parse_args()
+    if args.ddr_power_only and any((args.mmc0_only, args.mmc0_power, args.cpu_power, args.handheld_ground,
+                                    args.sysboot, args.panel_storage, args.pmic_controls)):
+        parser.error("--ddr-power-only requires a separate invocation")
     if args.mmc0_only and any((args.pmic_controls, args.handheld_ground, args.cpu_power, args.sysboot, args.panel_storage)):
         parser.error("--mmc0-only cannot be combined with whole-handheld checks")
     board = json.loads(args.circuit.read_text())
@@ -415,6 +463,8 @@ def main():
         if len(keys) > 1:
             raise ValueError(f"CAM short at {node} joins {sorted(keys)}")
     terminals = {port_labels[pid]: node for pid, node in by_pad.items() if pid in port_labels}
+    if args.ddr_power_only:
+        return ddr_power_lands(terminals)
     if args.mmc0_only:
         return mmc0_power(terminals)
     ports = {e["source_port_id"]: e["pcb_port_id"] for e in board if e["type"] == "pcb_port" and e.get("source_port_id")}

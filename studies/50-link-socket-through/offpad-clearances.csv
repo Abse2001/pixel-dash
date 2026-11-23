@@ -1,0 +1,7 @@
+terminal,via,x_mm,y_mm,front_mask_land_clear_mm,back_mask_land_clear_mm,L2_annular_copper_fraction,L3_annular_copper_fraction
+J_JOY_L.pin2,pcb_handheld_ground_land_17,-86.500126,33.159934,0.115001,7.418955,1.0,1.0
+J_SD.SHIELD4,pcb_handheld_ground_land_50,21.280033,-39.650093,0.135001,3.045363,1.0,1.0
+J_SD.SHIELD4,pcb_handheld_ground_land_51,21.280033,-39.170093,0.135001,3.082116,1.0,1.0
+J_SD.SHIELD3,pcb_handheld_ground_land_55,36.799967,-39.650093,0.135001,3.025259,1.0,1.0
+J_SD.SHIELD3,pcb_handheld_ground_land_56,36.799967,-39.170093,0.135001,3.062204,1.0,1.0
+J_JOY_R.pin2,pcb_handheld_ground_land_64,77.100066,-9.500126,0.125001,18.877281,1.0,1.0
