@@ -30,6 +30,7 @@ x_mm,y_mm,net,hole_mm,land_mm,solder_land,face,nominal_bore_to_land_boundary_mm,
 5.203157,42.853038,GND_INTERNAL,0.2,0.45,,,,off-pad
 5.40753,14.850064,GND_INTERNAL,0.2,0.45,C_PMIC_MPU.pin2,F.Cu,0.64251,centered
 5.575,30.425,DDR_D15,0.2,0.45,U_DDR.A2,F.Cu,0.06166,contained off-center
+5.599953,36.049949,VDDS_DDR,0.15,0.3,U_DDR.H2,F.Cu,0.12199,centered
 5.599953,40.850042,DDR_A5,0.2,0.45,U_DDR.P2,F.Cu,0.09699,centered
 5.615,32.04,DDR_D9,0.2,0.45,U_DDR.C2,F.Cu,0.07894,contained off-center
 5.710064,24.939949,VDDS_DDR,0.2,0.45,,,,off-pad
