@@ -19,21 +19,27 @@ def delay(wave, ps):
     return np.interp(time - ps, time, wave, left=0.)
 
 
-def load_voltage(incident, cap):
-    tau = model["Z"] * cap
+def load_voltage(incident, cap, impedance):
+    tau = impedance * cap
     a = np.exp(-dt / tau)
     beta = 1 - tau / dt * (1 - a)
     return lfilter(2 * np.array([beta, 1-a-beta]), [1., -a], incident)
 
 
-def at_receiver(edge, cap, flight):
+def at_receiver(edge, cap, flight, impedance=50.):
     drive, _, gamma = edge
+    if impedance != model["Z"]:
+        # Renormalize the affine source scattering law b = drive + gamma*a
+        # from the 50-ohm IBIS fixtures to the trial line impedance.
+        source_ohms = model["Z"] * (1 + gamma) / (1 - gamma)
+        drive = drive * (impedance / model["Z"]) * (source_ohms + model["Z"]) / (source_ohms + impedance)
+        gamma = (source_ohms - impedance) / (source_ohms + impedance)
     # At a capacitive load the returning wave is terminal voltage minus
     # incident voltage. Propagate it back to the source and reflect it there.
     if not np.isfinite(flight) or flight <= dt:
         raise ValueError("Flight must exceed one positive time step")
     incident = delay(drive, flight)
-    first = load_voltage(incident, cap)
+    first = load_voltage(incident, cap, impedance)
     terminal = first.copy()
     reflected = first - incident
     round_trips = int(np.ceil((time[-1] - time[0]) / (2 * flight)))
@@ -41,7 +47,7 @@ def at_receiver(edge, cap, flight):
         incident = delay(gamma * delay(reflected, flight), flight)
         if np.max(np.abs(incident)) < 1e-12:
             break
-        voltage = load_voltage(incident, cap)
+        voltage = load_voltage(incident, cap, impedance)
         terminal += voltage
         reflected = voltage - incident
     return first, terminal
@@ -57,7 +63,7 @@ def dwell_after_crossing(wave, level, start):
     return end - start, "recrossing"
 
 
-def screen(board, timing, archive, out, ioctrl, dwell=False, launch_window=False, slew_screen=False, receiver_window=False, corner="typ"):
+def screen(board, timing, archive, out, ioctrl, dwell=False, launch_window=False, slew_screen=False, receiver_window=False, corner="typ", jlc_channel=False):
     _, vdd = model["FIXTURE_CORNERS"][corner]
     edges = model["fixture"](archive, board, with_reflection=True, corner=corner, ioctrl=ioctrl)
     clock_edges = edges if ioctrl & 31 == (ioctrl >> 5) & 31 else model["fixture"](
@@ -66,7 +72,10 @@ def screen(board, timing, archive, out, ioctrl, dwell=False, launch_window=False
     @lru_cache(None)
     def pin(name, up, cap):
         driver = clock_edges if name in ("DDR_CK", "DDR_CKn") else edges
-        return at_receiver(driver[up], cap, float(rows[name]["estimated_flight_ps"]))
+        impedance = model["Z"]
+        if jlc_channel:
+            impedance = 99.26 / 2 if name in ("DDR_CK", "DDR_CKn") else 54.16
+        return at_receiver(driver[up], cap, float(rows[name]["estimated_flight_ps"]), impedance)
 
     writer = csv.writer(out, lineterminator="\n")
     if receiver_window:
@@ -180,6 +189,8 @@ if __name__ == "__main__":
     parser.add_argument("--ioctrl", type=lambda s: int(s, 0), choices=(0, 0x108, 0x18b, 0x273, 0x308, 0x30b, 0x318), default=0x273,
                         help="Low ten bits of all three command IOCTRL registers")
     parser.add_argument("--fixture-corner", choices=model["FIXTURE_CORNERS"], default="typ")
+    parser.add_argument("--jlc1080-channel", action="store_true",
+                        help="Screen uniform 54.16-ohm CA and 49.63-ohm odd-mode clock lines")
     modes = parser.add_mutually_exclusive_group()
     modes.add_argument("--launch-window", action="store_true", help="Screen capture phase for all routed synchronous commands at DDR3L-800")
     modes.add_argument("--slew-screen", action="store_true", help="Check nominal receiver slopes and the Micron tangent-line conditions")
@@ -187,4 +198,4 @@ if __name__ == "__main__":
     modes.add_argument("--dwell", action="store_true", help="Report receiver AC135 threshold dwell for isolated edges")
     args = parser.parse_args()
     with args.timing.open() as timing:
-        screen(json.loads(args.board.read_bytes()),timing,args.ti_ibis,sys.stdout,args.ioctrl,args.dwell,args.launch_window,args.slew_screen,args.receiver_window,args.fixture_corner)
+        screen(json.loads(args.board.read_bytes()),timing,args.ti_ibis,sys.stdout,args.ioctrl,args.dwell,args.launch_window,args.slew_screen,args.receiver_window,args.fixture_corner,args.jlc1080_channel)

@@ -1,0 +1,4 @@
+corner,eligible,tested,clock_min_V_ns,clock_max_V_ns,intersection_start_ps,intersection_end_ps
+min,416,416,1.572982,1.82193,803.131,1911.567
+typ,416,416,2.699089,3.212617,680.233,1985.77
+max,0,416,4.793672,5.798184,,
