@@ -1,4 +1,5 @@
 """Match each byte conductor on the actual board against its mapped ball, peers and strobe."""
+import argparse
 import csv
 import json
 import math
@@ -13,6 +14,17 @@ root = Path(__file__).resolve().parents[2]
 flight = runpy.run_path(str(root / "checks/audit-ddr-flight.py"))
 single, odd, barrel = (flight[k] for k in ("SINGLE", "ODD", "BARREL"))
 depth = flight["DEPTH"]
+# Preserve the existing project skew ceilings on both stacks.
+limit_single, limit_odd = single, odd
+parser = argparse.ArgumentParser(description=__doc__)
+parser.add_argument("baseline", type=Path)
+parser.add_argument("candidate", type=Path)
+parser.add_argument("--jlc1080", action="store_true", help="screen outer-layer byte routing on the provisional standard JLC stack")
+args = parser.parse_args()
+if args.jlc1080:
+    single, odd = 5.884, 5.739
+    # Only the L1–L4 depth is qualified for this comparison.
+    depth = {"top": 0., "bottom": 1.530}
 names = [f"DDR_D{i}" for i in range(16)] + [f"DDR_{s}{i}" for i in (0,1) for s in ("DQS","DQSn","DQM")]
 
 def extract(board):
@@ -49,7 +61,7 @@ def extract(board):
         raise ValueError("Missing byte routes: " + ", ".join(missing))
     return results
 
-old,cur = [extract(json.loads(Path(p).read_bytes())) for p in sys.argv[1:]]
+old,cur = [extract(json.loads(Path(p).read_bytes())) for p in (args.baseline, args.candidate)]
 w = csv.writer(sys.stdout, lineterminator="\n")
 w.writerow(["signal","prior_mm","current_mm","prior_via_spans","current_via_spans","barrel_mm","flight_mixed_ps","signed_worst_skew_ps","model_limit_ps","model_excess_ps","TI_peer_delta_mm","TI_peer_limit_mm","TI_strobe_or_pair_delta_mm","TI_strobe_or_pair_limit_mm","TI_excess_mm","placement_ceiling_mm","placement_excess_mm","matching_and_model","placement"])
 failed = False
@@ -67,7 +79,7 @@ for lane in (0,1):
     for n in data+pair:
         r=cur[n]; st=[p for p in pair if p!=n]; isdata=n in data
         peer=max(abs(r['length']-cur[d]['length']) for d in data) if isdata else 0
-        mm=.635 if isdata else .127; ps=mm*(single if isdata else odd)
+        mm=.635 if isdata else .127; ps=mm*(limit_single if isdata else limit_odd)
         delta=max(abs(r['length']-cur[p]['length']) for p in st)
         modes=r.get('modes',[r['flight']]*3)
         signed=max((x-y for p in st for x,y in zip(modes,cur[p]['modes'])),key=abs)
