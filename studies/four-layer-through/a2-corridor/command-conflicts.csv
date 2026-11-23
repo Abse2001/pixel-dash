@@ -1,0 +1,8 @@
+net,surface_length_mm,length_deficit_mm,conflicting_DDR_signals,fixed_other_objects,vias,layers
+DDR_A0,27.2715,8.87849,DDR_A14|DDR_A6|DDR_A7,,2,top>inner2>top
+DDR_A10,26.75408,9.39591,DDR_A14|DDR_A15|DDR_A6|DDR_A7|DDR_BA1,,4,top>inner2>bottom>inner2>top
+DDR_A11,25.76851,10.38148,DDR_A14|DDR_A6|DDR_A7|DDR_BA1,,2,top>inner2>top
+DDR_A12,24.72484,11.42515,DDR_A6|DDR_A7|DDR_BA1,,2,top>inner2>top
+DDR_A2,27.5053,8.64469,DDR_A7|DDR_BA1,,2,top>inner2>top
+DDR_A4,26.82395,9.32604,DDR_A14|DDR_A15|DDR_A6|DDR_A7|DDR_BA1,,3,top>bottom>inner2>top
+DDR_RASn,29.22151,6.92848,DDR_A14|DDR_A6|DDR_A7,,2,top>inner2>top
