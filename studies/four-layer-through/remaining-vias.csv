@@ -131,12 +131,10 @@ GND|GND_INTERNAL,unnamedsubcircuitsubcircuit_source_group_0_connectivity_net189,
 GND|GND_INTERNAL,unnamedsubcircuitsubcircuit_source_group_0_connectivity_net189,pcb_boot_ground_11,L1-L2,-30.25,7.817184,0.125,0.28
 GND|GND_INTERNAL,unnamedsubcircuitsubcircuit_source_group_0_connectivity_net189,pcb_boot_ground_12,L1-L2,-29,7.817184,0.125,0.28
 GND|GND_INTERNAL,unnamedsubcircuitsubcircuit_source_group_0_connectivity_net189,pcb_boot_ground_13,L1-L2,-27.75,7.817184,0.125,0.28
-GND|GND_INTERNAL,unnamedsubcircuitsubcircuit_source_group_0_connectivity_net189,pcb_boot_ground_15,L1-L2,-25.05,7.7171840000000005,0.125,0.28
 GND|GND_INTERNAL,unnamedsubcircuitsubcircuit_source_group_0_connectivity_net189,pcb_boot_ground_3,L1-L2,-30.25,5.567184,0.125,0.28
 GND|GND_INTERNAL,unnamedsubcircuitsubcircuit_source_group_0_connectivity_net189,pcb_boot_ground_5,L1-L2,-28.0,5.817184,0.125,0.28
 GND|GND_INTERNAL,unnamedsubcircuitsubcircuit_source_group_0_connectivity_net189,pcb_boot_ground_6,L1-L2,-26.5,5.567184,0.125,0.28
 GND|GND_INTERNAL,unnamedsubcircuitsubcircuit_source_group_0_connectivity_net189,pcb_boot_ground_7,L1-L2,-25.25,5.567184,0.125,0.28
-GND|GND_INTERNAL,unnamedsubcircuitsubcircuit_source_group_0_connectivity_net189,pcb_boot_ground_8,L1-L2,-34,7.817184,0.125,0.28
 GND|GND_INTERNAL,unnamedsubcircuitsubcircuit_source_group_0_connectivity_net189,pcb_boot_ground_9,L1-L2,-32.75,7.817184,0.125,0.28
 GND|GND_INTERNAL,unnamedsubcircuitsubcircuit_source_group_0_connectivity_net189,pcb_handheld_ground_land_1,L1-L2,-90.159983,-38.507966,0.125,0.28
 GND|GND_INTERNAL,unnamedsubcircuitsubcircuit_source_group_0_connectivity_net189,pcb_handheld_ground_land_10,L1-L2,-89.159983,-17.507966,0.125,0.28
