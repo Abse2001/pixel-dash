@@ -248,7 +248,7 @@ for path in json.loads((here/"ground-escapes.json").read_text()):
     add_barrel([*path["end"],.20,.45],n)
 for link in json.loads((here/"local-links.json").read_text()):
     for a,b in zip(link["points"],link["points"][1:]):
-        add_segment(a,b,k.F_Cu if link["layer"]=="F.Cu" else k.B_Cu,net(link["net"]),link["width"])
+        add_segment(a,b,{"F.Cu":k.F_Cu,"B.Cu":k.B_Cu,"In3.Cu":k.In3_Cu}[link["layer"]],net(link["net"]),link["width"])
 for feed in json.loads((here/"ddr-plane-feeds.json").read_text()):
     rail = net("VDDS_DDR")
     layer = k.F_Cu if feed["layer"] == "F.Cu" else k.B_Cu
