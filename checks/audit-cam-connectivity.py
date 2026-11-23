@@ -467,7 +467,7 @@ def main():
         card_failed = mmc0_power(terminals)
         return power_failed or card_failed
     if open_links:
-        raise ValueError("Whole-board check requires all 50 DDR links")
+        print(f"Whole-board DDR gate failed: {len(open_links)} open links.")
     if "TP_UART_RX.pin1" in terminals:
         probes = (("U1.E15", "TP_UART_RX.pin1"), ("U1.E16", "TP_UART_TX.pin1"), ("TP_UART_GND.pin1", "C_DDR25.pin2"))
         networks = {terminals[a] for a, _ in probes}
@@ -509,7 +509,7 @@ def main():
         examples = [", ".join(sorted(members[key][node])[:3]) or "via only" for node in sorted(nodes_by_net[key])]
         print(f"OPEN {key} has {count} separate CAM networks: " + " | ".join(examples))
     print(f"{len(opens)} mapped land nets have multiple physical networks.")
-    return bool(opens) or power_failed or startup_failed or straps_failed or interfaces_failed or caps_failed or card_failed or ground_failed
+    return bool(open_links) or bool(opens) or power_failed or startup_failed or straps_failed or interfaces_failed or caps_failed or card_failed or ground_failed
 
 
 if __name__ == "__main__":
