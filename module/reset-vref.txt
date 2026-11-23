@@ -19,7 +19,7 @@ Fitted word 0x4017. VDDSHV6 N5/P5 to DCDC4: False False
 PGOOD to PWRONRSTn: False
 CPU switched rail to divider True
 CPU divider bottom return True
-CPU midpoint to bypass and J4 False
+CPU midpoint to bypass and J4 True
 CPU reference bypass return True
 DRAM direct DCDC3 to divider True
 DRAM divider bottom return False
