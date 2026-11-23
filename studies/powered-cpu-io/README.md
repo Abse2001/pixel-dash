@@ -13,3 +13,7 @@ Drilled CAM reports 36 split mapped nets, 45 distinct DDR links and no shorts be
 ## SYSBOOT12 CPU tap
 
 Drilled CAM joins U1.V2 to R_SYSBOOT12.pin2 and confirms isolated low bias. The panel-side LCD D12 FPC contact remains on a separate island. Six of the sixteen strap states are now physically resolved. This checkpoint retains the preceding SYSBOOT10 and PWM connections, all 45 distinct DDR links, the same timing CSV, full-width DDR/MMC0/raster reference and all 71 local return terminals. Copper, via-edge, drill, self-contact and envelope checks pass. [Exact land memberships and boot word](sysboot12-cam.txt)
+
+## SYSBOOT7 CPU tap
+
+U1.T4 now reaches R_SYSBOOT7.pin2. Drilled CAM confirms an isolated low strap and seven resolved strap states. The remaining panel-side LCD D7 land is listed in the physical report. The exported board retains the same 45 DDR links and timing, powered N5/P5, calibration and all 71 reference terminals. Full-width DDR, MMC0 and raster coverage pass, as do copper, drill, via-edge, self-contact and common-envelope checks. [Exact boot straps and physical land groups](sysboot7-cam.txt)
