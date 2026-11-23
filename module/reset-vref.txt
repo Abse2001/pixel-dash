@@ -21,6 +21,10 @@ DCDC4 both switch pins reach the separate inductor terminals.
 DCDC4 reaches both output capacitors and the three carrier supply contacts; both bypass returns reach ground.
 PMIC PGOOD to CPU cold reset and pull connected
 Cold reset pull bias to sequenced IO output connected
+DEBUG_UART0_RX end-to-end connected
+THROUGH_X end-to-end connected
+THROUGH_DN end-to-end connected
+J_SD_PIN1 end-to-end connected
 AM3354 J3 calibration to 49.9 ohm resistor connected
 AM3354 calibration resistor return to module ground connected
 MPU buck output and feedback to seven CPU supply balls connected

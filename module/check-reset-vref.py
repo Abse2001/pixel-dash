@@ -54,6 +54,10 @@ print("DCDC4 reaches both output capacitors and the three carrier supply contact
 boot_paths = {
     "PMIC PGOOD to CPU cold reset and pull": ["U_PMIC.PGOOD","R_PMIC_POR.pin1","U1.B15"],
     "Cold reset pull bias to sequenced IO output": ["R_PMIC_POR.pin2","C_PMIC_IO_A.pin1","U_PMIC.DCDC4"],
+    "DEBUG_UART0_RX end-to-end": ["J_CARRIER.65", "U1.E15"],
+    "THROUGH_X end-to-end": ["J_CARRIER.15", "U1.L18"],
+    "THROUGH_DN end-to-end": ["J_CARRIER.10", "U1.U16"],
+    "J_SD_PIN1 end-to-end": ["J_CARRIER.6", "U1.F18"],
     "AM3354 J3 calibration to 49.9 ohm resistor": ["U1.J3","R_VTP.pin1"],
     "AM3354 calibration resistor return to module ground": ["R_VTP.pin2","U_PMIC.EP"],
     "MPU buck output and feedback to seven CPU supply balls": ["U_PMIC.FB2","L_PMIC_MPU.pin2","C_PMIC_MPU.pin1", *(f"U1.{pin}" for pin in ("F10","F11","F12","F13","G13","H13","J13"))],
