@@ -27,3 +27,7 @@ The previous 45 DDR links, full timing CSV, N5/P5, VTP, MMC0 and 71 DDR local re
 ## Panel-side LCD D4 connection
 
 R_SYSBOOT4 pin 2 now reaches the panel's LCD D4 contact. The number of panel data contacts connected to their strap sense nodes is 11/16. The CPU land for this bit is still on its own island. Seven strap levels reach the CPU and 35 mapped board nets remain split. All 45 DDR links, the timing CSV, powered lands, 71 local DDR returns, handheld ground, and sequenced MMC0 remain intact. Full-width raster and DDR references, class and copper spacing, and separate drill and via-edge checks pass. [Drilled endpoints](panel-tap-4-cam.txt) · [Physical gates](panel-tap-4-geometry.txt)
+
+## Panel-side LCD D3 connection
+
+R_SYSBOOT3 pin 2 now reaches the panel's LCD D3 contact. The number of panel data contacts connected to their strap sense nodes is 12/16. The CPU land for this bit is still on its own island. Seven strap levels reach the CPU and 35 mapped board nets remain split. All 45 DDR links, the timing CSV, powered lands, 71 local DDR returns, handheld ground, and sequenced MMC0 remain intact. Full-width raster and DDR references, class and copper spacing, and separate drill and via-edge checks pass. [Drilled endpoints](panel-tap-3-cam.txt) · [Physical gates](panel-tap-3-geometry.txt)
