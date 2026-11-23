@@ -38,6 +38,8 @@ JOY_L_CLICK end-to-end connected
 THROUGH_SD_CMD end-to-end connected
 THROUGH_SD_DAT1_PULLUP end-to-end connected
 THROUGH_SD_CS end-to-end connected
+PMIC SDA to CPU and pull-up connected
+Sequenced regulator output to both PMIC I2C pull-ups connected
 AM3354 J3 calibration to 49.9 ohm resistor connected
 AM3354 calibration resistor return to module ground connected
 MPU buck output and feedback to seven CPU supply balls connected

@@ -183,6 +183,7 @@ x_mm,y_mm,net,hole_mm,land_mm,solder_land,face,nominal_bore_to_land_boundary_mm,
 16.86,37.305,DDR_D7,0.15,0.3,,,,off-pad
 16.899999,39.824999,DDR_VREF_CA,0.15,0.3,,,,off-pad
 17.25,29.05,DDR_D12,0.15,0.3,,,,off-pad
+17.250068,18.79989,PMIC_I2C_SDA,0.15,0.3,U_PMIC.SDA,F.Cu,0.065,contained off-center
 17.315,38.085,DDR_D5,0.15,0.3,,,,off-pad
 17.39383,42.783343,GND_INTERNAL,0.2,0.45,,,,off-pad
 17.4,41.28,DDR_A6,0.2,0.45,,,,off-pad
@@ -208,6 +209,7 @@ x_mm,y_mm,net,hole_mm,land_mm,solder_land,face,nominal_bore_to_land_boundary_mm,
 19.655,31.259999,DDR_D13,0.15,0.3,,,,off-pad
 19.749936,9.80011,DDR_SWITCH_ENABLE,0.15,0.3,U_PMIC.LS1,F.Cu,0.065,centered
 19.749999,2.849999,THROUGH_SD_MISO,0.15,0.3,,,,off-pad
+19.764999,20.544999,VDD_IO_3V3_SEQ,0.15,0.3,,,,off-pad
 19.79654,41.676285,GND_INTERNAL,0.2,0.45,,,,off-pad
 19.93,4.527,THROUGH_SD_DAT1_PULLUP,0.15,0.3,,,,off-pad
 20.0,17.2,CPU_COLD_RESET,0.15,0.3,,,,off-pad
@@ -283,6 +285,7 @@ x_mm,y_mm,net,hole_mm,land_mm,solder_land,face,nominal_bore_to_land_boundary_mm,
 24.010116,41.95,VDDS_DDR_CPU,0.2,0.45,,,,off-pad
 24.039958,29.689903,DDR_A10,0.15,0.3,,,,off-pad
 24.049999,8.649999,THROUGH_R_SHOULDER,0.15,0.3,,,,off-pad
+24.051999,20.175999,PMIC_I2C_SDA,0.15,0.3,,,,off-pad
 24.097059,42.706568,VDDS_DDR_CPU,0.2,0.45,,,,off-pad
 24.160582,28.089333,DDR_A8,0.2,0.45,,,,off-pad
 24.160582,30.489379,DDR_RASn,0.2,0.45,,,,off-pad
@@ -436,12 +439,14 @@ x_mm,y_mm,net,hole_mm,land_mm,solder_land,face,nominal_bore_to_land_boundary_mm,
 33.0,26.440232,GND_INTERNAL,0.2,0.45,C_MPU_HF4.pin2,B.Cu,0.15,centered
 33.049999,32.029882,VDDS_DDR_CPU,0.2,0.45,,,,off-pad
 33.149999,30.449999,THROUGH_SD_MISO,0.15,0.3,,,,off-pad
+33.323999,23.595999,PMIC_I2C_SDA,0.15,0.3,,,,off-pad
 33.4,2.844999,SYSBOOT9_SENSE,0.15,0.3,,,,off-pad
 33.4,4.755,SYSBOOT12_SENSE,0.15,0.3,,,,off-pad
 33.499997,24.45,VDDS_DDR_CPU,0.2,0.45,,,,off-pad
 33.5,8.432816,GND_INTERNAL,0.2,0.45,R_SYSBOOT6.pin1,F.Cu,0.17,centered
 33.74,4.445,SYSBOOT10_SENSE,0.15,0.3,,,,off-pad
 33.782176,29.551974,THROUGH_SD_CS,0.15,0.3,,,,off-pad
+33.849988,27.780112,PMIC_I2C_SDA,0.15,0.3,,,,off-pad
 33.949999,39.249999,THROUGH_A,0.15,0.3,,,,off-pad
 33.95,4.82,SYSBOOT11_SENSE,0.15,0.3,,,,off-pad
 34.155,7.685,SYSBOOT7_SENSE,0.15,0.3,,,,off-pad
