@@ -33,6 +33,8 @@ x_mm,y_mm,net,hole_mm,land_mm,solder_land,face,nominal_bore_to_land_boundary_mm,
 6.803103,30.847061,GND_INTERNAL,0.2,0.45,,,,off-pad
 6.816266,26.610952,GND_INTERNAL,0.2,0.45,,,,off-pad
 6.824102,37.133389,DDR_RASn,0.2,0.45,,,,off-pad
+6.920052,40.770042,DDR_A2,0.2,0.45,,,,off-pad
+7.440053,38.569896,DDR_CASn,0.2,0.45,,,,off-pad
 7.50011,20.642638,GND_INTERNAL,0.2,0.45,C_PMIC_CORE.pin2,F.Cu,0.64251,centered
 7.779218,36.898002,DDR_CKn,0.15,0.3,,,,off-pad
 8.100673,36.121943,DDR_CK,0.15,0.3,,,,off-pad
@@ -43,6 +45,7 @@ x_mm,y_mm,net,hole_mm,land_mm,solder_land,face,nominal_bore_to_land_boundary_mm,
 8.950109,8.157488,GND_INTERNAL,0.2,0.45,C_PMIC_DDR.pin2,F.Cu,0.64251,centered
 9.1,34.95,DDR_D4,0.15,0.3,,,,off-pad
 9.120952,42.666267,GND_INTERNAL,0.2,0.45,,,,off-pad
+9.239946,38.049996,DDR_A10,0.2,0.45,,,,off-pad
 9.255,33.73,DDR_DQM0,0.2,0.45,U_DDR.E7,F.Cu,-0.25713,annulus only
 9.597999,39.247,DDR_A15,0.15,0.3,U_DDR.M7,F.Cu,0.11833,contained off-center
 9.639946,31.250112,DDR_DQSn1,0.15,0.3,U_DDR.B7,F.Cu,0.08199,contained off-center
@@ -92,6 +95,7 @@ x_mm,y_mm,net,hole_mm,land_mm,solder_land,face,nominal_bore_to_land_boundary_mm,
 20.275,31.175,DDR_D11,0.15,0.3,,,,off-pad
 20.305,32.494999,DDR_D8,0.15,0.3,,,,off-pad
 20.37,37.045,DDR_D2,0.15,0.3,,,,off-pad
+20.799912,29.849903,DDR_CASn,0.15,0.3,,,,off-pad
 20.837829,28.81209,DDR_CK,0.2,0.45,,,,off-pad
 20.893999,27.652999,DDR_A14,0.15,0.3,,,,off-pad
 20.929549,26.535725,DDR_A5,0.2,0.45,,,,off-pad
@@ -129,7 +133,9 @@ x_mm,y_mm,net,hole_mm,land_mm,solder_land,face,nominal_bore_to_land_boundary_mm,
 24.94995,19.90001,GND_INTERNAL,0.2,0.45,C_SRAM_CORE_IN.pin2,F.Cu,0.3,centered
 24.949999,38.470116,GND_INTERNAL,0.2,0.45,,,,off-pad
 24.963227,24.223714,GND_INTERNAL,0.2,0.45,,,,off-pad
+24.999958,29.689903,DDR_A10,0.2,0.45,,,,off-pad
 25.222182,5.404998,GND_INTERNAL,0.2,0.45,,,,off-pad
+25.719958,28.850058,DDR_A2,0.2,0.45,,,,off-pad
 25.802954,32.053154,GND_INTERNAL,0.2,0.45,,,,off-pad
 25.802954,32.853,GND_INTERNAL,0.2,0.45,,,,off-pad
 26.000002,42.5,GND_INTERNAL,0.2,0.45,R_DDR_SW_OUT.pin2,B.Cu,0.46627,centered
