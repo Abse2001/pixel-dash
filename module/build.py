@@ -252,8 +252,10 @@ for link in json.loads((here/"local-links.json").read_text()):
 for feed in json.loads((here/"ddr-plane-feeds.json").read_text()):
     rail = net("VDDS_DDR")
     layer = k.F_Cu if feed["layer"] == "F.Cu" else k.B_Cu
-    add_segment(feed["start"], feed["end"], layer, rail, .32)
-    add_barrel([*feed["end"], .20, .45], rail)
+    points = feed.get("points", [feed["start"], feed["end"]])
+    for start, end in zip(points, points[1:]):
+        add_segment(start, end, layer, rail, feed.get("width", .32))
+    add_barrel([*feed["end"], feed.get("drill", .20), feed.get("diam", .45)], rail)
 # A wide trunk carries the post-inductor DCDC3 output to the DDR area.
 zone(k.In2_Cu, "VDDS_DDR", [(6,3),(22,3),(22,18),(36.6,18),(36.6,45.6),(.4,45.6),(.4,18),(6,18)])
 for layer in (k.In1_Cu,k.In4_Cu):zone(layer)
