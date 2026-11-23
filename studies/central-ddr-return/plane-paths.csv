@@ -1,0 +1,21 @@
+signal,via_x_mm,via_y_mm,bypass,plane,witness_length_mm,status
+DDR_D14,-58.87,18.17,C_DDR41,inner1,4.704,covered path
+DDR_D14,-58.87,18.17,C_DDR41,inner2,4.2038,covered path
+DDR_D14,-60.235,16.805,C_DDR41,inner2,5.3209,covered path
+DDR_D14,-60.235,16.805,C_DDR41,inner1,5.7365,covered path
+DDR_D9,-57.505,14.14,C_DDR41,inner1,2.9534,covered path
+DDR_D9,-57.505,14.14,C_DDR41,inner2,2.5052,covered path
+DDR_D9,-67.385,15.96,C_DDR1,inner2,4.4599,covered path
+DDR_D9,-67.385,15.96,C_DDR1,inner1,,segment ends within launch region
+DDR_D12,-55.75,18.95,C_DDR41,inner1,3.1707,covered path
+DDR_D12,-55.75,18.95,C_DDR41,inner2,3.477,covered path
+DDR_D12,-61.275,16.35,C_DDR41,inner2,6.5061,covered path
+DDR_D12,-61.275,16.35,C_DDR41,inner1,7.0019,covered path
+DDR_DQS0,-51.200038,11.950058,C_DDR41,inner1,5.4351,covered path
+DDR_DQS0,-51.200038,11.950058,C_DDR41,inner2,6.2802,covered path
+DDR_DQS0,-66.559946,13.549996,C_DDR2,inner2,3.844,covered path
+DDR_DQS0,-66.559946,13.549996,C_DDR2,inner1,,segment ends within launch region
+DDR_D1,-58.61,15.245,C_DDR41,inner1,3.4329,covered path
+DDR_D1,-58.61,15.245,C_DDR41,inner2,3.8508,covered path
+DDR_D1,-59.455,15.245,C_DDR41,inner2,3.9039,covered path
+DDR_D1,-59.455,15.245,C_DDR41,inner1,4.7,covered path
