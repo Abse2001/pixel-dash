@@ -1,0 +1,3 @@
+ValueError: CAM short at ('top', 952) joins ['system_LCD_D7', 'system_LCD_HSYNC']
+0 via drill-spacing findings
+0 via/layer/unrelated-net pairs below 0.1524 mm
