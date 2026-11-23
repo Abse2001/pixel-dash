@@ -1,0 +1,56 @@
+ball,through_via,via_x_mm,via_y_mm,center_offset_mm,drill_mm,land_mm,nominal_bore_containment_mm,nominal_via_land_containment_mm,contact
+U1.A10,pcb_channel_source_trace_383_via_4,-44.445,22.01,0.07496,0.15,0.3,0.030037,-0.044963,off-center bore inside solder land
+U1.A17,pcb_system_AUDIO_PWM_via_1,-38.64,21.86,0.183629,0.15,0.3,-0.078632,-0.153632,bore crosses solder land edge
+U1.B15,pcb_channel_source_trace_382_via_4,-40.375,21.195,0.051468,0.15,0.3,0.053529,-0.021471,off-center bore inside solder land
+U1.B17,pcb_system_KEY_L_via_1,-38.585,21.165,0.215535,0.15,0.3,-0.110538,-0.185538,bore crosses solder land edge
+U1.C16,pcb_channel_source_trace_324_via_4,-39.6,20.36,0.010113,0.15,0.3,0.094884,0.019884,off-center bore inside solder land
+U1.C17,pcb_channel_source_trace_325_via_4,-38.68,20.3,0.129968,0.15,0.3,-0.024971,-0.099971,bore crosses solder land edge
+U1.D1,pcb_command_DDR_CKn_via_1,-51.737906,19.612174,0.151176,0.15,0.3,-0.046179,-0.121179,bore crosses solder land edge
+U1.E12,pcb_io_local_E13_F14_via_1,-42.825,18.675,0.079001,0.15,0.3,0.025996,-0.049004,off-center bore inside solder land
+U1.E15,channel_pcb_via_283,-40.349958,18.749942,0.05,0.15,0.3,0.054997,-0.020003,off-center bore inside solder land
+U1.E16,channel_pcb_via_284,-39.650112,18.699942,0.070711,0.15,0.3,0.034286,-0.040714,off-center bore inside solder land
+U1.E7,pcb_channel_source_trace_499_via_2,-46.7,18.625,0.16003,0.15,0.3,-0.055033,-0.130033,bore crosses solder land edge
+U1.F17,pcb_system_SD_DAT3_via_1,-38.705,17.9,0.10741,0.15,0.3,-0.002413,-0.077413,bore crosses solder land edge
+U1.F18,pcb_system_SD_DAT2_via_1,-37.754,17.883,0.254901,0.15,0.3,-0.149904,-0.224904,bore crosses solder land edge
+U1.G10,pcb_feed_VDD_CORE_U1.G10_1,-44.305,17.13,0.097033,0.15,0.3,0.007964,-0.067036,off-center bore inside solder land
+U1.G3,pcb_command_DDR_CKE_via_1,-50.058,17.211,0.084253,0.15,0.3,0.020745,-0.054255,off-center bore inside solder land
+U1.G7,pcb_feed_VDD_CORE_4,-46.799996,17.149996,0.0,0.15,0.3,0.104997,0.029997,centered bore
+U1.H11,pcb_feed_VDD_CORE_U1.H11,-43.600104,16.349896,0.0,0.15,0.3,0.104997,0.029997,centered bore
+U1.J13,pcb_feed_VDD_MPU_4,-42.175,15.43,0.212298,0.2,0.38,-0.132301,-0.222301,bore crosses solder land edge
+U1.J4,pcb_support_U1_J4_via_0,-49.302042,15.62805,0.128406,0.15,0.3,-0.023409,-0.098409,bore crosses solder land edge
+U1.J6,channel_pcb_via_138,-47.8,15.5,0.206074,0.254,0.4572,-0.153077,-0.254677,bore crosses solder land edge
+U1.K2,channel_pcb_via_241,-50.775,14.725,0.035312,0.15,0.3,0.069686,-0.005314,off-center bore inside solder land
+U1.K8,pcb_feed_VDD_CORE_U1.K8,-45.999896,14.74995,0.0,0.15,0.3,0.104997,0.029997,centered bore
+U1.L3,channel_pcb_via_259,-50.03,13.945,0.030542,0.15,0.3,0.074456,-0.000544,off-center bore inside solder land
+U1.L6,pcb_feed_VDD_CORE_U1.L6,-47.600096,13.950104,0.0,0.15,0.3,0.104997,0.029997,centered bore
+U1.L7,pcb_feed_VDD_CORE_U1.L7,-46.799996,13.950104,0.0,0.15,0.3,0.104997,0.029997,centered bore
+U1.L8,pcb_feed_VDD_CORE_U1.L8,-45.999896,13.950104,0.0,0.15,0.3,0.104997,0.029997,centered bore
+U1.L9,pcb_feed_VDD_CORE_U1.L9,-45.20005,13.950104,0.0,0.15,0.3,0.104997,0.029997,centered bore
+U1.M11,pcb_feed_VDD_CORE_U1.M11,-43.600104,13.150004,0.0,0.15,0.3,0.104997,0.029997,centered bore
+U1.N12,pcb_feed_VDD_CORE_U1.N12_1,-42.835,12.44,0.096654,0.15,0.3,0.008343,-0.066657,off-center bore inside solder land
+U1.N2,channel_pcb_via_279,-50.775,12.1,0.25115,0.15,0.3,-0.146153,-0.221153,bore crosses solder land edge
+U1.N9,pcb_feed_VDD_CORE_U1.N9_1,-45.18,12.51,0.161347,0.15,0.3,-0.05635,-0.13135,bore crosses solder land edge
+U1.P3,channel_pcb_via_261,-50.03,11.54,0.031747,0.15,0.3,0.07325,-0.00175,off-center bore inside solder land
+U1.P6,pcb_io_feed_U1_P6_via_5,-47.582,11.568,0.025483,0.15,0.3,0.079514,0.004514,off-center bore inside solder land
+U1.R1,pcb_support_U1_R1_via_0,-51.636,10.819,0.077823,0.15,0.3,0.027174,-0.047826,off-center bore inside solder land
+U1.T14,pcb_channel_source_trace_321_via_4,-41.215,9.925,0.029221,0.15,0.3,0.075776,0.000776,off-center bore inside solder land
+U_DDR.A1,channel_pcb_via_1,-68.199892,17.549988,0.0,0.15,0.3,0.122002,0.047002,centered bore
+U_DDR.A2,channel_pcb_via_240,-67.425,17.575,0.035331,0.15,0.3,0.086671,0.011671,off-center bore inside solder land
+U_DDR.A7,channel_pcb_via_244,-63.095,17.585,0.307057,0.15,0.3,-0.185054,-0.260054,copper land only
+U_DDR.B2,pcb_ram_feed_B2,-67.535046,16.479888,0.301869,0.15,0.3,-0.179867,-0.254867,copper land only
+U_DDR.B7,channel_pcb_via_246,-63.360054,16.749888,0.04,0.15,0.3,0.082002,0.007002,off-center bore inside solder land
+U_DDR.C1,pcb_ram_feed_C1,-68.199892,15.950042,0.0,0.15,0.3,0.122002,0.047002,centered bore
+U_DDR.C2,channel_pcb_via_250,-67.385,15.96,0.018043,0.15,0.3,0.10396,0.02896,off-center bore inside solder land
+U_DDR.C7,channel_pcb_via_254,-63.360054,15.950042,0.04,0.15,0.3,0.082002,0.007002,off-center bore inside solder land
+U_DDR.C9,pcb_support_U_DDR_C9_via_0,-61.853138,15.947057,0.053114,0.15,0.3,0.068888,-0.006112,off-center bore inside solder land
+U_DDR.E3,channel_pcb_via_262,-66.605,14.335,0.01592,0.15,0.3,0.106083,0.031083,off-center bore inside solder land
+U_DDR.F3,channel_pcb_via_268,-66.559946,13.549996,0.04,0.15,0.3,0.082002,0.007002,off-center bore inside solder land
+U_DDR.G3,channel_pcb_via_276,-66.559946,12.749896,0.04,0.15,0.3,0.082002,0.007002,off-center bore inside solder land
+U_DDR.H1,pcb_support_U_DDR_H1_via_0,-68.229,11.92,0.041836,0.15,0.3,0.080166,0.005166,off-center bore inside solder land
+U_DDR.H8,channel_pcb_via_282,-62.575,11.93,0.032011,0.15,0.3,0.089991,0.014991,off-center bore inside solder land
+U_DDR.H9,pcb_ram_feed_H9,-61.800108,11.95005,0.0,0.15,0.3,0.122002,0.047002,centered bore
+U_DDR.L8,pcb_support_U_DDR_L8_via_0,-62.607,9.548,0.007325,0.15,0.3,0.114677,0.039677,off-center bore inside solder land
+U_DDR.M7,pcb_command_DDR_A15_via_4,-63.402,8.753,0.003657,0.15,0.3,0.118346,0.043346,off-center bore inside solder land
+U_DDR.M8,pcb_support_U_DDR_M8_via_0,-62.600081,8.477432,0.272472,0.15,0.3,-0.15047,-0.22547,copper land only
+U_DDR.P2,pcb_command_DDR_A5_via_5,-67.402,7.163,0.013188,0.15,0.3,0.108815,0.033815,off-center bore inside solder land
+U_DDR.R2,pcb_command_DDR_A7_via_2,-67.402,6.353,0.003487,0.15,0.3,0.118515,0.043515,off-center bore inside solder land
