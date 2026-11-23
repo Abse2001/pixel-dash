@@ -1,0 +1,7 @@
+center candidates {2: 3425, 3: 3777, 4: 2016, 5: 2016, 7: 1728}
+1 max center distance for distinct destinations 1.406564964727953 pairs >=0.402 1521984
+5 center bounds [-57.670046  10.290058] [-56.230046  10.650058]
+7 center bounds [-57.625046  10.290058] [-56.275046  10.650058]
+2 max center distance for distinct destinations 0.22945587811168366 pairs >=0.402 0
+5 center bounds [-59.560046  10.650058] [-59.335046  10.695058]
+7 center bounds [-59.560046  10.650058] [-59.335046  10.695058]
