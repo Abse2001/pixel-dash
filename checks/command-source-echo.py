@@ -48,7 +48,17 @@ def at_receiver(edge, cap, flight):
     return first, terminal
 
 
-def screen(board, timing, archive, out, ioctrl):
+def dwell_after_crossing(wave, level, start):
+    """Time continuously beyond an AC threshold on a single normalized edge."""
+    below = np.flatnonzero((time > start) & (wave < level))
+    if not len(below):
+        return time[-1] - start, "simulation end"
+    i = below[0]
+    end = time[i-1] + dt * (wave[i-1] - level) / (wave[i-1] - wave[i])
+    return end - start, "recrossing"
+
+
+def screen(board, timing, archive, out, ioctrl, dwell=False):
     edges = model["fixture"](archive, board, with_reflection=True, ioctrl=ioctrl)
     rows = {row["net"]: row for row in csv.DictReader(timing)}
     @lru_cache(None)
@@ -56,7 +66,11 @@ def screen(board, timing, archive, out, ioctrl):
         return at_receiver(edges[up], cap, float(rows[name]["estimated_flight_ps"]))
 
     writer = csv.writer(out, lineterminator="\n")
-    writer.writerow(("net","load_CK_CKn_CA_pF","edge","first_echo_headroom_ps","first_setup_ps",
+    if dwell:
+        writer.writerow(("net", "load_CK_CKn_CA_pF", "edge", "modeled_tVAC_ps", "interval_end",
+                         "table64_largest_tVAC_ps", "modeled_excess_over_213_ps"))
+    else:
+        writer.writerow(("net","load_CK_CKn_CA_pF","edge","first_echo_headroom_ps","first_setup_ps",
                      "echo_setup_ps","setup_delta_ps","first_hold_ps","echo_hold_ps","hold_delta_ps"))
     cross = model["crossing"]
     for name in ("DDR_BA0", "DDR_CKE", "DDR_WEn"):
@@ -64,6 +78,12 @@ def screen(board, timing, archive, out, ioctrl):
             clock = [cross(time, p+n, vdd) for p,n in zip(pin("DDR_CK",True,ck), pin("DDR_CKn",False,ckn))]
             for up in (True,False):
                 ac, dc = zip(*[(cross(time,w,vdd/2+.135),cross(time,w,vdd/2-.090)) for w in pin(name,up,cap)])
+                if dwell:
+                    # Table 64 lists 213 ps as the largest AC135 tVAC requirement at DDR3L-800.
+                    duration, reason = dwell_after_crossing(pin(name, up, cap)[1], vdd/2+.135, ac[1])
+                    writer.writerow((name, f"{ck:g}/{ckn:g}/{cap:g}", "rise" if up else "fall",
+                                     round(duration, 4), reason, 213, round(duration - 213, 4)))
+                    continue
                 setup = [365+a-c for a,c in zip(ac,clock)]
                 hold = [285+c-d for c,d in zip(clock,dc)]
                 earliest = min(edges[e][1]+3*float(rows[n]["estimated_flight_ps"])-arrival
@@ -79,6 +99,7 @@ if __name__ == "__main__":
     parser.add_argument("ti_ibis",type=Path)
     parser.add_argument("--ioctrl", type=lambda s: int(s, 0), choices=(0, 0x273), default=0x273,
                         help="Low ten bits of all three command IOCTRL registers")
+    parser.add_argument("--dwell", action="store_true", help="Report receiver AC135 threshold dwell for isolated edges")
     args = parser.parse_args()
     with args.timing.open() as timing:
-        screen(json.loads(args.board.read_bytes()),timing,args.ti_ibis,sys.stdout,args.ioctrl)
+        screen(json.loads(args.board.read_bytes()),timing,args.ti_ibis,sys.stdout,args.ioctrl,args.dwell)
