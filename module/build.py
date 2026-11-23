@@ -100,8 +100,9 @@ def net(name):
         board.Add(nets[name])
     return nets[name]
 def netname(key): return labels.get(key,key)
-def zone(layer, rail=None, corners=None):
+def zone(layer, rail=None, corners=None, priority=0):
     z=k.ZONE(board);z.SetLayer(layer);z.SetNet(net(rail or netname(balls["SW_POWER","pin1"])));z.SetLocalClearance(mm(.13))
+    z.SetAssignedPriority(priority)
     z.SetMinThickness(mm(.102));z.SetPadConnection(k.ZONE_CONNECTION_FULL)
     boundary=z.Outline();boundary.NewOutline()
     points = [xy(x,y) for x,y in ((left,low),(left,high),(right,high),(right,low))] if corners is None else [at(p) for p in corners]
@@ -339,6 +340,7 @@ for name, file in (("VDDS_DDR","ddr-plane-feeds.json"), ("VDDS_DDR_CPU","cpu-ddr
 # A wide trunk carries the post-inductor DCDC3 output to the DDR area.
 zone(k.In2_Cu, "VDDS_DDR", [(6,3),(22,3),(22,18),(36.6,18),(36.6,45.6),(.4,45.6),(.4,18),(6,18)])
 zone(k.In3_Cu, "VDDS_DDR_CPU", [(13,3.5),(19,3.5),(26.0,20.8),(36.5,20.8),(36.5,45.6),(19.5,45.6),(19.5,22.2),(13,9)])
+zone(k.In3_Cu, "VDD_MPU", json.loads((here/"mpu-plane.json").read_text()), priority=1)
 for layer in (k.In1_Cu,k.In4_Cu):zone(layer)
 
 board_path=here/"pixel-dash-module.kicad_pcb"

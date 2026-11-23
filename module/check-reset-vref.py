@@ -52,6 +52,7 @@ assert connected("U_PMIC.DCDC4","C_PMIC_IO_A.pin1","C_PMIC_IO_B.pin1","J_CARRIER
 assert connected("C_PMIC_IO_A.pin2","C_PMIC_IO_B.pin2","U_PMIC.EP")
 print("DCDC4 reaches both output capacitors and the three carrier supply contacts; both bypass returns reach ground.")
 boot_paths = {
+    "MPU buck output and feedback to seven CPU supply balls": ["U_PMIC.FB2","L_PMIC_MPU.pin2","C_PMIC_MPU.pin1", *(f"U1.{pin}" for pin in ("F10","F11","F12","F13","G13","H13","J13"))],
     "LDO1 output to its local bypass": ["U_PMIC.LDO1","C_PMIC_LDO1.pin1"],
     "LDO1 bypass ground to PMIC exposed pad": ["C_PMIC_LDO1.pin2","U_PMIC.EP"],
     "RTC I/O DCDC6 switch node to inductor input": ["U_PMIC.L6","L_PMIC_RTC_IO.pin1"],
