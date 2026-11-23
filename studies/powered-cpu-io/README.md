@@ -57,3 +57,7 @@ R_SYSBOOT5 pin 2 now reaches the panel's LCD D5 contact. The number of panel dat
 ## Powered LCD D12
 
 U1.V2, R_SYSBOOT12 pin 2 and J_LCD pin 15 now share one drilled CAM island. Local changes to D4, D11 and PCLK retain their full-width return around the new D12 transitions. All 45 DDR links, their timing CSV, 71 local return terminals, the sequenced MMC0 supply and seven signals retain their prior results. The full panel has 9/29 end-to-end signals and 15/16 strap taps. Seven CPU boot straps are physically resolved. There are 31 split mapped nets. [Drilled CAM](panel-D12-cam.txt) · [Physical checks](panel-D12-geometry.txt) · [Full-board PCB](powered-panel-taps.png)
+
+## All sixteen panel strap taps
+
+R_SYSBOOT6 pin 2 reaches J_LCD pin 24 through a staggered blind/buried transition. All 16 panel-side strap taps are physically connected. The U1.T3 land for bit 6 remains isolated. Nine of 29 CPU-to-panel signals and seven physical CPU strap states are verified. Drilled CAM retains 45 DDR links and counts 1,205 plated barrels. Full-width DDR, MMC0 and raster references, all local power/return checks, 0.102 mm copper, 0.1524 mm via-edge and drill spacing pass. There are 31 split mapped nets. [Physical endpoints](panel-D6-cam.txt) · [Geometry](panel-D6-geometry.txt) · [Full PCB](powered-panel-taps.png)
