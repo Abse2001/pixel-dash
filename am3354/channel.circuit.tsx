@@ -28,7 +28,7 @@ function processorPin(signal: string) {
 }
 
 // Preserve the electrical netlist while reserving the N5/P5 breakout on this study.
-const liftedSignals = new Set(["DDR_D1", "DDR_D12", "DDR_A10", "DDR_A14"]);
+const liftedSignals = new Set(["DDR_D1", "DDR_A10", "DDR_A14", "DDR_D10", "DDR_D11", "DDR_D13", "DDR_D15"]);
 
 export default function MemoryChannel({ pcbOffsetX = 0, children }: {
     pcbOffsetX?: number

@@ -20,7 +20,7 @@ def polygon(pour):
     return Polygon(outer, holes)
 
 
-def audit(board, microsd=False, full_width=False, raster=False, archive=None):
+def audit(board, microsd=False, full_width=False, raster=False, archive=None, study_open=()):
     nets = {e["source_net_id"]: e["name"] for e in board if e["type"] == "source_net"}
     names = {e["source_trace_id"]: e.get("name", "") for e in board if e["type"] == "source_trace"}
     ref = {"top": ("inner1", "GND"), "bottom": ("inner2", "GND" if microsd or raster else "VDDS_DDR")}
@@ -106,7 +106,8 @@ def audit(board, microsd=False, full_width=False, raster=False, archive=None):
                 combined = unary_union(gaps)
                 yield name, layer, ref[layer][0], combined.area if full_width else combined.length
 
-    if not microsd and not raster and len(seen) != 50:
+    declared = {name for name in names.values() if name and name.startswith("DDR_")}
+    if not microsd and not raster and (len(declared) != 50 or declared - seen != set(study_open)):
         raise ValueError(f"Expected 50 routed DDR signals, found {len(seen)}")
     if raster and not seen:
         raise ValueError("The assembled board contains no routed raster signals")
@@ -122,9 +123,12 @@ if __name__ == "__main__":
     group.add_argument("--raster", action="store_true")
     parser.add_argument("--full-width", action="store_true")
     parser.add_argument("--gerbers", type=Path, help="Check the connected reference copper reconstructed from the manufacturing archive")
+    parser.add_argument("--study-open", nargs="+", default=[], help="Exact missing DDR signals on a partial board")
     args = parser.parse_args()
+    if args.study_open and (args.micro_sd or args.raster):
+        parser.error("--study-open applies only to DDR signals")
     full_width = args.full_width
-    failures = sorted(audit(json.loads(args.circuit.read_text()), args.micro_sd, full_width, args.raster, args.gerbers))
+    failures = sorted(audit(json.loads(args.circuit.read_text()), args.micro_sd, full_width, args.raster, args.gerbers, args.study_open))
     out = csv.writer(sys.stdout)
     out.writerow(("signal", "signal_layer", "reference_layer", "uncovered_copper_mm2" if full_width else "uncovered_centerline_mm"))
     for name, layer, ref, length in failures:

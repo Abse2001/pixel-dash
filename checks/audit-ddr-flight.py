@@ -16,7 +16,7 @@ DEPTH = {"top": 0., "inner1": WURTH.outer_to_inner,
          "inner2": WURTH.outer_to_outer-WURTH.outer_to_inner, "bottom": WURTH.outer_to_outer}
 
 
-def flights(board, proximity):
+def flights(board, proximity, study_open=()):
     pair_audit = runpy.run_path(str(Path(__file__).with_name("measure-ddr-pair-spacing.py")))
     pairs = pair_audit["PAIRS"]
     segments = pair_audit["pair_segments"](board)
@@ -46,7 +46,8 @@ def flights(board, proximity):
         isolated = planar*SINGLE + sum(barrels)*BARREL
         near = coupled.get(name, 0.)
         rows[name] = (planar, len(barrels), sum(barrels), near, isolated, isolated-near*(SINGLE-ODD))
-    if len(rows) != 50:
+    expected = {n for n in names.values() if n.startswith("DDR_")}
+    if len(expected) != 50 or expected - rows.keys() != set(study_open):
         raise ValueError("The full-bus comparison requires 50 physically routed nets")
     return rows
 

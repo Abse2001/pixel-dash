@@ -11,11 +11,15 @@ single, odd, barrel = [audit[key] for key in ("SINGLE", "ODD", "BARREL")]
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument("before", type=Path)
 parser.add_argument("after", type=Path)
+parser.add_argument("--study-open", nargs="+", default=[], metavar="NET",
+                    help="List the exact lifted data or command nets on a partial study. Pair references must be present.")
 args = parser.parse_args()
 before, board = (json.loads(path.read_text()) for path in (args.before, args.after))
-prior, now = (audit["flights"](b, .42) for b in (before, board))
-names = set(now)
-assert names == set(prior)
+prior = audit["flights"](before, .42)
+now = audit["flights"](board, .42, args.study_open)
+names = set(prior)
+if set(now) | set(args.study_open) != names:
+    raise ValueError("The before and after DDR netlists differ")
 ports = {e["source_port_id"]: e for e in board if e["type"] == "pcb_port" and e.get("source_port_id")}
 manhattan = {}
 for trace in board:
@@ -67,8 +71,11 @@ for name, current in sorted(now.items()):
         data,pair = [],clock
     row.extend([lo,hi,residual(current[0],lo,hi),residual(current[0]+current[2],lo,hi)])
     if name in data:
-        spread = max(abs(current[0]-now[n][0]) for n in data)
-        row.extend([spread,.635,max(0,spread-.635)])
+        if all(n in now for n in data):
+            spread = max(abs(current[0]-now[n][0]) for n in data)
+            row.extend([spread,.635,max(0,spread-.635)])
+        else:
+            row.extend(["",.635,""])
     else:
         row.extend([""]*3)
     if name in data or name in pair:
@@ -117,3 +124,10 @@ for name, current in sorted(now.items()):
         row.extend([""]*5)
     assert len(row)==42
     writer.writerow([f"{x:.4f}" if isinstance(x,float) else x for x in row])
+
+for name in sorted(args.study_open):
+    old = prior[name]
+    row = [""] * 42
+    row[0], row[1], row[3], row[5], row[7] = name, old[0], old[1], old[2], old[5]
+    row[-1] = "OPEN in study, copper absent"
+    writer.writerow(row)

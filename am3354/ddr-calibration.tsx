@@ -31,11 +31,19 @@ export function DdrCalibration() {
 				thickness={0.15}
 				pcbStraightLine
 			/>
+			<via
+				name="V_VTP_RETURN"
+				pcbX={-4.589546154}
+				pcbY={14.962969809}
+				outerDiameter={0.30}
+				holeDiameter={0.15}
+				connectsTo="net.GND"
+			/>
 			<trace
-				from=".V_C_DDR39_2 > .bottom"
-				to=".R_VTP > .pin2"
+				from=".R_VTP > .pin2"
+				to=".V_VTP_RETURN > .bottom"
 				thickness={0.13}
-				pcbPath={[{ x: -1.24579374, y: -0.05204426 }]}
+				pcbStraightLine
 			/>
 			<RC0201FR_07240RL
 				name="R_ZQ"

@@ -1,4 +1,5 @@
 """Measure same-layer DDR spacing against TI AM335x Tables 7-68 and 7-69."""
+import argparse
 import csv
 import json
 import re
@@ -44,7 +45,7 @@ def covered_length(line, intersections):
     return total
 
 
-def main(board):
+def main(board, study_open=()):
     traces, keys = trace_net_keys(board)
     sections = defaultdict(list)
     for trace in board:
@@ -88,7 +89,8 @@ def main(board):
                     below.append(line.intersection(seg.buffer(width, quad_segs=32)))
             restricted[name] += covered_length(line, relaxed)
             below_minimum[name] += covered_length(line, below)
-    if len(restricted) != 49:
+    declared = {t["name"] for t in board if t["type"] == "source_trace" and net_class(t.get("name") or "")}
+    if len(declared) != 49 or declared - restricted.keys() != set(study_open):
         raise ValueError(f"Expected 49 signals subject to the class spacing tables, found {len(restricted)}")
     out = csv.writer(sys.stdout)
     out.writerow(("signal", "below_nominal_mm", "below_1w_mm"))
@@ -101,4 +103,8 @@ def main(board):
 
 
 if __name__ == "__main__":
-    sys.exit(main(json.loads(Path(sys.argv[1]).read_text())))
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("circuit", type=Path)
+    parser.add_argument("--study-open", nargs="+", default=[], help="Exact missing class-checked DDR signals on a partial board")
+    args = parser.parse_args()
+    sys.exit(main(json.loads(args.circuit.read_text()), args.study_open))
