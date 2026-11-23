@@ -1,0 +1,4 @@
+signal,top_mm,inner1_mm,inner2_mm,bottom_mm,total_planar_mm,transitions,traversed_barrel_mm,nominal_board_flight_ps,nominal_data_minus_PCLK_ps
+system_LCD_PCLK,43.5762,0.0,0.0,55.5675,99.1437,10,14.2,665.6799,0.0
+system_LCD_D16,55.2053,6.5728,111.8979,21.8541,195.5301,9,8.33,1281.4405,615.7606
+system_LCD_D17,21.6036,2.323,178.8129,9.906,212.6454,13,11.17,1450.9975,785.3176
