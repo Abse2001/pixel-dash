@@ -150,8 +150,13 @@ print("All 50 timed track geometries reproduced on their assigned drilled copper
 # under DDR trace bodies also proves coverage is incomplete over the larger TI region.
 all_via_voids = union_all([point(v["pos"]).buffer(v["diam"]/2+.155) for v in vias])
 routed_footprint = union_all([shape for traces in signal_shapes.values() for shape in traces])
-uncovered = routed_footprint.difference(all_via_voids).difference(region).area
-print(f"L3 direct-supply area missing under projected DDR traces away from vias: {uncovered:.4f} mm².")
+projected = routed_footprint.difference(all_via_voids)
+outside_main = projected.difference(region).area
+all_direct = union_all([poly for i,poly in enumerate(pieces[power_layer])
+                        if root((power_layer, i)) == power_root])
+missing_supply = projected.difference(all_direct).area
+print(f"DDR trace projection outside the largest continuous L3 DCDC3 pour: {outside_main:.4f} mm².")
+print(f"Of that projection, {outside_main-missing_supply:.4f} mm² has separately connected L3 DCDC3 copper; {missing_supply:.4f} mm² has none. Via envelopes excluded.")
 planes={}
 for l in ("In1.Cu","In4.Cu"):
     plane=max(enumerate(pieces[l]),key=lambda a:a[1].area)
