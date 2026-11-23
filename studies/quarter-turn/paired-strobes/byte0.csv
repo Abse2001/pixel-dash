@@ -1,0 +1,12 @@
+signal,prior_mm,current_mm,vias,total_barrel_mm,near_mate_mm,mixed_flight_ps,prior_worst_skew_ps,signed_worst_skew_ps,model_limit_ps,model_excess_ps,TI_delta_to_strobe_mm,TI_limit_mm,TI_excess_mm,max_present_data_peer_delta_mm,peer_limit_mm,status
+DDR_D0,20.2857,,,,,,,,,,,,,,,OPEN
+DDR_D1,,,,,,,,,,,,,,,,OPEN
+DDR_D2,20.2383,15.1962,2,2.84,0.0,106.41088,21.2937,1.56424,3.66332,0,0.13274,0.635,0,0.03325,0.635,PASS (routed subset)
+DDR_D3,25.9353,15.17868,2,2.84,0.0,106.30982,54.1593,1.46318,3.66332,0,0.15025,0.635,0,0.05077,0.635,PASS (routed subset)
+DDR_D4,21.7026,15.22945,2,2.84,0.0,106.60271,29.7413,1.75607,3.66332,0,0.09949,0.635,0,0.05077,0.635,PASS (routed subset)
+DDR_D5,25.7789,,,,,,,,,,,,,,,OPEN
+DDR_D6,20.2549,,,,,,,,,,,,,,,OPEN
+DDR_D7,22.6639,,,,,,,,,,,,,,,OPEN
+DDR_DQM0,20.2585,,,,,,,,,,,,,,,OPEN
+DDR_DQS0,20.3465,15.32894,2,2.84,8.90972,105.82236,0.0834,0.08389,0.71336,0,0.0,0.127,0,,,PASS (routed subset)
+DDR_DQSn0,20.3320,15.32894,2,2.84,9.46162,105.73847,-0.0834,-0.08389,0.71336,0,0.0,0.127,0,,,PASS (routed subset)
