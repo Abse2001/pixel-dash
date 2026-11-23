@@ -1063,5 +1063,813 @@
         6.531872
       ]
     ]
+  },
+  {
+    "net": "GND_INTERNAL",
+    "start": "Pad K11 [GND_INTERNAL] of U1 on F.Cu",
+    "end": "Via [GND_INTERNAL] on F.Cu - B.Cu",
+    "width": 0.3,
+    "layer": "F.Cu",
+    "points": [
+      [
+        29.399896,
+        33.25005
+      ],
+      [
+        29.0031,
+        32.853
+      ]
+    ]
+  },
+  {
+    "net": "GND_INTERNAL",
+    "start": "Via [GND_INTERNAL] on F.Cu - B.Cu",
+    "end": "Pad G9 [GND_INTERNAL] of U1 on F.Cu",
+    "width": 0.3,
+    "layer": "F.Cu",
+    "points": [
+      [
+        27.403154,
+        30.452953
+      ],
+      [
+        27.79995,
+        30.850004
+      ]
+    ]
+  },
+  {
+    "net": "GND_INTERNAL",
+    "start": "Track [GND_INTERNAL] on F.Cu, length 1.1000 mm",
+    "end": "Pad G8 [GND_INTERNAL] of U_DDR on F.Cu",
+    "width": 0.3,
+    "layer": "F.Cu",
+    "points": [
+      [
+        11.199891,
+        35.250104
+      ],
+      [
+        10.400046,
+        35.250104
+      ]
+    ]
+  },
+  {
+    "net": "GND_INTERNAL",
+    "start": "Track [GND_INTERNAL] on F.Cu, length 0.5700 mm",
+    "end": "Pad M6 [GND_INTERNAL] of U1 on F.Cu",
+    "width": 0.3,
+    "layer": "F.Cu",
+    "points": [
+      [
+        26.200004,
+        34.849996
+      ],
+      [
+        25.399904,
+        34.849996
+      ]
+    ]
+  },
+  {
+    "net": "GND_INTERNAL",
+    "start": "Via [GND_INTERNAL] on F.Cu - B.Cu",
+    "end": "Pad G1 [GND_INTERNAL] of U_DDR on F.Cu",
+    "width": 0.3,
+    "layer": "F.Cu",
+    "points": [
+      [
+        4.199066,
+        34.250944
+      ],
+      [
+        4.199066,
+        34.649063
+      ],
+      [
+        4.800107,
+        35.250104
+      ]
+    ]
+  },
+  {
+    "net": "GND_INTERNAL",
+    "start": "Track [GND_INTERNAL] on F.Cu, length 1.1000 mm",
+    "end": "Pad pin1 [GND_INTERNAL] of R_SYSBOOT9 on F.Cu",
+    "width": 0.3,
+    "layer": "F.Cu",
+    "points": [
+      [
+        26.0,
+        6.182816
+      ],
+      [
+        27.25,
+        6.182816
+      ]
+    ]
+  },
+  {
+    "net": "GND_INTERNAL",
+    "start": "Pad pin1 [GND_INTERNAL] of R_SYSBOOT11 on F.Cu",
+    "end": "Pad pin1 [GND_INTERNAL] of R_SYSBOOT12 on F.Cu",
+    "width": 0.3,
+    "layer": "F.Cu",
+    "points": [
+      [
+        29.75,
+        6.182816
+      ],
+      [
+        31.0,
+        6.182816
+      ]
+    ]
+  },
+  {
+    "net": "GND_INTERNAL",
+    "start": "Pad pin1 [GND_INTERNAL] of R_SYSBOOT12 on F.Cu",
+    "end": "Pad pin1 [GND_INTERNAL] of R_SYSBOOT13 on F.Cu",
+    "width": 0.3,
+    "layer": "F.Cu",
+    "points": [
+      [
+        31.0,
+        6.182816
+      ],
+      [
+        32.25,
+        6.182816
+      ]
+    ]
+  },
+  {
+    "net": "CPU_DDR_VREF",
+    "start": "Pad pin1 [CPU_DDR_VREF] of R_CPU_VREF_LOW on F.Cu",
+    "end": "Pad pin1 [CPU_DDR_VREF] of R_CPU_VREF_HIGH on F.Cu",
+    "width": 0.15,
+    "layer": "F.Cu",
+    "points": [
+      [
+        21.693952,
+        44.306047
+      ],
+      [
+        21.693952,
+        44.806047
+      ],
+      [
+        23.767184,
+        44.5
+      ],
+      [
+        23.767184,
+        44.0
+      ]
+    ]
+  },
+  {
+    "net": "VDDS_DDR_CPU",
+    "start": "Pad H5 [VDDS_DDR_CPU] of U1 on F.Cu",
+    "end": "Pad J5 [VDDS_DDR_CPU] of U1 on F.Cu",
+    "width": 0.3,
+    "layer": "F.Cu",
+    "points": [
+      [
+        24.600058,
+        31.650104
+      ],
+      [
+        24.600058,
+        32.44995
+      ]
+    ]
+  },
+  {
+    "net": "VDDS_DDR_CPU",
+    "start": "Pad K5 [VDDS_DDR_CPU] of U1 on F.Cu",
+    "end": "Pad L5 [VDDS_DDR_CPU] of U1 on F.Cu",
+    "width": 0.3,
+    "layer": "F.Cu",
+    "points": [
+      [
+        24.600058,
+        33.25005
+      ],
+      [
+        24.600058,
+        34.049896
+      ]
+    ]
+  },
+  {
+    "net": "VDDS_DDR_CPU",
+    "start": "Pad G5 [VDDS_DDR_CPU] of U1 on F.Cu",
+    "end": "Pad H5 [VDDS_DDR_CPU] of U1 on F.Cu",
+    "width": 0.3,
+    "layer": "F.Cu",
+    "points": [
+      [
+        24.600058,
+        30.850004
+      ],
+      [
+        24.600058,
+        31.650104
+      ]
+    ]
+  },
+  {
+    "net": "VDDS_DDR_CPU",
+    "start": "Pad J5 [VDDS_DDR_CPU] of U1 on F.Cu",
+    "end": "Pad K5 [VDDS_DDR_CPU] of U1 on F.Cu",
+    "width": 0.3,
+    "layer": "F.Cu",
+    "points": [
+      [
+        24.600058,
+        32.44995
+      ],
+      [
+        24.600058,
+        33.25005
+      ]
+    ]
+  },
+  {
+    "net": "VDD_IO_3V3_SEQ",
+    "start": "Pad P6 [VDD_IO_3V3_SEQ] of U1 on F.Cu",
+    "end": "Pad P5 [VDD_IO_3V3_SEQ] of U1 on F.Cu",
+    "width": 0.3,
+    "layer": "F.Cu",
+    "points": [
+      [
+        25.399904,
+        36.449942
+      ],
+      [
+        24.600058,
+        36.449942
+      ]
+    ]
+  },
+  {
+    "net": "VDD_IO_3V3_SEQ",
+    "start": "Pad E10 [VDD_IO_3V3_SEQ] of U1 on F.Cu",
+    "end": "Pad E11 [VDD_IO_3V3_SEQ] of U1 on F.Cu",
+    "width": 0.3,
+    "layer": "F.Cu",
+    "points": [
+      [
+        28.60005,
+        29.250058
+      ],
+      [
+        29.399896,
+        29.250058
+      ]
+    ]
+  },
+  {
+    "net": "VDD_IO_3V3_SEQ",
+    "start": "Pad K14 [VDD_IO_3V3_SEQ] of U1 on F.Cu",
+    "end": "Pad L14 [VDD_IO_3V3_SEQ] of U1 on F.Cu",
+    "width": 0.3,
+    "layer": "F.Cu",
+    "points": [
+      [
+        31.799942,
+        33.25005
+      ],
+      [
+        31.799942,
+        34.049896
+      ]
+    ]
+  },
+  {
+    "net": "VDD_IO_3V3_SEQ",
+    "start": "Pad P5 [VDD_IO_3V3_SEQ] of U1 on F.Cu",
+    "end": "Pad N5 [VDD_IO_3V3_SEQ] of U1 on F.Cu",
+    "width": 0.3,
+    "layer": "F.Cu",
+    "points": [
+      [
+        24.600058,
+        36.449942
+      ],
+      [
+        24.600058,
+        35.650096
+      ]
+    ]
+  },
+  {
+    "net": "VDD_IO_3V3_SEQ",
+    "start": "Pad H14 [VDD_IO_3V3_SEQ] of U1 on F.Cu",
+    "end": "Pad J14 [VDD_IO_3V3_SEQ] of U1 on F.Cu",
+    "width": 0.3,
+    "layer": "F.Cu",
+    "points": [
+      [
+        31.799942,
+        31.650104
+      ],
+      [
+        31.799942,
+        32.44995
+      ]
+    ]
+  },
+  {
+    "net": "VDD_IO_3V3_SEQ",
+    "start": "Pad H14 [VDD_IO_3V3_SEQ] of U1 on F.Cu",
+    "end": "Pad G14 [VDD_IO_3V3_SEQ] of U1 on F.Cu",
+    "width": 0.3,
+    "layer": "F.Cu",
+    "points": [
+      [
+        31.799942,
+        31.650104
+      ],
+      [
+        31.799942,
+        30.850004
+      ]
+    ]
+  },
+  {
+    "net": "VDD_IO_3V3_SEQ",
+    "start": "Pad P6 [VDD_IO_3V3_SEQ] of U1 on F.Cu",
+    "end": "Pad P7 [VDD_IO_3V3_SEQ] of U1 on F.Cu",
+    "width": 0.3,
+    "layer": "F.Cu",
+    "points": [
+      [
+        25.399904,
+        36.449942
+      ],
+      [
+        26.200004,
+        36.449942
+      ]
+    ]
+  },
+  {
+    "net": "VDD_IO_3V3_SEQ",
+    "start": "Pad P13 [VDD_IO_3V3_SEQ] of U1 on F.Cu",
+    "end": "Pad P12 [VDD_IO_3V3_SEQ] of U1 on F.Cu",
+    "width": 0.3,
+    "layer": "F.Cu",
+    "points": [
+      [
+        31.000096,
+        36.449942
+      ],
+      [
+        30.199996,
+        36.449942
+      ]
+    ]
+  },
+  {
+    "net": "VDD_IO_3V3_SEQ",
+    "start": "Pad F14 [VDD_IO_3V3_SEQ] of U1 on F.Cu",
+    "end": "Pad G14 [VDD_IO_3V3_SEQ] of U1 on F.Cu",
+    "width": 0.3,
+    "layer": "F.Cu",
+    "points": [
+      [
+        31.799942,
+        30.049903
+      ],
+      [
+        31.799942,
+        30.850004
+      ]
+    ]
+  },
+  {
+    "net": "VDD_IO_3V3_SEQ",
+    "start": "Pad F14 [VDD_IO_3V3_SEQ] of U1 on F.Cu",
+    "end": "Pad E13 [VDD_IO_3V3_SEQ] of U1 on F.Cu",
+    "width": 0.3,
+    "layer": "F.Cu",
+    "points": [
+      [
+        31.799942,
+        30.049903
+      ],
+      [
+        31.000096,
+        29.250058
+      ]
+    ]
+  },
+  {
+    "net": "VDD_IO_3V3_SEQ",
+    "start": "Pad 77 [VDD_IO_3V3_SEQ] of J_CARRIER on B.Cu",
+    "end": "Pad 74 [VDD_IO_3V3_SEQ] of J_CARRIER on B.Cu",
+    "width": 0.3,
+    "layer": "B.Cu",
+    "points": [
+      [
+        19.4,
+        6.355
+      ],
+      [
+        19.4,
+        5.355
+      ],
+      [
+        20.6,
+        5.355
+      ],
+      [
+        20.6,
+        6.355
+      ]
+    ]
+  },
+  {
+    "net": "VDD_IO_3V3_SEQ",
+    "start": "Pad 71 [VDD_IO_3V3_SEQ] of J_CARRIER on B.Cu",
+    "end": "Pad 74 [VDD_IO_3V3_SEQ] of J_CARRIER on B.Cu",
+    "width": 0.3,
+    "layer": "B.Cu",
+    "points": [
+      [
+        21.8,
+        6.355
+      ],
+      [
+        21.8,
+        5.355
+      ],
+      [
+        20.6,
+        5.355
+      ],
+      [
+        20.6,
+        6.355
+      ]
+    ]
+  },
+  {
+    "net": "VDD_IO_3V3_SEQ",
+    "start": "Pad pin1 [VDD_IO_3V3_SEQ] of R_SYSBOOT4 on F.Cu",
+    "end": "Track [VDD_IO_3V3_SEQ] on F.Cu, length 1.2500 mm",
+    "width": 0.3,
+    "layer": "F.Cu",
+    "points": [
+      [
+        31.0,
+        8.432816
+      ],
+      [
+        31.0,
+        9.432816
+      ],
+      [
+        28.5,
+        9.432816
+      ],
+      [
+        28.5,
+        8.432816
+      ]
+    ]
+  },
+  {
+    "net": "VDD_LDO1_1V8",
+    "start": "Pad D8 [VDD_LDO1_1V8] of U1 on F.Cu",
+    "end": "Pad E9 [VDD_LDO1_1V8] of U1 on F.Cu",
+    "width": 0.3,
+    "layer": "F.Cu",
+    "points": [
+      [
+        27.000104,
+        28.449958
+      ],
+      [
+        27.79995,
+        29.250058
+      ]
+    ]
+  },
+  {
+    "net": "VDD_LDO1_1V8",
+    "start": "Pad E7 [VDD_LDO1_1V8] of U1 on F.Cu",
+    "end": "Pad D8 [VDD_LDO1_1V8] of U1 on F.Cu",
+    "width": 0.3,
+    "layer": "F.Cu",
+    "points": [
+      [
+        26.200004,
+        29.250058
+      ],
+      [
+        27.000104,
+        28.449958
+      ]
+    ]
+  },
+  {
+    "net": "VDD_LDO1_1V8",
+    "start": "Pad D10 [VDD_LDO1_1V8] of U1 on F.Cu",
+    "end": "Pad E9 [VDD_LDO1_1V8] of U1 on F.Cu",
+    "width": 0.3,
+    "layer": "F.Cu",
+    "points": [
+      [
+        28.60005,
+        28.449958
+      ],
+      [
+        27.79995,
+        29.250058
+      ]
+    ]
+  },
+  {
+    "net": "VDD_LDO1_1V8",
+    "start": "Pad R10 [VDD_LDO1_1V8] of U1 on F.Cu",
+    "end": "Pad P9 [VDD_LDO1_1V8] of U1 on F.Cu",
+    "width": 0.3,
+    "layer": "F.Cu",
+    "points": [
+      [
+        28.60005,
+        37.250042
+      ],
+      [
+        27.79995,
+        36.449942
+      ]
+    ]
+  },
+  {
+    "net": "VDD_CORE",
+    "start": "Pad L9 [VDD_CORE] of U1 on F.Cu",
+    "end": "Pad L8 [VDD_CORE] of U1 on F.Cu",
+    "width": 0.3,
+    "layer": "F.Cu",
+    "points": [
+      [
+        27.79995,
+        34.049896
+      ],
+      [
+        27.000104,
+        34.049896
+      ]
+    ]
+  },
+  {
+    "net": "VDD_CORE",
+    "start": "Pad L6 [VDD_CORE] of U1 on F.Cu",
+    "end": "Pad K6 [VDD_CORE] of U1 on F.Cu",
+    "width": 0.3,
+    "layer": "F.Cu",
+    "points": [
+      [
+        25.399904,
+        34.049896
+      ],
+      [
+        25.399904,
+        33.25005
+      ]
+    ]
+  },
+  {
+    "net": "VDD_CORE",
+    "start": "Pad L7 [VDD_CORE] of U1 on F.Cu",
+    "end": "Pad L6 [VDD_CORE] of U1 on F.Cu",
+    "width": 0.3,
+    "layer": "F.Cu",
+    "points": [
+      [
+        26.200004,
+        34.049896
+      ],
+      [
+        25.399904,
+        34.049896
+      ]
+    ]
+  },
+  {
+    "net": "VDD_CORE",
+    "start": "Pad J12 [VDD_CORE] of U1 on F.Cu",
+    "end": "Pad K12 [VDD_CORE] of U1 on F.Cu",
+    "width": 0.3,
+    "layer": "F.Cu",
+    "points": [
+      [
+        30.199996,
+        32.44995
+      ],
+      [
+        30.199996,
+        33.25005
+      ]
+    ]
+  },
+  {
+    "net": "VDD_CORE",
+    "start": "Pad G6 [VDD_CORE] of U1 on F.Cu",
+    "end": "Pad G7 [VDD_CORE] of U1 on F.Cu",
+    "width": 0.3,
+    "layer": "F.Cu",
+    "points": [
+      [
+        25.399904,
+        30.850004
+      ],
+      [
+        26.200004,
+        30.850004
+      ]
+    ]
+  },
+  {
+    "net": "VDD_MPU",
+    "start": "Pad F12 [VDD_MPU] of U1 on F.Cu",
+    "end": "Pad F13 [VDD_MPU] of U1 on F.Cu",
+    "width": 0.3,
+    "layer": "F.Cu",
+    "points": [
+      [
+        30.199996,
+        30.049903
+      ],
+      [
+        31.000096,
+        30.049903
+      ]
+    ]
+  },
+  {
+    "net": "VDD_MPU",
+    "start": "Pad G13 [VDD_MPU] of U1 on F.Cu",
+    "end": "Pad F13 [VDD_MPU] of U1 on F.Cu",
+    "width": 0.3,
+    "layer": "F.Cu",
+    "points": [
+      [
+        31.000096,
+        30.850004
+      ],
+      [
+        31.000096,
+        30.049903
+      ]
+    ]
+  },
+  {
+    "net": "VDDS_DDR",
+    "start": "Pad C1 [VDDS_DDR] of U_DDR on F.Cu",
+    "end": "Pad D2 [VDDS_DDR] of U_DDR on F.Cu",
+    "width": 0.3,
+    "layer": "F.Cu",
+    "points": [
+      [
+        4.800107,
+        32.049958
+      ],
+      [
+        5.599953,
+        32.850057
+      ]
+    ]
+  },
+  {
+    "net": "VDDS_DDR",
+    "start": "Pad A1 [VDDS_DDR] of U_DDR on F.Cu",
+    "end": "Pad B2 [VDDS_DDR] of U_DDR on F.Cu",
+    "width": 0.3,
+    "layer": "F.Cu",
+    "points": [
+      [
+        4.800107,
+        30.450012
+      ],
+      [
+        5.599953,
+        31.250112
+      ]
+    ]
+  },
+  {
+    "net": "VSYS_INTERNAL",
+    "start": "Pad AC_DET [VSYS_INTERNAL] of U_PMIC on F.Cu",
+    "end": "Pad IN_DCDC4 [VSYS_INTERNAL] of U_PMIC on F.Cu",
+    "width": 0.3,
+    "layer": "F.Cu",
+    "points": [
+      [
+        20.749933,
+        18.19989
+      ],
+      [
+        20.749933,
+        19.69989
+      ],
+      [
+        22.250057,
+        19.69989
+      ],
+      [
+        22.250057,
+        18.19989
+      ]
+    ]
+  },
+  {
+    "net": "VSYS_INTERNAL",
+    "start": "Pad IN_LDO1 [VSYS_INTERNAL] of U_PMIC on F.Cu",
+    "end": "Pad AC_DET [VSYS_INTERNAL] of U_PMIC on F.Cu",
+    "width": 0.3,
+    "layer": "F.Cu",
+    "points": [
+      [
+        18.749938,
+        18.19989
+      ],
+      [
+        18.749938,
+        16.69989
+      ],
+      [
+        20.749933,
+        16.69989
+      ],
+      [
+        20.749933,
+        18.19989
+      ]
+    ]
+  },
+  {
+    "net": "channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net74",
+    "start": "Pad pin1 [channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net74] of L_PMIC_DDR on F.Cu",
+    "end": "Pad L3 [channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net74] of U_PMIC on F.Cu",
+    "width": 0.15,
+    "layer": "F.Cu",
+    "points": [
+      [
+        13.550082,
+        10.750067
+      ],
+      [
+        14.550082,
+        11.750067
+      ],
+      [
+        15.30011,
+        11.750067
+      ]
+    ]
+  },
+  {
+    "net": "channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net87",
+    "start": "Pad pin1 [channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net87] of L_PMIC_MPU on F.Cu",
+    "end": "Pad L2 [channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net87] of U_PMIC on F.Cu",
+    "width": 0.15,
+    "layer": "F.Cu",
+    "points": [
+      [
+        13.100082,
+        14.850064
+      ],
+      [
+        14.200083,
+        13.750063
+      ],
+      [
+        15.30011,
+        13.750063
+      ]
+    ]
+  },
+  {
+    "net": "channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net85",
+    "start": "Pad pin1 [channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net85] of L_PMIC_CORE on F.Cu",
+    "end": "Pad L1 [channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net85] of U_PMIC on F.Cu",
+    "width": 0.15,
+    "layer": "F.Cu",
+    "points": [
+      [
+        13.100082,
+        19.050058
+      ],
+      [
+        15.30011,
+        16.750058
+      ]
+    ]
   }
 ]
