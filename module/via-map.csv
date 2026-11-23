@@ -66,12 +66,14 @@ x_mm,y_mm,net,hole_mm,land_mm,solder_land,face,nominal_bore_to_land_boundary_mm,
 9.639946,32.049958,DDR_DQS1,0.15,0.3,U_DDR.C7,F.Cu,0.08199,contained off-center
 9.905,30.415,DDR_D8,0.15,0.3,U_DDR.A7,F.Cu,-0.18507,annulus only
 10.000046,38.009896,VDDS_DDR,0.15,0.3,,,,off-pad
+10.400046,30.440012,VDDS_DDR,0.15,0.3,U_DDR.A8,F.Cu,0.11199,contained off-center
 10.425,36.07,DDR_D5,0.2,0.45,U_DDR.H8,F.Cu,0.06498,contained off-center
 10.76067,40.410566,DDR_BA1,0.2,0.45,,,,off-pad
 10.76067,42.810612,DDR_A8,0.2,0.45,,,,off-pad
 10.79684,39.653146,GND_INTERNAL,0.2,0.45,,,,off-pad
 10.899976,4.28,GND_INTERNAL,0.2,0.45,C_DDR_SW_IN.pin2,F.Cu,0.3,centered
 11.113226,8.353714,GND_INTERNAL,0.2,0.45,,,,off-pad
+11.196355,32.046422,VDDS_DDR,0.15,0.3,U_DDR.C9,F.Cu,0.11699,contained off-center
 11.199891,41.649888,VDDS_DDR,0.15,0.3,U_DDR.R9,F.Cu,0.12199,centered
 11.199891,41.649888,VDDS_DDR,0.15,0.3,C_DDR34.pin1,B.Cu,0.13011,contained off-center
 11.332816,2.649999,GND_INTERNAL,0.2,0.45,R_DDR_SW_EN.pin2,F.Cu,0.17,centered
