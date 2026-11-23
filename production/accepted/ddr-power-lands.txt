@@ -1,8 +1,10 @@
 drill_npth.drl matches 19 round hits and 0 slots
-drill-L1-L4.drl matches 758 round hits and 6 slots
-drill-L1-L2.drl matches 291 round hits and 0 slots
-drill-L2-L3.drl matches 23 round hits and 0 slots
+drill-L1-L4.drl matches 761 round hits and 6 slots
+drill-L1-L2.drl matches 294 round hits and 0 slots
+drill-L2-L3.drl matches 26 round hits and 0 slots
 drill-L3-L4.drl matches 36 round hits and 0 slots
+37 distinct DDR ball pairs connected. 1123 plated barrels checked. No shorts between mapped land nets.
+Physically open DDR links: DDR_A0, DDR_A1, DDR_A10, DDR_A11, DDR_A12, DDR_A13, DDR_A2, DDR_A4, DDR_CASn, DDR_CSn0, DDR_ODT, DDR_RASn, DDR_RESETn
 U_PMIC.DCDC4 to U1.N5: PASS
 U_PMIC.DCDC4 to U1.P5: PASS
 U_PMIC.DCDC4 to C_PMIC_IO_A.pin1: PASS
@@ -142,3 +144,18 @@ TP_UART_GND.pin1 to C_DDR37.pin2: PASS
 TP_UART_GND.pin1 to C_DDR38.pin2: PASS
 TP_UART_GND.pin1 to C_DDR39.pin2: PASS
 TP_UART_GND.pin1 to C_DDR40.pin2: PASS
+MMC0 rail isolation (DCDC4, GND, legacy regulator, VSYS): PASS
+MMC0 U1.H14 PASS
+MMC0 U1.J14 PASS
+MMC0 J_SD.VDD PASS
+MMC0 C_SD.pin1 PASS
+MMC0 C_SD_BULK.pin1 PASS
+MMC0 J_SD.VSS PASS
+MMC0 C_SD.pin2 PASS
+MMC0 C_SD_BULK.pin2 PASS
+MMC0 CMD pull, socket and CPU PASS
+MMC0 DAT0 pull, socket and CPU PASS
+MMC0 DAT1 pull, socket and CPU PASS
+MMC0 DAT2 pull, socket and CPU PASS
+MMC0 CD_DAT3 pull, socket and CPU PASS
+MMC0 sequenced card power and seven distinct links: PASS

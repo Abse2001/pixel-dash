@@ -12,14 +12,16 @@ DDR_A15,1.0,2.0,20.327,365,285,385.327,264.673,145,source and waveform unverifie
 DDR_A15,1.0,1.0,20.327,405,335,425.327,314.673,145,source and waveform unverified
 DDR_A15,2.0,1.0,20.327,473,380,493.327,359.673,213,source and waveform unverified
 DDR_A2,,,,,,,,,open connection
-DDR_A3,,,,,,,,,open connection
+DDR_A3,1.0,2.0,29.11,365,285,394.11,255.89,145,source and waveform unverified
+DDR_A3,1.0,1.0,29.11,405,335,434.11,305.89,145,source and waveform unverified
+DDR_A3,2.0,1.0,29.11,473,380,502.11,350.89,213,source and waveform unverified
 DDR_A4,,,,,,,,,open connection
-DDR_A5,1.0,2.0,-1.187,365,285,363.813,286.187,145,source and waveform unverified
-DDR_A5,1.0,1.0,-1.187,405,335,403.813,336.187,145,source and waveform unverified
-DDR_A5,2.0,1.0,-1.187,473,380,471.813,381.187,213,source and waveform unverified
-DDR_A6,1.0,2.0,36.726,365,285,401.726,248.274,145,source and waveform unverified
-DDR_A6,1.0,1.0,36.726,405,335,441.726,298.274,145,source and waveform unverified
-DDR_A6,2.0,1.0,36.726,473,380,509.726,343.274,213,source and waveform unverified
+DDR_A5,1.0,2.0,27.197,365,285,392.197,257.803,145,source and waveform unverified
+DDR_A5,1.0,1.0,27.197,405,335,432.197,307.803,145,source and waveform unverified
+DDR_A5,2.0,1.0,27.197,473,380,500.197,352.803,213,source and waveform unverified
+DDR_A6,1.0,2.0,42.622,365,285,407.622,242.378,145,source and waveform unverified
+DDR_A6,1.0,1.0,42.622,405,335,447.622,292.378,145,source and waveform unverified
+DDR_A6,2.0,1.0,42.622,473,380,515.622,337.378,213,source and waveform unverified
 DDR_A7,1.0,2.0,29.774,365,285,394.774,255.226,145,source and waveform unverified
 DDR_A7,1.0,1.0,29.774,405,335,434.774,305.226,145,source and waveform unverified
 DDR_A7,2.0,1.0,29.774,473,380,502.774,350.226,213,source and waveform unverified
@@ -45,6 +47,6 @@ DDR_CKE,2.0,1.0,-21.64,473,380,451.36,401.64,213,source and waveform unverified
 DDR_CSn0,,,,,,,,,open connection
 DDR_ODT,,,,,,,,,open connection
 DDR_RASn,,,,,,,,,open connection
-DDR_WEn,1.0,2.0,33.308,365,285,398.308,251.692,145,source and waveform unverified
-DDR_WEn,1.0,1.0,33.308,405,335,438.308,301.692,145,source and waveform unverified
-DDR_WEn,2.0,1.0,33.308,473,380,506.308,346.692,213,source and waveform unverified
+DDR_WEn,1.0,2.0,34.385,365,285,399.385,250.615,145,source and waveform unverified
+DDR_WEn,1.0,1.0,34.385,405,335,439.385,300.615,145,source and waveform unverified
+DDR_WEn,2.0,1.0,34.385,473,380,507.385,345.615,213,source and waveform unverified
