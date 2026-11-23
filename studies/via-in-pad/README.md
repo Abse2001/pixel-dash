@@ -15,3 +15,7 @@ python studies/via-in-pad/launch.py dist/index.circuit.json /tmp/vip-landings.cs
 tsci export /tmp/a10.circuit.json -f gerbers -o /tmp/a10.zip
 PYTHONPATH=checks python studies/via-in-pad/barrel.py /tmp/a10.circuit.json /tmp/a10.zip
 ```
+
+### A12 corridor with BA1 temporarily removed
+
+With the existing bytes and clocks held, the search connected A12 to RAM ball N7 by two different landings. The route using the L1–L2 blind landing measured 44.81553 mm. The through-via alternative measured 44.77700 mm. Their excess over the 38.68999 mm project placement ceiling was 6.12554 mm and 6.08701 mm respectively. The search also failed to restore BA1 alongside the blind-landing route. Both outcomes are exploratory and the accepted board retains BA1.
