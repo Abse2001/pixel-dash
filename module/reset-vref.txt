@@ -19,6 +19,8 @@ Fitted word 0x4017. VDDSHV6 N5/P5 to DCDC4: False False
 PGOOD to PWRONRSTn: False
 DCDC4 both switch pins reach the separate inductor terminals.
 DCDC4 reaches both output capacitors and the three carrier supply contacts; both bypass returns reach ground.
+LDO1 output to its local bypass connected
+LDO1 bypass ground to PMIC exposed pad connected
 RTC I/O DCDC6 switch node to inductor input connected
 PMIC wake output to RTC wake pull connected
 PMIC interrupt output to IRQ pull connected

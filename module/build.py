@@ -117,7 +117,7 @@ for p in source:
 # Underside 100 nF bypass spanning the H1 reference via and its adjacent ground via.
 parts["C_H1_VREF"] = parts["C_CPU_VREF"]
 h1_bypass = {"pin1": (4.800107, 36.049949), "pin2": (4.942108, 35.519994)}
-local_bypasses = json.loads((here/"dram-local-bypasses.json").read_text())
+local_bypasses = json.loads((here/"local-bypass-placements.json").read_text())
 for ref,(s,c) in parts.items():
     dx,dy=offset[group(ref)]
     cx,cy=c["center"]["x"],c["center"]["y"]

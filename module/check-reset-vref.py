@@ -52,6 +52,8 @@ assert connected("U_PMIC.DCDC4","C_PMIC_IO_A.pin1","C_PMIC_IO_B.pin1","J_CARRIER
 assert connected("C_PMIC_IO_A.pin2","C_PMIC_IO_B.pin2","U_PMIC.EP")
 print("DCDC4 reaches both output capacitors and the three carrier supply contacts; both bypass returns reach ground.")
 boot_paths = {
+    "LDO1 output to its local bypass": ["U_PMIC.LDO1","C_PMIC_LDO1.pin1"],
+    "LDO1 bypass ground to PMIC exposed pad": ["C_PMIC_LDO1.pin2","U_PMIC.EP"],
     "RTC I/O DCDC6 switch node to inductor input": ["U_PMIC.L6","L_PMIC_RTC_IO.pin1"],
     "PMIC wake output to RTC wake pull": ["U_PMIC.nWAKEUP","R_PMIC_WAKE.pin1"],
     "PMIC interrupt output to IRQ pull": ["U_PMIC.nINT","R_PMIC_IRQ.pin1"],
