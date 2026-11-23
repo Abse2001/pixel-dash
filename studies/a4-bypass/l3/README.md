@@ -1,0 +1,7 @@
+## BA0 on L3
+
+This populated study branches from the panel-D1 repair. A4 remains open. The CPU and RAM byte geometry, the 44 byte vias and CK/CKn retain the accepted layout. Both BA0 transitions are conventional off-pad L1–L4 holes with a 0.15 mm drill and 0.30 mm copper land. The trace enters and leaves on L3. The outer-layer pads are at (−49.402042, 20.747888) and (−51.866341, 22.335472) mm. The model includes 2.650 mm of total contacted barrel. The four-layer manufacturing build and its tolerances remain provisional.
+
+BA0 previously ran 36.26684 mm on L1 with 209.223 ps modeled flight and −27.247 ps skew to mean CK. The tuned route measures 36.52324 mm, including 3.4401 mm on L3, with 231.296 ps flight and −5.174 ps skew. Both meet the 36.14999–38.68999 mm project window. New length headroom is 0.37325 mm at the lower end and 2.16675 mm at the upper end. At assumed IOCTRL 0x273 the conditional source setup interval increases from 534.667 to 556.740 ps and hold decreases from 468.537 to 446.464 ps. The receiver remains unqualified because the modeled edge rates exceed the derating table.
+
+The exact export retains 37 separate DDR links, the DDR supplies, MMC0 and full-width reference on those links. All copper, drill and 6 mil via-edge screens passed. The isolated L2 ground land found in the shallower bypass is connected here. To reproduce, decompress the archived board, export its Gerbers, and run the repository checks against that JSON/archive pair. The board and reports here belong to this study only.

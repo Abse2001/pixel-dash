@@ -1,0 +1,8 @@
+0 via drill-spacing findings
+via_a,via_b,drill_edge_gap_mm,required_mm
+0 via/layer/unrelated-net pairs below 0.1524 mm
+via,layer,unrelated_net,edge_gap_mm,via_x_mm,via_y_mm,trace
+0 unrelated copper pairs below 0.102 mm
+layer,copper_a,copper_b,copper_gap_mm
+0 signal/layer reference-coverage findings
+signal,signal_layer,reference_layer,uncovered_copper_mm2
