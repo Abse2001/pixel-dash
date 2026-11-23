@@ -19,6 +19,8 @@ Fitted word 0x4017. VDDSHV6 N5/P5 to DCDC4: False False
 PGOOD to PWRONRSTn: False
 DCDC4 both switch pins reach the separate inductor terminals.
 DCDC4 reaches both output capacitors and the three carrier supply contacts; both bypass returns reach ground.
+AM3354 J3 calibration to 49.9 ohm resistor connected
+AM3354 calibration resistor return to module ground connected
 MPU buck output and feedback to seven CPU supply balls connected
 LDO1 output to its local bypass connected
 LDO1 bypass ground to PMIC exposed pad connected
