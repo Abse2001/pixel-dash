@@ -333,12 +333,14 @@ x_mm,y_mm,net,hole_mm,land_mm,solder_land,face,nominal_bore_to_land_boundary_mm,
 28.510116,24.45,VDDS_DDR_CPU,0.2,0.45,,,,off-pad
 28.789875,41.510039,GND_INTERNAL,0.2,0.45,,,,off-pad
 28.92,42.36,DDR_A1,0.2,0.45,,,,off-pad
+28.998597,44.268375,DDR_BA1,0.15,0.3,,,,off-pad
 29.0031,32.053154,GND_INTERNAL,0.2,0.45,,,,off-pad
 29.0031,32.853,GND_INTERNAL,0.2,0.45,,,,off-pad
 29.0031,33.6531,GND_INTERNAL,0.2,0.45,,,,off-pad
 29.0031,34.452946,GND_INTERNAL,0.2,0.45,,,,off-pad
 29.0031,35.253046,GND_INTERNAL,0.2,0.45,,,,off-pad
 29.0031,36.053146,GND_INTERNAL,0.2,0.45,,,,off-pad
+29.008984,43.572853,DDR_BA1,0.15,0.3,,,,off-pad
 29.04,40.92,DDR_A1,0.2,0.45,,,,off-pad
 29.05,31.270116,GND_INTERNAL,0.2,0.45,,,,off-pad
 29.070115,37.65,VDDS_DDR_CPU,0.2,0.45,,,,off-pad

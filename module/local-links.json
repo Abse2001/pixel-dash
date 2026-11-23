@@ -4351,5 +4351,60 @@
         27.658112
       ]
     ]
+  },
+  {
+    "net": "DDR_BA1",
+    "start": "DDR_BA1 input segment",
+    "end": "DDR_BA1 output segment",
+    "layer": "In2.Cu",
+    "width": 0.102,
+    "points": [
+      [
+        23.285894,
+        32.833486
+      ],
+      [
+        29.008984876893173,
+        43.57285335976986
+      ]
+    ]
+  },
+  {
+    "net": "DDR_BA1",
+    "start": "DDR_BA1 input segment",
+    "end": "DDR_BA1 output segment",
+    "layer": "B.Cu",
+    "width": 0.102,
+    "points": [
+      [
+        29.008984876893173,
+        43.57285335976986
+      ],
+      [
+        29.428043,
+        44.359215
+      ],
+      [
+        28.99859770689195,
+        44.26837582690447
+      ]
+    ]
+  },
+  {
+    "net": "DDR_BA1",
+    "start": "DDR_BA1 input segment",
+    "end": "DDR_BA1 output segment",
+    "layer": "In2.Cu",
+    "width": 0.102,
+    "points": [
+      [
+        28.99859770689195,
+        44.26837582690447
+      ],
+      [
+        10.76067,
+        40.410566
+      ]
+    ]
   }
 ]
