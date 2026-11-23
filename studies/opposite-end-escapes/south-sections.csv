@@ -1,0 +1,113 @@
+x_mm,y_mm,connected_center_interval_mm,boundary_1,boundary_2
+-48.162,16.18861,0.56554,channel_pcb_trace_10 bottom DDR_D13,pcb_command_DDR_A8 DDR_A8
+-48.162,16.13861,0.59122,channel_pcb_trace_10 bottom DDR_D13,pcb_command_DDR_A8 DDR_A8
+-48.162,16.08861,0.63597,channel_pcb_trace_10 bottom DDR_D13,pcb_command_DDR_A8 DDR_A8
+-48.17309,16.04002,0.50523,channel_pcb_trace_10 bottom DDR_D13,channel_pcb_via_138 ddr_switch_load_return
+-48.18559,15.99161,0.35074,channel_pcb_trace_10 bottom DDR_D13,channel_pcb_via_138 ddr_switch_load_return
+-48.19808,15.94319,0.29066,channel_pcb_trace_10 bottom DDR_D13,channel_pcb_via_138 ddr_switch_load_return
+-48.21057,15.89478,0.25365,channel_pcb_trace_10 bottom DDR_D13,channel_pcb_via_138 ddr_switch_load_return
+-48.22307,15.84637,0.23007,channel_pcb_trace_10 bottom DDR_D13,channel_pcb_via_138 ddr_switch_load_return
+-48.23556,15.79795,0.21615,channel_pcb_trace_10 bottom DDR_D13,channel_pcb_via_138 ddr_switch_load_return
+-48.24805,15.74954,0.21,channel_pcb_trace_10 bottom DDR_D13,channel_pcb_via_138 ddr_switch_load_return
+-48.26055,15.70112,0.21055,channel_pcb_trace_10 bottom DDR_D13,channel_pcb_via_138 ddr_switch_load_return
+-48.27304,15.65271,0.21914,channel_pcb_trace_10 bottom DDR_D13,channel_pcb_via_138 ddr_switch_load_return
+-48.28554,15.6043,0.24136,channel_pcb_trace_10 bottom DDR_D13,channel_pcb_via_138 ddr_switch_load_return
+-48.29803,15.55588,0.26995,channel_pcb_trace_10 bottom DDR_D13,channel_pcb_via_138 ddr_switch_load_return
+-48.31052,15.50747,0.30458,channel_pcb_trace_10 bottom DDR_D13,channel_pcb_via_138 ddr_switch_load_return
+-48.32302,15.45906,0.34578,channel_pcb_trace_10 bottom DDR_D13,channel_pcb_via_138 ddr_switch_load_return
+-48.33551,15.41064,0.39451,channel_pcb_trace_10 bottom DDR_D13,channel_pcb_via_138 ddr_switch_load_return
+-48.34801,15.36223,0.45242,channel_pcb_trace_10 bottom DDR_D13,channel_pcb_via_138 ddr_switch_load_return
+-48.3605,15.31381,0.52284,channel_pcb_trace_10 bottom DDR_D13,channel_pcb_via_138 ddr_switch_load_return
+-48.37299,15.2654,0.61357,channel_pcb_trace_10 bottom DDR_D13,channel_pcb_via_138 ddr_switch_load_return
+-48.38549,15.21699,0.76223,channel_pcb_trace_10 bottom DDR_D13,channel_pcb_via_138 ddr_switch_load_return
+-48.39798,15.16857,1.1496,channel_pcb_trace_10 bottom DDR_D13,pcb_command_DDR_A8 DDR_A8
+-48.41048,15.12016,1.14195,channel_pcb_trace_10 bottom DDR_D13,pcb_command_DDR_A8 DDR_A8
+-48.42297,15.07174,1.13431,channel_pcb_trace_10 bottom DDR_D13,pcb_command_DDR_A8 DDR_A8
+-48.43546,15.02333,1.12666,channel_pcb_trace_10 bottom DDR_D13,pcb_command_DDR_A8 DDR_A8
+-48.44796,14.97492,0.95385,channel_pcb_trace_10 bottom DDR_D13,L2 ground coverage L2 GND
+-48.46045,14.9265,0.90173,channel_pcb_trace_10 bottom DDR_D13,L2 ground coverage L2 GND
+-48.47294,14.87809,0.87783,channel_pcb_trace_10 bottom DDR_D13,L2 ground coverage L2 GND
+-48.48544,14.82967,0.86893,channel_pcb_trace_10 bottom DDR_D13,L2 ground coverage L2 GND
+-48.49793,14.78126,0.87047,channel_pcb_trace_10 bottom DDR_D13,L2 ground coverage L2 GND
+-48.51043,14.73285,0.8803,channel_pcb_trace_10 bottom DDR_D13,L2 ground coverage L2 GND
+-48.52292,14.68443,0.89731,channel_pcb_trace_10 bottom DDR_D13,L2 ground coverage L2 GND
+-48.53541,14.63602,0.92092,channel_pcb_trace_10 bottom DDR_D13,L2 ground coverage L2 GND
+-48.54791,14.58761,0.95096,channel_pcb_trace_10 bottom DDR_D13,L2 ground coverage L2 GND
+-48.5604,14.53919,0.98755,channel_pcb_trace_10 bottom DDR_D13,L2 ground coverage L2 GND
+-48.5729,14.49078,0.89321,L2 ground coverage L2 GND,L2 ground coverage L2 GND
+-48.58539,14.44236,0.83423,L2 ground coverage L2 GND,L2 ground coverage L2 GND
+-48.59788,14.39395,0.76998,L2 ground coverage L2 GND,L2 ground coverage L2 GND
+-48.61038,14.34554,0.71927,L2 ground coverage L2 GND,L2 ground coverage L2 GND
+-48.62287,14.29712,0.67949,L2 ground coverage L2 GND,L2 ground coverage L2 GND
+-48.63537,14.24871,0.64839,L2 ground coverage L2 GND,L2 ground coverage L2 GND
+-48.64786,14.20029,0.62483,L2 ground coverage L2 GND,L2 ground coverage L2 GND
+-48.66035,14.15188,0.60832,L2 ground coverage L2 GND,L2 ground coverage L2 GND
+-48.67285,14.10347,0.59879,L2 ground coverage L2 GND,L2 ground coverage L2 GND
+-48.68534,14.05505,0.59662,L2 ground coverage L2 GND,L2 ground coverage L2 GND
+-48.69784,14.00664,0.60272,L2 ground coverage L2 GND,L2 ground coverage L2 GND
+-48.71033,13.95823,0.61897,L2 ground coverage L2 GND,L2 ground coverage L2 GND
+-48.72282,13.90981,0.64934,L2 ground coverage L2 GND,L2 ground coverage L2 GND
+-48.73532,13.8614,0.70488,L2 ground coverage L2 GND,L2 ground coverage L2 GND
+-48.74781,13.81298,1.05188,L2 ground coverage L2 GND,L2 ground coverage L2 GND
+-48.7603,13.76457,1.00932,L2 ground coverage L2 GND,L2 ground coverage L2 GND
+-48.7728,13.71616,0.97559,L2 ground coverage L2 GND,L2 ground coverage L2 GND
+-48.78529,13.66774,0.95201,L2 ground coverage L2 GND,pcb_command_DDR_A8 inner1 DDR_A8
+-48.79779,13.61933,0.94201,L2 ground coverage L2 GND,L2 ground coverage L2 GND
+-48.802,13.56986,1.14897,pcb_support_U1_J4_wire_2 channel_source_trace_257,pcb_command_DDR_A8 inner1 DDR_A8
+-48.802,13.51986,1.09636,pcb_support_U1_J4_wire_2 channel_source_trace_257,L2 ground coverage L2 GND
+-48.802,13.46986,0.88567,pcb_support_U1_J4_via_2 channel_source_trace_257,L2 ground coverage L2 GND
+-48.802,13.41986,0.80189,pcb_support_U1_J4_via_2 channel_source_trace_257,L2 ground coverage L2 GND
+-48.802,13.36986,0.75175,pcb_support_U1_J4_via_2 channel_source_trace_257,L2 ground coverage L2 GND
+-48.802,13.31986,0.71787,pcb_support_U1_J4_via_2 channel_source_trace_257,L2 ground coverage L2 GND
+-48.802,13.26986,0.69511,pcb_support_U1_J4_via_2 channel_source_trace_257,L2 ground coverage L2 GND
+-48.802,13.21986,0.68117,pcb_support_U1_J4_via_2 channel_source_trace_257,L2 ground coverage L2 GND
+-48.802,13.16986,0.67503,pcb_support_U1_J4_via_2 channel_source_trace_257,L2 ground coverage L2 GND
+-48.802,13.11986,0.67622,pcb_support_U1_J4_via_2 channel_source_trace_257,L2 ground coverage L2 GND
+-48.802,13.06986,0.68482,pcb_support_U1_J4_via_2 channel_source_trace_257,L2 ground coverage L2 GND
+-48.802,13.01986,0.70147,pcb_support_U1_J4_via_2 channel_source_trace_257,L2 ground coverage L2 GND
+-48.802,12.96986,0.72751,pcb_support_U1_J4_via_2 channel_source_trace_257,L2 ground coverage L2 GND
+-48.802,12.91986,0.76588,pcb_support_U1_J4_via_2 channel_source_trace_257,L2 ground coverage L2 GND
+-48.802,12.86986,0.82371,pcb_support_U1_J4_via_2 channel_source_trace_257,L2 ground coverage L2 GND
+-48.802,12.81986,0.93139,channel_pcb_trace_11 bottom DDR_D6,L2 ground coverage L2 GND
+-48.802,12.76986,0.60028,channel_pcb_trace_11 bottom DDR_D6,L2 ground coverage L2 GND
+-48.802,12.71986,0.49768,channel_pcb_trace_11 bottom DDR_D6,L2 ground coverage L2 GND
+-48.802,12.66986,0.44534,channel_pcb_trace_11 bottom DDR_D6,L2 ground coverage L2 GND
+-48.802,12.61986,0.39534,channel_pcb_trace_11 bottom DDR_D6,L2 ground coverage L2 GND
+-48.80644,12.57016,0.39974,channel_pcb_trace_11 bottom DDR_D6,L2 ground coverage L2 GND
+-48.81313,12.52061,0.34087,channel_pcb_trace_11 bottom DDR_D6,L2 ground coverage L2 GND
+-48.81983,12.47106,0.282,channel_pcb_trace_11 bottom DDR_D6,L2 ground coverage L2 GND
+-48.82653,12.42151,0.22313,channel_pcb_trace_11 bottom DDR_D6,L2 ground coverage L2 GND
+-48.83322,12.37196,0.17751,channel_pcb_trace_11 bottom DDR_D6,L2 ground coverage L2 GND
+-48.83992,12.32241,0.153,channel_pcb_trace_11 bottom DDR_D6,L2 ground coverage L2 GND
+-48.84661,12.27286,0.14182,channel_pcb_trace_11 bottom DDR_D6,L2 ground coverage L2 GND
+-48.85331,12.22331,0.14121,channel_pcb_trace_11 bottom DDR_D6,L2 ground coverage L2 GND
+-48.86,12.17376,0.14866,channel_pcb_trace_11 bottom DDR_D6,L2 ground coverage L2 GND
+-48.8667,12.12421,0.15696,channel_pcb_trace_11 bottom DDR_D6,L2 ground coverage L2 GND
+-48.8734,12.07467,0.16526,channel_pcb_trace_11 bottom DDR_D6,L2 ground coverage L2 GND
+-48.88009,12.02512,0.17355,channel_pcb_trace_11 bottom DDR_D6,L2 ground coverage L2 GND
+-48.88679,11.97557,0.18185,channel_pcb_trace_11 bottom DDR_D6,L2 ground coverage L2 GND
+-48.89348,11.92602,0.19015,channel_pcb_trace_11 bottom DDR_D6,L2 ground coverage L2 GND
+-48.90018,11.87647,0.19845,channel_pcb_trace_11 bottom DDR_D6,L2 ground coverage L2 GND
+-48.90688,11.82692,0.20675,channel_pcb_trace_11 bottom DDR_D6,L2 ground coverage L2 GND
+-48.91357,11.77737,0.21724,channel_pcb_trace_11 bottom DDR_D6,L2 ground coverage L2 GND
+-48.92027,11.72782,0.23725,channel_pcb_trace_11 bottom DDR_D6,L2 ground coverage L2 GND
+-48.92696,11.67827,0.26908,channel_pcb_trace_11 bottom DDR_D6,L2 ground coverage L2 GND
+-48.93366,11.62872,0.31766,channel_pcb_trace_11 bottom DDR_D6,L2 ground coverage L2 GND
+-48.94036,11.57917,0.39737,channel_pcb_trace_11 bottom DDR_D6,L2 ground coverage L2 GND
+-48.94705,11.52962,0.48964,channel_pcb_trace_11 bottom DDR_D6,L2 ground coverage L2 GND
+-48.95375,11.48007,0.58198,channel_pcb_trace_11 bottom DDR_D6,L2 ground coverage L2 GND
+-48.96044,11.43052,0.68054,channel_pcb_trace_11 bottom DDR_D6,pcb_command_DDR_A8 inner1 DDR_A8
+-48.96714,11.38097,0.7909,channel_pcb_trace_11 bottom DDR_D6,pcb_command_DDR_A8 inner1 DDR_A8
+-48.97383,11.33142,0.91785,channel_pcb_trace_11 bottom DDR_D6,pcb_command_DDR_A8 inner1 DDR_A8
+-48.98053,11.28187,1.0479,L2 ground coverage L2 GND,pcb_command_DDR_A8 inner1 DDR_A8
+-48.98723,11.23232,1.13376,L2 ground coverage L2 GND,pcb_command_DDR_A8 inner1 DDR_A8
+-48.99392,11.18277,1.22575,L2 ground coverage L2 GND,L2 ground coverage L2 GND
+-49.00062,11.13322,1.28531,L2 ground coverage L2 GND,L2 ground coverage L2 GND
+-49.00731,11.08367,1.37744,L2 ground coverage L2 GND,L2 ground coverage L2 GND
+-49.01401,11.03412,1.71174,L2 ground coverage L2 GND,L2 ground coverage L2 GND
+-49.02071,10.98457,1.76133,pcb_support_U1_U1_wire_3 SYSBOOT8_SENSE,L2 ground coverage L2 GND
+-49.0274,10.93502,0.99704,pcb_support_U1_U1_via_3 SYSBOOT8_SENSE,L2 ground coverage L2 GND
+-49.0341,10.88547,1.40737,pcb_support_U1_U1_via_3 SYSBOOT8_SENSE,L2 ground coverage L2 GND
+-49.04079,10.83592,1.34463,pcb_support_U1_U1_via_3 SYSBOOT8_SENSE,L2 ground coverage L2 GND
+-49.04749,10.78638,1.30365,pcb_support_U1_U1_via_3 SYSBOOT8_SENSE,L2 ground coverage L2 GND
+-49.05419,10.73683,1.2618,pcb_support_U1_U1_wire_4 bottom LCD_D8,L2 ground coverage L2 GND
