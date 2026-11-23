@@ -1,8 +1,15 @@
 drill_npth.drl matches 19 round hits and 0 slots
-drill-L1-L4.drl matches 866 round hits and 6 slots
-drill-L1-L2.drl matches 237 round hits and 0 slots
+drill-L1-L4.drl matches 872 round hits and 6 slots
+drill-L1-L2.drl matches 231 round hits and 0 slots
 drill-L2-L3.drl matches 29 round hits and 0 slots
 drill-L3-L4.drl matches 44 round hits and 0 slots
+Drilled CAM connection U1.B17 to SW_L.pin1: PASS
+Drilled CAM connection J_SD.SHIELD1 to TP_UART_GND.pin1: PASS
+Drilled CAM connection J_SD.SHIELD2 to TP_UART_GND.pin1: PASS
+Drilled CAM connection J_SD.SHIELD3 to TP_UART_GND.pin1: PASS
+Drilled CAM connection J_SD.SHIELD4 to TP_UART_GND.pin1: PASS
+Drilled CAM connection J_JOY_L.pin2 to TP_UART_GND.pin1: PASS
+Drilled CAM connection J_JOY_R.pin2 to TP_UART_GND.pin1: PASS
 U_PMIC.DCDC4 to U1.N5: PASS
 U_PMIC.DCDC4 to U1.P5: PASS
 U_PMIC.DCDC4 to C_PMIC_IO_A.pin1: PASS

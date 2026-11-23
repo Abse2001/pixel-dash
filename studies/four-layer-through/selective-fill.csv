@@ -1,0 +1,162 @@
+via_id,x_mm,y_mm,hole_mm,land_mm,side,pad_id,component,pin,center_offset_mm,nominal_bore_containment_mm,nominal_land_containment_mm,disposition
+channel_pcb_via_1,-68.199892,17.549988,0.15,0.3,top,channel_pcb_smtpad_324,U_DDR,A1,0.0,0.121988,0.046988,Type VII specified; process acceptance open
+channel_pcb_via_138,-47.8,15.5,0.254,0.4572,top,channel_pcb_smtpad_98,U1,J6,0.206074,-0.153077,-0.254677,hold: off-center bore; redesign or qualify
+channel_pcb_via_166,-22.3,23.2,0.254,0.4572,top,channel_pcb_smtpad_608,U_PMIC,EP,2.545584,0.272996,0.171396,hold: off-center bore; redesign or qualify
+channel_pcb_via_167,-19.3,23.2,0.254,0.4572,top,channel_pcb_smtpad_608,U_PMIC,EP,2.163331,0.272996,0.171396,hold: off-center bore; redesign or qualify
+channel_pcb_via_168,-18.7,23.2,0.254,0.4572,top,channel_pcb_smtpad_608,U_PMIC,EP,2.545584,0.272996,0.171396,hold: off-center bore; redesign or qualify
+channel_pcb_via_169,-22.3,23.8,0.254,0.4572,top,channel_pcb_smtpad_608,U_PMIC,EP,2.163331,0.272996,0.171396,hold: off-center bore; redesign or qualify
+channel_pcb_via_170,-21.7,23.8,0.254,0.4572,top,channel_pcb_smtpad_608,U_PMIC,EP,1.697056,0.872996,0.771396,hold: off-center bore; redesign or qualify
+channel_pcb_via_171,-18.7,23.8,0.254,0.4572,top,channel_pcb_smtpad_608,U_PMIC,EP,2.163331,0.272996,0.171396,hold: off-center bore; redesign or qualify
+channel_pcb_via_172,-22.3,24.4,0.254,0.4572,top,channel_pcb_smtpad_608,U_PMIC,EP,1.897367,0.272996,0.171396,hold: off-center bore; redesign or qualify
+channel_pcb_via_173,-21.7,24.4,0.254,0.4572,top,channel_pcb_smtpad_608,U_PMIC,EP,1.341641,0.872996,0.771396,hold: off-center bore; redesign or qualify
+channel_pcb_via_174,-21.1,24.4,0.254,0.4572,top,channel_pcb_smtpad_608,U_PMIC,EP,0.848528,1.472996,1.371396,hold: off-center bore; redesign or qualify
+channel_pcb_via_175,-22.3,25,0.254,0.4572,top,channel_pcb_smtpad_608,U_PMIC,EP,1.8,0.272996,0.171396,hold: off-center bore; redesign or qualify
+channel_pcb_via_176,-21.7,25,0.254,0.4572,top,channel_pcb_smtpad_608,U_PMIC,EP,1.2,0.872996,0.771396,hold: off-center bore; redesign or qualify
+channel_pcb_via_177,-21.1,25,0.254,0.4572,top,channel_pcb_smtpad_608,U_PMIC,EP,0.6,1.472996,1.371396,hold: off-center bore; redesign or qualify
+channel_pcb_via_178,-20.5,25,0.254,0.4572,top,channel_pcb_smtpad_608,U_PMIC,EP,0.0,2.072996,1.971396,hold: inherited centered site; tolerances and fill disposition open
+channel_pcb_via_179,-22.3,25.6,0.254,0.4572,top,channel_pcb_smtpad_608,U_PMIC,EP,1.897367,0.272996,0.171396,hold: off-center bore; redesign or qualify
+channel_pcb_via_180,-21.7,25.6,0.254,0.4572,top,channel_pcb_smtpad_608,U_PMIC,EP,1.341641,0.872996,0.771396,hold: off-center bore; redesign or qualify
+channel_pcb_via_181,-21.1,25.6,0.254,0.4572,top,channel_pcb_smtpad_608,U_PMIC,EP,0.848528,1.472996,1.371396,hold: off-center bore; redesign or qualify
+channel_pcb_via_182,-20.5,25.6,0.254,0.4572,top,channel_pcb_smtpad_608,U_PMIC,EP,0.6,1.472996,1.371396,hold: off-center bore; redesign or qualify
+channel_pcb_via_183,-19.9,25.6,0.254,0.4572,top,channel_pcb_smtpad_608,U_PMIC,EP,0.848528,1.472996,1.371396,hold: off-center bore; redesign or qualify
+channel_pcb_via_184,-22.3,26.2,0.254,0.4572,top,channel_pcb_smtpad_608,U_PMIC,EP,2.163331,0.272996,0.171396,hold: off-center bore; redesign or qualify
+channel_pcb_via_185,-21.7,26.2,0.254,0.4572,top,channel_pcb_smtpad_608,U_PMIC,EP,1.697056,0.872996,0.771396,hold: off-center bore; redesign or qualify
+channel_pcb_via_186,-21.1,26.2,0.254,0.4572,top,channel_pcb_smtpad_608,U_PMIC,EP,1.341641,0.872996,0.771396,hold: off-center bore; redesign or qualify
+channel_pcb_via_187,-19.3,26.2,0.254,0.4572,top,channel_pcb_smtpad_608,U_PMIC,EP,1.697056,0.872996,0.771396,hold: off-center bore; redesign or qualify
+channel_pcb_via_188,-22.3,26.8,0.254,0.4572,top,channel_pcb_smtpad_608,U_PMIC,EP,2.545584,0.272996,0.171396,hold: off-center bore; redesign or qualify
+channel_pcb_via_189,-20.5,26.8,0.254,0.4572,top,channel_pcb_smtpad_608,U_PMIC,EP,1.8,0.272996,0.171396,hold: off-center bore; redesign or qualify
+channel_pcb_via_190,-18.7,26.8,0.254,0.4572,top,channel_pcb_smtpad_608,U_PMIC,EP,2.545584,0.272996,0.171396,hold: off-center bore; redesign or qualify
+channel_pcb_via_191,-18.74994,29.99989,0.2,0.4,top,channel_pcb_smtpad_586,U_PMIC,IN_BU,0.8,-0.100002,-0.200002,hold: off-center bore; redesign or qualify
+channel_pcb_via_193,-13.300062,27.750058,0.2,0.45,top,channel_pcb_smtpad_630,C_PMIC_SYS_BU,pin2,0.0,0.299999,0.174999,Type VII specified; process acceptance open
+channel_pcb_via_201,-8.25011,22.657482,0.15,0.3,top,channel_pcb_smtpad_641,C_PMIC_RTC_CORE,pin1,0.0,0.667505,0.592505,hold: inherited centered site; tolerances and fill disposition open
+channel_pcb_via_203,-15.75,26.70506,0.15,0.3,top,channel_pcb_smtpad_581,U_PMIC,FB6,0.551947,0.020005,-0.054995,hold: off-center bore; redesign or qualify
+channel_pcb_via_204,-8.84269,28.249932,0.15,0.3,top,channel_pcb_smtpad_645,C_PMIC_RTC_IO,pin1,0.0,0.667505,0.592505,hold: inherited centered site; tolerances and fill disposition open
+channel_pcb_via_220,-16.30011,22.249942,0.2,0.4,top,channel_pcb_smtpad_572,U_PMIC,L4A,0.0,0.040005,-0.059995,hold: inherited centered site; tolerances and fill disposition open
+channel_pcb_via_221,-16.50011,22.750068,0.2,0.4,top,channel_pcb_smtpad_573,U_PMIC,L4B,0.2,0.040005,-0.059995,hold: off-center bore; redesign or qualify
+channel_pcb_via_240,-67.425,17.575,0.15,0.3,top,channel_pcb_smtpad_340,U_DDR,A2,0.035331,0.086658,0.011658,hold: off-center bore; redesign or qualify
+channel_pcb_via_241,-50.775,14.725,0.15,0.3,top,channel_pcb_smtpad_27,U1,K2,0.035312,0.069674,-0.005326,hold: off-center bore; redesign or qualify
+channel_pcb_via_246,-63.360054,16.749888,0.15,0.3,top,channel_pcb_smtpad_373,U_DDR,B7,0.04,0.081991,0.006991,hold: off-center bore; redesign or qualify
+channel_pcb_via_250,-67.38499999999999,15.96,0.15,0.3,top,channel_pcb_smtpad_342,U_DDR,C2,0.018043,0.103945,0.028945,hold: off-center bore; redesign or qualify
+channel_pcb_via_254,-63.360054,15.950042,0.15,0.3,top,channel_pcb_smtpad_374,U_DDR,C7,0.04,0.081991,0.006991,hold: off-center bore; redesign or qualify
+channel_pcb_via_259,-50.03,13.945,0.15,0.3,top,channel_pcb_smtpad_46,U1,L3,0.030542,0.074443,-0.000557,hold: off-center bore; redesign or qualify
+channel_pcb_via_261,-50.03,11.540000000000001,0.15,0.3,top,channel_pcb_smtpad_49,U1,P3,0.031747,0.073237,-0.001763,hold: off-center bore; redesign or qualify
+channel_pcb_via_262,-66.60499999999999,14.335,0.15,0.3,top,channel_pcb_smtpad_360,U_DDR,E3,0.01592,0.106069,0.031069,hold: off-center bore; redesign or qualify
+channel_pcb_via_268,-66.559946,13.549996,0.15,0.3,top,channel_pcb_smtpad_361,U_DDR,F3,0.04,0.081991,0.006991,hold: off-center bore; redesign or qualify
+channel_pcb_via_276,-66.559946,12.749896,0.15,0.3,top,channel_pcb_smtpad_362,U_DDR,G3,0.04,0.081991,0.006991,hold: off-center bore; redesign or qualify
+channel_pcb_via_279,-50.775,12.100000000000001,0.15,0.3,top,channel_pcb_smtpad_30,U1,N2,0.25115,-0.146154,-0.221154,hold: off-center bore; redesign or qualify
+channel_pcb_via_282,-62.574999999999996,11.93,0.15,0.3,top,channel_pcb_smtpad_395,U_DDR,H8,0.032011,0.089977,0.014977,hold: off-center bore; redesign or qualify
+channel_pcb_via_283,-40.349958,18.749942,0.15,0.3,top,channel_pcb_smtpad_256,U1,E15,0.05,0.054987,-0.020013,hold: off-center bore; redesign or qualify
+channel_pcb_via_283,-40.349958,18.749942,0.15,0.3,bottom,channel_pcb_smtpad_674,TP_UART_RX,pin1,0.304202,0.120765,0.045765,hold: off-center bore; redesign or qualify
+channel_pcb_via_284,-39.650112,18.699942,0.15,0.3,top,channel_pcb_smtpad_274,U1,E16,0.070711,0.034278,-0.040722,hold: off-center bore; redesign or qualify
+pcb_ball_feed_U1_D6_via_5,-8.409,23.35,0.15,0.3,top,channel_pcb_smtpad_641,C_PMIC_RTC_CORE,pin1,0.710512,-0.025013,-0.100013,hold: off-center bore; redesign or qualify
+pcb_buck_input_U_PMIC_IN_BIAS_via_1,-17.83,20.46,0.15,0.3,top,channel_pcb_smtpad_571,U_PMIC,IN_DCDC4,0.349405,-0.015053,-0.090053,hold: off-center bore; redesign or qualify
+pcb_buck_input_U_PMIC_IN_BIAS_via_4,-23.26,29.19,0.15,0.3,top,channel_pcb_smtpad_595,U_PMIC,IN_BIAS,0.014023,0.055063,-0.019937,hold: off-center bore; redesign or qualify
+pcb_buck_input_U_PMIC_IN_DCDC3_via_4,-24.61,27.75,0.15,0.3,top,channel_pcb_smtpad_596,U_PMIC,IN_DCDC3,0.08989,0.064947,-0.010053,hold: off-center bore; redesign or qualify
+pcb_channel_source_trace_273_via_1,-26.515,7.875,0.15,0.3,top,channel_pcb_smtpad_545,R_SYSBOOT14,pin1,0.05973,0.150013,0.075013,hold: off-center bore; redesign or qualify
+pcb_channel_source_trace_287_via_1,-25.4,24.35,0.15,0.3,top,channel_pcb_smtpad_603,U_PMIC,PB,0.707224,-0.04281,-0.11781,hold: off-center bore; redesign or qualify
+pcb_channel_source_trace_320_via_1,-29.07,25.325,0.15,0.3,bottom,channel_pcb_smtpad_616,R_PMIC_WAKE,pin2,0.453744,0.011602,-0.063398,hold: off-center bore; redesign or qualify
+pcb_channel_source_trace_321_via_4,-41.215,9.925,0.15,0.3,top,channel_pcb_smtpad_249,U1,T14,0.029221,0.075764,0.000764,hold: off-center bore; redesign or qualify
+pcb_channel_source_trace_322_via_3,-25.37,23.795,0.15,0.3,top,channel_pcb_smtpad_604,U_PMIC,nINT,0.671615,0.018939,-0.056061,hold: off-center bore; redesign or qualify
+pcb_channel_source_trace_324_via_4,-39.6,20.36,0.15,0.3,top,channel_pcb_smtpad_272,U1,C16,0.010113,0.094871,0.019871,hold: off-center bore; redesign or qualify
+pcb_channel_source_trace_325_via_4,-38.68,20.3,0.15,0.3,top,channel_pcb_smtpad_290,U1,C17,0.129968,-0.024977,-0.099977,hold: off-center bore; redesign or qualify
+pcb_channel_source_trace_382_via_1,-19.83,21.37,0.15,0.3,top,channel_pcb_smtpad_567,U_PMIC,PGOOD,0.575486,-0.015057,-0.090057,hold: off-center bore; redesign or qualify
+pcb_channel_source_trace_382_via_4,-40.375,21.195,0.15,0.3,top,channel_pcb_smtpad_253,U1,B15,0.051468,0.053516,-0.021484,hold: off-center bore; redesign or qualify
+pcb_channel_source_trace_383_via_4,-44.445,22.01,0.15,0.3,top,channel_pcb_smtpad_162,U1,A10,0.07496,0.030025,-0.044975,hold: off-center bore; redesign or qualify
+pcb_channel_source_trace_499_via_2,-46.7,18.625,0.15,0.3,top,channel_pcb_smtpad_112,U1,E7,0.16003,-0.055047,-0.130047,hold: off-center bore; redesign or qualify
+pcb_command_DDR_A15_via_4,-63.40200000000054,8.752999999999979,0.15,0.3,top,channel_pcb_smtpad_383,U_DDR,M7,0.003657,0.118331,0.043331,hold: off-center bore; redesign or qualify
+pcb_command_DDR_A5_via_5,-67.40200000000061,7.163000000000004,0.15,0.3,top,channel_pcb_smtpad_353,U_DDR,P2,0.013188,0.108801,0.033801,hold: off-center bore; redesign or qualify
+pcb_command_DDR_A7_via_2,-67.40200000000031,6.352999999999988,0.15,0.3,top,channel_pcb_smtpad_354,U_DDR,R2,0.003487,0.118501,0.043501,hold: off-center bore; redesign or qualify
+pcb_command_DDR_CKE_via_1,-50.05800000000252,17.211000000000013,0.15,0.3,top,channel_pcb_smtpad_42,U1,G3,0.084253,0.020737,-0.054263,hold: off-center bore; redesign or qualify
+pcb_command_DDR_CKn_via_1,-51.73790596564402,19.612174034355977,0.15,0.3,top,channel_pcb_smtpad_3,U1,D1,0.151176,-0.04619,-0.12119,hold: off-center bore; redesign or qualify
+pcb_command_LCD_D2_via_12,41.3,13.125,0.15,0.3,top,pcb_smtpad_384,J_LCD,pin30,0.023868,0.051316,-0.023684,hold: off-center bore; redesign or qualify
+pcb_command_LCD_D4_via_12,41.29800000000285,14.157000000000217,0.15,0.3,top,pcb_smtpad_382,J_LCD,pin28,0.00975,0.067164,-0.007836,hold: off-center bore; redesign or qualify
+pcb_command_LCD_D5_via_1,-27.58199999999976,6.297000000000153,0.15,0.3,top,channel_pcb_smtpad_526,R_SYSBOOT5,pin2,0.216032,0.027002,-0.047998,hold: off-center bore; redesign or qualify
+pcb_ddr_switch_bias_via_1,-25.01,35.884,0.15,0.3,top,channel_pcb_smtpad_614,R_POWER_PB,pin2,0.413674,-0.085126,-0.160126,hold: off-center bore; redesign or qualify
+pcb_ddr_switch_enable_via_2,-36.904,31.476,0.15,0.3,top,channel_pcb_smtpad_689,U_DDR_SWITCH,ON,0.007946,0.042134,-0.032866,hold: off-center bore; redesign or qualify
+pcb_feed_VDD_CORE_1,-32.76989,21.902522,0.18,0.38,top,channel_pcb_smtpad_651,C_PMIC_CORE,pin1,0.45,0.292506,0.192506,hold: off-center bore; redesign or qualify
+pcb_feed_VDD_CORE_4,-46.799996,17.149996,0.15,0.3,top,channel_pcb_smtpad_114,U1,G7,0.0,0.104984,0.029984,hold: inherited centered site; tolerances and fill disposition open
+pcb_feed_VDD_CORE_U1.G10_1,-44.305,17.13,0.15,0.3,top,channel_pcb_smtpad_168,U1,G10,0.097033,0.007951,-0.067049,hold: off-center bore; redesign or qualify
+pcb_feed_VDD_CORE_U1.H11,-43.600104,16.349896,0.15,0.3,top,channel_pcb_smtpad_187,U1,H11,0.0,0.104984,0.029984,hold: inherited centered site; tolerances and fill disposition open
+pcb_feed_VDD_CORE_U1.K8,-45.999896,14.74995,0.15,0.3,top,channel_pcb_smtpad_135,U1,K8,0.0,0.104984,0.029984,hold: inherited centered site; tolerances and fill disposition open
+pcb_feed_VDD_CORE_U1.L6,-47.600096,13.950104,0.15,0.3,top,channel_pcb_smtpad_100,U1,L6,0.0,0.104984,0.029984,hold: inherited centered site; tolerances and fill disposition open
+pcb_feed_VDD_CORE_U1.L7,-46.799996,13.950104,0.15,0.3,top,channel_pcb_smtpad_118,U1,L7,0.0,0.104984,0.029984,hold: inherited centered site; tolerances and fill disposition open
+pcb_feed_VDD_CORE_U1.L8,-45.999896,13.950104,0.15,0.3,top,channel_pcb_smtpad_136,U1,L8,0.0,0.104984,0.029984,hold: inherited centered site; tolerances and fill disposition open
+pcb_feed_VDD_CORE_U1.L9,-45.20005,13.950104,0.15,0.3,top,channel_pcb_smtpad_154,U1,L9,0.0,0.104984,0.029984,hold: inherited centered site; tolerances and fill disposition open
+pcb_feed_VDD_CORE_U1.M11,-43.600104,13.150004,0.15,0.3,top,channel_pcb_smtpad_191,U1,M11,0.0,0.104984,0.029984,hold: inherited centered site; tolerances and fill disposition open
+pcb_feed_VDD_CORE_U1.N12_1,-42.835,12.44,0.15,0.3,top,channel_pcb_smtpad_210,U1,N12,0.096654,0.008334,-0.066666,hold: off-center bore; redesign or qualify
+pcb_feed_VDD_CORE_U1.N9_1,-45.18,12.51,0.15,0.3,top,channel_pcb_smtpad_156,U1,N9,0.161347,-0.056354,-0.131354,hold: off-center bore; redesign or qualify
+pcb_feed_VDD_MPU_1,-31.395,24.145,0.2,0.38,top,channel_pcb_smtpad_655,C_PMIC_MPU,pin1,0.013263,0.630196,0.540196,hold: off-center bore; redesign or qualify
+pcb_feed_VDD_MPU_4,-42.175,15.43,0.2,0.38,top,channel_pcb_smtpad_224,U1,J13,0.212298,-0.132315,-0.222315,hold: off-center bore; redesign or qualify
+pcb_handheld_ground_land_0,-89.799983,-38.267966,0.2,0.45,top,pcb_smtpad_458,SW_SELECT,pin4,0.0,0.499999,0.374999,Type VII specified; process acceptance open
+pcb_handheld_ground_land_12,-96.799983,-9.267966,0.2,0.45,top,pcb_smtpad_426,SW_UP,pin4,0.0,0.499999,0.374999,Type VII specified; process acceptance open
+pcb_handheld_ground_land_24,-32.046636,-37.7,0.2,0.45,top,pcb_smtpad_231,R_BAT_FB_BOTTOM,pin2,0.0,0.303238,0.178238,Type VII specified; process acceptance open
+pcb_handheld_ground_land_25,-37.746636,-37.0,0.2,0.45,top,pcb_smtpad_192,R_BAT_REVERSE_GATE,pin2,0.0,0.303238,0.178238,Type VII specified; process acceptance open
+pcb_handheld_ground_land_27,-36.0,-32.500002,0.2,0.45,top,pcb_smtpad_217,C_BAT_IN_BULK_B,pin2,0.0,0.575005,0.450005,Type VII specified; process acceptance open
+pcb_handheld_ground_land_28,-37.100024,-30.0,0.2,0.45,top,pcb_smtpad_213,C_BAT_IN_LOCAL,pin2,0.0,0.299999,0.174999,Type VII specified; process acceptance open
+pcb_handheld_ground_land_29,-36.5,-24.800002,0.2,0.45,top,pcb_smtpad_215,C_BAT_IN_BULK_A,pin2,0.0,0.575005,0.450005,Type VII specified; process acceptance open
+pcb_handheld_ground_land_3,-96.799983,-25.267966,0.2,0.45,top,pcb_smtpad_430,SW_DOWN,pin4,0.0,0.499999,0.374999,Type VII specified; process acceptance open
+pcb_handheld_ground_land_32,-26.400002,-34.5,0.2,0.45,top,pcb_smtpad_225,C_BAT_OUT_BULK_C,pin2,0.0,0.575005,0.450005,Type VII specified; process acceptance open
+pcb_handheld_ground_land_33,-28.8,-30.299976,0.2,0.45,top,pcb_smtpad_219,C_BAT_OUT_LOCAL,pin2,0.0,0.299999,0.174999,Type VII specified; process acceptance open
+pcb_handheld_ground_land_35,-28.246636,-20.5,0.2,0.45,top,pcb_smtpad_237,R_BAT_EN_BOTTOM,pin2,0.0,0.303238,0.178238,Type VII specified; process acceptance open
+pcb_handheld_ground_land_37,-24.500002,-28.4,0.2,0.45,top,pcb_smtpad_223,C_BAT_OUT_BULK_B,pin2,0.0,0.575005,0.450005,Type VII specified; process acceptance open
+pcb_handheld_ground_land_40,-19.500002,-27.34996,0.2,0.45,top,pcb_smtpad_241,U_USB_VALID,GND,0.0,0.225006,0.100006,Type VII specified; process acceptance open
+pcb_handheld_ground_land_42,-18.9,-16.949998,0.2,0.45,top,pcb_smtpad_309,C_3V3_OUT_A,pin2,0.0,0.575005,0.450005,Type VII specified; process acceptance open
+pcb_handheld_ground_land_47,-0.700024,29.6,0.2,0.45,top,pcb_smtpad_153,C_VBUS,pin2,0.0,0.299999,0.174999,Type VII specified; process acceptance open
+pcb_handheld_ground_land_48,9.0,39.5503,0.2,0.45,top,pcb_smtpad_473,D_USB_PRESENT,cathode,0.0,0.4,0.275,Type VII specified; process acceptance open
+pcb_handheld_ground_land_49,22.240033,-39.410093,0.2,0.45,top,pcb_smtpad_280,J_SD,SHIELD4,1e-06,0.499999,0.374999,Type VII specified; process acceptance open
+pcb_handheld_ground_land_52,22.240033,-29.708309,0.2,0.45,top,pcb_smtpad_277,J_SD,SHIELD1,0.0,0.499999,0.374999,Type VII specified; process acceptance open
+pcb_handheld_ground_land_54,37.759967,-39.410093,0.2,0.45,top,pcb_smtpad_279,J_SD,SHIELD3,1e-06,0.499998,0.374998,Type VII specified; process acceptance open
+pcb_handheld_ground_land_57,36.920014,-29.708309,0.2,0.45,top,pcb_smtpad_278,J_SD,SHIELD2,0.0,0.499999,0.374999,Type VII specified; process acceptance open
+pcb_handheld_ground_land_58,97.200017,-38.267966,0.2,0.45,top,pcb_smtpad_462,SW_START,pin4,0.0,0.499999,0.374999,Type VII specified; process acceptance open
+pcb_handheld_ground_land_6,-104.799983,-17.267966,0.2,0.45,top,pcb_smtpad_434,SW_LEFT,pin4,0.0,0.499999,0.374999,Type VII specified; process acceptance open
+pcb_handheld_ground_land_61,65.999998,-16.05004,0.2,0.45,top,pcb_smtpad_787,Q_LIPO_USB_OFF,pin2,0.0,0.225006,0.100006,Type VII specified; process acceptance open
+pcb_handheld_ground_land_65,105.950017,-1.767966,0.2,0.45,top,pcb_smtpad_442,SW_A,pin4,0.0,0.499999,0.374999,Type VII specified; process acceptance open
+pcb_handheld_ground_land_68,97.200017,7.732034,0.2,0.45,top,pcb_smtpad_450,SW_X,pin4,0.0,0.499999,0.374999,Type VII specified; process acceptance open
+pcb_handheld_ground_land_71,113.517966,14.200017,0.2,0.45,top,pcb_smtpad_446,SW_B,pin4,0.0,0.499999,0.374999,Type VII specified; process acceptance open
+pcb_handheld_ground_land_74,105.950017,17.232034,0.2,0.45,top,pcb_smtpad_454,SW_Y,pin4,0.0,0.499999,0.374999,Type VII specified; process acceptance open
+pcb_handheld_ground_land_86,-41.150002,35.9,0.2,0.45,top,channel_pcb_smtpad_702,C_DDR_SW_EN,pin2,0.0,0.575005,0.450005,Type VII specified; process acceptance open
+pcb_handheld_ground_land_9,-88.799983,-17.267966,0.2,0.45,top,pcb_smtpad_438,SW_RIGHT,pin4,0.0,0.499999,0.374999,Type VII specified; process acceptance open
+pcb_io_feed_R_PMIC_IRQ_pin2_via_3,-23.867,19.093,0.15,0.3,top,channel_pcb_smtpad_624,R_PMIC_SDA,pin2,0.322038,-0.107987,-0.182987,hold: off-center bore; redesign or qualify
+pcb_io_feed_U1_P6_via_5,-47.582,11.568,0.15,0.3,top,channel_pcb_smtpad_103,U1,P6,0.025483,0.079501,0.004501,hold: off-center bore; redesign or qualify
+pcb_io_local_E13_F14_via_1,-42.825,18.675,0.15,0.3,top,channel_pcb_smtpad_202,U1,E12,0.079001,0.025986,-0.049014,hold: off-center bore; redesign or qualify
+pcb_joy_adc_supply_via_1,-2.5,19.59,0.15,0.3,top,channel_pcb_smtpad_673,C_JOY_ADC,pin1,0.02,0.174999,0.099999,hold: off-center bore; redesign or qualify
+pcb_mmc0_return_3,26.375,-28.835,0.2,0.4,top,pcb_smtpad_273,J_SD,VSS,0.365718,-0.114999,-0.214999,hold: off-center bore; redesign or qualify
+pcb_ram_feed_C1,-68.199892,15.950042,0.15,0.3,top,channel_pcb_smtpad_326,U_DDR,C1,0.0,0.121988,0.046988,hold: inherited centered site; tolerances and fill disposition open
+pcb_ram_feed_H9,-61.800108,11.950050000000001,0.15,0.3,top,channel_pcb_smtpad_411,U_DDR,H9,0.0,0.121988,0.046988,hold: inherited centered site; tolerances and fill disposition open
+pcb_source_trace_457_via_1,-86.925,33.925,0.15,0.3,top,pcb_smtpad_480,J_JOY_L,pin1,0.079076,2e-06,-0.074998,hold: off-center bore; redesign or qualify
+pcb_source_trace_461_via_1,-85.425,34.3,0.15,0.3,top,pcb_smtpad_477,J_JOY_L,pin4,0.407059,-0.075067,-0.150067,hold: off-center bore; redesign or qualify
+pcb_source_trace_483_via_1,-9.748,19.952,0.15,0.3,top,pcb_smtpad_513,R_JOY_R_CLICK,pin1,0.318818,-0.107355,-0.182355,hold: off-center bore; redesign or qualify
+pcb_support_C_VREF_CA_pin2_via_0,-60.04662549337971,7.14169138502206,0.15,0.3,bottom,channel_pcb_smtpad_506,C_VREF_CA,pin2,0.241774,-0.034258,-0.109258,hold: off-center bore; redesign or qualify
+pcb_support_U1_J3_via_0,-49.40999977094635,14.36407424871082,0.15,0.3,bottom,channel_pcb_smtpad_501,R_VTP,pin1,0.3,-0.01713,-0.09213,hold: off-center bore; redesign or qualify
+pcb_support_U1_J4_via_0,-49.30204199999999,15.628050000000002,0.15,0.3,top,channel_pcb_smtpad_62,U1,J4,0.128406,-0.023422,-0.098422,hold: off-center bore; redesign or qualify
+pcb_support_U1_J4_via_0,-49.30204199999999,15.628050000000002,0.15,0.3,bottom,channel_pcb_smtpad_509,C_CPU_VREF,pin1,0.1,0.016291,-0.058709,hold: off-center bore; redesign or qualify
+pcb_support_U1_J4_via_3,-56.095000000002116,7.120999999999988,0.15,0.3,top,channel_pcb_smtpad_504,R_VREF_CA,pin2,0.22856,0.156058,0.081058,hold: off-center bore; redesign or qualify
+pcb_support_U1_R1_via_0,-51.63599999999983,10.819000000000031,0.15,0.3,top,channel_pcb_smtpad_14,U1,R1,0.077823,0.02716,-0.04784,hold: off-center bore; redesign or qualify
+pcb_support_U1_R1_via_4,-34.24199999999917,6.4510000000000165,0.15,0.3,top,channel_pcb_smtpad_516,R_SYSBOOT0,pin2,0.242682,-0.046998,-0.121998,hold: off-center bore; redesign or qualify
+pcb_support_U1_U2_via_2,-32.721118987441095,8.448357488261543,0.15,0.3,top,channel_pcb_smtpad_534,R_SYSBOOT9,pin2,0.236231,-0.02663,-0.10163,hold: off-center bore; redesign or qualify
+pcb_support_U_DDR_C9_via_0,-61.85313837482214,15.947057383110613,0.15,0.3,top,channel_pcb_smtpad_406,U_DDR,C9,0.053114,0.068874,-0.006126,hold: off-center bore; redesign or qualify
+pcb_support_U_DDR_H1_via_0,-68.2289999999992,11.91999999999998,0.15,0.3,top,channel_pcb_smtpad_331,U_DDR,H1,0.041836,0.080152,0.005152,hold: off-center bore; redesign or qualify
+pcb_support_U_DDR_L8_via_0,-62.607,9.548,0.15,0.3,top,channel_pcb_smtpad_398,U_DDR,L8,0.007325,0.114662,0.039662,hold: off-center bore; redesign or qualify
+pcb_system_ADC_LY_via_2,-9.41,16.02,0.15,0.3,top,pcb_smtpad_497,C_JOY_LY,pin1,0.022413,0.164883,0.089883,hold: off-center bore; redesign or qualify
+pcb_system_ADC_RY_via_4,-9.41,13.005,0.15,0.3,top,pcb_smtpad_505,C_JOY_RY,pin1,0.011284,0.164883,0.089883,hold: off-center bore; redesign or qualify
+pcb_system_AUDIO_PWM_via_1,-38.64,21.86,0.15,0.3,top,channel_pcb_smtpad_288,U1,A17,0.183629,-0.078637,-0.153637,hold: off-center bore; redesign or qualify
+pcb_system_JOY_R_CLICK_via_4,77.88,-9.04,0.15,0.3,top,pcb_smtpad_485,J_JOY_R,pin3,0.04996,0.035,-0.04,hold: off-center bore; redesign or qualify
+pcb_system_KEY_A_via_8,97.575,2.7,0.15,0.3,top,pcb_smtpad_440,SW_A,pin1,0.040738,0.492847,0.417847,hold: off-center bore; redesign or qualify
+pcb_system_KEY_DOWN_via_2,-105.2,-20.75,0.15,0.3,top,pcb_smtpad_428,SW_DOWN,pin1,0.017848,0.507151,0.432151,hold: off-center bore; redesign or qualify
+pcb_system_KEY_START_via_6,88.76,-33.76,0.15,0.3,top,pcb_smtpad_460,SW_START,pin1,0.040746,0.517151,0.442151,hold: off-center bore; redesign or qualify
+pcb_system_KEY_UP_via_2,-105.2,-4.775,0.15,0.3,top,pcb_smtpad_424,SW_UP,pin1,0.007152,0.517847,0.442847,hold: off-center bore; redesign or qualify
+pcb_system_LCD_D11_via_10,41.3,20.14,0.15,0.3,top,pcb_smtpad_370,J_LCD,pin16,0.012753,0.06379,-0.01121,hold: off-center bore; redesign or qualify
+pcb_system_LCD_D8_via_12,41.3,17.175,0.15,0.3,top,pcb_smtpad_376,J_LCD,pin22,0.023349,0.051952,-0.023048,hold: off-center bore; redesign or qualify
+pcb_system_SD_DAT0_via_4,25.645,-28.835,0.15,0.3,top,pcb_smtpad_274,J_SD,DAT0,0.023466,0.26995,0.19495,hold: off-center bore; redesign or qualify
+pcb_system_SD_DAT2_via_1,-37.754,17.883,0.15,0.3,top,channel_pcb_smtpad_311,U1,F18,0.254901,-0.149908,-0.224908,hold: off-center bore; redesign or qualify
+pcb_system_SD_DAT2_via_6,32.229,-28.835,0.15,0.3,top,pcb_smtpad_268,J_SD,DAT2,0.025426,0.263987,0.188987,hold: off-center bore; redesign or qualify
+pcb_system_SD_DAT3_via_1,-38.705,17.9,0.15,0.3,top,channel_pcb_smtpad_293,U1,F17,0.10741,-0.002424,-0.077424,hold: off-center bore; redesign or qualify
+pcb_via_154,-16.049999999999997,-11.15,0.3,0.45,top,pcb_smtpad_300,U_3V3,VIN,0.60826,-0.19999,-0.27499,hold: off-center bore; redesign or qualify
+pcb_vsys_feed_AC_DET_via_2,-19.15,21.03,0.15,0.3,top,channel_pcb_smtpad_568,U_PMIC,AC_DET,0.250724,-0.035061,-0.110061,hold: off-center bore; redesign or qualify
+pcb_vsys_feed_C_PMIC_IN_BU_pin1_via_1,-17.74,21.243,0.15,0.3,top,channel_pcb_smtpad_571,U_PMIC,IN_DCDC4,0.443002,0.055063,-0.019937,hold: off-center bore; redesign or qualify
+pcb_vsys_feed_IN_LDO1_via_2,-21.25,20.79,0.15,0.3,top,channel_pcb_smtpad_564,U_PMIC,IN_LDO1,0.01011,0.064943,-0.010057,hold: off-center bore; redesign or qualify
+pcb_vsys_feed_R_POWER_PB_pin2_via_1,-17.74,20.813,0.15,0.3,top,channel_pcb_smtpad_571,U_PMIC,IN_DCDC4,0.016279,0.055063,-0.019937,hold: off-center bore; redesign or qualify
+pcb_vsys_trunk_C_3V3_IN_pin1_via_1,55.3,-17.0,0.35,0.65,top,pcb_smtpad_757,C_LIPO_BOOST_OUT,pin1,0.700002,-0.17,-0.32,hold: off-center bore; redesign or qualify
+via_ddr_supply_bridge_lower,-46.405,21.62,0.2,0.45,bottom,channel_pcb_smtpad_451,C_DDR16,pin1,0.050134,0.100115,-0.024885,hold: off-center bore; redesign or qualify
+via_ddr_supply_bridge_upper,-45.11,23.475,0.2,0.45,bottom,channel_pcb_smtpad_477,C_DDR29,pin1,0.102512,0.080115,-0.044885,hold: off-center bore; redesign or qualify
+via_ddr_supply_lower_bank,-35.003,32.088,0.3,0.6,top,channel_pcb_smtpad_693,U_DDR_SWITCH,VOUT1,0.12,-0.144994,-0.294994,hold: off-center bore; redesign or qualify

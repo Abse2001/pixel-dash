@@ -347,6 +347,8 @@ def main():
     parser.add_argument("--ddr-power-only", action="store_true", help="check DDR supplies, bypasses and N5/P5 on drilled copper")
     parser.add_argument("--ddr-checkpoint", nargs="+", metavar="OPEN_CONTROL",
                         help="verify the exact set of open address/control links on a routing study, DDR power and MMC0")
+    parser.add_argument("--require-link", nargs=2, action="append", default=[], metavar=("FROM", "TO"),
+                        help="require two named lands to share a drilled CAM network")
     args = parser.parse_args()
     if args.ddr_checkpoint and any((args.ddr_power_only, args.mmc0_only, args.mmc0_power, args.pmic_controls,
                                     args.handheld_ground, args.cpu_power, args.sysboot, args.panel_storage)):
@@ -436,6 +438,10 @@ def main():
         if len(keys) > 1:
             raise ValueError(f"CAM short at {node} joins {sorted(keys)}")
     terminals = {port_labels[pid]: node for pid, node in by_pad.items() if pid in port_labels}
+    for source, target in args.require_link:
+        if terminals[source] != terminals[target]:
+            raise ValueError(f"Open in drilled CAM between {source} and {target}")
+        print(f"Drilled CAM connection {source} to {target}: PASS")
     if args.ddr_power_only:
         return ddr_power_lands(terminals)
     if args.mmc0_only:

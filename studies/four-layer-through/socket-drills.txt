@@ -1,0 +1,12 @@
+drill_npth.drl matches 19 round hits and 0 slots
+drill-L1-L4.drl matches 872 round hits and 6 slots
+drill-L1-L2.drl matches 231 round hits and 0 slots
+drill-L2-L3.drl matches 29 round hits and 0 slots
+drill-L3-L4.drl matches 44 round hits and 0 slots
+through_via,closest_component_hole_or_slot,drill_edge_gap_mm
+pcb_handheld_ground_land_17,pcb_plated_hole_21,7.84394
+pcb_handheld_ground_land_50,pcb_hole_6,3.17036
+pcb_handheld_ground_land_51,pcb_hole_6,3.2071
+pcb_handheld_ground_land_55,pcb_hole_7,3.15026
+pcb_handheld_ground_land_56,pcb_hole_7,3.18719
+pcb_handheld_ground_land_64,pcb_hole_1,19.00225

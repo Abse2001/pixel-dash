@@ -1,0 +1,15 @@
+via,x_mm,y_mm,hole_mm,land_mm,mask,bore_to_opening_mm,land_to_opening_mm
+pcb_system_KEY_L_via_1,-39.125,21.465,0.15,0.3,F_Mask.gbr,0.197606,0.122606
+pcb_handheld_ground_land_17,-86.500126,33.159934,0.2,0.45,F_Mask.gbr,0.240001,0.115001
+pcb_handheld_ground_land_50,21.280033,-39.650093,0.2,0.45,F_Mask.gbr,0.260001,0.135001
+pcb_handheld_ground_land_51,21.280033,-39.170093,0.2,0.45,F_Mask.gbr,0.260001,0.135001
+pcb_handheld_ground_land_55,36.799966999999995,-39.650093,0.2,0.45,F_Mask.gbr,0.260001,0.135001
+pcb_handheld_ground_land_56,36.799966999999995,-39.170093,0.2,0.45,F_Mask.gbr,0.260001,0.135001
+pcb_handheld_ground_land_64,77.100066,-9.500126,0.2,0.45,F_Mask.gbr,0.250001,0.125001
+pcb_system_KEY_L_via_1,-39.125,21.465,0.15,0.3,B_Mask.gbr,1.33954,1.26454
+pcb_handheld_ground_land_17,-86.500126,33.159934,0.2,0.45,B_Mask.gbr,7.543955,7.418955
+pcb_handheld_ground_land_50,21.280033,-39.650093,0.2,0.45,B_Mask.gbr,3.170363,3.045363
+pcb_handheld_ground_land_51,21.280033,-39.170093,0.2,0.45,B_Mask.gbr,3.207116,3.082116
+pcb_handheld_ground_land_55,36.799966999999995,-39.650093,0.2,0.45,B_Mask.gbr,3.150259,3.025259
+pcb_handheld_ground_land_56,36.799966999999995,-39.170093,0.2,0.45,B_Mask.gbr,3.187204,3.062204
+pcb_handheld_ground_land_64,77.100066,-9.500126,0.2,0.45,B_Mask.gbr,19.002281,18.877281

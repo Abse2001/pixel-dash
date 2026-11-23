@@ -2,7 +2,6 @@ ball,through_via,via_x_mm,via_y_mm,center_offset_mm,drill_mm,land_mm,nominal_bor
 U1.A10,pcb_channel_source_trace_383_via_4,-44.445,22.01,0.07496,0.15,0.3,0.030037,-0.044963,off-center bore inside solder land
 U1.A17,pcb_system_AUDIO_PWM_via_1,-38.64,21.86,0.183629,0.15,0.3,-0.078632,-0.153632,bore crosses solder land edge
 U1.B15,pcb_channel_source_trace_382_via_4,-40.375,21.195,0.051468,0.15,0.3,0.053529,-0.021471,off-center bore inside solder land
-U1.B17,pcb_system_KEY_L_via_1,-38.585,21.165,0.215535,0.15,0.3,-0.110538,-0.185538,bore crosses solder land edge
 U1.C16,pcb_channel_source_trace_324_via_4,-39.6,20.36,0.010113,0.15,0.3,0.094884,0.019884,off-center bore inside solder land
 U1.C17,pcb_channel_source_trace_325_via_4,-38.68,20.3,0.129968,0.15,0.3,-0.024971,-0.099971,bore crosses solder land edge
 U1.D1,pcb_command_DDR_CKn_via_1,-51.737906,19.612174,0.151176,0.15,0.3,-0.046179,-0.121179,bore crosses solder land edge
