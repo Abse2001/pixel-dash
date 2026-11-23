@@ -128,7 +128,12 @@ for l in ("In1.Cu","In4.Cu"):
     assert owners[root((l,plane[0]))]=={"GND_INTERNAL"}
     planes[l]=plane[1]
 miss=collections.Counter()
-for n in signals:
+strap_branches = json.loads(Path(__file__).with_name("carrier-strap-routes.json").read_text())
+for branch in strap_branches:
+    name = branch["net"]
+    strap_nodes = [node for ref,pin,node in pads[name] if ref.startswith("R_SYSBOOT") or ref == "J_CARRIER"]
+    assert len(strap_nodes) == 2 and len(set(strap_nodes)) == 1, name
+for n in [*signals, *(branch["net"] for branch in strap_branches)]:
     launches=union_all([point(v["pos"]).buffer(v["diam"]/2+.155,quad_segs=64) for v in vias if v["net"]==n])
     for t in geom:
         if t["kind"]!="track" or t["net"]!=n:continue

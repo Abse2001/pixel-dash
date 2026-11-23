@@ -268,6 +268,14 @@ for edit in json.loads((here/"escape-edits.json").read_text()):
         board.Remove(track)
     for start,end in zip(edit["new"],edit["new"][1:]):
         add_segment(start,end,layer,net(edit["net"]),.102)
+for branch in json.loads((here/"carrier-strap-routes.json").read_text()):
+    signal = net(branch["net"])
+    for section in branch["sections"]:
+        layer = k.F_Cu if section["layer"] == "F.Cu" else k.B_Cu
+        for a, b in zip(section["points"], section["points"][1:]):
+            add_segment(a, b, layer, signal, .14)
+    for x, y in branch["vias"]:
+        add_barrel([x, y, .20, .45], signal)
 for path in json.loads((here/"ground-escapes.json").read_text()):
     n=net(netname(balls["SW_POWER","pin1"]))
     add_segment(path["start"],path["end"],k.F_Cu if path["layer"]=="F.Cu" else k.B_Cu,n,path.get("width", .20))

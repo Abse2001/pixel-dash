@@ -18,7 +18,7 @@ def connected(*pins):
 with (here / "carrier-pinout.csv").open() as stream:
     connector = {row["signal"]: row for row in csv.DictReader(stream)}
 word = 0
-print("bit  target  CPU ball  contact  pull-to-CPU  CPU-to-carrier  pull-to-source")
+print("bit  target  CPU ball  contact  pull-to-CPU  CPU-to-carrier  pull-to-carrier  pull-to-source")
 for bit in range(16):
     row = connector[f"LCD_D{bit}"]
     cpu = row["module_terminal"]
@@ -32,7 +32,7 @@ for bit in range(16):
     word |= int(high) << bit
     source = "U_PMIC.DCDC4" if high else "U_PMIC.EP"
     print(bit, int(high), cpu, row["contact"], connected(expected[0], cpu),
-          connected(cpu, carrier), connected(resistor + ".pin1", source))
+          connected(cpu, carrier), connected(expected[0], carrier), connected(resistor + ".pin1", source))
 assert word == 0x4017, hex(word)
 print(f"Fitted word 0x{word:04x}. VDDSHV6 N5/P5 to DCDC4:",
       connected("U1.N5", "U_PMIC.DCDC4"), connected("U1.P5", "U_PMIC.DCDC4"))
