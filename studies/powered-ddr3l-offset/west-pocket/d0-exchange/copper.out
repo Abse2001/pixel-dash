@@ -1,0 +1,11 @@
+layer,copper_a,copper_b,copper_gap_mm
+bottom,channel_pcb_trace_1,channel_pcb_trace_14,0.101455
+bottom,channel_pcb_trace_1,channel_pcb_trace_3,0.0999909
+bottom,channel_pcb_trace_21,channel_pcb_trace_31,0.1015824
+bottom,channel_pcb_trace_24,channel_pcb_trace_197,0.0998105
+bottom,channel_pcb_trace_25,channel_pcb_trace_27,0.0993996
+bottom,channel_pcb_trace_25,channel_pcb_trace_33,0.0873361
+bottom,channel_pcb_trace_26,channel_pcb_trace_29,0.1017271
+bottom,channel_pcb_trace_31,channel_pcb_trace_41,0.058501
+bottom,channel_pcb_trace_4,channel_trial_DDR_D15,0.1017147
+bottom,channel_pcb_trace_6,channel_pcb_trace_19,0.085751

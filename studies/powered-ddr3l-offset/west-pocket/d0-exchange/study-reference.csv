@@ -1,0 +1,5 @@
+signal,signal_layer,reference_layer,uncovered_copper_mm2
+DDR_A4,top,inner1,0.0000379
+DDR_CASn,bottom,inner2,0.0000441
+DDR_D15,top,inner1,0.0000925
+DDR_D7,top,inner1,0.0000102
