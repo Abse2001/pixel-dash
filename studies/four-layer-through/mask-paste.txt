@@ -1,0 +1,4 @@
+F_Mask.gbr PASS, 2525 operations including aperture transformations
+F_Paste.gbr PASS, 2225 operations including aperture transformations
+B_Mask.gbr PASS, 379 operations including aperture transformations
+B_Paste.gbr PASS, 315 operations including aperture transformations
