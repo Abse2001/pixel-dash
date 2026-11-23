@@ -77,6 +77,7 @@ x_mm,y_mm,net,hole_mm,land_mm,solder_land,face,nominal_bore_to_land_boundary_mm,
 10.899976,4.28,GND_INTERNAL,0.2,0.45,C_DDR_SW_IN.pin2,F.Cu,0.3,centered
 11.113226,8.353714,GND_INTERNAL,0.2,0.45,,,,off-pad
 11.196355,32.046422,VDDS_DDR,0.15,0.3,U_DDR.C9,F.Cu,0.11699,contained off-center
+11.199891,33.649904,VDDS_DDR,0.15,0.3,U_DDR.E9,F.Cu,0.12199,centered
 11.199891,41.649888,VDDS_DDR,0.15,0.3,U_DDR.R9,F.Cu,0.12199,centered
 11.199891,41.649888,VDDS_DDR,0.15,0.3,C_DDR34.pin1,B.Cu,0.13011,contained off-center
 11.332816,2.649999,GND_INTERNAL,0.2,0.45,R_DDR_SW_EN.pin2,F.Cu,0.17,centered

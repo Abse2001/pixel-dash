@@ -246,6 +246,20 @@ for adjustment in json.loads((here/"via-adjustments.json").read_text()):
             if (item.GetStart()-old).EuclideanNorm()<=3:item.SetStart(new)
             if (item.GetEnd()-old).EuclideanNorm()<=3:item.SetEnd(new)
     assert hits==1,adjustment
+for edit in json.loads((here/"escape-edits.json").read_text()):
+    layer = {"F.Cu":k.F_Cu, "B.Cu":k.B_Cu}[edit["layer"]]
+    tracks = [t for t in board.GetTracks() if not isinstance(t,k.PCB_VIA)
+              and t.GetLayer()==layer and t.GetNetname()==edit["net"]]
+    for start, end in zip(edit["old"],edit["old"][1:]):
+        def near(x, y):
+            return (x-at(y)).EuclideanNorm() <= 3
+        track, = [t for t in tracks if
+                  (near(t.GetStart(),start) and near(t.GetEnd(),end)) or
+                  (near(t.GetEnd(),start) and near(t.GetStart(),end))]
+        tracks.remove(track)
+        board.Remove(track)
+    for start,end in zip(edit["new"],edit["new"][1:]):
+        add_segment(start,end,layer,net(edit["net"]),.102)
 for path in json.loads((here/"ground-escapes.json").read_text()):
     n=net(netname(balls["SW_POWER","pin1"]))
     add_segment(path["start"],path["end"],k.F_Cu if path["layer"]=="F.Cu" else k.B_Cu,n,.20)
