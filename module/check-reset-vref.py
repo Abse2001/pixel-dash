@@ -48,6 +48,9 @@ if args.control_status is not None:
 for switch, terminal in (("L4A","pin1"), ("L4B","pin2")):
     assert connected("U_PMIC." + switch, "L_PMIC_IO." + terminal)
 print("DCDC4 both switch pins reach the separate inductor terminals.")
+assert connected("U_PMIC.DCDC4","C_PMIC_IO_A.pin1","C_PMIC_IO_B.pin1","J_CARRIER.71","J_CARRIER.74","J_CARRIER.77")
+assert connected("C_PMIC_IO_A.pin2","C_PMIC_IO_B.pin2","U_PMIC.EP")
+print("DCDC4 reaches both output capacitors and the three carrier supply contacts; both bypass returns reach ground.")
 checks = {
     "CPU switched rail to divider": ["U_DDR_SWITCH.VOUT1", "R_CPU_VREF_HIGH.pin2"],
     "CPU divider bottom return": ["R_CPU_VREF_LOW.pin2", "U_PMIC.EP"],

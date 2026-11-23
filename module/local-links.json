@@ -3571,5 +3571,39 @@
         15.50000000000005
       ]
     ]
+  },
+  {
+    "net": "VDD_IO_3V3_SEQ",
+    "width": 0.32,
+    "layer": "F.Cu",
+    "start": "U_PMIC.DCDC4",
+    "end": "C_PMIC_IO_A.pin1",
+    "points": [
+      [
+        22.53000000000001,
+        14.5
+      ],
+      [
+        22.6,
+        14.5
+      ]
+    ]
+  },
+  {
+    "net": "VDD_IO_3V3_SEQ",
+    "width": 0.32,
+    "layer": "B.Cu",
+    "start": "U_PMIC.DCDC4",
+    "end": "C_PMIC_IO_A.pin1",
+    "points": [
+      [
+        23.129852459070765,
+        16.748656347905584
+      ],
+      [
+        22.6,
+        14.5
+      ]
+    ]
   }
 ]
