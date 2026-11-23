@@ -47,6 +47,6 @@ DDR_CKE,2.0,1.0,-21.64,473,380,451.36,401.64,213,source and waveform unverified
 DDR_CSn0,,,,,,,,,open connection
 DDR_ODT,,,,,,,,,open connection
 DDR_RASn,,,,,,,,,open connection
-DDR_WEn,1.0,2.0,34.385,365,285,399.385,250.615,145,source and waveform unverified
-DDR_WEn,1.0,1.0,34.385,405,335,439.385,300.615,145,source and waveform unverified
-DDR_WEn,2.0,1.0,34.385,473,380,507.385,345.615,213,source and waveform unverified
+DDR_WEn,1.0,2.0,51.427,365,285,416.427,233.573,145,source and waveform unverified
+DDR_WEn,1.0,1.0,51.427,405,335,456.427,283.573,145,source and waveform unverified
+DDR_WEn,2.0,1.0,51.427,473,380,524.427,328.573,213,source and waveform unverified

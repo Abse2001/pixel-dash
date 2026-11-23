@@ -1,9 +1,9 @@
 drill_npth.drl matches 19 round hits and 0 slots
-drill-L1-L4.drl matches 761 round hits and 6 slots
+drill-L1-L4.drl matches 762 round hits and 6 slots
 drill-L1-L2.drl matches 294 round hits and 0 slots
-drill-L2-L3.drl matches 26 round hits and 0 slots
-drill-L3-L4.drl matches 36 round hits and 0 slots
-37 distinct DDR ball pairs connected. 1123 plated barrels checked. No shorts between mapped land nets.
+drill-L2-L3.drl matches 27 round hits and 0 slots
+drill-L3-L4.drl matches 35 round hits and 0 slots
+37 distinct DDR ball pairs connected. 1124 plated barrels checked. No shorts between mapped land nets.
 Open DDR links: DDR_A0 (U1.F3 to U_DDR.N3), DDR_A1 (U1.H1 to U_DDR.P7), DDR_A10 (U1.F4 to U_DDR.L7), DDR_A11 (U1.F2 to U_DDR.R7), DDR_A12 (U1.E3 to U_DDR.N7), DDR_A13 (U1.H3 to U_DDR.T3), DDR_A2 (U1.E4 to U_DDR.P3), DDR_A4 (U1.C2 to U_DDR.P8), DDR_CASn (U1.F1 to U_DDR.K3), DDR_CSn0 (U1.H2 to U_DDR.L2), DDR_ODT (U1.G1 to U_DDR.K1), DDR_RASn (U1.G4 to U_DDR.J3), DDR_RESETn (U1.G2 to U_DDR.T2)
 UART0 RX, TX and ground reach three distinct probe networks.
 PAM8403 MUTE and SHND reach regulated 3.3 V and are isolated from ground and VDD.

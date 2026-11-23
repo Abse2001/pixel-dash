@@ -11,4 +11,4 @@ DDR_BA0,32,426.667,rise,3.95/3.65/4.6,-7.548,373.537,fall,4/4/3.2,102.055,10,0,f
 DDR_BA1,32,525.825,rise,3.95/3.65/4.6,109.329,274.379,fall,4/4/3.2,102.055,0,0,first incident; launch/receiver margin open
 DDR_BA2,32,440.363,rise,3.95/3.65/4.6,19.844,359.841,fall,4/4/3.2,102.055,0,0,first incident; launch/receiver margin open
 DDR_CKE,32,432.274,rise,3.95/3.65/4.6,3.666,367.93,fall,4/4/3.2,102.055,5,0,first incident; launch/receiver margin open
-DDR_WEn,32,488.3,rise,3.95/3.65/4.6,109.329,311.904,fall,4/4/3.2,102.055,0,0,first incident; launch/receiver margin open
+DDR_WEn,32,505.341,rise,3.95/3.65/4.6,109.329,294.863,fall,4/4/3.2,102.055,0,0,first incident; launch/receiver margin open
