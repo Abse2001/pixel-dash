@@ -224,7 +224,7 @@
     "fill": false
   },
   {
-    "ref": "C_DDR11",
+    "ref": "C_DDR1",
     "pin": "pin1",
     "start": [
       4.720115,
@@ -252,21 +252,7 @@
     "fill": false
   },
   {
-    "ref": "C_DDR10",
-    "pin": "pin1",
-    "start": [
-      2.599999,
-      24.829884
-    ],
-    "end": [
-      3.289999,
-      24.829884
-    ],
-    "layer": "B.Cu",
-    "fill": false
-  },
-  {
-    "ref": "C_DDR3",
+    "ref": "C_DDR1",
     "pin": "pin1",
     "start": [
       3.4,
@@ -604,5 +590,61 @@
     ],
     "layer": "B.Cu",
     "fill": false
+  },
+  {
+    "ref": "C_DDR3",
+    "pin": "pin1",
+    "start": [
+      3.729884,
+      43.75
+    ],
+    "end": [
+      3.729884,
+      43.75
+    ],
+    "layer": "B.Cu",
+    "fill": true
+  },
+  {
+    "ref": "C_DDR4",
+    "pin": "pin1",
+    "start": [
+      6.85,
+      42.129884
+    ],
+    "end": [
+      6.85,
+      42.129884
+    ],
+    "layer": "B.Cu",
+    "fill": true
+  },
+  {
+    "ref": "C_DDR10",
+    "pin": "pin1",
+    "start": [
+      8.454884,
+      42.925
+    ],
+    "end": [
+      8.454884,
+      42.925
+    ],
+    "layer": "B.Cu",
+    "fill": true
+  },
+  {
+    "ref": "C_DDR11",
+    "pin": "pin1",
+    "start": [
+      1.929884,
+      42.775
+    ],
+    "end": [
+      1.929884,
+      42.775
+    ],
+    "layer": "B.Cu",
+    "fill": true
   }
 ]

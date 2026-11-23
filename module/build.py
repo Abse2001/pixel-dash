@@ -117,6 +117,7 @@ for p in source:
 # Underside 100 nF bypass spanning the H1 reference via and its adjacent ground via.
 parts["C_H1_VREF"] = parts["C_CPU_VREF"]
 h1_bypass = {"pin1": (4.800107, 36.049949), "pin2": (4.942108, 35.519994)}
+local_bypasses = json.loads((here/"dram-local-bypasses.json").read_text())
 for ref,(s,c) in parts.items():
     dx,dy=offset[group(ref)]
     cx,cy=c["center"]["x"],c["center"]["y"]
@@ -143,6 +144,10 @@ for ref,(s,c) in parts.items():
     fp=k.FOOTPRINT(board);fp.SetReference(ref);fp.SetValue(s["manufacturer_part_number"])
     bot=c["layer"]=="bottom" or ref=="C_DDR12"
     fp.SetLayer(k.B_Cu if bot else k.F_Cu);fp.SetPosition(xy(cx+dx,cy+dy))
+    if ref in local_bypasses:
+        site = local_bypasses[ref]
+        center = [(a+b)/2 for a,b in zip(site["pin1"], site["pin2"])]
+        fp.SetPosition(k.VECTOR2I(mm(center[0]), mm(center[1])))
     if ref == "R_ZQ":
         fp.SetPosition(k.VECTOR2I(mm(10.825285),mm(38.956776)))
     if ref == "C_DDR12":
@@ -178,6 +183,10 @@ for ref,(s,c) in parts.items():
             x,y = positions[pname]
             pad.SetPosition(k.VECTOR2I(mm(x),mm(y)))
             pad.SetOrientationDegrees(194.839306)
+        if ref in local_bypasses:
+            x,y = local_bypasses[ref][pname]
+            pad.SetPosition(k.VECTOR2I(mm(x),mm(y)))
+            pad.SetOrientationDegrees(local_bypasses[ref]["rotation"])
         if ref == "C_H1_VREF":
             x,y = h1_bypass[pname]
             pad.SetPosition(k.VECTOR2I(mm(x),mm(y)))

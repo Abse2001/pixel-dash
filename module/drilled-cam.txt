@@ -1,7 +1,7 @@
 50/50 independent drilled DDR pairs. Open: none
-393 plated through drills. No shorts between mapped lands or vias.
-Drill diameters: {0.2: 247, 0.15: 146}
-DCDC3 post-inductor L3 copper 746.46 mm², reaches 18/18 DRAM supply balls.
+396 plated through drills. No shorts between mapped lands or vias.
+Drill diameters: {0.2: 250, 0.15: 146}
+DCDC3 post-inductor L3 copper 745.90 mm², reaches 18/18 DRAM supply balls.
 DRAM supply balls outside that copper island: none
 Ground reaches 162/166 assigned return pads. Open: U1.A1, U_DDR.A9, U_DDR.B9, U_DDR.J8
 DCDC3 reaches all 44 assigned direct DDR rail pads.
