@@ -8,6 +8,11 @@ const P = 0.1, X0 = -56.6, Y0 = -1.75, NX = Math.round((-32.95 - X0) / P) + 1, N
 const W = 0.1, CLR = 0.1, CLR_DDR = +(process.env.CLR_DDR ?? 0.31), VIA_D = 0.3, PADVIA_D = 0.3
 const gx = (x: number) => Math.round((x - X0) / P), gy = (y: number) => Math.round((y - Y0) / P), wx = (i: number) => X0 + i * P, wy = (j: number) => Y0 + j * P
 const MODE = process.env.MODE ?? "outer" // "inner": the balls the DDR copper boxes in - via-in-pad, then layer 4 (inner3) and the bottom layer
+// inside the processor's ball field a via sits exactly on a ball centre (via-in-pad) or >= 0.45 mm from every ball centre:
+// a via pad half on a ball pad is what JLCPCB's DFM flags; fully centred it is plain via-in-pad (filled and capped)
+const offBallAt = (x: number, y: number) => { if (x < -51.6 - 0.45 || x > -38.0 + 0.45 || y < 8.35 - 0.45 || y > 21.95 + 0.45) return false
+  const kx = Math.min(17, Math.max(0, Math.round((x + 51.6) / 0.8))), ky = Math.min(17, Math.max(0, Math.round((21.95 - y) / 0.8))), d = Math.hypot(x - (-51.6 + 0.8 * kx), y - (21.95 - 0.8 * ky)); return d > 0.02 && d < 0.45 }
+const offBall = new Uint8Array(NN); for (let c = 0; c < NN; c++) offBall[c] = offBallAt(wx(c % NX), wy((c / NX) | 0)) ? 1 : 0
 const LAYERS = [MODE === "inner" ? "inner3" : "top", "bottom"] as const
 const isInner = (ball: string) => /^[RTUV][1-6]$/.test(ball) || ["B5", "C5", "C6"].includes(ball)
 const prev = MODE === "outer" && (await Bun.file(dir + "/routes.json").exists()) ? await Bun.file(dir + "/routes.json").json() : { nets: {} }
@@ -96,7 +101,7 @@ function route(n: Net): boolean { const id = idOf(n.name), fixed = n.fixedPad !=
     // via: anywhere legal, or a pad via on a connector terminal
     const o = (1 - l) * NN + c
     if (l === 0 && term[c]) { const pk = term[c] - 1; if (termVia[c] && (n.fixedPad === undefined ? sigPads[pk].role === "SIG" : pk === n.fixedPad)) { const occ = tNear3[0][c] + vNear4[c] > 0 ? 1 : 0; relax(o, VIA_COST * (1 + histV[c]) * (1 + pres * occ) + pres * 8 * (occ + padUse[pk]) + histPad[pk]) } }
-    else if ((statV[c] === 0 || statV[c] === id) && okT(1 - l, c) && !term[c] && !(MODE === "inner" && c !== n.src && Math.hypot((c % NX) - (n.src % NX), ((c / NX) | 0) - ((n.src / NX) | 0)) < 4.5)) { const occ = tNear3[0][c] + tNear3[1][c] + vNear4[c] > 0 ? 1 : 0; relax(o, VIA_COST * (1 + histV[c]) * (1 + pres * occ) + pres * 8 * occ) } }
+    else if ((statV[c] === 0 || statV[c] === id) && okT(1 - l, c) && !term[c] && !(MODE === "inner" && c !== n.src && Math.hypot((c % NX) - (n.src % NX), ((c / NX) | 0) - ((n.src / NX) | 0)) < 4.5) && !offBall[c]) { const occ = tNear3[0][c] + tNear3[1][c] + vNear4[c] > 0 ? 1 : 0; relax(o, VIA_COST * (1 + histV[c]) * (1 + pres * occ) + pres * 8 * occ) } }
   if (end < 0) return false
   const path: number[] = []; for (let u = end; u !== -1; u = from[u]) path.unshift(u)
   n.path = path; n.pad = endPad; return true }

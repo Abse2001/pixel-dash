@@ -3585,9 +3585,9 @@
   {
    "name": "C_HS_CPU_T5",
    "part": "C100N_0402",
-   "x": -46.5,
-   "y": 22.45,
-   "rot": 0,
+   "x": -46.9,
+   "y": 22.85,
+   "rot": 90,
    "layer": "bottom",
    "nets": {
     "pin1": "VDDS_DDR",
@@ -3597,8 +3597,8 @@
   {
    "name": "C_HS_CPU_T6",
    "part": "C100N_0402",
-   "x": -46.5,
-   "y": 23.25,
+   "x": -45.7,
+   "y": 22.75,
    "rot": 0,
    "layer": "bottom",
    "nets": {
@@ -3609,9 +3609,9 @@
   {
    "name": "C_HS_CPU_T7",
    "part": "C100N_0402",
-   "x": -45.3,
-   "y": 23.15,
-   "rot": 90,
+   "x": -45.7,
+   "y": 23.55,
+   "rot": 0,
    "layer": "bottom",
    "nets": {
     "pin1": "VDDS_DDR",
@@ -3621,7 +3621,7 @@
   {
    "name": "C_HS_CPU_T8",
    "part": "C100N_0402",
-   "x": -45.6,
+   "x": -45.2,
    "y": 24.75,
    "rot": 90,
    "layer": "bottom",
@@ -3633,18 +3633,6 @@
   {
    "name": "C_HS_CPU_T9",
    "part": "C100N_0402",
-   "x": -41.6,
-   "y": 19.65,
-   "rot": 90,
-   "layer": "bottom",
-   "nets": {
-    "pin1": "VDDS_DDR",
-    "pin2": "GND"
-   }
-  },
-  {
-   "name": "C_HS_CPU_T10",
-   "part": "C100N_0402",
    "x": -46.8,
    "y": 25.65,
    "rot": 0,
@@ -3655,10 +3643,10 @@
    }
   },
   {
-   "name": "C_HS_CPU_T11",
+   "name": "C_HS_CPU_T10",
    "part": "C100N_0402",
-   "x": -46.8,
-   "y": 26.45,
+   "x": -44.4,
+   "y": 7.15,
    "rot": 0,
    "layer": "bottom",
    "nets": {
@@ -3667,7 +3655,7 @@
    }
   },
   {
-   "name": "C_HS_CPU_T12",
+   "name": "C_HS_CPU_T11",
    "part": "C100N_0402",
    "x": -49.1,
    "y": 26.25,
@@ -3679,9 +3667,21 @@
    }
   },
   {
+   "name": "C_HS_CPU_T12",
+   "part": "C100N_0402",
+   "x": -46.8,
+   "y": 26.25,
+   "rot": 0,
+   "layer": "top",
+   "nets": {
+    "pin1": "VDDS_DDR",
+    "pin2": "GND"
+   }
+  },
+  {
    "name": "C_HS_CPU_T13",
    "part": "C100N_0402",
-   "x": -45.6,
+   "x": -45.2,
    "y": 26.35,
    "rot": 90,
    "layer": "bottom",
@@ -3717,30 +3717,6 @@
   {
    "name": "C_HS_CPU_T16",
    "part": "C100N_0402",
-   "x": -43.3,
-   "y": 7.15,
-   "rot": 90,
-   "layer": "bottom",
-   "nets": {
-    "pin1": "VDDS_DDR",
-    "pin2": "GND"
-   }
-  },
-  {
-   "name": "C_HS_CPU_T17",
-   "part": "C100N_0402",
-   "x": -46.8,
-   "y": 27.25,
-   "rot": 0,
-   "layer": "bottom",
-   "nets": {
-    "pin1": "VDDS_DDR",
-    "pin2": "GND"
-   }
-  },
-  {
-   "name": "C_HS_CPU_T18",
-   "part": "C100N_0402",
    "x": -52.1,
    "y": 6.05,
    "rot": 90,
@@ -3751,11 +3727,35 @@
    }
   },
   {
+   "name": "C_HS_CPU_T17",
+   "part": "C100N_0402",
+   "x": -50.4,
+   "y": 27.65,
+   "rot": 0,
+   "layer": "bottom",
+   "nets": {
+    "pin1": "VDDS_DDR",
+    "pin2": "GND"
+   }
+  },
+  {
+   "name": "C_HS_CPU_T18",
+   "part": "C100N_0402",
+   "x": -48.8,
+   "y": 27.95,
+   "rot": 0,
+   "layer": "bottom",
+   "nets": {
+    "pin1": "VDDS_DDR",
+    "pin2": "GND"
+   }
+  },
+  {
    "name": "C_HS_CPU_T19",
    "part": "C100N_0402",
-   "x": -40.8,
-   "y": 9.35,
-   "rot": 90,
+   "x": -54.3,
+   "y": 6.55,
+   "rot": 0,
    "layer": "bottom",
    "nets": {
     "pin1": "VDDS_DDR",
@@ -3765,10 +3765,10 @@
   {
    "name": "C_HS_CPU_T20",
    "part": "C100N_0402",
-   "x": -50.4,
-   "y": 27.65,
-   "rot": 0,
-   "layer": "bottom",
+   "x": -41.3,
+   "y": 24.45,
+   "rot": 90,
+   "layer": "top",
    "nets": {
     "pin1": "VDDS_DDR",
     "pin2": "GND"
@@ -3789,9 +3789,9 @@
   {
    "name": "C_BULK_1V8_2",
    "part": "C10U_0603",
-   "x": -37.6999,
-   "y": 16.35,
-   "rot": 0,
+   "x": -36.7999,
+   "y": 19.35,
+   "rot": 90,
    "layer": "bottom",
    "nets": {
     "pin1": "VDD_1V8",
@@ -3801,9 +3801,9 @@
   {
    "name": "C_X_MPU_1",
    "part": "C100N_0402",
-   "x": -39.5999,
-   "y": 14.45,
-   "rot": 0,
+   "x": -39.2999,
+   "y": 17.15,
+   "rot": 90,
    "layer": "bottom",
    "nets": {
     "pin1": "VDD_MPU",
@@ -3813,9 +3813,9 @@
   {
    "name": "C_X_MPU_2",
    "part": "C100N_0402",
-   "x": -37.1999,
-   "y": 17.75,
-   "rot": 90,
+   "x": -38.6999,
+   "y": 15.95,
+   "rot": 0,
    "layer": "bottom",
    "nets": {
     "pin1": "VDD_MPU",
@@ -3825,8 +3825,8 @@
   {
    "name": "C_X_1V8_1",
    "part": "C100N_0402",
-   "x": -37.4,
-   "y": 14.9999,
+   "x": -39.2,
+   "y": 14.6999,
    "rot": 90,
    "layer": "bottom",
    "nets": {
@@ -3837,8 +3837,8 @@
   {
    "name": "C_X_1V8_2",
    "part": "C100N_0402",
-   "x": -36.5,
-   "y": 14.9999,
+   "x": -40.1,
+   "y": 13.9499,
    "rot": 90,
    "layer": "bottom",
    "nets": {
@@ -3849,9 +3849,9 @@
   {
    "name": "C_X_1V8_3",
    "part": "C100N_0402",
-   "x": -41.9501,
-   "y": 11.05,
-   "rot": 0,
+   "x": -41.5001,
+   "y": 10.75,
+   "rot": 90,
    "layer": "bottom",
    "nets": {
     "pin1": "VDD_1V8",
@@ -3860,6 +3860,18 @@
   },
   {
    "name": "C_X_3V3_1",
+   "part": "C100N_0402",
+   "x": -40.7,
+   "y": 9.9001,
+   "rot": 90,
+   "layer": "bottom",
+   "nets": {
+    "pin1": "VDD_3V3",
+    "pin2": "GND"
+   }
+  },
+  {
+   "name": "C_X_3V3_2",
    "part": "C100N_0402",
    "x": -40.7,
    "y": 7.5001,
@@ -3871,10 +3883,10 @@
    }
   },
   {
-   "name": "C_X_3V3_2",
+   "name": "C_X_3V3_3",
    "part": "C100N_0402",
-   "x": -37.55,
-   "y": 13.3501,
+   "x": -37.25,
+   "y": 17.2499,
    "rot": 90,
    "layer": "bottom",
    "nets": {
@@ -6955,55 +6967,55 @@
   },
   {
    "name": "V_C_HS_CPU_T5_1",
-   "x": -46.0799,
-   "y": 22.45,
+   "x": -46.9,
+   "y": 23.2701,
    "net": "VDDS_DDR",
    "d": 0.3,
    "hole": 0.1
   },
   {
    "name": "V_C_HS_CPU_T5_2",
-   "x": -46.9201,
-   "y": 22.45,
+   "x": -46.9,
+   "y": 22.4299,
    "net": "GND",
    "d": 0.3,
    "hole": 0.1
   },
   {
    "name": "V_C_HS_CPU_T6_1",
-   "x": -46.0799,
-   "y": 23.25,
+   "x": -45.2799,
+   "y": 22.75,
    "net": "VDDS_DDR",
    "d": 0.3,
    "hole": 0.1
   },
   {
    "name": "V_C_HS_CPU_T6_2",
-   "x": -46.9201,
-   "y": 23.25,
+   "x": -46.1201,
+   "y": 22.75,
    "net": "GND",
    "d": 0.3,
    "hole": 0.1
   },
   {
    "name": "V_C_HS_CPU_T7_1",
-   "x": -45.3,
-   "y": 23.5701,
+   "x": -45.2799,
+   "y": 23.55,
    "net": "VDDS_DDR",
    "d": 0.3,
    "hole": 0.1
   },
   {
    "name": "V_C_HS_CPU_T7_2",
-   "x": -45.3,
-   "y": 22.7299,
+   "x": -46.1201,
+   "y": 23.55,
    "net": "GND",
    "d": 0.3,
    "hole": 0.1
   },
   {
    "name": "V_C_HS_CPU_T8_1",
-   "x": -45.6,
+   "x": -45.2,
    "y": 25.1701,
    "net": "VDDS_DDR",
    "d": 0.3,
@@ -7011,7 +7023,7 @@
   },
   {
    "name": "V_C_HS_CPU_T8_2",
-   "x": -45.6,
+   "x": -45.2,
    "y": 24.3299,
    "net": "GND",
    "d": 0.3,
@@ -7019,54 +7031,38 @@
   },
   {
    "name": "V_C_HS_CPU_T9_1",
-   "x": -41.6,
-   "y": 20.0701,
+   "x": -46.3799,
+   "y": 25.65,
    "net": "VDDS_DDR",
    "d": 0.3,
    "hole": 0.1
   },
   {
    "name": "V_C_HS_CPU_T9_2",
-   "x": -41.6,
-   "y": 19.2299,
+   "x": -47.2201,
+   "y": 25.65,
    "net": "GND",
    "d": 0.3,
    "hole": 0.1
   },
   {
    "name": "V_C_HS_CPU_T10_1",
-   "x": -46.3799,
-   "y": 25.65,
+   "x": -43.9799,
+   "y": 7.15,
    "net": "VDDS_DDR",
    "d": 0.3,
    "hole": 0.1
   },
   {
    "name": "V_C_HS_CPU_T10_2",
-   "x": -47.2201,
-   "y": 25.65,
+   "x": -44.8201,
+   "y": 7.15,
    "net": "GND",
    "d": 0.3,
    "hole": 0.1
   },
   {
    "name": "V_C_HS_CPU_T11_1",
-   "x": -46.3799,
-   "y": 26.45,
-   "net": "VDDS_DDR",
-   "d": 0.3,
-   "hole": 0.1
-  },
-  {
-   "name": "V_C_HS_CPU_T11_2",
-   "x": -47.2201,
-   "y": 26.45,
-   "net": "GND",
-   "d": 0.3,
-   "hole": 0.1
-  },
-  {
-   "name": "V_C_HS_CPU_T12_1",
    "x": -49.1,
    "y": 25.8299,
    "net": "VDDS_DDR",
@@ -7074,7 +7070,7 @@
    "hole": 0.1
   },
   {
-   "name": "V_C_HS_CPU_T12_2",
+   "name": "V_C_HS_CPU_T11_2",
    "x": -49.1,
    "y": 26.6701,
    "net": "GND",
@@ -7082,8 +7078,24 @@
    "hole": 0.1
   },
   {
+   "name": "V_C_HS_CPU_T12_1",
+   "x": -47.2201,
+   "y": 26.25,
+   "net": "VDDS_DDR",
+   "d": 0.3,
+   "hole": 0.1
+  },
+  {
+   "name": "V_C_HS_CPU_T12_2",
+   "x": -46.3799,
+   "y": 26.25,
+   "net": "GND",
+   "d": 0.3,
+   "hole": 0.1
+  },
+  {
    "name": "V_C_HS_CPU_T13_1",
-   "x": -45.6,
+   "x": -45.2,
    "y": 26.7701,
    "net": "VDDS_DDR",
    "d": 0.3,
@@ -7091,7 +7103,7 @@
   },
   {
    "name": "V_C_HS_CPU_T13_2",
-   "x": -45.6,
+   "x": -45.2,
    "y": 25.9299,
    "net": "GND",
    "d": 0.3,
@@ -7131,38 +7143,6 @@
   },
   {
    "name": "V_C_HS_CPU_T16_1",
-   "x": -43.3,
-   "y": 7.5701,
-   "net": "VDDS_DDR",
-   "d": 0.3,
-   "hole": 0.1
-  },
-  {
-   "name": "V_C_HS_CPU_T16_2",
-   "x": -43.3,
-   "y": 6.7299,
-   "net": "GND",
-   "d": 0.3,
-   "hole": 0.1
-  },
-  {
-   "name": "V_C_HS_CPU_T17_1",
-   "x": -46.3799,
-   "y": 27.25,
-   "net": "VDDS_DDR",
-   "d": 0.3,
-   "hole": 0.1
-  },
-  {
-   "name": "V_C_HS_CPU_T17_2",
-   "x": -47.2201,
-   "y": 27.25,
-   "net": "GND",
-   "d": 0.3,
-   "hole": 0.1
-  },
-  {
-   "name": "V_C_HS_CPU_T18_1",
    "x": -52.1,
    "y": 6.4701,
    "net": "VDDS_DDR",
@@ -7170,7 +7150,7 @@
    "hole": 0.1
   },
   {
-   "name": "V_C_HS_CPU_T18_2",
+   "name": "V_C_HS_CPU_T16_2",
    "x": -52.1,
    "y": 5.6299,
    "net": "GND",
@@ -7178,23 +7158,7 @@
    "hole": 0.1
   },
   {
-   "name": "V_C_HS_CPU_T19_1",
-   "x": -40.8,
-   "y": 9.7701,
-   "net": "VDDS_DDR",
-   "d": 0.3,
-   "hole": 0.1
-  },
-  {
-   "name": "V_C_HS_CPU_T19_2",
-   "x": -40.8,
-   "y": 8.9299,
-   "net": "GND",
-   "d": 0.3,
-   "hole": 0.1
-  },
-  {
-   "name": "V_C_HS_CPU_T20_1",
+   "name": "V_C_HS_CPU_T17_1",
    "x": -49.9799,
    "y": 27.65,
    "net": "VDDS_DDR",
@@ -7202,9 +7166,57 @@
    "hole": 0.1
   },
   {
-   "name": "V_C_HS_CPU_T20_2",
+   "name": "V_C_HS_CPU_T17_2",
    "x": -50.8201,
    "y": 27.65,
+   "net": "GND",
+   "d": 0.3,
+   "hole": 0.1
+  },
+  {
+   "name": "V_C_HS_CPU_T18_1",
+   "x": -48.3799,
+   "y": 27.95,
+   "net": "VDDS_DDR",
+   "d": 0.3,
+   "hole": 0.1
+  },
+  {
+   "name": "V_C_HS_CPU_T18_2",
+   "x": -49.2201,
+   "y": 27.95,
+   "net": "GND",
+   "d": 0.3,
+   "hole": 0.1
+  },
+  {
+   "name": "V_C_HS_CPU_T19_1",
+   "x": -53.8799,
+   "y": 6.55,
+   "net": "VDDS_DDR",
+   "d": 0.3,
+   "hole": 0.1
+  },
+  {
+   "name": "V_C_HS_CPU_T19_2",
+   "x": -54.7201,
+   "y": 6.55,
+   "net": "GND",
+   "d": 0.3,
+   "hole": 0.1
+  },
+  {
+   "name": "V_C_HS_CPU_T20_1",
+   "x": -41.3,
+   "y": 24.0299,
+   "net": "VDDS_DDR",
+   "d": 0.3,
+   "hole": 0.1
+  },
+  {
+   "name": "V_C_HS_CPU_T20_2",
+   "x": -41.3,
+   "y": 24.8701,
    "net": "GND",
    "d": 0.3,
    "hole": 0.1
@@ -7227,112 +7239,112 @@
   },
   {
    "name": "V_C_BULK_1V8_2_1",
-   "x": -36.9999,
-   "y": 16.1,
+   "x": -37.0499,
+   "y": 20.05,
    "net": "VDD_1V8",
    "d": 0.3,
    "hole": 0.1
   },
   {
    "name": "V_C_BULK_1V8_2_2",
-   "x": -36.9999,
-   "y": 16.6,
+   "x": -36.5499,
+   "y": 20.05,
    "net": "VDD_1V8",
    "d": 0.3,
    "hole": 0.1
   },
   {
    "name": "V_C_BULK_1V8_2_3",
-   "x": -38.3999,
-   "y": 16.1,
+   "x": -37.0499,
+   "y": 18.65,
    "net": "GND",
    "d": 0.3,
    "hole": 0.1
   },
   {
    "name": "V_C_BULK_1V8_2_4",
-   "x": -38.3999,
-   "y": 16.6,
+   "x": -36.5499,
+   "y": 18.65,
    "net": "GND",
    "d": 0.3,
    "hole": 0.1
   },
   {
    "name": "V_C_X_MPU_1_1",
-   "x": -39.1798,
-   "y": 14.45,
+   "x": -39.2999,
+   "y": 17.5701,
    "net": "VDD_MPU",
    "d": 0.3,
    "hole": 0.1
   },
   {
    "name": "V_C_X_MPU_1_2",
-   "x": -40.02,
-   "y": 14.45,
+   "x": -39.2999,
+   "y": 16.7299,
    "net": "GND",
    "d": 0.3,
    "hole": 0.1
   },
   {
    "name": "V_C_X_MPU_2_1",
-   "x": -37.1999,
-   "y": 18.1701,
+   "x": -38.2798,
+   "y": 15.95,
    "net": "VDD_MPU",
    "d": 0.3,
    "hole": 0.1
   },
   {
    "name": "V_C_X_MPU_2_2",
-   "x": -37.1999,
-   "y": 17.3299,
+   "x": -39.12,
+   "y": 15.95,
    "net": "GND",
    "d": 0.3,
    "hole": 0.1
   },
   {
    "name": "V_C_X_1V8_1_1",
-   "x": -37.4,
-   "y": 15.42,
+   "x": -39.2,
+   "y": 15.12,
    "net": "VDD_1V8",
    "d": 0.3,
    "hole": 0.1
   },
   {
    "name": "V_C_X_1V8_1_2",
-   "x": -37.4,
-   "y": 14.5798,
+   "x": -39.2,
+   "y": 14.2798,
    "net": "GND",
    "d": 0.3,
    "hole": 0.1
   },
   {
    "name": "V_C_X_1V8_2_1",
-   "x": -36.5,
-   "y": 15.42,
+   "x": -40.1,
+   "y": 14.37,
    "net": "VDD_1V8",
    "d": 0.3,
    "hole": 0.1
   },
   {
    "name": "V_C_X_1V8_2_2",
-   "x": -36.5,
-   "y": 14.5798,
+   "x": -40.1,
+   "y": 13.5298,
    "net": "GND",
    "d": 0.3,
    "hole": 0.1
   },
   {
    "name": "V_C_X_1V8_3_1",
-   "x": -41.53,
-   "y": 11.05,
+   "x": -41.5001,
+   "y": 11.1701,
    "net": "VDD_1V8",
    "d": 0.3,
    "hole": 0.1
   },
   {
    "name": "V_C_X_1V8_3_2",
-   "x": -42.3702,
-   "y": 11.05,
+   "x": -41.5001,
+   "y": 10.3299,
    "net": "GND",
    "d": 0.3,
    "hole": 0.1
@@ -7340,7 +7352,7 @@
   {
    "name": "V_C_X_3V3_1_1",
    "x": -40.7,
-   "y": 7.9202,
+   "y": 10.3202,
    "net": "VDD_3V3",
    "d": 0.3,
    "hole": 0.1
@@ -7348,23 +7360,39 @@
   {
    "name": "V_C_X_3V3_1_2",
    "x": -40.7,
-   "y": 7.08,
+   "y": 9.48,
    "net": "GND",
    "d": 0.3,
    "hole": 0.1
   },
   {
    "name": "V_C_X_3V3_2_1",
-   "x": -37.55,
-   "y": 13.7702,
+   "x": -40.7,
+   "y": 7.9202,
    "net": "VDD_3V3",
    "d": 0.3,
    "hole": 0.1
   },
   {
    "name": "V_C_X_3V3_2_2",
-   "x": -37.55,
-   "y": 12.93,
+   "x": -40.7,
+   "y": 7.08,
+   "net": "GND",
+   "d": 0.3,
+   "hole": 0.1
+  },
+  {
+   "name": "V_C_X_3V3_3_1",
+   "x": -37.25,
+   "y": 17.67,
+   "net": "VDD_3V3",
+   "d": 0.3,
+   "hole": 0.1
+  },
+  {
+   "name": "V_C_X_3V3_3_2",
+   "x": -37.25,
+   "y": 16.8298,
    "net": "GND",
    "d": 0.3,
    "hole": 0.1
@@ -7809,7 +7837,7 @@
    "y": -1.1499,
    "row": "outer",
    "col": 27,
-   "role": "LCD_D21"
+   "role": "SIG"
   },
   {
    "conn": "J1",
@@ -7863,7 +7891,7 @@
    "y": -1.1499,
    "row": "outer",
    "col": 33,
-   "role": "TOUCH_IRQ"
+   "role": "SIG"
   },
   {
    "conn": "J1",
@@ -7881,7 +7909,7 @@
    "y": -1.1499,
    "row": "outer",
    "col": 35,
-   "role": "KEY_A"
+   "role": "TOUCH_IRQ"
   },
   {
    "conn": "J1",
@@ -7917,7 +7945,7 @@
    "y": -1.1499,
    "row": "outer",
    "col": 39,
-   "role": "KEY_UP"
+   "role": "JOY_L_CLICK"
   },
   {
    "conn": "J1",
@@ -7953,7 +7981,7 @@
    "y": -1.1499,
    "row": "outer",
    "col": 43,
-   "role": "SIG"
+   "role": "LCD_D20"
   },
   {
    "conn": "J1",
@@ -8088,7 +8116,7 @@
    "y": 2.0499,
    "row": "inner",
    "col": 41,
-   "role": "LCD_RESET"
+   "role": "KEY_DOWN"
   },
   {
    "conn": "J1",
@@ -8106,7 +8134,7 @@
    "y": 2.0499,
    "row": "inner",
    "col": 39,
-   "role": "JOY_L_CLICK"
+   "role": "USB0_ID"
   },
   {
    "conn": "J1",
@@ -8115,7 +8143,7 @@
    "y": 2.0499,
    "row": "inner",
    "col": 38,
-   "role": "USB0_ID"
+   "role": "KEY_UP"
   },
   {
    "conn": "J1",
@@ -8124,7 +8152,7 @@
    "y": 2.0499,
    "row": "inner",
    "col": 37,
-   "role": "KEY_DOWN"
+   "role": "LCD_D21"
   },
   {
    "conn": "J1",
@@ -8142,7 +8170,7 @@
    "y": 2.0499,
    "row": "inner",
    "col": 35,
-   "role": "LCD_D19"
+   "role": "KEY_A"
   },
   {
    "conn": "J1",
@@ -8151,7 +8179,7 @@
    "y": 2.0499,
    "row": "inner",
    "col": 34,
-   "role": "LCD_D18"
+   "role": "LCD_D17"
   },
   {
    "conn": "J1",
@@ -8178,7 +8206,7 @@
    "y": 2.0499,
    "row": "inner",
    "col": 31,
-   "role": "LCD_D17"
+   "role": "LCD_D19"
   },
   {
    "conn": "J1",
@@ -8187,7 +8215,7 @@
    "y": 2.0499,
    "row": "inner",
    "col": 30,
-   "role": "LCD_D20"
+   "role": "LCD_D18"
   },
   {
    "conn": "J1",
@@ -8331,7 +8359,7 @@
    "y": 2.0499,
    "row": "inner",
    "col": 14,
-   "role": "LCD_D9"
+   "role": "LCD_D10"
   },
   {
    "conn": "J1",
@@ -8358,7 +8386,7 @@
    "y": 2.0499,
    "row": "inner",
    "col": 11,
-   "role": "LCD_D10"
+   "role": "LCD_D12"
   },
   {
    "conn": "J1",
@@ -8376,7 +8404,7 @@
    "y": 2.0499,
    "row": "inner",
    "col": 9,
-   "role": "LCD_D12"
+   "role": "LCD_D9"
   },
   {
    "conn": "J1",
@@ -8610,7 +8638,7 @@
    "y": 29.9501,
    "row": "inner",
    "col": 16,
-   "role": "SIG"
+   "role": "SD_DAT0"
   },
   {
    "conn": "J2",
@@ -8718,7 +8746,7 @@
    "y": 29.9501,
    "row": "inner",
    "col": 28,
-   "role": "KEY_SELECT"
+   "role": "UART0_TXD"
   },
   {
    "conn": "J2",
@@ -8736,7 +8764,7 @@
    "y": 29.9501,
    "row": "inner",
    "col": 30,
-   "role": "KEY_R"
+   "role": "KEY_SELECT"
   },
   {
    "conn": "J2",
@@ -8754,7 +8782,7 @@
    "y": 29.9501,
    "row": "inner",
    "col": 32,
-   "role": "SD_DAT1"
+   "role": "KEY_R"
   },
   {
    "conn": "J2",
@@ -8799,7 +8827,7 @@
    "y": 29.9501,
    "row": "inner",
    "col": 37,
-   "role": "TOUCH_SDA"
+   "role": "I2C0_SCL"
   },
   {
    "conn": "J2",
@@ -8808,7 +8836,7 @@
    "y": 29.9501,
    "row": "inner",
    "col": 38,
-   "role": "SD_DAT0"
+   "role": "TOUCH_SDA"
   },
   {
    "conn": "J2",
@@ -8826,7 +8854,7 @@
    "y": 29.9501,
    "row": "inner",
    "col": 40,
-   "role": "KEY_RIGHT"
+   "role": "I2C0_SDA"
   },
   {
    "conn": "J2",
@@ -8835,7 +8863,7 @@
    "y": 29.9501,
    "row": "inner",
    "col": 41,
-   "role": "I2C0_SDA"
+   "role": "SD_CLK"
   },
   {
    "conn": "J2",
@@ -8862,7 +8890,7 @@
    "y": 29.9501,
    "row": "inner",
    "col": 44,
-   "role": "NMIn"
+   "role": "KEY_RIGHT"
   },
   {
    "conn": "J2",
@@ -8871,7 +8899,7 @@
    "y": 29.9501,
    "row": "inner",
    "col": 45,
-   "role": "SD_CLK"
+   "role": "NMIn"
   },
   {
    "conn": "J2",
@@ -8880,7 +8908,7 @@
    "y": 29.9501,
    "row": "inner",
    "col": 46,
-   "role": "JOY_R_CLICK"
+   "role": "BACKLIGHT_PWM"
   },
   {
    "conn": "J2",
@@ -8898,7 +8926,7 @@
    "y": 29.9501,
    "row": "inner",
    "col": 48,
-   "role": "BACKLIGHT_PWM"
+   "role": "JOY_R_CLICK"
   },
   {
    "conn": "J2",
@@ -8907,7 +8935,7 @@
    "y": 29.9501,
    "row": "inner",
    "col": 49,
-   "role": "USB0_DRVVBUS"
+   "role": "SD_DAT3"
   },
   {
    "conn": "J2",
@@ -8925,7 +8953,7 @@
    "y": 33.1499,
    "row": "outer",
    "col": 48,
-   "role": "SD_DAT3"
+   "role": "SIG"
   },
   {
    "conn": "J2",
@@ -8961,7 +8989,7 @@
    "y": 33.1499,
    "row": "outer",
    "col": 44,
-   "role": "SD_CMD"
+   "role": "LCD_RESET"
   },
   {
    "conn": "J2",
@@ -8979,7 +9007,7 @@
    "y": 33.1499,
    "row": "outer",
    "col": 42,
-   "role": "SIG"
+   "role": "SD_CMD"
   },
   {
    "conn": "J2",
@@ -9006,7 +9034,7 @@
    "y": 33.1499,
    "row": "outer",
    "col": 39,
-   "role": "SIG"
+   "role": "PWRONRSTn"
   },
   {
    "conn": "J2",
@@ -9033,7 +9061,7 @@
    "y": 33.1499,
    "row": "outer",
    "col": 36,
-   "role": "I2C0_SCL"
+   "role": "SD_DAT1"
   },
   {
    "conn": "J2",
@@ -9051,7 +9079,7 @@
    "y": 33.1499,
    "row": "outer",
    "col": 34,
-   "role": "PWRONRSTn"
+   "role": "USB0_DRVVBUS"
   },
   {
    "conn": "J2",
@@ -9069,7 +9097,7 @@
    "y": 33.1499,
    "row": "outer",
    "col": 32,
-   "role": "UART0_TXD"
+   "role": "KEY_START"
   },
   {
    "conn": "J2",
@@ -9078,7 +9106,7 @@
    "y": 33.1499,
    "row": "outer",
    "col": 31,
-   "role": "KEY_START"
+   "role": "SIG"
   },
   {
    "conn": "J2",
