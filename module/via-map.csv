@@ -165,7 +165,6 @@ x_mm,y_mm,net,hole_mm,land_mm,solder_land,face,nominal_bore_to_land_boundary_mm,
 13.150024,4.28,VDDS_DDR,0.2,0.45,,,,off-pad
 13.195976,41.921235,GND_INTERNAL,0.2,0.45,,,,off-pad
 13.315,39.365,SYSBOOT14_SENSE,0.15,0.3,,,,off-pad
-13.39,34.58,SYSBOOT8_SENSE,0.15,0.3,,,,off-pad
 13.545,32.754999,DDR_D1,0.15,0.3,,,,off-pad
 13.599999,35.774999,DDR_VREF,0.15,0.3,,,,off-pad
 13.633644,45.013674,VDDS_DDR,0.2,0.45,,,,off-pad
@@ -194,7 +193,6 @@ x_mm,y_mm,net,hole_mm,land_mm,solder_land,face,nominal_bore_to_land_boundary_mm,
 15.569575,36.387526,VDDS_DDR,0.2,0.45,,,,off-pad
 15.589999,32.279999,VDDS_DDR,0.15,0.3,,,,off-pad
 15.687,6.031999,VDDS_DDR_CPU,0.2,0.45,,,,off-pad
-15.795,33.15,SYSBOOT8_SENSE,0.15,0.3,,,,off-pad
 16.079999,31.92,DDR_CSn0,0.2,0.45,,,,off-pad
 16.15989,38.489896,DDR_CKE,0.15,0.3,,,,off-pad
 16.319999,9.429999,SYSBOOT4_SENSE,0.15,0.3,,,,off-pad
