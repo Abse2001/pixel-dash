@@ -17,6 +17,15 @@ sites = [
 ]
 
 
+display = json.loads(Path(__file__).with_name("lcd-d17-launches.json").read_text())
+bends = {}
+for launch in display:
+    net, ref, pin = (launch[key] for key in ("net", "ref", "pin"))
+    points = launch["points"]
+    sites.append((net, ref, pin, points[-1], launch["width_mm"]))
+    bends[ref, pin] = points[1:-1]
+
+
 def pad_shape(item):
     width, height = item["size"]
     if item["shape"] == 0:
@@ -38,17 +47,17 @@ def check(actual, minimum, net, rule):
 # Include the other reservations in the obstacle set even before copper is installed.
 for net, ref, pin, xy, width in sites:
     pad = next(o for o in geometry if o.get("ref") == ref and o["pin"] == pin)
-    geometry.extend([
-        dict(kind="via", net=net, pos=xy, drill=.15, diam=.30),
-        dict(kind="track", net=net, layer=pad["layer"], start=pad["pos"], end=xy, width=width),
-    ])
+    geometry.append(dict(kind="via", net=net, pos=xy, drill=.15, diam=.30))
+    path = [pad["pos"], *bends.get((ref, pin), []), xy]
+    geometry.extend(dict(kind="track", net=net, layer=pad["layer"], start=a, end=b, width=width)
+                    for a, b in zip(path, path[1:]))
 
 for net, ref, pin, xy, width in sites:
     pad = next(o for o in geometry if o.get("ref") == ref and o["pin"] == pin)
     if pad["net"] != net:
         raise SystemExit(f"{ref}.{pin} no longer maps to {net}")
     site = Point(xy)
-    lead = LineString([pad["pos"], xy])
+    lead = LineString([pad["pos"], *bends.get((ref, pin), []), xy])
     for o in geometry:
         if o["kind"] == "via":
             dist = math.dist(xy, o["pos"])
