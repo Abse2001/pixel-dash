@@ -63,7 +63,7 @@ def dwell_after_crossing(wave, level, start):
     return end - start, "recrossing"
 
 
-def screen(board, timing, archive, out, ioctrl, dwell=False, launch_window=False, slew_screen=False, receiver_window=False, corner="typ", jlc_channel=False, receiver_vref=None):
+def screen(board, timing, archive, out, ioctrl, dwell=False, launch_window=False, slew_screen=False, receiver_window=False, corner="typ", jlc_channel=False, receiver_vref=None, line_impedances=None):
     _, vdd = model["FIXTURE_CORNERS"][corner]
     edges = model["fixture"](archive, board, with_reflection=True, corner=corner, ioctrl=ioctrl)
     clock_edges = edges if ioctrl & 31 == (ioctrl >> 5) & 31 else model["fixture"](
@@ -75,6 +75,8 @@ def screen(board, timing, archive, out, ioctrl, dwell=False, launch_window=False
         impedance = model["Z"]
         if jlc_channel:
             impedance = 99.26 / 2 if name in ("DDR_CK", "DDR_CKn") else 54.16
+        if line_impedances is not None:
+            impedance = line_impedances[name]
         return at_receiver(driver[up], cap, float(rows[name]["estimated_flight_ps"]), impedance)
 
     writer = csv.writer(out, lineterminator="\n")
