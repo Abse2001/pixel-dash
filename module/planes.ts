@@ -143,7 +143,7 @@ for (const [l] of LAYERS.entries()) { const own = owner[l], fillers = NETS.map((
     const at = new Map<number, number[]>(); mine.forEach((v, m) => LAYERS.forEach((_, l) => { const c = near(l, v); if (c >= 0) at.set(l * NN + c, [...(at.get(l * NN + c) ?? []), m]) }))
     while (st.length) { const u = st.pop()!, l = (u / NN) | 0, c = u % NN, i = c % NX, j = (c / NX) | 0; for (const m of at.get(u) ?? []) enter(m)
       for (let d = 0; d < 8; d += 2) { const ii = i + D8[d], jj = j + D8[d + 1]; if (ii < 0 || jj < 0 || ii >= NX || jj >= NY) continue; const c2 = jj * NX + ii; if (wide[l][c2] && !seen[l][c2]) { seen[l][c2] = 1; st.push(l * NN + c2) } } }
-    report.push(`feed width ${net.name}: ${hit.size}/${mine.length} vias reached from the connector pins through copper >= 0.2 mm wide`) } }
+    report.push(`feed width ${net.name}: ${hit.size}/${mine.length} vias reached from the connector pins through copper >= 0.2 mm wide` + (hit.size < mine.length ? ` (not: ${mine.map((v, m) => hit.has(m) ? '' : (v as any).name ?? '').filter(Boolean).slice(0, 14).join(' ')})` : '')) } }
 // ---------- polygons ----------
 function outlines(own: Int8Array, k: number) { // directed boundary edges with the region on the left, linked into loops
   const VX = NX + 1, next = new Map<number, number[]>(), add = (a: number, b: number) => { const l = next.get(a); if (l) l.push(b); else next.set(a, [b]) }
