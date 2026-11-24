@@ -9,5 +9,7 @@ Switched DDR output reaches 7/7 CPU DDR balls. Open: none
 All 50 timed track geometries reproduced on their assigned drilled copper islands within 0.001 mm.
 DDR trace projection outside the largest continuous L3 DCDC3 pour: 81.7977 mm².
 Of that projection, 31.1296 mm² has separately connected L3 DCDC3 copper; 50.6680 mm² has none. Via envelopes excluded.
+Inside the missing L3 projection: 28.6270 mm² occupied by other copper, 22.0410 mm² without copper.
+L3 occupancy within that projection (mm²): DDR_RASn=3.5605, DDR_CASn=3.5236, DDR_BA1=3.4877, DDR_A0=2.6228, DDR_A11=2.3501, DDR_A3=2.0617, DDR_A2=1.7893, DDR_CKE=1.2856, DDR_A6=1.2313, DDR_A7=1.0949, DDR_WEn=1.0924, DDR_A1=1.0830, DDR_ODT=0.9642, DDR_A10=0.5640, DDR_VREF_CA=0.5390, DDR_CSn0=0.4760, DDR_RESETn=0.3894, DDR_VREF=0.2423, DDR_A4=0.1801, SYSBOOT8_SENSE=0.0893
 C_DDR21 has two plated local returns to both ground planes, including CPU M12.
 Full-width ground reference losses outside own launches (mm²): {}

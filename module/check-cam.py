@@ -158,6 +158,24 @@ all_direct = union_all([poly for i,poly in enumerate(pieces[power_layer])
 missing_supply = projected.difference(all_direct).area
 print(f"DDR trace projection outside the largest continuous L3 DCDC3 pour: {outside_main:.4f} mm².")
 print(f"Of that projection, {outside_main-missing_supply:.4f} mm² has separately connected L3 DCDC3 copper; {missing_supply:.4f} mm² has none. Via envelopes excluded.")
+# Partition the failed projection on the exported film. Feeding an isolated
+# island cannot recover area already occupied by a different electrical net.
+missing_region = projected.difference(all_direct)
+occupied_by = collections.Counter()
+for index, polygon in enumerate(pieces[power_layer]):
+    node = root((power_layer, index))
+    if node == power_root or not missing_region.intersects(polygon):
+        continue
+    assigned = owners.get(node)
+    name = next(iter(assigned)) if assigned else "unassigned copper"
+    occupied_by[name] += missing_region.intersection(polygon).area
+occupied_area = sum(occupied_by.values())
+clear_area = missing_supply - occupied_area
+assert clear_area >= -1e-7, ("overlapping L3 regions", clear_area)
+print(f"Inside the missing L3 projection: {occupied_area:.4f} mm² occupied by other copper, "
+      f"{clear_area:.4f} mm² without copper.")
+print("L3 occupancy within that projection (mm²): " + ", ".join(
+    f"{name}={area:.4f}" for name, area in occupied_by.most_common() if area >= .00005))
 planes={}
 for l in ("In1.Cu","In4.Cu"):
     plane=max(enumerate(pieces[l]),key=lambda a:a[1].area)
