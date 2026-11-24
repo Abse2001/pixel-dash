@@ -26,10 +26,10 @@ x_mm,y_mm,net,hole_mm,land_mm,solder_land,face,nominal_bore_to_land_boundary_mm,
 4.450107,34.750004,VDDS_DDR,0.15,0.3,,,,off-pad
 4.570116,43.75,GND_INTERNAL,0.2,0.45,C_DDR3.pin2,B.Cu,0.15,centered
 4.765999,28.868999,DDR_A9,0.15,0.3,,,,off-pad
-4.800107,36.049949,DDR_VREF,0.15,0.3,U_DDR.H1,F.Cu,0.12199,centered
 4.800107,36.049949,DDR_VREF,0.15,0.3,C_H1_VREF.pin1,B.Cu,0.087,centered
-4.800107,40.049942,VDDS_DDR,0.15,0.3,C_DDR6.pin1,B.Cu,0.175,centered
+4.800107,36.049949,DDR_VREF,0.15,0.3,U_DDR.H1,F.Cu,0.12199,centered
 4.800107,40.049942,VDDS_DDR,0.15,0.3,U_DDR.N1,F.Cu,0.12199,centered
+4.800107,40.049942,VDDS_DDR,0.15,0.3,C_DDR6.pin1,B.Cu,0.175,centered
 4.942108,35.519993,GND_INTERNAL,0.15,0.3,U_DDR.G1,F.Cu,-0.18297,annulus only
 4.942108,35.519993,GND_INTERNAL,0.15,0.3,C_H1_VREF.pin2,B.Cu,0.087,centered
 5.199953,37.929896,VDDS_DDR,0.15,0.3,,,,off-pad
@@ -307,6 +307,7 @@ x_mm,y_mm,net,hole_mm,land_mm,solder_land,face,nominal_bore_to_land_boundary_mm,
 24.883343,40.64383,GND_INTERNAL,0.2,0.45,,,,off-pad
 24.94995,19.90001,GND_INTERNAL,0.2,0.45,C_SRAM_CORE_IN.pin2,F.Cu,0.3,centered
 24.949999,38.470116,GND_INTERNAL,0.2,0.45,,,,off-pad
+24.960058,29.530058,VDDS_DDR_CPU,0.2,0.45,,,,off-pad
 24.963227,24.223714,GND_INTERNAL,0.2,0.45,,,,off-pad
 25.149999,4.449999,THROUGH_Y,0.15,0.3,,,,off-pad
 25.222182,5.404998,GND_INTERNAL,0.2,0.45,,,,off-pad
@@ -326,7 +327,6 @@ x_mm,y_mm,net,hole_mm,land_mm,solder_land,face,nominal_bore_to_land_boundary_mm,
 26.434173,25.596216,VDDS_DDR_CPU,0.2,0.45,,,,off-pad
 26.50005,20.29991,GND_INTERNAL,0.2,0.45,C_SRAM_MPU_IN.pin2,F.Cu,0.3,centered
 26.549999,2.849999,JOY_L_CLICK,0.15,0.3,,,,off-pad
-26.550058,30.424903,VDDS_DDR_CPU,0.2,0.45,,,,off-pad
 26.579884,29.7,GND_INTERNAL,0.2,0.45,,,,off-pad
 26.603054,32.053154,GND_INTERNAL,0.2,0.45,,,,off-pad
 26.603054,32.853,GND_INTERNAL,0.2,0.45,,,,off-pad
