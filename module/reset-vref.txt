@@ -10,16 +10,18 @@ bit  target  CPU ball  contact  pull-to-CPU  CPU-to-carrier  pull-to-carrier  pu
 8 0 U1.U1 38 True True True True
 9 0 U1.U2 39 False False True True
 10 0 U1.U3 40 False False True True
-11 0 U1.U4 41 False False True True
+11 0 U1.U4 41 True True True True
 12 0 U1.V2 42 True True True True
 13 0 U1.V3 43 True True True True
 14 1 U1.V4 44 True True True True
 15 0 U1.T5 45 True True True True
-Drilled strap mask 0xf111 (7/16). SYSBOOT[4:0] codes consistent with connected pulls: 0x11, 0x13, 0x15, 0x17, 0x19, 0x1b, 0x1d, 0x1f
+Drilled strap mask 0xf911 (8/16). SYSBOOT[4:0] codes consistent with connected pulls: 0x11, 0x13, 0x15, 0x17, 0x19, 0x1b, 0x1d, 0x1f
 Fitted word 0x4017. VDDSHV6 N5/P5 to DCDC4: True True
 PGOOD to PWRONRSTn: True
 DCDC4 both switch pins reach the separate inductor terminals.
 DCDC4 reaches both output capacitors and the three carrier supply contacts; both bypass returns reach ground.
+SYSBOOT11 pull to CPU and carrier connected
+SYSBOOT11 low-side return connected
 SYSBOOT14 pull to CPU and carrier connected
 SYSBOOT14 high-side supply connected
 PMIC interrupt and pull-up to CPU T14 connected

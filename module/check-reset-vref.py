@@ -62,6 +62,8 @@ assert connected("U_PMIC.DCDC4","C_PMIC_IO_A.pin1","C_PMIC_IO_B.pin1","J_CARRIER
 assert connected("C_PMIC_IO_A.pin2","C_PMIC_IO_B.pin2","U_PMIC.EP")
 print("DCDC4 reaches both output capacitors and the three carrier supply contacts; both bypass returns reach ground.")
 boot_paths = {
+    "SYSBOOT11 pull to CPU and carrier": ["U1.U4", "R_SYSBOOT11.pin2", "J_CARRIER.41"],
+    "SYSBOOT11 low-side return": ["R_SYSBOOT11.pin1", "U_PMIC.EP"],
     "SYSBOOT14 pull to CPU and carrier": ["U1.V4", "R_SYSBOOT14.pin2", "J_CARRIER.44"],
     "SYSBOOT14 high-side supply": ["R_SYSBOOT14.pin1", "U_PMIC.DCDC4"],
     "PMIC interrupt and pull-up to CPU T14": ["U_PMIC.nINT", "R_PMIC_IRQ.pin1", "U1.T14"],

@@ -398,6 +398,9 @@ for x, y, width, height in [(17.595, 41.715, .40, .43), (4.625, 33.58, .30, .36)
                (x+width/2, y+height/2), (x-width/2, y+height/2)]
     zone(k.In2_Cu, "VDDS_DDR", corners, priority=2, clearance=.115)
 
+for outline in json.loads((here/"u4-switched-ddr-pour.json").read_text()):
+    zone(k.B_Cu, "VDDS_DDR_CPU", outline, clearance=.158)
+
 board_path=here/"pixel-dash-module.kicad_pcb"
 k.SaveBoard(str(board_path), board)
 # Foil and pressed dielectric thicknesses from JLC06161H-1080, in mm.
