@@ -39,28 +39,37 @@ def inspect(name, row):
         a, b = node(t["layer"], t["start"]), node(t["layer"], t["end"])
         connect(a, b, math.dist(t["start"], t["end"]))
         lines[t["layer"]].append(LineString([t["start"], t["end"]]))
-    for v in (o for o in parts if o["kind"] == "via"):
+    vias = [o for o in parts if o["kind"] == "via"]
+    for v in vias:
         contacts = [key for group in nodes.values() for key in group
                     if math.dist(key[1:], v["pos"]) <= tolerance]
         if len(contacts) == 2:
             connect(*contacts, 0.)
         else:
-            assert len(contacts) == 1 and any(math.dist(p["pos"], v["pos"]) <= min(p["size"])/2
-                                              for p in pads), (name, "unexpected barrel contacts", contacts)
+            pad, = [p for p in pads if math.dist(p["pos"], v["pos"]) <= tolerance]
+            assert len(contacts) == 1 and contacts[0][0] != pad["layer"], (name, "barrel contacts", contacts)
+            connect(contacts[0], node(pad["layer"], v["pos"]), 0.)
 
     ends = [key for key, links in neighbors.items() if len(links) == 1]
     assert len(ends) == 2 and all(len(n) <= 2 for n in neighbors.values()), (name, "branch", ends)
-    assert all(sum(math.dist(end[1:], p["pos"]) <= min(p["size"])/2 for end in ends) == 1
-               for p in pads), (name, "endpoints outside assigned balls", ends)
-    visited, location, planar = set(), ends[0], 0.
+    pin = {p["ref"]: p for p in pads}
+    def terminal(p):
+        end, = [end for end in ends if end[0] == p["layer"]
+                and math.dist(end[1:], p["pos"]) <= min(p["size"])/2]
+        return end
+
+    visited, location, planar = set(), terminal(pin["U1"]), 0.
+    layers = [location[0]]
     while location not in visited:
         visited.add(location)
         steps = [(q, length) for q, length in neighbors[location] if q not in visited]
         if not steps:
             break
         (location, length), = steps
+        if location[0] != layers[-1]:
+            layers.append(location[0])
         planar += length
-    assert visited == set(neighbors) and location == ends[1], (name, "detached copper")
+    assert visited == set(neighbors) and location == terminal(pin["U_DDR"]), (name, "detached copper")
     assert abs(planar - float(row["length_mm"])) < .000006, (name, planar, row["length_mm"])
 
     for layer, layer_lines in lines.items():
@@ -76,8 +85,18 @@ def inspect(name, row):
                     for line in (first, second))
                 assert common_end, (name, "same-net crossing or overlap", layer, intersection.wkt)
 
+    names = {"F.Cu": "L1", "In2.Cu": "L3", "In3.Cu": "L4", "B.Cu": "L6"}
+    contacts = sorted("/".join(sorted((a, b))) for a, b in zip(layers, layers[1:]))
+    reported = sorted("/".join(sorted(span.split("/"))) for span in row["via_contacts"].split(";") if span)
+    assert len(vias) == len(contacts) and contacts == reported, (name, contacts, reported)
+    return name, pin["U1"]["pin"], pin["U_DDR"]["pin"], " > ".join(names[l] for l in layers), len(vias)
+
 assert len(timing) == 50
-for signal, result in timing.items():
-    inspect(signal, result)
-print("All 50 centerlines are single end-to-end paths. Each matches its reported planar length.")
+rows = [inspect(signal, result) for signal, result in timing.items()]
+if len(sys.argv) == 4:
+    with Path(sys.argv[3]).open("w", newline="") as stream:
+        writer = csv.writer(stream, lineterminator="\n")
+        writer.writerow(("net", "AM3354_ball", "DDR3L_ball", "CPU_to_DRAM_layer_path", "through_vias"))
+        writer.writerows(rows)
+print("All 50 centerlines are single end-to-end paths. Each matches its reported planar length and barrel contacts.")
 print("No centerline branch, detached loop, same-layer self-crossing or collinear overlap.")
