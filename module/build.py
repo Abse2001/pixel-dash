@@ -156,7 +156,7 @@ for ref,(s,c) in parts.items():
         dx += .95
         dy -= .15
     if ref == "C_DDR30":
-        dx += .075
+        dx += .17
         dy += .075
     if ref == "R_VREF_LOW":
         dx += 1.37
@@ -387,7 +387,7 @@ for name, file in (("VDDS_DDR","ddr-plane-feeds.json"), ("VDDS_DDR_CPU","cpu-ddr
             add_segment(start, end, layer, rail, feed.get("width", .32))
         add_barrel([*feed["end"], feed.get("drill", .20), feed.get("diam", .45)], rail)
 # A wide trunk carries the post-inductor DCDC3 output to the DDR area.
-zone(k.In2_Cu, "VDDS_DDR", [(6,3),(22,3),(22,18),(36.6,18),(36.6,45.6),(.4,45.6),(.4,18),(6,18)])
+zone(k.In2_Cu, "VDDS_DDR", [(6,3),(25,3),(25,11),(22,13),(22,18),(36.6,18),(36.6,45.6),(.4,45.6),(.4,18),(6,18)])
 zone(k.In3_Cu, "VDDS_DDR_CPU", [(13,3.5),(19,3.5),(26.0,20.8),(36.5,20.8),(36.5,45.6),(19.5,45.6),(19.5,22.2),(13,9)])
 zone(k.In3_Cu, "VDD_MPU", json.loads((here/"mpu-plane.json").read_text()), priority=1)
 for layer in (k.In1_Cu,k.In4_Cu):zone(layer)
