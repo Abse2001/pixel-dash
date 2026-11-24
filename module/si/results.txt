@@ -1,0 +1,37 @@
+ADDR/CTRL, 42.3 mm, DDR3-800 (2.5 ns per bit), rise 250 ps
+ Z0  Rs  Cload | valid after | high stays >= | low stays <= | overshoot | undershoot | verdict
+ 50  25  3.0pF |    230 ps | 0.813 V (need 0.765) | 0.537 V (need 0.585) | 0.482 V | 0.482 V | MARGINAL
+ 50  25  4.5pF |    277 ps | 0.811 V (need 0.765) | 0.539 V (need 0.585) | 0.447 V | 0.447 V | MARGINAL
+ 50  34  3.0pF |    247 ps | 0.813 V (need 0.765) | 0.537 V (need 0.585) | 0.257 V | 0.257 V | OK
+ 50  34  4.5pF |    295 ps | 0.812 V (need 0.765) | 0.538 V (need 0.585) | 0.219 V | 0.219 V | OK
+ 50  40  3.0pF |    258 ps | 0.812 V (need 0.765) | 0.538 V (need 0.585) | 0.139 V | 0.139 V | OK
+ 50  40  4.5pF |    311 ps | 0.812 V (need 0.765) | 0.538 V (need 0.585) | 0.103 V | 0.103 V | OK
+ 50  48  3.0pF |    275 ps | 0.813 V (need 0.765) | 0.537 V (need 0.585) | 0.013 V | 0.013 V | OK
+ 50  48  4.5pF |    336 ps | 0.812 V (need 0.765) | 0.538 V (need 0.585) | 0.002 V | 0.002 V | OK
+ 50  60  3.0pF |    303 ps | 0.811 V (need 0.765) | 0.539 V (need 0.585) | 0.000 V | 0.000 V | OK
+ 50  60  4.5pF |    379 ps | 0.811 V (need 0.765) | 0.539 V (need 0.585) | 0.000 V | 0.000 V | OK
+ 60  25  3.0pF |    243 ps | 0.812 V (need 0.765) | 0.538 V (need 0.585) | 0.621 V | 0.621 V | MARGINAL
+ 60  25  4.5pF |    299 ps | 0.811 V (need 0.765) | 0.539 V (need 0.585) | 0.537 V | 0.537 V | MARGINAL
+ 60  34  3.0pF |    255 ps | 0.811 V (need 0.765) | 0.539 V (need 0.585) | 0.382 V | 0.382 V | OK
+ 60  34  4.5pF |    310 ps | 0.813 V (need 0.765) | 0.537 V (need 0.585) | 0.321 V | 0.321 V | OK
+ 60  40  3.0pF |    264 ps | 0.810 V (need 0.765) | 0.540 V (need 0.585) | 0.260 V | 0.260 V | OK
+ 60  40  4.5pF |    322 ps | 0.810 V (need 0.765) | 0.540 V (need 0.585) | 0.205 V | 0.205 V | OK
+ 60  48  3.0pF |    279 ps | 0.813 V (need 0.765) | 0.537 V (need 0.585) | 0.127 V | 0.127 V | OK
+ 60  48  4.5pF |    344 ps | 0.812 V (need 0.765) | 0.538 V (need 0.585) | 0.082 V | 0.082 V | OK
+ 60  60  3.0pF |    304 ps | 0.812 V (need 0.765) | 0.538 V (need 0.585) | 0.000 V | 0.000 V | OK
+ 60  60  4.5pF |    382 ps | 0.812 V (need 0.765) | 0.538 V (need 0.585) | 0.000 V | 0.000 V | OK
+ 75  25  3.0pF |    274 ps | 0.811 V (need 0.765) | 0.539 V (need 0.585) | 0.766 V | 0.766 V | MARGINAL
+ 75  25  4.5pF |    329 ps | 0.810 V (need 0.765) | 0.540 V (need 0.585) | 0.628 V | 0.628 V | MARGINAL
+ 75  34  3.0pF |    275 ps | 0.812 V (need 0.765) | 0.538 V (need 0.585) | 0.522 V | 0.522 V | MARGINAL
+ 75  34  4.5pF |    333 ps | 0.811 V (need 0.765) | 0.539 V (need 0.585) | 0.426 V | 0.426 V | MARGINAL
+ 75  40  3.0pF |    280 ps | 0.813 V (need 0.765) | 0.537 V (need 0.585) | 0.399 V | 0.399 V | OK
+ 75  40  4.5pF |    343 ps | 0.810 V (need 0.765) | 0.540 V (need 0.585) | 0.316 V | 0.316 V | OK
+ 75  48  3.0pF |    290 ps | 0.811 V (need 0.765) | 0.539 V (need 0.585) | 0.264 V | 0.264 V | OK
+ 75  48  4.5pF |    361 ps | 0.811 V (need 0.765) | 0.539 V (need 0.585) | 0.193 V | 0.193 V | OK
+ 75  60  3.0pF |    311 ps | 0.812 V (need 0.765) | 0.538 V (need 0.585) | 0.103 V | 0.103 V | OK
+ 75  60  4.5pF |    394 ps | 0.810 V (need 0.765) | 0.540 V (need 0.585) | 0.057 V | 0.057 V | OK
+CK (each leg against its 60 ohm odd-mode line), 400 MHz
+ Rs 25: valid after 195 ps, high >= 0.810 V, low <= 0.540 V, overshoot 0.644 V, undershoot 0.644 V
+ Rs 34: valid after 206 ps, high >= 0.810 V, low <= 0.540 V, overshoot 0.407 V, undershoot 0.407 V
+ Rs 40: valid after 215 ps, high >= 0.814 V, low <= 0.536 V, overshoot 0.284 V, undershoot 0.284 V
+ Rs 48: valid after 227 ps, high >= 0.810 V, low <= 0.540 V, overshoot 0.147 V, undershoot 0.147 V

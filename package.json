@@ -20,5 +20,8 @@
     "minicssgrid": "0.0.9",
     "react": "^19.0.0",
     "spicey": "0.0.14"
+  },
+  "devDependencies": {
+    "circuit-json-to-gerber": "0.0.125"
   }
 }
