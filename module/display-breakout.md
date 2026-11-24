@@ -1,0 +1,9 @@
+# Display breakout reservations
+
+Coordinates are millimetres in the KiCad board frame. The pixel clock connects CPU V5 to carrier contact 55. Moving C_DDR27 west 0.140 mm and north 0.020 mm makes room for a 0.104 mm front-copper escape from (24.600058, 39.650088) to (24.940058, 39.830088), with a 0.150 mm drill and 0.300 mm through land. The local switched DDR feed and ground return follow the capacitor.
+
+A separate export with that launch installed retained all 50 DDR links, 7 switched CPU supply lands, 18 DRAM supply lands, 183 ground lands and full-width ground coverage outside the launch. Its far end was dangling. The saved board reserves the launch by placement and contains no dangling clock stub. J_CARRIER.55 still needs a continuously referenced connection. An experimental seven-via path conflicts with LCD_RESET, SYSBOOT8, SYSBOOT11 and SYSBOOT13. LCD_D21 remains occupied on its accepted route.
+
+The single-ended SYSBOOT2 study reached the carrier with three obstructed barrel sites. Two can be cleared in a geometric screen by adjusting the MMC0 data routing. The CPU-side site still conflicts with the right-shoulder trace. Holding that trace fixed eliminated the tested through-barrel path. SYSBOOT9 also lacked a connected corridor in this screen.
+
+For USB, moving the SYSBOOT12 barrel from (27.830, 2.750) to (28.078, 2.535) and jogging JOY_L_CLICK permits paired connector-side launches around (27.220, 2.820) and (27.650, 2.775). A grid screen of 0.115 mm conductors, 0.130 mm edge gap and paired barrel transitions found separate connector-side and CPU-side regions on all four signal layers. Even on bottom copper the nearest sampled reachable midlines were 29.539 mm apart. The contact-bank move alone is insufficient. These USB and strap trials are excluded from the saved copper.
