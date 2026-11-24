@@ -155,6 +155,9 @@ for ref,(s,c) in parts.items():
     if ref == "L_PMIC_IO":
         dx += .95
         dy -= .15
+    if ref == "R_SYSBOOT2":
+        dx += .035
+        dy -= .120
     if ref == "C_DDR27":
         dx += -0.1400
         dy += 0.0200

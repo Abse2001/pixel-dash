@@ -11,6 +11,7 @@ geometry = json.loads(Path(sys.argv[1]).read_text())
 # Site XY, drill 0.150 and land 0.300 mm. Width is the pad-to-barrel trace width.
 sites = [
     ("LCD_PCLK", "U1", "V5", (24.940058, 39.830088), .104),
+    ("LCD_PCLK", "J_CARRIER", "55", (28.350, 7.100), .104),
     ("THROUGH_USB_DP_A", "J_CARRIER", "24", (27.220, 2.820), .115),
     ("THROUGH_USB_DM_A", "J_CARRIER", "25", (27.650, 2.775), .115),
 ]
