@@ -15,7 +15,7 @@ bit  target  CPU ball  contact  pull-to-CPU  CPU-to-carrier  pull-to-carrier  pu
 13 0 U1.V3 43 False False True True
 14 1 U1.V4 44 False False True True
 15 0 U1.T5 45 False False True True
-Fitted word 0x4017. VDDSHV6 N5/P5 to DCDC4: False False
+Fitted word 0x4017. VDDSHV6 N5/P5 to DCDC4: True True
 PGOOD to PWRONRSTn: True
 DCDC4 both switch pins reach the separate inductor terminals.
 DCDC4 reaches both output capacitors and the three carrier supply contacts; both bypass returns reach ground.
@@ -45,6 +45,7 @@ TOUCH_SDA end-to-end connected
 TOUCH_SCL end-to-end connected
 CPU external RTC LDO selection and RTC IO supply on DCDC6 connected
 CPU N15 IO supply to sequenced 3.3 V connected
+Boot IO supply and P-row distribution to DCDC4 connected
 AM3354 J3 calibration to 49.9 ohm resistor connected
 AM3354 calibration resistor return to module ground connected
 MPU buck output and feedback to seven CPU supply balls connected

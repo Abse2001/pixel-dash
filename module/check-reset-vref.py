@@ -81,6 +81,7 @@ boot_paths = {
     "TOUCH_SCL end-to-end": ["J_CARRIER.63", "U1.J15"],
     "CPU external RTC LDO selection and RTC IO supply on DCDC6": ["U_PMIC.FB6","L_PMIC_RTC_IO.pin2","U1.B4","U1.D7"],
     "CPU N15 IO supply to sequenced 3.3 V": ["U_PMIC.DCDC4","U1.N15"],
+    "Boot IO supply and P-row distribution to DCDC4": ["U_PMIC.DCDC4", *(f"U1.{ball}" for ball in ("N5","P5","P6","P7","P8","P10","P11","P12","P13"))],
     "AM3354 J3 calibration to 49.9 ohm resistor": ["U1.J3","R_VTP.pin1"],
     "AM3354 calibration resistor return to module ground": ["R_VTP.pin2","U_PMIC.EP"],
     "MPU buck output and feedback to seven CPU supply balls": ["U_PMIC.FB2","L_PMIC_MPU.pin2","C_PMIC_MPU.pin1", *(f"U1.{pin}" for pin in ("F10","F11","F12","F13","G13","H13","J13"))],
