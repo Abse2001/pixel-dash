@@ -1,5 +1,5 @@
 section,width_mm,mesh_mm,line_Z_ohm,flight_ps_per_mm,screen_50_ohm_plus_minus_5
 outer,0.102,0.005,55.09,5.8707,FAIL
-inner_ideal_two_planes,0.102,0.005,72.295,7.0566,FAIL
+inner_ideal_two_planes,0.102,0.005,47.005,7.0959,PASS
 outer,0.102,0.003,54.987,5.8669,PASS
-inner_ideal_two_planes,0.102,0.003,72.564,7.0571,FAIL
+inner_ideal_two_planes,0.102,0.003,49.542,7.0979,PASS

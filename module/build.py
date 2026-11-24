@@ -379,15 +379,18 @@ for layer in (k.In1_Cu,k.In4_Cu):zone(layer)
 
 board_path=here/"pixel-dash-module.kicad_pcb"
 k.SaveBoard(str(board_path), board)
-# Foil and pressed dielectric thicknesses from JLC06161H-1080, in mm.
+# Foil and pressed dielectric thicknesses from JLC06161H-1080C, in mm.
 foils=(.035,.0152,.0152,.0152,.0152,.035)
-dielectrics=(.0764,.55,.2104,.55,.0764)
+dielectrics=(.0764,.075,1.1208,.075,.0764)
 stack=[]
 for i,foil in enumerate(foils):
     label=("F.Cu","In1.Cu","In2.Cu","In3.Cu","In4.Cu","B.Cu")[i]
     stack.append(f'(layer "{label}" (type "copper") (thickness {foil}))')
     if i<len(dielectrics):
         kind="core" if i in (1,3) else "prepreg"
+        if i == 2:
+            stack.append('(layer "dielectric 3" (type "prepreg") (thickness 0.2104) (material "FR4") addsublayer (type "core") (thickness 0.7) (material "FR4") addsublayer (type "prepreg") (thickness 0.2104) (material "FR4"))')
+            continue
         stack.append(f'(layer "dielectric {i+1}" (type "{kind}") (thickness {dielectrics[i]}) (material "FR4"))')
 board_path.write_text(board_path.read_text().replace("(setup\n", "(setup\n\t\t(stackup "+"\n".join(stack)+")\n",1))
 print(right-left,high-low,len(parts)+1,len(routed),sorted(routed))

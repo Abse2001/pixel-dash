@@ -17,9 +17,9 @@ for name,ends in pads.items():
     tracks=[o for o in objs if o["kind"]=="track" and o["net"]==name]
     layers=collections.defaultdict(list)
     for o in tracks:layers[o["layer"]].append(LineString([o["start"],o["end"]]))
-    # Copper center depths from JLC06161H-1080.
+    # Copper center depths from JLC06161H-1080C.
     depth=[0,.0175+.0764+.0076]
-    for d in (.55,.2104,.55):depth.append(depth[-1]+.0152+d)
+    for d in (.075,2*.2104+.700,.075):depth.append(depth[-1]+.0152+d)
     depth.append(depth[-1]+.0076+.0764+.0175)
     z=dict(zip(("F.Cu","In1.Cu","In2.Cu","In3.Cu","In4.Cu","B.Cu"),depth))
     spans=[];barrel=0
@@ -31,7 +31,7 @@ for name,ends in pads.items():
     length=sum(g.length for a in layers.values() for g in a)
     inner=sum(g.length for l,gs in layers.items() if l.startswith("In") for g in gs)
     data[name]=dict(layers=layers,len=length,barrel=barrel,spans=spans,
-                    nominal=(length-inner)*5.884+inner*6.671+barrel*6.600,
+                    nominal=(length-inner)*5.8669+inner*7.09785+barrel*6.600,
                     manhattan=sum(abs(x-y) for x,y in zip(*ends)),inner=inner)
 assert len(data)==50
 for n,r in data.items():
@@ -43,7 +43,7 @@ for n,r in data.items():
         for l,gs in r["layers"].items():
             env=union_all(data[mate]["layers"].get(l,[])).buffer(.42,quad_segs=48)
             near+=sum(g.intersection(env).length for g in gs)
-    t=r["nominal"];r["times"]=(t,t-near*(5.884-5.739),t-r["len"]*(5.884-5.739) if mate else t)
+    t=r["nominal"];r["times"]=(t,t-near*(5.8669-5.739),t-r["len"]*(5.8669-5.739) if mate else t)
 out=csv.writer(sys.stdout,lineterminator="\n")
 out.writerow(("net","length_mm","via_contacts","traversed_barrel_mm","inner_mm","flight_ps","signed_skew_ps","length_target_mm","length_excess_mm","TI_peer_or_pair_mismatch_mm","TI_limit_mm","model_limit_ps","model_excess_ps","screen"))
 def row(n,skew,lo,hi,mismatch=None,mm=None,ps=None):

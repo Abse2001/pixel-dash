@@ -1,4 +1,4 @@
-"""Estimate uniform outer and inner DDR line impedances on JLC06161H-1080."""
+"""Estimate uniform outer and inner DDR line impedances on the JLC06161H-1080C study build."""
 import csv
 import json
 import math
@@ -13,7 +13,7 @@ from scipy.sparse.linalg import spsolve
 def inner_capacitance(width, pitch, vacuum):
     # Both reference planes are ideal AC grounds. The second plane at L4
     # (at L3 for L4 traces) is an optimistic case, conditional on solid copper.
-    bottom, foil, top = .55, .0152, .2104
+    bottom, foil, top = .075, .0152, 2*.2104+.700
     height = bottom + foil + top
     x = np.arange(-round(1.5 / pitch), round(1.5 / pitch)+1) * pitch
     y = np.linspace(0., height, round(height / pitch)+1)
@@ -25,6 +25,7 @@ def inner_capacitance(width, pitch, vacuum):
     fixed[:,[0,-1]] = True
     potential = metal.astype(float)
     er = np.where(yy <= bottom, 4.6, 4.4)
+    er[(yy > bottom + foil + .2104) & (yy < bottom + foil + .2104 + .700)] = 4.6
     if vacuum:
         er.fill(1.)
     ex = 2 * er[:,1:] * er[:,:-1] / (er[:,1:] + er[:,:-1]) * dy/dx
