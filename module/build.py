@@ -108,8 +108,8 @@ def net(name):
         board.Add(nets[name])
     return nets[name]
 def netname(key): return labels.get(key,key)
-def zone(layer, rail=None, corners=None, priority=0):
-    z=k.ZONE(board);z.SetLayer(layer);z.SetNet(net(rail or netname(balls["SW_POWER","pin1"])));z.SetLocalClearance(mm(.13))
+def zone(layer, rail=None, corners=None, priority=0, clearance=.13):
+    z=k.ZONE(board);z.SetLayer(layer);z.SetNet(net(rail or netname(balls["SW_POWER","pin1"])));z.SetLocalClearance(mm(clearance))
     z.SetAssignedPriority(priority)
     z.SetMinThickness(mm(.102));z.SetPadConnection(k.ZONE_CONNECTION_FULL)
     boundary=z.Outline();boundary.NewOutline()
@@ -389,6 +389,14 @@ zone(k.In2_Cu, "VDDS_DDR", [(6,3),(22,3),(22,18),(36.6,18),(36.6,45.6),(.4,45.6)
 zone(k.In3_Cu, "VDDS_DDR_CPU", [(13,3.5),(19,3.5),(26.0,20.8),(36.5,20.8),(36.5,45.6),(19.5,45.6),(19.5,22.2),(13,9)])
 zone(k.In3_Cu, "VDD_MPU", json.loads((here/"mpu-plane.json").read_text()), priority=1)
 for layer in (k.In1_Cu,k.In4_Cu):zone(layer)
+
+# Switched DDR copper around the V4 escape, on the capacitor side of the board.
+zone(k.B_Cu, "VDDS_DDR_CPU", json.loads((here/"v4-switched-ddr-pour.json").read_text()), clearance=.158)
+# Two local portions of the direct supply plane retain copper beside CASn and BA1.
+for x, y, width, height in [(17.595, 41.715, .40, .43), (4.625, 33.58, .30, .36)]:
+    corners = [(x-width/2, y-height/2), (x+width/2, y-height/2),
+               (x+width/2, y+height/2), (x-width/2, y+height/2)]
+    zone(k.In2_Cu, "VDDS_DDR", corners, priority=2, clearance=.115)
 
 board_path=here/"pixel-dash-module.kicad_pcb"
 k.SaveBoard(str(board_path), board)
