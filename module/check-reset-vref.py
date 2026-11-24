@@ -37,6 +37,9 @@ assert word == 0x4017, hex(word)
 print(f"Fitted word 0x{word:04x}. VDDSHV6 N5/P5 to DCDC4:",
       connected("U1.N5", "U_PMIC.DCDC4"), connected("U1.P5", "U_PMIC.DCDC4"))
 print("PGOOD to PWRONRSTn:", connected("U_PMIC.PGOOD", "U1.B15"))
+assert pin_net["U1.D6"][0] == "VDD_RTC_CORE_1V0"
+assert pin_net["U1.B4"][0] == pin_net["U1.D7"][0] == "VDDS_RTC_1V8"
+assert not connected("U1.B4","U1.D6")
 if args.control_status is not None:
     raw = args.control_status
     if not 0 <= raw <= 0xffffffff:
@@ -76,6 +79,8 @@ boot_paths = {
     "DCDC4 output to ten CPU IO supply balls": ["U_PMIC.DCDC4", *(f"U1.{ball}" for ball in ("E10","E11","E12","E13","F14","G14","H14","J14","K14","L14"))],
     "TOUCH_SDA end-to-end": ["J_CARRIER.62", "U1.B16"],
     "TOUCH_SCL end-to-end": ["J_CARRIER.63", "U1.J15"],
+    "CPU external RTC LDO selection and RTC IO supply on DCDC6": ["U_PMIC.FB6","L_PMIC_RTC_IO.pin2","U1.B4","U1.D7"],
+    "CPU N15 IO supply to sequenced 3.3 V": ["U_PMIC.DCDC4","U1.N15"],
     "AM3354 J3 calibration to 49.9 ohm resistor": ["U1.J3","R_VTP.pin1"],
     "AM3354 calibration resistor return to module ground": ["R_VTP.pin2","U_PMIC.EP"],
     "MPU buck output and feedback to seven CPU supply balls": ["U_PMIC.FB2","L_PMIC_MPU.pin2","C_PMIC_MPU.pin1", *(f"U1.{pin}" for pin in ("F10","F11","F12","F13","G13","H13","J13"))],

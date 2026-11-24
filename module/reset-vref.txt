@@ -43,6 +43,8 @@ Sequenced regulator output to both PMIC I2C pull-ups connected
 DCDC4 output to ten CPU IO supply balls connected
 TOUCH_SDA end-to-end connected
 TOUCH_SCL end-to-end connected
+CPU external RTC LDO selection and RTC IO supply on DCDC6 connected
+CPU N15 IO supply to sequenced 3.3 V connected
 AM3354 J3 calibration to 49.9 ohm resistor connected
 AM3354 calibration resistor return to module ground connected
 MPU buck output and feedback to seven CPU supply balls connected
