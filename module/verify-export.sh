@@ -40,6 +40,12 @@ diff -u carrier-strap-load.csv "$out/carrier-strap-load.csv"
 diff -u reset-vref.txt "$out/reset-vref.txt"
 OPENBLAS_NUM_THREADS=1 python3 check-impedance.py "$out/geometry.json" > "$out/impedance-screen.csv"
 diff -u impedance-screen.csv "$out/impedance-screen.csv"
+if [[ -n "${TI_IBIS_ARCHIVE:-}" ]]; then
+    python3 check-command-receiver.py "$TI_IBIS_ARCHIVE" > "$out/command-receiver-screen.csv"
+    python3 check-command-receiver.py "$TI_IBIS_ARCHIVE" --stack-delay > "$out/command-receiver-stack-delay.csv"
+    diff -u command-receiver-screen.csv "$out/command-receiver-screen.csv"
+    diff -u command-receiver-stack-delay.csv "$out/command-receiver-stack-delay.csv"
+fi
 diff -u drilled-cam.txt "$out/drilled-cam.txt"
 OPENBLAS_NUM_THREADS=1 python3 check-core-drop.py "$out/geometry.json" > "$out/core-drop.csv"
 diff -u core-drop.csv "$out/core-drop.csv"
