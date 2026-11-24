@@ -21,6 +21,16 @@ net = {terminal[port]: value for port, value in port_net.items() if port in term
 islands = json.loads(Path(sys.argv[1]).read_text())
 connector = {row["signal"]: row for row in csv.DictReader((here / "carrier-pinout.csv").open())}
 bom = {row["reference"]: row["MPN"] for row in csv.DictReader((here / "module-bom.csv").open())}
+if "--panel-context" in sys.argv[2:]:
+    for label, pin in (("Panel logic supply", "J_LCD.pin7"), ("Panel RESET", "J_LCD.pin44")):
+        peers = sorted(port for port, key in net.items() if port != pin and key == net[pin])
+        print(f"{label} {pin}: inherited net {net[pin]}, other terminals: {', '.join(peers) or 'none'}")
+    contact = connector["LCD_RESET"]
+    cpu, carrier = contact["module_terminal"], "J_CARRIER."+contact["contact"]
+    reached = any({cpu, carrier} <= set(group) for group in islands[contact["module_net"]])
+    print(f"Module RESET path {cpu} to {carrier}: {'connected' if reached else 'open'}")
+    sys.exit(0)
+
 writer = csv.writer(sys.stdout, lineterminator="\n")
 writer.writerow(("bit","pull","cpu","contact","panel","source_to_cpu_pull_contact","carrier_case",
                  "dc_V","margin_V","settle_us_at_100pF","assessment"))
