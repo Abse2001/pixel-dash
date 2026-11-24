@@ -2,6 +2,11 @@
 # Check the saved board, without refilling or changing the candidate.
 set -euo pipefail
 cd "$(dirname "$0")"
+case "${1:-}" in
+    ""|--require-connected) ;;
+    *) echo "Usage: $0 [--require-connected]" >&2; exit 2 ;;
+esac
+if (( $# > 1 )); then exit 2; fi
 out=$(mktemp -d)
 mkdir "$out/films"
 board=pixel-dash-module.kicad_pcb
@@ -19,6 +24,8 @@ PY
 kicad-cli pcb export gerbers --disable-aperture-macros -o "$out/films/" -l F.Cu,In1.Cu,In2.Cu,In3.Cu,In4.Cu,B.Cu,Edge.Cuts "$board"
 kicad-cli pcb export drill -o "$out/films/" "$board"
 python3 check-cam.py "$out/films" "$out/geometry.json" "$out/pad-islands.json" > "$out/drilled-cam.txt"
+python3 check-open-connections.py "$out/pad-islands.json" "$out/drc.json" "${1:-}" > "$out/open-connections.csv"
+diff -u open-connections.csv "$out/open-connections.csv"
 python3 check-via-spacing.py "$out/geometry.json" > "$out/via-spacing-findings.csv"
 python3 check-timing.py "$out/geometry.json" > "$out/timing.csv"
 python3 check-reset-vref.py "$out/pad-islands.json" > "$out/reset-vref.txt"
