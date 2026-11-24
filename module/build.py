@@ -156,7 +156,7 @@ for ref,(s,c) in parts.items():
         dx += .95
         dy -= .15
     if ref == "R_SYSBOOT2":
-        dx += .035
+        dx += .061
         dy -= .120
     if ref == "C_DDR27":
         dx += -0.1400
