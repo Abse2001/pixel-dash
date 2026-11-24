@@ -81,3 +81,15 @@ A four-layer copper-sheet DC screen of the switched rail used the exported conne
 LCD D23 reaches CPU U10 and DF40 contact 53 along 67.817 mm of copper. The right edge extends 0.30 mm to preserve 0.50 mm edge clearance and continuous adjacent ground. This retains all component positions, connector contacts and the six layers. The U10 centered 0.15/0.30 mm through via requires resin fill and copper cap. All 16 assigned MPU lands stay on one drilled island. The raster path still needs source-to-panel timing including the carrier and buffer.
 
 USB0 VBUS sense reaches CPU P15 and DF40 contact 80. The route uses a centered 0.15/0.30 mm resin-filled and copper-capped through via at P15. The local 3.3 V branch keeps its 0.25 mm width. SYSBOOT15 and PMIC IRQ retain their connector and CPU paths and full-width adjacent ground. The carrier must provide a VBUS sensing circuit meeting TI powered and unpowered input limits before USB connection. The USB data pair remains open.
+
+### CPU lands U2 and T2 — isolated breakout study
+
+This study from the 29-open module reserves local space for SYSBOOT9 at U2 (22.200012, 38.849987 mm) and SYSBOOT5 at T2 (22.200012, 38.049887 mm). The clearance calculation places a centered 0.15 mm drill and 0.30 mm land at each location. The nearest unrelated trace edge would be 0.158673 mm from the U2 land edge and 0.156982 mm from T2. The target is 0.1524 mm. Both holes would require resin fill and copper cap. A second test export with both holes plated retained 50/50 DDR connections, both power domains and the ground-reference screen. KiCad flagged each barrel as connected on only one layer. The saved layout keeps them undrilled until the signals can reach their existing pulls and DF40 contacts.
+
+| Signal | Previous → study length (mm) | Traversed barrel (mm) | Study flight (ps) | Signed skew (ps) | Project length gate (mm) |
+|---|---|---:|---:|---:|---|
+| D5 | 19.19469 → 19.17803 | 3.118, two F–B transitions | 133.42232 | +1.58321 | ≤19.4001 |
+| D7 | 19.14010 → 19.15254 | 3.118, two F–B transitions | 133.27237 | +1.43327 | ≤19.4001 |
+| A7 | 36.52403 → 36.57424 | 3.118, F–L3, L3–B, B–F | 244.76288 | +1.63037 | 36.150–38.690 |
+
+D5 and D7 have worst data-group mismatches of 0.21607 and 0.24155 mm against the 0.635 mm TI matching limit. Their modeled skew target is ±3.66331 ps. A7 skew is relative to CK. The VTP change adds 0.07321 mm. The fresh drilled export preserves all 50 DDR pairs, both DDR supplies, all 183 mapped grounds and the full-width ground-reference screen. The 29 missing joins match the parent by net. Receiver setup and hold and the L3 supply-coverage deficit remain open.
