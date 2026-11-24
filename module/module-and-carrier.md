@@ -25,3 +25,15 @@ For the first cold-boot test, disconnect the panel, remove the MMC0 card and lea
 3. Cold boot a board-specific SPL from a known-good MMC0 card. First enable UART logging and verify the PMIC, clock and pinmux settings in SRAM. Next initialize the exact fitted DDR3L part and run address- and data-pattern checks before loading external-memory application code.
 
 Record supply ramps, PWRONRSTn, raw register values, transfer logs, and the tested carrier and module revisions. Repeat from full power removal with the panel attached after panel DVDD and strap isolation are electrically verified. Compare both latched strap words with 0x4017. These are first-article tests pending assembled hardware. [TI AM335x TRM, §§26.1.6 and 26.1.9](https://www.ti.com/lit/ug/spruh73q/spruh73q.pdf)
+
+### Building the UART0 SRAM diagnostic
+
+From the repository root, build the raw GP peripheral-boot payload with GNU Arm binutils. It reads CONTROL_STATUS once, selects UART0's operational register bank, waits for transmit-ready before each byte, prints the raw word and halts. It uses registers and internal SRAM throughout. The ROM must have initialized UART0 by taking the UART boot path.
+
+```sh
+arm-none-eabi-as -mcpu=cortex-a8 -o /tmp/pixel-uart0.o module/bringup/uart0-sram.S
+arm-none-eabi-ld -Ttext=0x402f0400 -e _start -o /tmp/pixel-uart0.elf /tmp/pixel-uart0.o
+arm-none-eabi-objcopy -O binary /tmp/pixel-uart0.elf /tmp/pixel-uart0.bin
+```
+
+Send `pixel-uart0.bin` in the cold-boot XMODEM test above. Expect `Pixel Dash SRAM CONTROL_STATUS=0x` followed by eight hexadecimal digits on contact 66. Save the complete word. Decode SYSBOOT as `((word >> 8) & 0xff00) | (word & 0xff)`. Device and revision fields can make two raw words differ while the strap bits agree. Build the MMC0 SPL separately once the module and carrier are ready for power-on testing.
