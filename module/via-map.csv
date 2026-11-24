@@ -30,8 +30,8 @@ x_mm,y_mm,net,hole_mm,land_mm,solder_land,face,nominal_bore_to_land_boundary_mm,
 4.765999,28.868999,DDR_A9,0.15,0.3,,,,off-pad
 4.800107,36.049949,DDR_VREF,0.15,0.3,C_H1_VREF.pin1,B.Cu,0.087,centered
 4.800107,36.049949,DDR_VREF,0.15,0.3,U_DDR.H1,F.Cu,0.12199,centered
-4.800107,40.049942,VDDS_DDR,0.15,0.3,U_DDR.N1,F.Cu,0.12199,centered
 4.800107,40.049942,VDDS_DDR,0.15,0.3,C_DDR6.pin1,B.Cu,0.175,centered
+4.800107,40.049942,VDDS_DDR,0.15,0.3,U_DDR.N1,F.Cu,0.12199,centered
 4.942108,35.519993,GND_INTERNAL,0.15,0.3,U_DDR.G1,F.Cu,-0.18297,annulus only
 4.942108,35.519993,GND_INTERNAL,0.15,0.3,C_H1_VREF.pin2,B.Cu,0.087,centered
 5.199953,37.929896,VDDS_DDR,0.15,0.3,,,,off-pad
@@ -383,6 +383,7 @@ x_mm,y_mm,net,hole_mm,land_mm,solder_land,face,nominal_bore_to_land_boundary_mm,
 26.7,19.09258,GND_INTERNAL,0.2,0.45,C_PMIC_IO_A.pin2,B.Cu,0.64251,centered
 26.719999,28.019999,VDD_LDO1_1V8,0.15,0.3,,,,off-pad
 26.76,36.84,DDR_A7,0.15,0.3,,,,off-pad
+26.945,22.954768,GND_INTERNAL,0.15,0.3,C_DDR17.pin2,B.Cu,0.175,centered
 27.0,4.495,GND_INTERNAL,0.2,0.45,,,,off-pad
 27.0,41.28,DDR_A1,0.15,0.3,,,,off-pad
 27.110104,32.035103,GND_INTERNAL,0.15,0.3,,,,off-pad
@@ -433,6 +434,7 @@ x_mm,y_mm,net,hole_mm,land_mm,solder_land,face,nominal_bore_to_land_boundary_mm,
 29.0031,32.053154,GND_INTERNAL,0.2,0.45,,,,off-pad
 29.0031,32.853,GND_INTERNAL,0.2,0.45,,,,off-pad
 29.008984,43.572853,DDR_BA1,0.15,0.3,,,,off-pad
+29.014895,28.659958,LOCAL_BYPASS_D11,0.15,0.3,C_SRAM_MPU.pin1,B.Cu,0.175,centered
 29.04,40.92,DDR_A1,0.2,0.45,,,,off-pad
 29.050004,36.624942,VDD_IO_3V3_SEQ,0.15,0.3,,,,off-pad
 29.067999,17.515999,TOUCH_SDA,0.15,0.3,,,,off-pad
@@ -479,7 +481,6 @@ x_mm,y_mm,net,hole_mm,land_mm,solder_land,face,nominal_bore_to_land_boundary_mm,
 30.649999,37.629884,VDDS_DDR_CPU,0.2,0.45,,,,off-pad
 30.649999,38.470116,GND_INTERNAL,0.2,0.45,,,,off-pad
 30.675096,33.05005,VDD_LDO1_1V8,0.15,0.3,,,,off-pad
-30.799943,22.299958,GND_INTERNAL,0.2,0.45,C_SRAM_MPU.pin2,F.Cu,0.3,centered
 30.996539,25.526284,GND_INTERNAL,0.2,0.45,,,,off-pad
 31.0,2.844999,SYSBOOT3_SENSE,0.15,0.3,,,,off-pad
 31.009999,12.049999,SYSBOOT15_SENSE,0.15,0.3,,,,off-pad
