@@ -1,13 +1,13 @@
 50/50 independent drilled DDR pairs. Open: none
-568 plated through drills. No shorts between mapped lands or vias.
-Drill diameters: {0.2: 254, 0.15: 314}
-DCDC3 post-inductor L3 copper 665.81 mm², reaches 18/18 DRAM supply balls.
+569 plated through drills. No shorts between mapped lands or vias.
+Drill diameters: {0.2: 254, 0.15: 315}
+DCDC3 post-inductor L3 copper 665.53 mm², reaches 18/18 DRAM supply balls.
 DRAM supply balls outside that copper island: none
 Ground reaches 183/183 assigned return pads. Open: none
 DCDC3 reaches all 44 assigned direct DDR rail pads.
 Switched DDR output reaches 7/7 CPU DDR balls. Open: none
 All 50 timed track geometries reproduced on their assigned drilled copper islands within 0.001 mm.
-DDR trace projection outside the largest continuous L3 DCDC3 pour: 82.0650 mm².
-Of that projection, 28.0229 mm² has separately connected L3 DCDC3 copper; 54.0421 mm² has none. Via envelopes excluded.
+DDR trace projection outside the largest continuous L3 DCDC3 pour: 81.8743 mm².
+Of that projection, 28.0229 mm² has separately connected L3 DCDC3 copper; 53.8514 mm² has none. Via envelopes excluded.
 C_DDR21 has two plated local returns to both ground planes, including CPU M12.
 Full-width ground reference losses outside own launches (mm²): {}

@@ -19,6 +19,7 @@ Fitted word 0x4017. VDDSHV6 N5/P5 to DCDC4: True True
 PGOOD to PWRONRSTn: True
 DCDC4 both switch pins reach the separate inductor terminals.
 DCDC4 reaches both output capacitors and the three carrier supply contacts; both bypass returns reach ground.
+LDO1 regulator to final CPU 1.8 V land N6 connected
 SYSBOOT13 at CPU and carrier connected
 SYSBOOT13 physical pull bias connected
 CPU C10 to its dedicated 1 uF local output capacitor connected
