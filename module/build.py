@@ -34,8 +34,9 @@ for c in source:
             and ref not in {"SW_POWER", "U_JOY_ADC", "C_JOY_ADC"}):
         parts[ref] = (s, c)
 # Use the 0402 1 µF Samsung part for the underside SRAM bypass.
-part, geometry = parts["C_SRAM_MPU"]
-parts["C_SRAM_MPU"] = (dict(part, manufacturer_part_number="CL05A105KA5NQNC",
+for bypass in ("C_SRAM_MPU", "C_SRAM_CORE"):
+    part, geometry = parts[bypass]
+    parts[bypass] = (dict(part, manufacturer_part_number="CL05A105KA5NQNC",
                             supplier_part_numbers={"jlcpcb":["C52923"]}), geometry)
 for copy, original in (("R_CPU_VREF_HIGH", "R_VREF_HIGH"), ("R_CPU_VREF_LOW", "R_VREF_LOW")):
     parts[copy] = parts[original]
@@ -170,7 +171,7 @@ for ref,(s,c) in parts.items():
         dx+=(0 if ref.endswith("LOW") else 2.2)-cx
         dy-=cy
     fp=k.FOOTPRINT(board);fp.SetReference(ref);fp.SetValue(s["manufacturer_part_number"])
-    bot=c["layer"]=="bottom" or ref in ("C_DDR12", "R_OSC0_BIAS", "C_SRAM_MPU") or ref.startswith("C_MPU_")
+    bot=c["layer"]=="bottom" or ref in ("C_DDR12", "R_OSC0_BIAS", "C_SRAM_MPU", "C_SRAM_CORE") or ref.startswith("C_MPU_")
     fp.SetLayer(k.B_Cu if bot else k.F_Cu);fp.SetPosition(xy(cx+dx,cy+dy))
     if ref in local_bypasses:
         site = local_bypasses[ref]
@@ -222,7 +223,7 @@ for ref,(s,c) in parts.items():
             x,y = local_bypasses[ref][pname]
             pad.SetPosition(k.VECTOR2I(mm(x),mm(y)))
             pad.SetOrientationDegrees(local_bypasses[ref]["rotation"])
-            if ref == "C_SRAM_MPU":
+            if ref in ("C_SRAM_MPU", "C_SRAM_CORE"):
                 pad.SetSize(k.VECTOR2I(mm(.540004),mm(.499999)))
         if ref == "C_H1_VREF":
             x,y = h1_bypass[pname]
