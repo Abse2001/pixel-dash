@@ -57,6 +57,7 @@ DCDC1 post-inductor CORE feed, output capacitor, feedback and CPU G10 connected
 DCDC1 to all 20 CPU CORE balls connected
 RTC external wake from PMIC with RTC-domain pull-up connected
 DCDC5 RTC core output to D6 and local regulator bypass connected
+RTC reset from backup power good to U1.B5 connected
 AM3354 J3 calibration to 49.9 ohm resistor connected
 AM3354 calibration resistor return to module ground connected
 MPU buck output and feedback to seven CPU supply balls connected

@@ -731,8 +731,8 @@
   {
     "net": "THROUGH_R_SHOULDER",
     "pos": [
-      24.749999999999996,
-      14.049999999999997
+      24.949999,
+      14.199999
     ],
     "diam": 0.3,
     "drill": 0.15
@@ -1102,6 +1102,60 @@
     "pos": [
       25.399904,
       28.449958
+    ],
+    "diam": 0.3,
+    "drill": 0.15
+  },
+  {
+    "net": "channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net83",
+    "pos": [
+      24.699999,
+      13.849999
+    ],
+    "diam": 0.3,
+    "drill": 0.15
+  },
+  {
+    "net": "channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net83",
+    "pos": [
+      24.600058,
+      26.850012
+    ],
+    "diam": 0.3,
+    "drill": 0.15
+  },
+  {
+    "net": "channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net83",
+    "pos": [
+      24.79600000000002,
+      16.840000000000014
+    ],
+    "diam": 0.3,
+    "drill": 0.15
+  },
+  {
+    "net": "channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net83",
+    "pos": [
+      22.560000000000016,
+      21.728000000000016
+    ],
+    "diam": 0.3,
+    "drill": 0.15
+  },
+  {
+    "net": "channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net83",
+    "pos": [
+      21.36400000000002,
+      23.60000000000002
+    ],
+    "diam": 0.3,
+    "drill": 0.15
+  },
+  {
+    "net": "channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net83",
+    "pos": [
+      21.988000000000017,
+      24.74400000000002
     ],
     "diam": 0.3,
     "drill": 0.15

@@ -93,6 +93,7 @@ boot_paths = {
     "DCDC1 to all 20 CPU CORE balls": ["L_PMIC_CORE.pin2", *(f"U1.{ball}" for ball in ('F6', 'F7', 'G10', 'G6', 'G7', 'H11', 'J12', 'K12', 'K6', 'K8', 'L6', 'L7', 'L8', 'L9', 'M11', 'M13', 'N12', 'N13', 'N8', 'N9'))],
     "RTC external wake from PMIC with RTC-domain pull-up": ["U_PMIC.nWAKEUP","R_PMIC_WAKE.pin1","U1.C5"],
     "DCDC5 RTC core output to D6 and local regulator bypass": ["U_PMIC.FB5","L_PMIC_RTC_CORE.pin2","C_PMIC_RTC_CORE.pin1","U1.D6"],
+    "RTC reset from backup power good to U1.B5": ["U_PMIC.PGOOD_BU","U1.B5"],
     "AM3354 J3 calibration to 49.9 ohm resistor": ["U1.J3","R_VTP.pin1"],
     "AM3354 calibration resistor return to module ground": ["R_VTP.pin2","U_PMIC.EP"],
     "MPU buck output and feedback to seven CPU supply balls": ["U_PMIC.FB2","L_PMIC_MPU.pin2","C_PMIC_MPU.pin1", *(f"U1.{pin}" for pin in ("F10","F11","F12","F13","G13","H13","J13"))],
