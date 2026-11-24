@@ -55,6 +55,7 @@ assert connected("U_PMIC.DCDC4","C_PMIC_IO_A.pin1","C_PMIC_IO_B.pin1","J_CARRIER
 assert connected("C_PMIC_IO_A.pin2","C_PMIC_IO_B.pin2","U_PMIC.EP")
 print("DCDC4 reaches both output capacitors and the three carrier supply contacts; both bypass returns reach ground.")
 boot_paths = {
+    "LDO1 to both USB analog 1.8 V balls and P14": ["U_PMIC.LDO1","U1.N16","U1.R16","U1.P14","C_PMIC_LDO1.pin1"],
     "OSC0 feedback output and series drive input to XTALOUT": ["R_OSC0_BIAS.pin2","U1.U11","R_OSC0_DRIVE.pin1"],
     "OSC0 local return at VSS_OSC": ["U1.V11","C_OSC0_IN.pin2","C_OSC0_OUT.pin2","U_PMIC.EP"],
     "CPU XTALOUT to series drive resistor": ["U1.U11","R_OSC0_DRIVE.pin1"],

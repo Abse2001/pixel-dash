@@ -472,6 +472,7 @@ x_mm,y_mm,net,hole_mm,land_mm,solder_land,face,nominal_bore_to_land_boundary_mm,
 31.74989,13.157358,GND_INTERNAL,0.2,0.45,C_PMIC_RTC_CORE.pin2,F.Cu,0.64251,centered
 31.749999,14.449999,THROUGH_SD_CLK,0.15,0.3,,,,off-pad
 31.75,2.844999,SYSBOOT5_SENSE,0.15,0.3,,,,off-pad
+31.799942,36.449942,VDD_LDO1_1V8,0.15,0.3,U1.P14,F.Cu,0.10498,centered
 31.836771,25.526284,VDDS_DDR_CPU,0.2,0.45,,,,off-pad
 31.884999,40.366999,OSC0_BIAS_OUT,0.15,0.3,,,,off-pad
 32.159999,36.84,DDR_CKE,0.2,0.45,,,,off-pad
@@ -503,6 +504,7 @@ x_mm,y_mm,net,hole_mm,land_mm,solder_land,face,nominal_bore_to_land_boundary_mm,
 33.171999,22.911999,TOUCH_SDA,0.15,0.3,,,,off-pad
 33.289999,1.429999,LCD_RESET,0.15,0.3,,,,off-pad
 33.323999,23.595999,PMIC_I2C_SDA,0.15,0.3,,,,off-pad
+33.399887,35.650096,VDD_LDO1_1V8,0.15,0.3,U1.N16,F.Cu,0.10498,centered
 33.4,2.844999,SYSBOOT9_SENSE,0.15,0.3,,,,off-pad
 33.4,4.755,SYSBOOT12_SENSE,0.15,0.3,,,,off-pad
 33.499997,24.45,VDDS_DDR_CPU,0.2,0.45,,,,off-pad
