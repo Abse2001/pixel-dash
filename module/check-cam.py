@@ -163,6 +163,16 @@ for l in ("In1.Cu","In4.Cu"):
     plane=max(enumerate(pieces[l]),key=lambda a:a[1].area)
     assert owners[root((l,plane[0]))]=={"GND_INTERNAL"}
     planes[l]=plane[1]
+# Check each local C_DDR21 return before merging layers through plated holes.
+pad = next(o for o in geom if o.get("ref") == "C_DDR21" and o["pin"] == "pin2")
+back, = trees["B.Cu"].query(point(pad["pos"]), predicate="intersects")
+for position in ([30.199996, 34.849996], [29.802946, 35.247045]):
+    hole, = [i for i, via in assignments.items() if math.dist(via["pos"], position) < .001]
+    assert assignments[hole]["net"] == "GND_INTERNAL"
+    assert ("B.Cu", back) in annuli[hole], ("C_DDR21 local ground open", position)
+    for layer in ("In1.Cu", "In4.Cu"):
+        assert any(ly == layer and pieces[ly][j] is planes[layer] for ly,j in annuli[hole]), (position,layer)
+print("C_DDR21 has two plated local returns to both ground planes, including CPU M12.")
 miss=collections.Counter()
 strap_branches = json.loads(Path(__file__).with_name("carrier-strap-routes.json").read_text())
 assert {b["net"] for b in strap_branches} == {f"SYSBOOT{bit}_SENSE" for bit in range(16)}
