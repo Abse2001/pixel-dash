@@ -83,8 +83,9 @@ both bytes and address/control/clock, keepouts `runs/mod8.keepouts.json`; then `
   simulation of the worst net with its neighbours, losses, vias and packages (`si/`): passes the DDR3L levels with
   the drive at 40 ohm or weaker on every usable prepreg. No IBIS models; measure on the first boards.
 - D3 and D7 are swapped at the memory (within byte 0, deliberate, DQ0 untouched).
-- Via-in-pad everywhere; 21 handheld-signal vias are same-net dog-bones 0.3 mm from their ball centre, overlapping the
-  ball pad: order filled and capped vias.
+- Via-in-pad everywhere: every handheld-signal via inside the processor's ball field sits exactly on its ball centre
+  or >= 0.45 mm from every ball centre; no via pad overlaps a pad of another net (bypass-capacitor vias keep
+  >= 0.104 mm to the ball pads). Order epoxy-filled and capped vias.
 - USB0 D+/D- run side by side (11 mm, equal length) but not as an impedance-controlled pair.
 - 1.8 V PLL/oscillator/USB supply balls share the 1.8 V plane without ferrites.
 - Connector pin numbers in `fab/pinmap.csv` follow the LCSC footprint (1-50 outer row, 51-100 inner row).
@@ -92,5 +93,8 @@ both bytes and address/control/clock, keepouts `runs/mod8.keepouts.json`; then `
   is the JLCPCB/LCSC footprint of C597931 as imported (rows 3.90 mm outside, 2.50 mm inside; Hirose draws 3.78 / 2.38, the contacts land inside both).
 - C_VREF_CPU (0.1 uF on the processor's DDR_VREF) sits 5.9 mm from the J4 ball (TI: "near", no number); closer
   sites are inside the bottom-side DDR fan-out.
+- Crystal Y_OSC0: LCSC C362341 (24 MHz, 10 pF, 30 ohm, +/-10/+/-20 ppm, -40..85 C) replaced C439045 (out of stock);
+  same land pattern. With the 15 pF capacitors and the short routed traces the load is about 9-10 pF, which suits a
+  10 pF crystal (TI Table 6-2: ESR <= 48 ohm, +/-50 ppm total, C1/C2 12-24 pF).
 - BOM part numbers and pick-and-place rotations need the usual review in the assembly preview.
   Stock at the time of writing: AM3354BZCZD80 27 pcs, MT41K512M16VRP-107 IT:P 281 pcs (about 70 USD each).

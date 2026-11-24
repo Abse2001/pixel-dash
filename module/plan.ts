@@ -74,7 +74,7 @@ export const PARTS: Record<string, { fp: string; comp: string; file: string }> =
   R240_0201: { fp: "R0201", comp: "RC0201FR_07240RL", file: "../am3354/imports/RC0201FR_07240RL" },
   R49R9_0402: { fp: "R0402", comp: "A_0402WGF499JTCE", file: "../am3354/imports/A_0402WGF499JTCE" },
   R1K_0402: { fp: "R0402", comp: "A_0402WGF1001TCE", file: "../imports/A_0402WGF1001TCE" },
-  XTAL_24M: { fp: "XTAL3225", comp: "S3B24_000000F1210F30", file: "../imports/S3B24_000000F1210F30" },
+  XTAL_24M: { fp: "XTAL3225", comp: "TXM24M0004322DBCDO00T", file: "./imports/TXM24M0004322DBCDO00T" },
   DF40_100: { fp: "DF40", comp: "DF40C_100DS_0_4V_51_", file: "./imports/DF40C_100DS_0_4V_51_" }, // imported from JLCPCB (C597931), footprint and 3D model as supplied
 }
 /** world pads of a part (bottom side parts are mirrored, as tscircuit renders them) */

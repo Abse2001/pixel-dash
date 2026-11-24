@@ -10,9 +10,9 @@ for (const [name, text] of Object.entries(files)) await Bun.write(`${OUT}/gerber
 console.log("gerber files:", Object.entries(files).map(([n, t]) => `${n} (${(t.length / 1024).toFixed(0)}k)`).join(", "))
 const INFO: Record<string, [string, string, string]> = { // value, package, LCSC part
   C100N_0201: ["100nF", "0201", "C76939"], C100N_0402: ["100nF", "0402", "C1525"], C1U_0402: ["1uF", "0402", "C52923"], C10U_0603: ["10uF", "0603", "C19702"], C15P_0402: ["15pF", "0402", "C285151"],
-  R240_0201: ["240R 1%", "0201", ""], R49R9_0402: ["49.9R 1%", "0402", ""], R1K_0402: ["1k 1%", "0402", ""], XTAL_24M: ["24MHz 12pF", "SMD3225-4P", ""], DF40_100: ["DF40C-100DS-0.4V(51)", "DF40C-100DS", "C597931"] }
+  R240_0201: ["240R 1%", "0201", ""], R49R9_0402: ["49.9R 1%", "0402", ""], R1K_0402: ["1k 1%", "0402", ""], XTAL_24M: ["24MHz 10pF", "SMD3225-4P", ""], DF40_100: ["DF40C-100DS-0.4V(51)", "DF40C-100DS", "C597931"] }
 // LCSC numbers of the parts imported earlier come from their import files
-const imp: Record<string, string> = { R240_0201: "../am3354/imports/RC0201FR_07240RL.tsx", R49R9_0402: "../am3354/imports/A_0402WGF499JTCE.tsx", R1K_0402: "../imports/A_0402WGF1001TCE.tsx", XTAL_24M: "../imports/S3B24_000000F1210F30.tsx", C100N_0201: "../am3354/imports/TMK063ABJ104KP_F.tsx", C10U_0603: "../imports/CL10A106KP8NNNC.tsx", C100N_0402: "../imports/CL05B104KO5NNNC.tsx", C15P_0402: "../imports/A_0402CG150F500NT.tsx" }
+const imp: Record<string, string> = { R240_0201: "../am3354/imports/RC0201FR_07240RL.tsx", R49R9_0402: "../am3354/imports/A_0402WGF499JTCE.tsx", R1K_0402: "../imports/A_0402WGF1001TCE.tsx", XTAL_24M: "./imports/TXM24M0004322DBCDO00T.tsx", C100N_0201: "../am3354/imports/TMK063ABJ104KP_F.tsx", C10U_0603: "../imports/CL10A106KP8NNNC.tsx", C100N_0402: "../imports/CL05B104KO5NNNC.tsx", C15P_0402: "../imports/A_0402CG150F500NT.tsx" }
 for (const [k, f] of Object.entries(imp)) { const m = (await Bun.file(`${M}/${f}`).text()).match(/jlcpcb"?\s*:\s*\[\s*"(C\d+)"/); if (m) INFO[k][2] = m[1] }
 const E = plan.edge, CX = (E.x0 + E.x1) / 2, CY = (E.y0 + E.y1) / 2
 const rows = [{ name: "U1", part: "CPU", x: -44.8, y: 15.15, rot: 0, layer: "top" }, { name: "U_DDR", part: "RAM", x: -70, y: 15.15, rot: 270, layer: "top" }, ...plan.parts]
