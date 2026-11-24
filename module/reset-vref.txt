@@ -19,6 +19,8 @@ Fitted word 0x4017. VDDSHV6 N5/P5 to DCDC4: True True
 PGOOD to PWRONRSTn: True
 DCDC4 both switch pins reach the separate inductor terminals.
 DCDC4 reaches both output capacitors and the three carrier supply contacts; both bypass returns reach ground.
+PMIC clock and pull-up to CPU C16 connected
+MPU regulator to local HF4 bypass connected
 D9 SRAM output and dedicated 1 uF bypass connected
 D9 bypass return to CPU ground connected
 D11 SRAM output and dedicated 1 uF bypass connected

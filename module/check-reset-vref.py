@@ -55,6 +55,8 @@ assert connected("U_PMIC.DCDC4","C_PMIC_IO_A.pin1","C_PMIC_IO_B.pin1","J_CARRIER
 assert connected("C_PMIC_IO_A.pin2","C_PMIC_IO_B.pin2","U_PMIC.EP")
 print("DCDC4 reaches both output capacitors and the three carrier supply contacts; both bypass returns reach ground.")
 boot_paths = {
+    "PMIC clock and pull-up to CPU C16": ["U_PMIC.SCL", "R_PMIC_SCL.pin1", "U1.C16"],
+    "MPU regulator to local HF4 bypass": ["L_PMIC_MPU.pin2", "C_MPU_HF4.pin1", "U1.F13"],
     "D9 SRAM output and dedicated 1 uF bypass": ["U1.D9", "C_SRAM_CORE.pin1"],
     "D9 bypass return to CPU ground": ["C_SRAM_CORE.pin2", "U_PMIC.EP"],
     "D11 SRAM output and dedicated 1 uF bypass": ["U1.D11", "C_SRAM_MPU.pin1"],
