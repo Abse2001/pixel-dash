@@ -9,3 +9,13 @@ At 0.0025 mm mesh the nominal outer and inner sections are 50.337 and 46.650 Ω.
 Run `python module/studies/1080c/corners.py` with NumPy and SciPy to reproduce corners.csv. This branch holds a cross-section study. The accepted PCB still has its original widths.
 
 [TI AM335x datasheet, Table 7-62](https://www.ti.com/lit/ds/symlink/am3354.pdf)
+
+## Alternate published 1.6 mm build
+
+On JLC06161H-1080 the L2–L3 and L4–L5 separations are 0.550 mm and the L3–L4 separation is 0.2104 mm. The 0.230 mm inner and 0.115 mm outer trial gives 47.650–54.367 Ω inner and 46.241–54.707 Ω outer, across the same two meshes and model corners. A common 50.5 Ω nominal allows 45.5–55.5 Ω and leaves about 0.74 Ω of modeled margin. At nominal dimensions the finer mesh gives 50.972 Ω inner and 50.337 Ω outer. These are isolated uniform line sections with ideal AC reference planes and assumed process bounds.
+
+Applying those widths to the actual module from a4d726c exposes a layout failure. KiCad 9 reports 212 copper clearances, 75 hole clearances, seven shorting items, two edge clearances and 38 unconnected items after refill. Independent Gerber and drill reconstruction joins A2, A5, A11, CASn and ODT on a single copper island. Full-width ground projection outside all launch exclusions misses 0.0053 mm² on L4. The area of DDR projection without connected L3 DDR supply copper increases to 93.4167 mm². Those figures come from the widened export. The accepted board keeps its original copper widths.
+
+Receiver setup and hold **fail qualification** on this layout. The five joined inputs cannot receive independent command waveforms at any sampling phase. Propagation estimates for isolated uniform sections cannot recover a valid command bus. Routing must provide lateral spacing and continuous references before extracting the coupled clock, strobes, launches and individual receiver waveforms.
+
+To reproduce the field sweep run `python alternate.py` in this directory. To reproduce the physical trial, check out module revision a4d726c in a separate directory, copy its KiCad project settings beside the output board, and run `/usr/bin/python3 apply-alternate.py path/to/module/pixel-dash-module.kicad_pcb trial/pixel-dash-module.kicad_pcb`. Run KiCad DRC, export the six copper layers and plated drill file, and use that revision's extract-geometry.py and check-cam.py. The ordinary CAM gate fails on the joined nets.

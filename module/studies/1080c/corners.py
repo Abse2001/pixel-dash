@@ -16,14 +16,18 @@ def axis(breaks, steps):
 
 
 @lru_cache(maxsize=256)
-def section(layer, width, gap_scale, foil_scale, dk_scale, mesh):
+def cross_section(layer, width, gap_scale, foil_scale, dk_scale, mesh, stack="1080C"):
+    if stack not in ("1080C", "1080"):
+        raise ValueError(stack)
     inner = layer == "inner"
-    h = (.075 if inner else .0764) * gap_scale
+    h = ((.075 if stack=="1080C" else .550) if inner else .0764) * gap_scale
     t = (.0152 if inner else .035) * foil_scale
     top = h+t
     half = width/2
     x = axis([0,half,half+.12,half+.40,2.0], [mesh,mesh,.012,.032])
-    if inner:
+    if inner and stack=="1080":
+        y = axis([0,h,top,top+.2104*gap_scale],[mesh*2,mesh,mesh*2])
+    elif inner:
         pp = .2104 * gap_scale
         core = .700 * gap_scale
         y = axis([0,h,top,top+pp,top+pp+core,top+2*pp+core],
@@ -34,7 +38,9 @@ def section(layer, width, gap_scale, foil_scale, dk_scale, mesh):
                  [mesh,mesh,mesh,mesh,.008,.025])
     dx, dy = np.diff(x), np.diff(y)
     xx, yy = np.meshgrid((x[:-1]+x[1:])/2, (y[:-1]+y[1:])/2)
-    if inner:
+    if inner and stack=="1080":
+        er = np.where(yy<h,4.6,4.4)*dk_scale
+    elif inner:
         er = np.where((yy<h) | ((yy>top+pp)&(yy<top+pp+core)), 4.6, 4.4)*dk_scale
     else:
         mask = (yy<h+.03048) | ((xx<half)&(yy<top+.01524))
@@ -64,7 +70,11 @@ def section(layer, width, gap_scale, foil_scale, dk_scale, mesh):
         voltage = conductor.ravel().astype(float)
         voltage[free] = spsolve(matrix[free][:,free],-(matrix@voltage)[free])
         caps.append(2*8.8541878128e-12*np.dot(weights,(voltage[a]-voltage[b])**2))
-    return 1/(299792458*math.sqrt(math.prod(caps)))
+    return (1/(299792458*math.sqrt(math.prod(caps))), 1e9*math.sqrt(caps[0]/caps[1])/299792458)
+
+
+def section(layer, width, gap_scale, foil_scale, dk_scale, mesh):
+    return cross_section(layer,width,gap_scale,foil_scale,dk_scale,mesh)[0]
 
 
 if __name__ == "__main__":
