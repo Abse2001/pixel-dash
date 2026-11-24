@@ -312,7 +312,9 @@ x_mm,y_mm,net,hole_mm,land_mm,solder_land,face,nominal_bore_to_land_boundary_mm,
 24.963227,24.223714,GND_INTERNAL,0.2,0.45,,,,off-pad
 25.149999,4.449999,THROUGH_Y,0.15,0.3,,,,off-pad
 25.222182,5.404998,GND_INTERNAL,0.2,0.45,,,,off-pad
+25.289999,24.769999,VDD_RTC_CORE_1V0,0.15,0.3,,,,off-pad
 25.399904,26.850012,GND_INTERNAL,0.15,0.3,U1.B6,F.Cu,0.10498,centered
+25.399904,28.449958,VDD_RTC_CORE_1V0,0.15,0.3,U1.D6,F.Cu,0.10498,centered
 25.719958,28.850058,DDR_A2,0.2,0.45,,,,off-pad
 25.749999,2.849999,THROUGH_R_SHOULDER,0.15,0.3,,,,off-pad
 25.8,29.719884,VDDS_DDR,0.2,0.45,,,,off-pad
@@ -366,7 +368,9 @@ x_mm,y_mm,net,hole_mm,land_mm,solder_land,face,nominal_bore_to_land_boundary_mm,
 28.203,35.253046,GND_INTERNAL,0.2,0.45,,,,off-pad
 28.21505,34.825096,GND_INTERNAL,0.15,0.3,,,,off-pad
 28.249999,27.349999,THROUGH_R_SHOULDER,0.15,0.3,,,,off-pad
+28.344999,14.759999,VDD_RTC_CORE_1V0,0.15,0.3,,,,off-pad
 28.349999,15.349999,THROUGH_SD_MISO,0.15,0.3,,,,off-pad
+28.409999,23.924999,VDD_RTC_CORE_1V0,0.15,0.3,,,,off-pad
 28.510116,24.45,VDDS_DDR_CPU,0.2,0.45,,,,off-pad
 28.53,32.040115,GND_INTERNAL,0.15,0.3,,,,off-pad
 28.549999,11.849999,DEBUG_UART0_TX,0.15,0.3,,,,off-pad
