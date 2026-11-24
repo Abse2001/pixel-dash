@@ -103,6 +103,12 @@ def screen(step):
     for (x, y), loss in zip(bucket, p):
         groups[x,y] = groups.get((x,y), 0.) + loss
     hot = max(groups, key=groups.get)
+    in_tile = np.all(bucket == hot, axis=1)
+    tile_loss = {}
+    for layer, name in enumerate(layers):
+        on_sheet = (xy[a,2] == layer) & (xy[b,2] == layer)
+        tile_loss[name] = round(100 * p[in_tile & on_sheet].sum() / p[in_tile].sum(), 2)
+    print("Worst-load local tile loss by copper layer (%), remainder in barrels:", tile_loss)
     print(f"grid {step:.3f} mm. Concentrated ball loads, mOhm:",
           {p["pin"]: round(1000*r, 3) for p,r in zip(balls, np.diag(transfer).tolist())})
     print(f"worst {balls[k]['pin']}, 1.8 A drop {1800*transfer[k,k]:.3f} mV; "
