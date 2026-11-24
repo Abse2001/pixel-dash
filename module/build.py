@@ -165,7 +165,7 @@ for ref,(s,c) in parts.items():
         dx+=(0 if ref.endswith("LOW") else 2.2)-cx
         dy-=cy
     fp=k.FOOTPRINT(board);fp.SetReference(ref);fp.SetValue(s["manufacturer_part_number"])
-    bot=c["layer"]=="bottom" or ref=="C_DDR12" or ref.startswith("C_MPU_")
+    bot=c["layer"]=="bottom" or ref in ("C_DDR12", "R_OSC0_BIAS") or ref.startswith("C_MPU_")
     fp.SetLayer(k.B_Cu if bot else k.F_Cu);fp.SetPosition(xy(cx+dx,cy+dy))
     if ref in local_bypasses:
         site = local_bypasses[ref]

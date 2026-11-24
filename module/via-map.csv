@@ -358,6 +358,7 @@ x_mm,y_mm,net,hole_mm,land_mm,solder_land,face,nominal_bore_to_land_boundary_mm,
 26.434173,25.596216,VDDS_DDR_CPU,0.2,0.45,,,,off-pad
 26.50005,20.29991,GND_INTERNAL,0.2,0.45,C_SRAM_MPU_IN.pin2,F.Cu,0.3,centered
 26.549999,2.849999,JOY_L_CLICK,0.15,0.3,,,,off-pad
+26.549999,44.659999,OSC0_BIAS_IN,0.15,0.3,,,,off-pad
 26.579884,29.7,GND_INTERNAL,0.2,0.45,,,,off-pad
 26.603054,32.053154,GND_INTERNAL,0.2,0.45,,,,off-pad
 26.603054,32.853,GND_INTERNAL,0.2,0.45,,,,off-pad
