@@ -28,6 +28,7 @@ python3 check-open-connections.py "$out/pad-islands.json" "$out/drc.json" "${1:-
 diff -u open-connections.csv "$out/open-connections.csv"
 python3 check-carrier-contacts.py "$out/pad-islands.json" > "$out/carrier-continuity.csv"
 diff -u carrier-continuity.csv "$out/carrier-continuity.csv"
+python3 check-launch-reservations.py "$out/geometry.json"
 python3 check-via-spacing.py "$out/geometry.json" > "$out/via-spacing-findings.csv"
 python3 check-timing.py "$out/geometry.json" > "$out/timing.csv"
 python3 check-reset-vref.py "$out/pad-islands.json" > "$out/reset-vref.txt"
