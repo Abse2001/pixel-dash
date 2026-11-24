@@ -46,6 +46,8 @@ diff -u inner-width-screen.csv "$out/inner-width-screen.csv"
 if [[ -n "${TI_IBIS_ARCHIVE:-}" ]]; then
     python3 check-command-receiver.py "$TI_IBIS_ARCHIVE" > "$out/command-receiver-screen.csv"
     python3 check-command-receiver.py "$TI_IBIS_ARCHIVE" --stack-delay > "$out/command-receiver-stack-delay.csv"
+    python3 check-command-receiver.py "$TI_IBIS_ARCHIVE" --stack-delay --ioctrl 0x18b > "$out/command-receiver-ti-launch.csv"
+    diff -u command-receiver-ti-launch.csv "$out/command-receiver-ti-launch.csv"
     diff -u command-receiver-screen.csv "$out/command-receiver-screen.csv"
     diff -u command-receiver-stack-delay.csv "$out/command-receiver-stack-delay.csv"
 fi

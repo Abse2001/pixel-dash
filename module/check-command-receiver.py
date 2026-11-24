@@ -19,6 +19,8 @@ parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument("archive", type=Path, help="TI SPRM552C IBIS archive")
 parser.add_argument("--stack-delay", action="store_true",
                     help="substitute the finest-mesh isolated trace delays from impedance-screen.csv")
+parser.add_argument("--ioctrl", type=lambda value: int(value, 0), choices=(0x18b, 0x318),
+                    default=0x318, help="TI boot reference or provisional module drive setting")
 args = parser.parse_args()
 if args.stack_delay:
     with (here / "impedance-screen.csv").open() as stream:
@@ -52,7 +54,7 @@ for supply in (1.323, 1.350, 1.377):
         vref = supply * fraction
         response = io.StringIO()
         model["screen"](components, io.StringIO(channel.getvalue()), args.archive, response,
-                        0x318, receiver_window=True, receiver_vref=vref)
+                        args.ioctrl, receiver_window=True, receiver_vref=vref)
         results = list(csv.DictReader(io.StringIO(response.getvalue())))
         for name in sorted({r["net"] for r in results}):
             samples = [r for r in results if r["net"] == name]
@@ -61,5 +63,5 @@ for supply in (1.323, 1.350, 1.377):
             if len(eligible) == len(samples):
                 window = (max(float(r["earliest_capture_ps"]) for r in eligible),
                           min(float(r["latest_capture_ps"]) for r in eligible))
-            out.writerow((name, 1.35, supply, round(vref, 6), "0x318", len(eligible), len(samples),
+            out.writerow((name, 1.35, supply, round(vref, 6), hex(args.ioctrl), len(eligible), len(samples),
                           *window, min(float(r["VIX_margin_mV"]) for r in samples), "OPEN"))
