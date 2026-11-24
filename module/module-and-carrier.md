@@ -43,3 +43,5 @@ arm-none-eabi-objcopy -O binary /tmp/pixel-uart0.elf /tmp/pixel-uart0.bin
 ```
 
 Send `pixel-uart0.bin` in the cold-boot XMODEM test above. Expect `Pixel Dash SRAM CONTROL_STATUS=0x` followed by eight hexadecimal digits on contact 66. Save the complete word. Decode SYSBOOT as `((word >> 8) & 0xff00) | (word & 0xff)`. Device and revision fields can make two raw words differ while the strap bits agree. Build the MMC0 SPL separately once the module and carrier are ready for power-on testing.
+
+KEY_START reaches DF40 contact 18 from AM3354 ZCZ U18 (GPMC_BEn1, mode 7, GPIO1_28). Set GPIO1 bit 28 as an input and enable the pad receiver before reading the carrier switch. Table 4-2 gives U18 a high reset-release state. Use the carrier switch wiring to select its operating bias. [TI AM335x datasheet, Table 4-2](https://www.ti.com/lit/ds/symlink/am3354.pdf)

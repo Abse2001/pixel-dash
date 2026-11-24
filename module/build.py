@@ -137,7 +137,7 @@ for index in range(1, 6):
              supplier_part_numbers={"jlcpcb": ["C15195"]}), geometry)
 local_bypasses = json.loads((here/"local-bypass-placements.json").read_text())
 # TI ZCZ pin functions, Table 4-49. Keep the module I2C1 bus on its carrier contacts.
-module_ball = {"D16": "B16", "D15": "J15", "C12": "U8", "D17": "T13", "V16": "V12"}
+module_ball = {"D16": "B16", "D15": "J15", "A13": "U18", "C12": "U8", "D17": "T13", "V16": "V12"}
 for original, replacement in module_ball.items():
     assert balls.get(("U1", replacement)) is None
     balls["U1", replacement] = balls["U1", original]
