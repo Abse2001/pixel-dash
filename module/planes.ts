@@ -13,15 +13,17 @@ const LAYERS = ["inner1", "inner2", "inner3", "inner4"] as const
 const XB = +(process.env.XB ?? -46.4) // layer 3: VDDS_DDR west of this, 3V3 / 1V8 east of it
 // trunk order, with the layers a net may use (first = preferred) and where it is filled
 // skeleton order: the nets with the fewest ways through first, the big planes last
+// the 3V3 balls N5, P5, P6, P7 sit west of the layer-3 split: this corner of layer 3 is 3V3 too
+const SW = (x: number, y: number) => x > -49.1 && x < XB && y > 10.9 && y < 12.0 // row P only: N6 above it is a 1V8 ball
 const NETS: { name: string; layers: number[]; fill: Record<number, (x: number, y: number) => boolean> }[] = [
   { name: "GND", layers: [0], fill: { 0: () => true, 3: () => true } },
   ...["VDDS_RTC", ...plan.innerNets].map((name: string) => ({ name, layers: [2, 1], fill: {} })),
-  { name: "DDR_VREF", layers: [2, 1], fill: { 2: (x: number) => x < -52.5 } },
-  { name: "VDD_3V3", layers: [1, 2], fill: { 1: (x: number) => x >= XB } },
+  { name: "DDR_VREF", layers: [1, 2], fill: { 2: (x: number, y: number) => x < -53 && x > -76 && y > 9 && y < 21 } }, // the channel between the two chips; the rest of layer 4 is left to core and MPU,
+  { name: "VDD_3V3", layers: [1, 2], fill: { 1: (x: number, y: number) => x >= XB || SW(x, y) } },
   { name: "VDD_1V8", layers: [1, 2], fill: { 2: (x: number, y: number) => x >= XB && y < 13 } }, // layer 3 east is the 3V3 plane; 1V8 fills the lower part of layer 4 and runs fattened feeds elsewhere
+  { name: "VDDS_DDR", layers: [1, 2], fill: { 1: (x: number, y: number) => x < XB && !SW(x, y) } },
   { name: "VDD_MPU", layers: [2, 1], fill: { 2: () => true } },
   { name: "VDD_CORE", layers: [2, 1], fill: { 2: () => true } },
-  { name: "VDDS_DDR", layers: [1, 2], fill: { 1: (x: number) => x < XB } },
 ]
 const CENTRE4 = new Set(["VDD_CORE", "VDD_MPU"]), CENTRE3 = new Set(["VDD_1V8", "VDD_3V3", "VDDS_DDR"]) // who may cross the middle of the processor on layers 4 / 3 cheaply
 const idx = new Map(NETS.map((n, i) => [n.name, i + 1]))
@@ -33,12 +35,12 @@ for (const [name, n] of Object.entries(routes.nets) as any) for (const v of n.vi
 // a plane net may also have to be reached at through vias of local parts joined by outer-layer traces only: none here
 const ci = (x: number) => Math.floor((x - E.x0) / P), cj = (y: number) => Math.floor((y - E.y0) / P)
 // ---------- static: who may have copper in a cell (0 anybody, k only net k, 127 nobody) ----------
-const ANTI = 0.125 // copper to via pad: 0.225 mm to the wall of a 0.1 mm hole (JLCPCB inner layers: 0.2 mm)
+const ANTI = +(process.env.ANTI ?? 0.125) // copper to via pad: 0.2 mm to the wall of a 0.1 mm hole (JLCPCB inner layers: 0.2 mm), 0.3 mm webs between ball vias
 const stat = new Int8Array(NN)
 for (let j = 0; j < NY; j++) for (let i = 0; i < NX; i++) { const x = cx(i), y = cy(j); if (x < E.x0 + 0.3 || x > E.x1 - 0.3 || y < E.y0 + 0.3 || y > E.y1 - 0.3) stat[j * NX + i] = 127 }
 for (const h of plan.holes) { const R = h.d / 2 + 0.4; for (let j = cj(h.y - R); j <= cj(h.y + R); j++) for (let i = ci(h.x - R); i <= ci(h.x + R); i++) if (i >= 0 && j >= 0 && i < NX && j < NY && Math.hypot(cx(i) - h.x, cy(j) - h.y) < R) stat[j * NX + i] = 127 }
-for (const v of vias) { const R = Math.max(v.d, 0.3) / 2 + ANTI + P / 2, k = idx.get(v.net) ?? 127
-  for (let j = Math.max(0, cj(v.y - R)); j <= Math.min(NY - 1, cj(v.y + R)); j++) for (let i = Math.max(0, ci(v.x - R)); i <= Math.min(NX - 1, ci(v.x + R)); i++) if (Math.hypot(cx(i) - v.x, cy(j) - v.y) < R) { const c = j * NX + i; stat[c] = stat[c] === 0 || stat[c] === k ? k : 127 } }
+for (const v of vias) { const R = Math.max(v.d, 0.3) / 2 + ANTI, k = idx.get(v.net) ?? 127 // exact: a cell is closed when any part of its square is nearer than R
+  for (let j = Math.max(0, cj(v.y - R) - 1); j <= Math.min(NY - 1, cj(v.y + R) + 1); j++) for (let i = Math.max(0, ci(v.x - R) - 1); i <= Math.min(NX - 1, ci(v.x + R) + 1); i++) if (Math.hypot(Math.max(Math.abs(cx(i) - v.x) - P / 2, 0), Math.max(Math.abs(cy(j) - v.y) - P / 2, 0)) < R - 1e-9) { const c = j * NX + i; stat[c] = stat[c] === 0 || stat[c] === k ? k : 127 } }
 // signal traces on an inner layer: no plane copper within 0.15 mm of them
 const blockL = LAYERS.map(() => new Uint8Array(NN))
 for (const n of Object.values(routes.nets) as any[]) for (const g of n.segs) { const l = LAYERS.indexOf(g.layer); if (l < 0) continue
@@ -126,6 +128,20 @@ for (const [l] of LAYERS.entries()) { const own = owner[l], fillers = NETS.map((
   // different nets on one layer
   let minNet = 9; for (const [l] of LAYERS.entries()) for (let c = 0; c < NN; c++) { const o = owner[l][c]; if (!o) continue; const i = c % NX, j = (c / NX) | 0; for (let dj = 0; dj <= 4; dj++) for (let di = -4; di <= 4; di++) { const ii = i + di, jj = j + dj; if (ii < 0 || ii >= NX || jj >= NY) continue; const o2 = owner[l][jj * NX + ii]; if (o2 && o2 !== o) minNet = Math.min(minNet, Math.hypot(Math.max(Math.abs(di) - 1, 0), Math.max(dj - 1, 0)) * P) } }
   report.push(`check clearances: copper to foreign via pad min ${minClear.toFixed(3)} mm (${clearBad} cells below 0.10); copper of different nets on a layer min ${minNet > 8 ? ">0.2" : minNet.toFixed(3)} mm`) }
+{ // feed width: vias of a supply reached from its connector pins through copper at least 0.2 mm wide (4 cells), on any layer
+  for (const [ni, net] of NETS.entries()) { const k = ni + 1; if (!["VDD_3V3", "VDD_1V8", "VDD_CORE", "VDD_MPU", "VDDS_DDR"].includes(net.name)) continue
+    const mine = vias.filter((v) => v.net === net.name), wide = LAYERS.map((_, l) => { const core = new Uint8Array(NN), w = new Uint8Array(NN) // opening with a 4x4 square
+      for (let j = 0; j < NY - 3; j++) for (let i = 0; i < NX - 3; i++) { let ok = true; for (let dj = 0; dj < 4 && ok; dj++) for (let di = 0; di < 4; di++) if (owner[l][(j + dj) * NX + i + di] !== k) { ok = false; break } if (ok) core[j * NX + i] = 1 }
+      for (let c = 0; c < NN; c++) if (core[c]) { const i = c % NX, j = (c / NX) | 0; for (let dj = 0; dj < 4; dj++) for (let di = 0; di < 4; di++) w[(j + dj) * NX + i + di] = 1 }
+      return w })
+    const seen = LAYERS.map(() => new Uint8Array(NN)), st: number[] = [], hit = new Set<number>()
+    const near = (l: number, v: V) => { const c0 = cj(v.y) * NX + ci(v.x); for (let dj = -3; dj <= 3; dj++) for (let di = -3; di <= 3; di++) { const c = c0 + dj * NX + di; if (c >= 0 && c < NN && wide[l][c]) return c } return -1 }
+    const enter = (m: number) => { if (hit.has(m)) return; hit.add(m); LAYERS.forEach((_, l) => { const c = near(l, mine[m]); if (c >= 0 && !seen[l][c]) { seen[l][c] = 1; st.push(l * NN + c) } }) }
+    mine.forEach((v, m) => { if (plan.vias.some((p: any) => /^V_J/.test(p.name) && p.x === v.x && p.y === v.y)) enter(m) })
+    const at = new Map<number, number[]>(); mine.forEach((v, m) => LAYERS.forEach((_, l) => { const c = near(l, v); if (c >= 0) at.set(l * NN + c, [...(at.get(l * NN + c) ?? []), m]) }))
+    while (st.length) { const u = st.pop()!, l = (u / NN) | 0, c = u % NN, i = c % NX, j = (c / NX) | 0; for (const m of at.get(u) ?? []) enter(m)
+      for (let d = 0; d < 8; d += 2) { const ii = i + D8[d], jj = j + D8[d + 1]; if (ii < 0 || jj < 0 || ii >= NX || jj >= NY) continue; const c2 = jj * NX + ii; if (wide[l][c2] && !seen[l][c2]) { seen[l][c2] = 1; st.push(l * NN + c2) } } }
+    report.push(`feed width ${net.name}: ${hit.size}/${mine.length} vias reached from the connector pins through copper >= 0.2 mm wide`) } }
 // ---------- polygons ----------
 function outlines(own: Int8Array, k: number) { // directed boundary edges with the region on the left, linked into loops
   const VX = NX + 1, next = new Map<number, number[]>(), add = (a: number, b: number) => { const l = next.get(a); if (l) l.push(b); else next.set(a, [b]) }

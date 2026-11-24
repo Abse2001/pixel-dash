@@ -2,7 +2,7 @@
 // processor and the memory need on the 6-layer board. Output: module/plan.json (+ plan-items.json for plots/checks).
 // Frame: the DDR block's coordinates (mm).
 import { Board, disc, seg, rect, gap, type Item, type Layer, type Pt } from "./geom"
-const DDR = "/home/user/ddr-route/out/module8/ddr-cpu-ram.routed.json"
+const DDR = "/home/user/ddr-route/out/module9/ddr-cpu-ram.routed.json"
 const srj = await Bun.file(DDR).json(), names: Record<string, string> = await Bun.file("/home/user/ddr-route/net-names.json").json()
 const powerBalls: { chip: string; ball: string; net: string; x: number; y: number }[] = await Bun.file(import.meta.dir + "/power-balls.json").json()
 const iface = (await Bun.file(import.meta.dir + "/../production/interface.csv").text()).trim().split("\n").slice(1).map((l) => l.split(","))
@@ -75,17 +75,17 @@ export const PARTS: Record<string, { fp: string; comp: string; file: string }> =
   R49R9_0402: { fp: "R0402", comp: "A_0402WGF499JTCE", file: "../am3354/imports/A_0402WGF499JTCE" },
   R1K_0402: { fp: "R0402", comp: "A_0402WGF1001TCE", file: "../imports/A_0402WGF1001TCE" },
   XTAL_24M: { fp: "XTAL3225", comp: "S3B24_000000F1210F30", file: "../imports/S3B24_000000F1210F30" },
-  DF40_100: { fp: "DF40", comp: "DF40C_100DS", file: "./DF40C_100DS" },
+  DF40_100: { fp: "DF40", comp: "DF40C_100DS_0_4V_51_", file: "./imports/DF40C_100DS_0_4V_51_" }, // imported from JLCPCB (C597931), footprint and 3D model as supplied
 }
 /** world pads of a part (bottom side parts are mirrored, as tscircuit renders them) */
 export const padsOf = (p: { part: string; x: number; y: number; rot: number; layer: Layer }) => { const f = FP[PARTS[p.part].fp], c = Math.cos(p.rot * Math.PI / 180), s = Math.sin(p.rot * Math.PI / 180), m = p.layer === "bottom" ? -1 : 1
   return f.pads.map((q) => ({ pin: q.pin, x: p.x + m * q.x * c - q.y * s, y: p.y + m * q.x * s + q.y * c, shape: rect(p.x + m * q.x * c - q.y * s, p.y + m * q.x * s + q.y * c, q.w, q.h, p.rot) })) }
 const bodyOf = (p: { part: string; x: number; y: number; rot: number }) => { const [w, h] = FP[PARTS[p.part].fp].body; return rect(p.x, p.y, w, h, p.rot) }
-const CLR = (it: Item) => it.kind === "ddr" || it.kind === "ddrvia" || it.kind === "pad" ? 0.15 : 0.1 // clearance of new static copper (JLCPCB: 0.15 mm between pads of different nets)
+const CLR = (it: Item) => it.kind === "ddr" || it.kind === "ddrvia" || it.kind === "pad" ? 0.18 : 0.1 // clearance of new static copper (JLCPCB: 0.15 mm between pads of different nets, 0.18 mm between 0402 parts)
 /** can this part sit here? returns the reason it cannot */
 function partBlocked(p: Omit<Part, "name">, bodyGap = 0.1): string | null {
   const body = bodyOf(p); for (const q of body.pts) if (q.x < EDGE.x0 + 0.4 || q.x > EDGE.x1 - 0.4 || q.y < EDGE.y0 + 0.4 || q.y > EDGE.y1 - 0.4) return "edge"
-  for (const o of bodies) if (o.layer === p.layer && gap(body, o.s) < bodyGap) return "body " + o.ref
+  for (const o of bodies) if (o.layer === p.layer && gap(body, o.s) < (o.ref === "U1" || o.ref === "U_DDR" ? 0.9 : bodyGap)) return "body " + o.ref // JLCPCB: 1 mm from a BGA on the same side
   for (const q of padsOf(p)) { const h = B.hits(q.shape, [p.layer], p.nets[q.pin] ?? "?", CLR); if (h.length) return `pad ${q.pin} vs ${h[0].net} ${h[0].kind}` }
   return null }
 function commitPart(p: Part) { parts.push(p); bodies.push({ layer: p.layer, s: bodyOf(p), ref: p.name }); for (const q of padsOf(p)) B.add({ ...q.shape, layers: [p.layer], net: p.nets[q.pin] ?? "NC:" + p.name + "." + q.pin, kind: "pad", ref: p.name + "." + q.pin }); return p }
@@ -144,7 +144,9 @@ function maze(net: string, start: Pt & { layer: Layer }, goal: (x: number, y: nu
   flush(); return { x: r3(X(end % N)), y: r3(Y(Math.floor(end / N) % N)), layer: L[Math.floor(end / N / N)] } }
 /** via for a ball: in the pad when the other side is free, otherwise a short top-layer escape to the nearest legal via site */
 function ballVia(k: string): Via | null { const b = ball[k], net = ballNet[k]; const have = vias.find((v) => v.ball === k); if (have) return have
-  if (!viaBlocked(b.x, b.y, net)) return addVia({ name: "P_" + k.replace(".", "_"), x: b.x, y: b.y, net, d: 0.3, hole: 0.1, ball: k })
+  // a via centred in its own ball pad is smaller than the pad, so only the far side decides
+  if (!viaBlocked(b.x, b.y, net) || (!B.hits(disc(b.x, b.y, 0.15), ["bottom"], net, 0.1).length && !B.near(disc(b.x, b.y, 0.5), 0).some((it) => it.layers.length === 2 && Math.hypot(it.pts[0].x - b.x, it.pts[0].y - b.y) < 0.45))) return addVia({ name: "P_" + k.replace(".", "_"), x: b.x, y: b.y, net, d: 0.3, hole: 0.1, ball: k })
+  if (process.env.DBG) console.error(`   ${k}: centred via blocked by ${viaBlocked(b.x, b.y, net)}`)
   // the other side is occupied under the ball centre: an off-centre via-in-pad (filled and capped), centre still on the pad
   for (const [d, need] of [[0.3, 0.1], [0.25, 0.09]] as const) { let best = { g: -9, x: 0, y: 0 }
     for (let dx = -0.2; dx <= 0.2001; dx += 0.01) for (let dy = -0.2; dy <= 0.2001; dy += 0.01) { if (Math.hypot(dx, dy) > b.r) continue
@@ -155,7 +157,7 @@ function ballVia(k: string): Via | null { const b = ball[k], net = ballNet[k]; c
 function pairPart(name: string, part: string, a: Pt, b: Pt, net1: string, net2: string, layer: Layer): Part | null {
   const ang = Math.atan2(b.y - a.y, b.x - a.x) * 180 / Math.PI, rot = (((layer === "bottom" ? ang + 180 : ang) % 360) + 360) % 360
   const p: Part = { name, part, x: r3((a.x + b.x) / 2), y: r3((a.y + b.y) / 2), rot: r3(rot), layer, nets: { pin1: net1, pin2: net2 } }
-  const why = partBlocked(p, 0.1); if (why && process.env.DBG) console.error(`   pair ${name} L=${Math.hypot(b.x - a.x, b.y - a.y).toFixed(2)}: ${why}`); return why ? null : p }
+  const why = partBlocked(p, 0.18); if (why && process.env.DBG) console.error(`   pair ${name} L=${Math.hypot(b.x - a.x, b.y - a.y).toFixed(2)}: ${why}`); return why ? null : p }
 const reach = (part: string) => { const f = FP[PARTS[part].fp], off = Math.abs(f.pads[0].x), m = f.pads[0].w / 2 - 0.04; return [Math.max(2 * (off - m), 0.45), 2 * (off + m)] }
 /** a two-pad part with pin1 on an existing via; pin2 on an existing via of net2 in reach, else on a new via */
 function anchored(name: string, part: string, at: Pt, net1: string, net2: string, layer: Layer = "bottom", existingOnly = false): Part | null {
@@ -203,7 +205,7 @@ function attachAll() {
       if (e) { done = true; report.push(`${t.name}: not on the via of ${t.k}; ${Math.hypot(p.x - v.x, p.y - v.y).toFixed(2)} mm away on the ${p.layer} side, linked by a routed trace (site ${n + 1})`) } else { tried.add(`${p.x},${p.y},${p.layer}`); uncommit(t.name) } }
     if (done) continue
     // boxed in by the DDR copper on both outer layers: the part gets a via in each pad and the net runs on an inner layer
-    const p = free(t.name, t.part, v, net, t.net2, { layers: ["bottom", "top"], maxDist: 8 })
+    const p = free(t.name, t.part, v, net, t.net2, { layers: ["bottom", "top"], maxDist: 8 }) ?? free(t.name, t.part, v, net, t.net2, { layers: ["bottom", "top"], maxDist: 15, step: 0.15 }) ?? free(t.name, t.part, v, net, t.net2, { layers: ["bottom", "top"], maxDist: 15, step: 0.15, anywhere: true })
     if (p) { innerNets.push(net); report.push(`${t.name}: ${t.k} cannot be reached on the outer layers; part ${Math.hypot(p.x - v.x, p.y - v.y).toFixed(2)} mm away on the ${p.layer} side, net ${net} runs on an inner layer`) } else report.push(`!! ${t.name}: could not be linked to ${t.k}`) } }
 
 // ---------- ball vias, regulator capacitors, calibration ----------
@@ -212,15 +214,15 @@ for (const k of ["U1.B9", "U1.A9", "U1.J4", "U_DDR.H1", "U_DDR.M8"]) ballVia(k)
 const innerBall = (b: string) => /^[RTUV][1-6]$/.test(b) || ["B5", "C5", "C6"].includes(b)
 for (const s of signals) if (innerBall(s.ball)) { const v = ballVia("U1." + s.ball), b = ball["U1." + s.ball]; if (!v || Math.hypot(v.x - b.x, v.y - b.y) > 1e-3) report.push(`!! ${s.name} (${s.ball}): no centred via-in-pad`) }
 // ---------- crystal (top side, below the processor) ----------
-{ const Y = commitPart({ name: "Y_OSC0", part: "XTAL_24M", x: -43.55, y: 5.4, rot: 90, layer: "top", nets: { pin3: "OSC0_IN", pin1: "OSC0_OUT", pin2: "GND", pin4: "GND" } })
+{ const Y = commitPart({ name: "Y_OSC0", part: "XTAL_24M", x: -43.55, y: 4.8, rot: 90, layer: "top", nets: { pin3: "OSC0_IN", pin1: "OSC0_OUT", pin2: "GND", pin4: "GND" } })
   const yp = Object.fromEntries(padsOf(Y).map((q) => [q.pin, q]))
   for (const g of ["pin2", "pin4"]) addVia({ name: `V_Y_OSC0_${g}`, x: r3(yp[g].x), y: r3(yp[g].y), net: "GND", d: 0.3, hole: 0.1 })
-  const cin = commitPart({ name: "C_OSC0_IN", part: "C15P_0402", x: -45.95, y: 6.5, rot: 0, layer: "top", nets: { pin2: "OSC0_IN", pin1: "GND" } })
-  const cout = commitPart({ name: "C_OSC0_OUT", part: "C15P_0402", x: -41.4, y: 4.3, rot: 90, layer: "top", nets: { pin2: "OSC0_OUT", pin1: "GND" } })
+  const cin = commitPart({ name: "C_OSC0_IN", part: "C15P_0402", x: -45.95, y: 5.9, rot: 0, layer: "top", nets: { pin2: "OSC0_IN", pin1: "GND" } })
+  const cout = commitPart({ name: "C_OSC0_OUT", part: "C15P_0402", x: -41.4, y: 3.7, rot: 90, layer: "top", nets: { pin2: "OSC0_OUT", pin1: "GND" } })
   const ci = Object.fromEntries(padsOf(cin).map((q) => [q.pin, q])), co = Object.fromEntries(padsOf(cout).map((q) => [q.pin, q]))
   addVia({ name: "V_C_OSC0_IN_1", x: r3(ci.pin1.x), y: r3(ci.pin1.y), net: "GND", d: 0.3, hole: 0.1 }); addVia({ name: "V_C_OSC0_OUT_1", x: r3(co.pin1.x), y: r3(co.pin1.y), net: "GND", d: 0.3, hole: 0.1 })
   const tr = (net: string, pts: Pt[], w: number, from: string, to: string) => { for (let i = 0; i + 1 < pts.length; i++) { const s = seg(pts[i], pts[i + 1], w), h = B.hits(s, ["top"], net, 0.1); if (h.length) report.push(`crystal trace ${net} hits ${h[0].net} ${h[0].kind} ${h[0].ref ?? ""}`); B.add({ ...s, layers: ["top"], net, kind: "trace" }) }; paths.push({ net, layer: "top", pts, w, from, to }) }
-  tr("OSC0_IN", [U1("V10"), { x: U1("V10").x, y: 6.9 }], 0.15, "U1.V10", "Y_OSC0.pin3")
+  tr("OSC0_IN", [U1("V10"), { x: U1("V10").x, y: 6.3 }], 0.15, "U1.V10", "Y_OSC0.pin3")
   tr("OSC0_IN", [{ x: ci.pin2.x, y: ci.pin2.y }, { x: yp.pin3.x - 0.3, y: yp.pin3.y }], 0.3, "C_OSC0_IN.pin2", "Y_OSC0.pin3")
   tr("OSC0_OUT", [U1("U11"), { x: -43.2, y: 8.75 }, { x: -43.2, y: 7.95 }, { x: -42.85, y: 7.6 }, { x: -41.75, y: 7.6 }, { x: co.pin2.x, y: 7.25 }, { x: co.pin2.x, y: co.pin2.y }], 0.15, "U1.U11", "C_OSC0_OUT.pin2")
   tr("OSC0_OUT", [{ x: co.pin2.x, y: co.pin2.y }, { x: yp.pin1.x + 0.3, y: co.pin2.y }], 0.3, "C_OSC0_OUT.pin2", "Y_OSC0.pin1") }
@@ -290,7 +292,7 @@ if (process.env.TOPUP) { const routes = await Bun.file(import.meta.dir + "/route
   for (let n = hs().length; n < 20; n++) if (!free(`C_HS_CPU_T${n + 1}`, "C100N_0402", { x: -48.4, y: 15.55 }, "VDDS_DDR", "GND", { anywhere: true, maxDist: 9.6, step: 0.15, ok: (p) => dist(p) <= 10.16 - 0.4, score: dist })) break
   for (let n = hs().length; n < 20; n++) if (!free(`C_HS_CPU_T${n + 1}`, "C100N_0201", { x: -48.4, y: 15.55 }, "VDDS_DDR", "GND", { anywhere: true, maxDist: 9.6, step: 0.05, ok: (p) => dist(p) <= 10.16 - 0.4, score: dist })) break
   report.push(`top-up: DDR high-speed bypass CPU now ${hs().length}/20, worst distance ${Math.max(...hs().map(dist)).toFixed(2)} mm (limit 10.16)`)
-  if (!parts.some((p) => p.name === "C_VREF_CPU")) { const v = vias.find((v) => v.ball === "U1.J4")!, p = free("C_VREF_CPU", "C100N_0402", v, "DDR_VREF", "GND", { anywhere: true, maxDist: 14, step: 0.15 }); if (p) report.push(`top-up: C_VREF_CPU ${Math.hypot(p.x - v.x, p.y - v.y).toFixed(2)} mm from the VREF via of U1.J4`) }
+  if (!parts.some((p) => p.name === "C_VREF_CPU")) { const v = vias.find((v) => v.ball === "U1.J4")!, p = free("C_VREF_CPU", "C100N_0201", v, "DDR_VREF", "GND", { anywhere: true, maxDist: 14, step: 0.05 }) ?? free("C_VREF_CPU", "C100N_0402", v, "DDR_VREF", "GND", { anywhere: true, maxDist: 14, step: 0.15 }); if (p) report.push(`top-up: C_VREF_CPU ${Math.hypot(p.x - v.x, p.y - v.y).toFixed(2)} mm from the VREF via of U1.J4`) }
   free("C_BULK_1V8_2", "C10U_0603", U1("D10"), "VDD_1V8", "GND", { anywhere: true, maxDist: 8, viasPerPad: 2, step: 0.15 })
   for (const [net, near, n] of [["VDD_MPU", U1("G13"), 2], ["VDD_1V8", U1("H15"), 2], ["VDD_1V8", U1("R11"), 1], ["VDD_3V3", U1("P12"), 2], ["VDD_3V3", U1("E12"), 1]] as const) for (let i = 0; i < n; i++) { const name = `C_X_${net.slice(4)}_${parts.filter((p) => p.name.startsWith("C_X_" + net.slice(4))).length + 1}`
     const p = free(name, "C100N_0402", near, net, "GND", { anywhere: true, maxDist: 6, step: 0.15 }); if (p) report.push(`top-up: ${name} (${net}) ${Math.hypot(p.x - near.x, p.y - near.y).toFixed(2)} mm from its ball`) } }
@@ -301,6 +303,9 @@ for (const h of holes) { const hit = B.hits(disc(h.x, h.y, h.d / 2), BOTH, "-", 
 const unassigned = Object.keys(ball).filter((k) => !ballNet[k])
 report.push(`balls without a net (left open): U1 ${unassigned.filter((k) => k.startsWith("U1.")).length}, U_DDR ${unassigned.filter((k) => k.startsWith("U_DDR.")).map((k) => k.slice(6)).join(" ")}`)
 for (const [k, n] of Object.entries(ballNet)) if (PLANE.has(n) && !vias.some((v) => v.ball === k)) report.push(`!! ${k} (${n}) has no via`)
+const REQUIRED = ["R_VTP", "R_ZQ", "R_VREF_TOP", "R_VREF_BOT", "C_VREF_DIV", "C_VREF_DQ", "C_VREF_CA", "C_VBB_MPU", "C_SRAM_CORE", "C_SRAM_MPU", "C_CAP_RTC", "C_VDDS_RTC", "Y_OSC0", "C_OSC0_IN", "C_OSC0_OUT", "J1", "J2", "C_BULK_DDR_CPU1", "C_BULK_DDR_CPU2", "C_BULK_DDR_RAM1", "C_BULK_DDR_RAM2", ...(process.env.TOPUP ? ["C_VREF_CPU"] : [])]
+const missing = REQUIRED.filter((n) => !parts.some((p) => p.name === n)); if (missing.length) report.push("!! REQUIRED PARTS NOT PLACED: " + missing.join(" "))
 console.log(report.join("\n")); console.log(`${parts.length} parts, ${vias.length} vias, ${signals.length} signals, pins: ${pins.filter((p) => p.role === "SIG").length} free signal pins, ${pins.filter((p) => p.role === "GND").length} ground pins`)
-await Bun.write(import.meta.dir + "/plan.json", JSON.stringify({ edge: EDGE, holes, ddrInner, innerNets, planeNets: [...PLANE], ballNet, ball, signals, parts, vias, links, paths, pins, unassigned }, null, 1))
+await Bun.write(import.meta.dir + "/plan.json", JSON.stringify({ edge: EDGE, holes, required: REQUIRED, ddrInner, innerNets, planeNets: [...PLANE], ballNet, ball, signals, parts, vias, links, paths, pins, unassigned }, null, 1))
 await Bun.write(import.meta.dir + "/plan-items.json", JSON.stringify({ items: B.items, bodies }))
+if (missing.length) process.exit(1)

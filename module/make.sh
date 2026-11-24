@@ -1,5 +1,5 @@
 #!/bin/bash
-# Rebuilds the compute module from the verified DDR block (ddr-route/out/module8) to fabrication files.
+# Rebuilds the compute module from the verified DDR block (ddr-route/out/module9) to fabrication files.
 set -e
 cd "$(dirname "$0")/.."
 bun module/plan.ts                 # parts, vias, connector pins around the fixed DDR copper

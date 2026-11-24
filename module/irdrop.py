@@ -43,4 +43,12 @@ for net, (layer, loads) in LOADS.items():
         if rn < 1e-22: break
         p = r + (rn / rs) * p; rs = rn
     worst = -x[own].min() * 1e3
+    gx = np.where(own & np.roll(own, -1, axis=1), (x - np.roll(x, -1, axis=1)) / RS, 0.0); gy = np.where(own & np.roll(own, -1, axis=0), (x - np.roll(x, -1, axis=0)) / RS, 0.0)
+    K = np.hypot(gx, gy) / P; jmax, imax = np.unravel_index(K.argmax(), K.shape)  # sheet current density, A per mm of copper width
+    if os.environ.get('KMAP'):
+        from PIL import Image
+        img = np.zeros((NY, NX, 3), np.uint8); img[own] = (40, 40, 90); t = np.clip(K / 2.0, 0, 1); img[own, 0] = (40 + 215 * t[own]).astype(np.uint8); img[own, 1] = (40 + 215 * np.clip(K[own] / 0.5, 0, 1)).astype(np.uint8)
+        Image.fromarray(img[::-1]).resize((NX * 4, NY * 4), Image.NEAREST).save(os.environ['KMAP'] + '-' + net + '.png')
+    loss = ((gx ** 2 + gy ** 2) * RS).sum() * 1e3
+    print(f"          peak current density {K.max():.2f} A/mm at ({x0 + imax * P:.2f}, {y0 + jmax * P:.2f}) (0.15 mm inner trace at 10 K rise: about 2 A/mm); copper above 1 A/mm: {(K > 1).sum() * P * P:.2f} mm2; total loss {loss:.1f} mW")
     print(f"{net:9s} on {['inner1','inner2','inner3','inner4'][layer]}: {sum(loads.values()):.2f} A, {len(pins)} pin vias, worst drop {worst:.1f} mV ({it} iterations{', %d balls not on this layer' % miss if miss else ''})")

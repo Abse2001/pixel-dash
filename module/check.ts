@@ -37,6 +37,12 @@ for (const t of cj.filter((e) => e.type === "pcb_trace")) { const net = t.net_na
 for (const v of cj.filter((e) => e.type === "pcb_via")) { let net = v.net_name
   if (!net) { const near = all.find((i) => i.kind === "via" && Math.hypot(i.pts[0].x - v.x - CX, i.pts[0].y - v.y - CY) < 0.01); if (near) continue; net = "?:" + v.pcb_via_id }
   add(disc(v.x + CX, v.y + CY, v.outer_diameter / 2), LAY, net, "via") }
+{ // nothing required may be missing, and no ball that needs a part may be left as a one-pad net
+  const names = new Set([...pc.values()]), miss = (plan.required ?? []).filter((n: string) => !names.has(n)).concat(["C_VREF_CPU"].filter((n) => !names.has(n)))
+  ;(miss.length ? bad : ok)(`required parts present (${(plan.required ?? []).length + 1} checked)${miss.length ? ": MISSING " + miss.join(" ") : ""}`)
+  const cnt = new Map<string, number>(); for (const it of all) if (it.kind === "pad") cnt.set(it.net, (cnt.get(it.net) ?? 0) + 1)
+  const lone = [...cnt].filter(([n, k]) => k === 1 && !n.startsWith("open:") && !n.startsWith("NC:")).map(([n]) => n)
+  ;(lone.length ? bad : ok)(`no net ends at a single pad: ${lone.length ? lone.join(" ") : "none"}`) }
 // ---------- clearance ----------
 { let min = 9, n = 0; const worst: string[] = []
   for (const a of all) for (const b of B.near(a, 0.2) as It[]) { if (b.id <= a.id || a.net === b.net || !a.layers.some((l) => b.layers.includes(l))) continue
@@ -44,7 +50,7 @@ for (const v of cj.filter((e) => e.type === "pcb_via")) { let net = v.net_name
   ;(n ? bad : ok)(`outer and via copper of different nets >= ${MIN} mm apart: ${n} below, minimum ${min.toFixed(3)} mm`); out.push(...worst.map((w) => "        " + w)) }
 { let min = 9, where = ""; const pads = all.filter((i) => i.kind === "pad") // assembly: pads of different parts on one side
   for (const a of pads) for (const b of B.near(a, 0.3) as It[]) { if (b.kind !== "pad" || b.id <= a.id || a.layers[0] !== b.layers[0] || a.ref!.split(".")[0] === b.ref!.split(".")[0]) continue; const g = gap(a, b); if (g < min) { min = g; where = `${a.ref} / ${b.ref}` } }
-  ;(min < 0.15 - 1e-6 ? bad : ok)(`pads of different parts on the same side >= 0.15 mm apart: minimum ${min.toFixed(3)} mm (${where})`) }
+  ;(min < 0.18 - 1e-6 ? bad : ok)(`pads of different parts on the same side >= 0.18 mm apart (JLCPCB 0402-0402 spacing; 0.15 mm pad rule): minimum ${min.toFixed(3)} mm (${where})`) }
 { const hs = all.filter((i) => i.kind === "via"); let min = 9, n = 0, where = "" // drill hits: none doubled, none closer than 0.2 mm wall to wall
   for (const a of hs) for (const b of B.near(a, 0.3) as It[]) { if (b.kind !== "via" || b.id <= a.id) continue; const dd = Math.hypot(a.pts[0].x - b.pts[0].x, a.pts[0].y - b.pts[0].y) - 0.1; if (dd < min) { min = dd; where = `(${(a.pts[0].x - CX).toFixed(2)}, ${(a.pts[0].y - CY).toFixed(2)}) ${a.net}/${b.net}` } if (dd < 0.2 - 1e-6) n++ }
   ;(n ? bad : ok)(`drill holes >= 0.20 mm wall to wall: ${n} pairs closer, minimum ${min.toFixed(3)} mm at ${where} (${hs.length} holes)`) }
@@ -53,6 +59,10 @@ for (const v of cj.filter((e) => e.type === "pcb_via")) { let net = v.net_name
 { let min = 9, n = 0, where = "" // JLCPCB: via hole to other copper >= 0.2 mm (holes are 0.1 mm)
   for (const v of all.filter((i) => i.kind === "via")) { const hole = disc(v.pts[0].x, v.pts[0].y, 0.05); for (const o of B.near(hole, 0.25) as It[]) { if (o.net === v.net) continue; const g = gap(hole, o); if (g < min) { min = g; where = `(${(v.pts[0].x - CX).toFixed(2)}, ${(v.pts[0].y - CY).toFixed(2)}) ${v.net} / ${o.net} ${o.kind}` } if (g < 0.2 - 1e-6) n++ } }
   ;(n ? bad : ok)(`via hole wall to copper of other nets >= 0.20 mm (outer layers and via pads): ${n} below, minimum ${min.toFixed(3)} mm at ${where}`) }
+{ let min = 9, where = "" // JLCPCB assembly: other parts on the BGA side stay 1 mm from the BGA bodies
+  const bga = [rect(-44.8, 15.15, 15, 15), rect(-70, 15.15, 14, 9)]
+  for (const a of all.filter((i) => i.kind === "pad" && i.layers[0] === "top" && !/^U(1|_DDR)\./.test(i.ref!))) for (const b of bga) { const g = gap(a, b); if (g < min) { min = g; where = a.ref! } }
+  ;(min < 1.0 - 1e-6 ? bad : ok)(`top-side parts >= 1.0 mm from the BGA bodies: minimum ${min.toFixed(2)} mm (${where})`) }
 // ---------- pours ----------
 const pours = cj.filter((e) => e.type === "pcb_copper_pour").map((p) => ({ layer: p.layer, net: p.net_name, outer: p.brep_shape.outer_ring.vertices.map((v: any) => ({ x: v.x + CX, y: v.y + CY })), holes: p.brep_shape.inner_rings.map((r: any) => r.vertices.map((v: any) => ({ x: v.x + CX, y: v.y + CY }))) }))
 const pip = (q: any, poly: any[]) => { let c = false; for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) if ((poly[i].y > q.y) !== (poly[j].y > q.y) && q.x < ((poly[j].x - poly[i].x) * (q.y - poly[i].y)) / (poly[j].y - poly[i].y) + poly[i].x) c = !c; return c }

@@ -26,15 +26,16 @@ nets.forEach((n) => idOf(n.name))
 const statT = [new Int32Array(NN), new Int32Array(NN)], statV = new Int32Array(NN)
 const mark = (a: Int32Array, c: number, id: number) => { a[c] = a[c] === 0 || a[c] === id ? id : -1 }
 const inCpu = (x: number, y: number) => x > -52.4 && x < -37.2 && y > 7.55 && y < 22.75
-function stamp(it: Pick<Item, "pts" | "r">, a: Int32Array, id: number, reach: number) { const xs = it.pts.map((p) => p.x), ys = it.pts.map((p) => p.y), R = it.r + reach
-  for (let j = Math.max(0, gy(Math.min(...ys) - R)); j <= Math.min(NY - 1, gy(Math.max(...ys) + R)); j++) for (let i = Math.max(0, gx(Math.min(...xs) - R)); i <= Math.min(NX - 1, gx(Math.max(...xs) + R)); i++) if (gap(disc(wx(i), wy(j), 0), it) < reach - 1e-6) mark(a, j * NX + i, id) }
+function stamp(it: Pick<Item, "pts" | "r">, a: Int32Array, id: number, reach: number, only?: (x: number, y: number) => boolean) { const xs = it.pts.map((p) => p.x), ys = it.pts.map((p) => p.y), R = it.r + reach
+  for (let j = Math.max(0, gy(Math.min(...ys) - R)); j <= Math.min(NY - 1, gy(Math.max(...ys) + R)); j++) for (let i = Math.max(0, gx(Math.min(...xs) - R)); i <= Math.min(NX - 1, gx(Math.max(...xs) + R)); i++) if ((!only || only(wx(i), wy(j))) && gap(disc(wx(i), wy(j), 0), it) < reach - 1e-6) mark(a, j * NX + i, id) }
 for (const it of items) { if (!it.layers.length) continue
   const ddr = it.kind === "ddr" || it.kind === "ddrvia", id = it.net.startsWith("NC:") ? -1 : idOf(it.net)
   // DDR nets keep four trace widths to other signals outside the processor breakout (Table 7-68/7-69 spacing)
-  const c = ddr && !(it.pts.every((p) => inCpu(p.x, p.y))) ? CLR_DDR : CLR
-  for (const l of it.layers) { if (l === "top" && MODE === "inner") continue; stamp(it, statT[l === "top" ? 0 : 1], id, c + W / 2 + 0.005) }
-  if (MODE === "inner" && it.layers.length === 2) stamp(it, statT[0], id, 0.13 + W / 2 + 0.005) // layer 4 sees only the via barrels
-  stamp(it, statV, id, c + VIA_D / 2 + 0.005) }
+  // four trace widths to DDR copper everywhere outside the processor's ball field; inside it (breakout) the normal clearance
+  const out = (x: number, y: number) => !inCpu(x, y)
+  for (const l of it.layers) { if (l === "top" && MODE === "inner") continue; stamp(it, statT[l === "top" ? 0 : 1], id, CLR + W / 2 + 0.005); if (ddr) stamp(it, statT[l === "top" ? 0 : 1], id, CLR_DDR + W / 2 + 0.005, MODE === "inner" ? undefined : out) }
+  if (MODE === "inner" && it.layers.length === 2) stamp(it, statT[0], id, 0.1 + W / 2 + 0.005) // layer 4 sees only the via pads: 0.1 mm to the pad keeps 0.2 mm to the 0.1 mm hole
+  stamp(it, statV, id, CLR + VIA_D / 2 + 0.005); if (ddr) stamp(it, statV, id, CLR_DDR + VIA_D / 2 + 0.005, out) }
 // vias with a pad smaller than 0.3 mm (layer-4 dips of the DDR block): keep the same distance to the hole as for a 0.3 mm pad
 for (const it of items) if (it.layers.length === 2 && it.pts.length === 1 && it.r < 0.149) { const big = { pts: it.pts, r: 0.15 }, id = idOf(it.net); for (const l of [0, 1]) if (!(MODE === "inner" && l === 0)) stamp(big, statT[l], id, CLR + W / 2 + 0.005) }
 // vias of this pass stay clear of the layer-4 traces of the first pass
@@ -95,7 +96,7 @@ function route(n: Net): boolean { const id = idOf(n.name), fixed = n.fixedPad !=
     // via: anywhere legal, or a pad via on a connector terminal
     const o = (1 - l) * NN + c
     if (l === 0 && term[c]) { const pk = term[c] - 1; if (termVia[c] && (n.fixedPad === undefined ? sigPads[pk].role === "SIG" : pk === n.fixedPad)) { const occ = tNear3[0][c] + vNear4[c] > 0 ? 1 : 0; relax(o, VIA_COST * (1 + histV[c]) * (1 + pres * occ) + pres * 8 * (occ + padUse[pk]) + histPad[pk]) } }
-    else if ((statV[c] === 0 || statV[c] === id) && okT(1 - l, c) && !term[c]) { const occ = tNear3[0][c] + tNear3[1][c] + vNear4[c] > 0 ? 1 : 0; relax(o, VIA_COST * (1 + histV[c]) * (1 + pres * occ) + pres * 8 * occ) } }
+    else if ((statV[c] === 0 || statV[c] === id) && okT(1 - l, c) && !term[c] && !(MODE === "inner" && c !== n.src && Math.hypot((c % NX) - (n.src % NX), ((c / NX) | 0) - ((n.src / NX) | 0)) < 4.5)) { const occ = tNear3[0][c] + tNear3[1][c] + vNear4[c] > 0 ? 1 : 0; relax(o, VIA_COST * (1 + histV[c]) * (1 + pres * occ) + pres * 8 * occ) } }
   if (end < 0) return false
   const path: number[] = []; for (let u = end; u !== -1; u = from[u]) path.unshift(u)
   n.path = path; n.pad = endPad; return true }
@@ -112,11 +113,11 @@ for (let it = 1; it <= MAXIT; it++) { let failed = 0
   for (const k of order) { const n = nets[k]; stampNet(n, -1); n.path = undefined; if (!route(n)) failed++; stampNet(n, 1) }
   let nbad = 0; const badNets: string[] = []
   for (const n of nets) { if (!n.path) { nbad++; badNets.push(n.name + "(unrouted)"); continue } const { bad, padClash } = conflicts(n)
-    for (const u of bad) { const l = u >= NN ? 1 : 0, c = u % NN; hist[l][c] += 0.4; histV[c] += 0.2 } if (padClash) histPad[n.pad!] += 1.5
+    for (const u of bad) { const l = u >= NN ? 1 : 0, c = u % NN; hist[l][c] = Math.min(hist[l][c] + 0.4, 6); histV[c] = Math.min(histV[c] + 0.2, 3) } if (padClash) histPad[n.pad!] += 1.5
     if (bad.length || padClash) { nbad++; badNets.push(n.name) } }
   if (it % 5 === 0 || nbad === 0) console.log(`iter ${it}: ${nbad} nets in conflict, ${failed} unrouted, pres ${pres.toFixed(2)}, ${((performance.now() - t0) / 1e3).toFixed(0)}s ${nbad && nbad < 8 ? badNets.join(" ") : ""}`)
   if (nbad === 0) { solved = true; break }
-  pres = Math.min(pres * 1.25, 60); for (let i = order.length - 1; i > 0; i--) { const j = Math.floor(rnd() * (i + 1)); [order[i], order[j]] = [order[j], order[i]] } }
+  pres = Math.min(pres * 1.25, 25); for (let i = order.length - 1; i > 0; i--) { const j = Math.floor(rnd() * (i + 1)); [order[i], order[j]] = [order[j], order[i]] } }
 // ---------- output ----------
 const out: any = { solved, nets: { ...prev.nets } as Record<string, any> }
 for (const n of nets) { if (!n.path) continue; const pad = sigPads[n.pad!], segs: { layer: string; pts: Pt[] }[] = [], vias: any[] = []
@@ -128,6 +129,10 @@ for (const n of nets) { if (!n.path) continue; const pad = sigPads[n.pad!], segs
   // run on to the pad centre along the pad's centreline
   const last = cur.at(-1)!; if (Math.abs(last.y - pad.y) > 1e-6 && !vias.some((v) => Math.abs(v.x - last.x) < 1e-6 && Math.abs(v.y - last.y) < 1e-6 && cur.length === 1)) cur.push({ x: pad.x, y: pad.y })
   flush()
+  // the ball's via may sit slightly off the pad centre (planner): the layer-4 / bottom copper starts at that via, and no second via is drilled
+  { const ballName = plan.signals.find((s: any) => s.name === n.name).ball, b0 = plan.ball["U1." + ballName], pv = (plan.vias as any[]).find((v) => v.ball === "U1." + ballName)
+    if (MODE === "inner" && pv && Math.hypot(pv.x - b0.x, pv.y - b0.y) > 1e-3) { for (let k = vias.length - 1; k >= 0; k--) if (Math.hypot(vias[k].x - b0.x, vias[k].y - b0.y) < 0.02) vias.splice(k, 1)
+      for (const g of segs) for (const q of g.pts) if (Math.hypot(q.x - b0.x, q.y - b0.y) < 0.02) { q.x = pv.x; q.y = pv.y } } }
   out.nets[n.name] = { ball: plan.signals.find((s: any) => s.name === n.name).ball, conn: pad.conn, pin: pad.pin, segs, vias, length: +segs.reduce((s, g) => s + g.pts.slice(1).reduce((t, p, i) => t + Math.hypot(p.x - g.pts[i].x, p.y - g.pts[i].y), 0), 0).toFixed(2) } }
 if (solved || process.env.KEEP) await Bun.write(dir + "/routes.json", JSON.stringify(out))
 const L = nets.filter((n) => n.path).map((n) => out.nets[n.name]) as any[]
@@ -138,3 +143,4 @@ if (process.env.PROBE) { const n = nets.find((n) => n.name === process.env.PROBE
 if (process.env.MAP) { const [l, x0, y0, x1, y1] = process.env.MAP.split(",").map(Number), n = nets.find((n) => n.name === (process.env.PROBE ?? "LCD_D0"))!, id = idOf(n.name)
   for (let j = gy(y1); j >= gy(y0); j--) { let s = ""; for (let i = gx(x0); i <= gx(x1); i++) { const c = j * NX + i, v = l === 2 ? statV[c] : statT[l][c]; s += term[c] && l === 1 ? "T" : v === 0 ? "." : v === id ? "o" : v === -1 ? "#" : "x" } console.log(s) } }
 if (process.env.SHOWBAD) for (const n of nets) { if (!n.path) continue; const { bad, padClash } = conflicts(n); if (bad.length || padClash) console.log(n.name, "pad", sigPads[n.pad!].conn, sigPads[n.pad!].pin, padClash ? "PAD CLASH" : "", "bad nodes:", bad.slice(0, 8).map((u) => `${LAYERS[u >= NN ? 1 : 0]}(${wx((u % NN) % NX).toFixed(1)},${wy(((u % NN) / NX) | 0).toFixed(2)})`).join(" "), "| path:", n.path.filter((_, i) => i % 6 === 0).map((u) => `${u >= NN ? "b" : "i"}(${wx((u % NN) % NX).toFixed(1)},${wy(((u % NN) / NX) | 0).toFixed(1)})`).join(" ").slice(0, 400)) }
+if (process.env.WHYV) for (const n of nets.filter((n) => !n.path)) { const x = wx(n.src % NX), y = wy((n.src / NX) | 0), id = idOf(n.name); console.log(n.name, "statV at ball", statV[n.src], "own id", id, "blockers:", items.filter((it) => it.layers.length && idOf(it.net.startsWith("NC:") ? "x" : it.net) !== id && gap(disc(x, y, 0), it) < (it.kind === "ddr" || it.kind === "ddrvia" ? (it.pts.every((p) => inCpu(p.x, p.y)) ? CLR : CLR_DDR) : CLR) + VIA_D / 2 + 0.005).map((it) => `${it.net} ${it.kind} ${it.layers.join("+")} ${gap(disc(x, y, 0), it).toFixed(3)}`).slice(0, 4).join(" | ")) }

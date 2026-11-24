@@ -13,10 +13,10 @@ import { A_0402CG150F500NT } from "../imports/A_0402CG150F500NT"
 import { A_0402WGF1001TCE } from "../imports/A_0402WGF1001TCE"
 import { S3B24_000000F1210F30 } from "../imports/S3B24_000000F1210F30"
 import { CL05A105KA5NQNC } from "./imports/CL05A105KA5NQNC"
-import { DF40C_100DS } from "./DF40C_100DS"
+import { DF40C_100DS_0_4V_51_ } from "./imports/DF40C_100DS_0_4V_51_"
 import plan from "./plan.json"
-const COMP: Record<string, any> = { TMK063ABJ104KP_F, RC0201FR_07240RL, A_0402WGF499JTCE, CL05B104KO5NNNC, CL10A106KP8NNNC, A_0402CG150F500NT, A_0402WGF1001TCE, S3B24_000000F1210F30, CL05A105KA5NQNC, DF40C_100DS }
-const PART: Record<string, string> = { C100N_0201: "TMK063ABJ104KP_F", C100N_0402: "CL05B104KO5NNNC", C1U_0402: "CL05A105KA5NQNC", C10U_0603: "CL10A106KP8NNNC", C15P_0402: "A_0402CG150F500NT", R240_0201: "RC0201FR_07240RL", R49R9_0402: "A_0402WGF499JTCE", R1K_0402: "A_0402WGF1001TCE", XTAL_24M: "S3B24_000000F1210F30", DF40_100: "DF40C_100DS" }
+const COMP: Record<string, any> = { TMK063ABJ104KP_F, RC0201FR_07240RL, A_0402WGF499JTCE, CL05B104KO5NNNC, CL10A106KP8NNNC, A_0402CG150F500NT, A_0402WGF1001TCE, S3B24_000000F1210F30, CL05A105KA5NQNC, DF40C_100DS_0_4V_51_ }
+const PART: Record<string, string> = { C100N_0201: "TMK063ABJ104KP_F", C100N_0402: "CL05B104KO5NNNC", C1U_0402: "CL05A105KA5NQNC", C10U_0603: "CL10A106KP8NNNC", C15P_0402: "A_0402CG150F500NT", R240_0201: "RC0201FR_07240RL", R49R9_0402: "A_0402WGF499JTCE", R1K_0402: "A_0402WGF1001TCE", XTAL_24M: "S3B24_000000F1210F30", DF40_100: "DF40C_100DS_0_4V_51_" }
 const dir = import.meta.dir, E = plan.edge, CX = (E.x0 + E.x1) / 2, CY = (E.y0 + E.y1) / 2
 const routes = (await Bun.file(dir + "/routes.json").exists()) ? await Bun.file(dir + "/routes.json").json() : { nets: {} }
 const pours: any[] = (await Bun.file(dir + "/pours.json").exists()) ? await Bun.file(dir + "/pours.json").json() : []
@@ -32,14 +32,14 @@ circuit.add(
   </board>,
 )
 await circuit.renderUntilSettled()
-const cj: any[] = circuit.getCircuitJson().filter((e: any) => e.type !== "pcb_silkscreen_text" || ["U1", "U_DDR", "J1", "J2"].includes(e.text)) // 0402 designators do not fit; the assembly data carries them
+const cj: any[] = circuit.getCircuitJson().filter((e: any) => e.type !== "pcb_silkscreen_text" || ["U1", "U_DDR"].includes(e.text)) // 0402 designators do not fit; the assembly data carries them
 const errs = cj.filter((e) => e.type.includes("error")); const kinds: Record<string, number> = {}; for (const e of errs) kinds[e.type] = (kinds[e.type] ?? 0) + 1
 // ---------- add the planned copper ----------
 const ALL = ["top", "inner1", "inner2", "inner3", "inner4", "bottom"]; let n = 0
 const via = (v: any, net: string) => cj.push({ type: "pcb_via", pcb_via_id: `m_via_${n++}`, x: v.x - CX, y: v.y - CY, hole_diameter: 0.1, outer_diameter: v.d, layers: ALL, from_layer: "top", to_layer: "bottom", net_name: net })
 const trace = (pts: any[], layer: string, w: number, net: string) => cj.push({ type: "pcb_trace", pcb_trace_id: `m_trace_${n++}`, net_name: net, route: pts.map((p) => ({ route_type: "wire", x: p.x - CX, y: p.y - CY, width: w, layer })) })
 // the DDR block exactly as routed and verified (ddr-route/out/module6)
-{ const ddr = await Bun.file(process.env.DDR ?? "/home/user/ddr-route/out/module8/ddr-cpu-ram.routed.json").json(), names: Record<string, string> = await Bun.file("/home/user/ddr-route/net-names.json").json()
+{ const ddr = await Bun.file(process.env.DDR ?? "/home/user/ddr-route/out/module9/ddr-cpu-ram.routed.json").json(), names: Record<string, string> = await Bun.file("/home/user/ddr-route/net-names.json").json()
   for (const t of ddr.traces) { if (!t.pcb_trace_id.startsWith("ddr_lane_")) continue; const net = names[t.connection_name]; let cur: any[] = [], layer = t.route[0].layer
     const flush = () => { if (cur.length > 1) trace(cur, layer, 0.102, net); cur = [] }
     for (const p of t.route) { if (p.route_type === "via") { cur.push(p); flush(); via({ x: p.x, y: p.y, d: p.via_diameter ?? 0.3, hole: p.via_hole_diameter ?? 0.15 }, net); layer = p.to_layer === layer ? p.from_layer : p.to_layer; cur = [p]; continue }

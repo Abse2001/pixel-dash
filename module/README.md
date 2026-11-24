@@ -10,12 +10,12 @@ handheld carries DF40C-100DP, LCSC C531031).
 |---|---|
 | L1 top | DDR + handheld signals, both BGAs, crystal |
 | L2 | ground |
-| L3 | VDDS_DDR (west), 3V3 and 1V8 (under and east of the processor) |
-| L4 | VDD_CORE, VDD_MPU, DDR_VREF, the 23 handheld signals whose balls sit inside the DDR fan-out, and short DDR sections moved here to even out via length |
+| L3 | VDDS_DDR (west, with the DDR_VREF link from the processor's J4 ball embedded in it), 3V3 and 1V8 (under and east of the processor) |
+| L4 | VDD_CORE, VDD_MPU, part of 1V8, DDR_VREF (between the chips), the 23 handheld signals whose balls sit inside the DDR fan-out |
 | L5 | ground |
 | L6 bottom | DDR + handheld signals, decoupling, connectors |
 
-Through vias only, no blind or buried vias: 0.1 mm holes in 0.3 mm pads (0.25 mm pads on the DDR layer-4 dips), via-in-pad throughout. The 0.1 mm hole keeps every hole wall 0.2 mm from other copper, which JLCPCB asks for; it needs a board of 1 mm or less with ENIG.
+Through vias only, no blind or buried vias: 0.1 mm holes in 0.3 mm pads, via-in-pad throughout. The 0.1 mm hole keeps every hole wall at least 0.2 mm from other copper on the outer layers and 0.225 mm on the planes (JLCPCB: 0.2 mm); it needs a board of 1 mm or less with ENIG.
 
 ## What the handheld has to provide
 
@@ -49,33 +49,34 @@ vias filled and capped (via-in-pad), 60 ohm impedance control on the 0.102 mm ou
 
 `module/make.sh` runs the whole chain and ends with the whole-board check:
 
-1. `plan.ts` loads the routed, verified DDR block (`ddr-route/out/module8`) and places every other part and via.
+1. `plan.ts` loads the routed, verified DDR block (`ddr-route/out/module9`) and places every other part and via.
 2. `route.sh` (`route-signals.ts`) routes the handheld signals to free connector pins.
 3. `TOPUP=1 plan.ts` adds the bypass capacitors that had to wait for those routes.
 4. `planes.ts` builds the inner-layer copper; `build.tsx` renders `dist/module.circuit.json`.
 5. `check.ts` checks the rendered board: pad positions, clearances, shorts, every net one piece.
 6. `export.ts` and `layers.py` write `fab/`.
 
-The DDR block itself is produced and checked in `ddr-route` (`route-staged.ts` with `out/module7/keepouts.json`,
-then `verify.ts`, `spec-check.ts`, `selfgap.ts`).
+The DDR block itself is produced and checked in `ddr-route` (`route-staged.ts`, two-layer mode, seed 5, `exactViasByBus` = 2 for
+both bytes and address/control/clock, keepouts `runs/mod8.keepouts.json`; then `clean-wiggles.ts`, `verify.ts`,
+`spec-check.ts` with `THROUGH=1`, `selfgap.ts`).
 
 ## Checks behind this build
 
-- DDR block (`ddr-route/out/module8`): connectivity/clearance, TI SPRS717L Tables 7-68/7-69 lengths and skews,
+- DDR block (`ddr-route/out/module9`): connectivity/clearance, TI SPRS717L Tables 7-68/7-69 lengths and skews,
   spacing allowance (also with the module's other traces as neighbours), same-net gaps: all pass.
-- Whole board (`check.ts`): 141/141 nets one piece, no shorts, minimum clearance 0.100 mm, drill walls >= 0.25 mm apart.
+- Whole board (`check.ts`): 141/141 nets one piece, no shorts, minimum clearance 0.100 mm, drill walls >= 0.30 mm apart,
+  hole wall to other copper >= 0.200 mm (outer) / 0.225 mm (planes), through vias only.
 - Independent audit from the Gerbers and the drill file (own parser): 0 shorts, 0 opens, every pour present,
   mask/paste on all 794 pads, vias tented, bypass counts and distances per Table 7-64/7-65 met
   (processor 20 x 100 nF within 306 mil of 400, memory 12 within 61 mil of 150, 2 x 10 uF bulk each).
-- Plane voltage drop (`irdrop.py`, 17.5 um copper): VDD_MPU 8 mV at 1 A, VDD_CORE 5 mV at 0.4 A,
-  VDD_1V8 8 mV at 0.2 A, VDD_3V3 4 mV at 0.25 A, VDDS_DDR 1 mV at 0.6 A.
+- Plane voltage drop (`irdrop3d.py`: all four inner layers joined at the vias, 17.5 um copper, plated 0.1 mm barrels):
+  VDD_CORE 4.1 mV at 0.4 A, VDD_MPU 6.9 mV at 1 A, VDD_1V8 6.0 mV at 0.2 A, VDD_3V3 2.6 mV at 0.25 A,
+  VDDS_DDR 2.4 mV at 0.6 A; every core and MPU ball via is reached through copper at least 0.2 mm wide.
 
 ## Known deviations and risks (first build)
 
-- DDR lengths and skews meet TI's tables (measured in the plane of the board, as the tables are). Via barrels are not
-  in those tables; counted as extra electrical length (barrel plus the 19 % slower layer-4 runs) the spread inside a
-  matched group is 0 mm in byte 0, 2.05 mm in byte 1 and 3.03 mm in address/control/clock (3.86 and 5.79 mm without
-  the layer-4 sections). Equal via counts in every group would need the DDR block re-routed.
+- DDR: every net has exactly two vias and runs on the outer layers only, so the via length is the same for every
+  net of every matched group, and the in-plane lengths and skews meet TI's tables.
 - No VTT termination on address/control/clock: TI's Figure 7-48 topology for one memory device. First-order
   analysis in `si/` (no IBIS models): levels settle cleanly; keep the processor's DDR drive strength at about
   40 ohm or weaker to stay inside the overshoot limit. Ask the fab for 60 ohm impedance control on the 0.102 mm traces.
@@ -85,6 +86,8 @@ then `verify.ts`, `spec-check.ts`, `selfgap.ts`).
 - 1.8 V PLL/oscillator/USB supply balls share the 1.8 V plane without ferrites.
 - Connector pin numbers in `fab/pinmap.csv` follow the LCSC footprint (1-50 outer row, 51-100 inner row).
   Lay out the handheld from the X/Y positions, not from pin numbers. The land pattern follows Hirose's drawing
-  (rows 3.78 mm outside, 2.38 mm inside, 0.2 x 0.7 mm pads).
+  is the JLCPCB/LCSC footprint of C597931 as imported (rows 3.90 mm outside, 2.50 mm inside; Hirose draws 3.78 / 2.38, the contacts land inside both).
+- C_VREF_CPU (0.1 uF on the processor's DDR_VREF) sits 9.9 mm from the J4 ball: TI asks for it "near" the ball without
+  a number; every closer site is taken by the 20 high-speed DDR bypass capacitors that Table 7-65 does put a number on.
 - BOM part numbers and pick-and-place rotations need the usual review in the assembly preview.
   Stock at the time of writing: AM3354BZCZD80 27 pcs, MT41K512M16VRP-107 IT:P 281 pcs (about 70 USD each).
