@@ -82,7 +82,8 @@ boot_paths = {
     "CPU external RTC LDO selection and RTC IO supply on DCDC6": ["U_PMIC.FB6","L_PMIC_RTC_IO.pin2","U1.B4","U1.D7"],
     "CPU N15 IO supply to sequenced 3.3 V": ["U_PMIC.DCDC4","U1.N15"],
     "Boot IO supply and P-row distribution to DCDC4": ["U_PMIC.DCDC4", *(f"U1.{ball}" for ball in ("N5","P5","P6","P7","P8","P10","P11","P12","P13"))],
-    "LDO1 and both SRAM input bypasses to five CPU 1.8 V pads": ["U_PMIC.LDO1","C_SRAM_CORE_IN.pin1","C_SRAM_MPU_IN.pin1", *(f"U1.{ball}" for ball in ("D8","D10","E7","E9","F9"))],
+    "LDO1 and both SRAM input bypasses to four CPU 1.8 V pads": ["U_PMIC.LDO1","C_SRAM_CORE_IN.pin1","C_SRAM_MPU_IN.pin1", *(f"U1.{ball}" for ball in ("D10","E7","E9","F9"))],
+    "All twelve unused TSC_ADC terminals to system ground": ["U_PMIC.EP", *(f"U1.{ball}" for ball in ("A7","A8","A9","B6","B7","B8","B9","C7","C8","C9","D8","E8"))],
     "AM3354 J3 calibration to 49.9 ohm resistor": ["U1.J3","R_VTP.pin1"],
     "AM3354 calibration resistor return to module ground": ["R_VTP.pin2","U_PMIC.EP"],
     "MPU buck output and feedback to seven CPU supply balls": ["U_PMIC.FB2","L_PMIC_MPU.pin2","C_PMIC_MPU.pin1", *(f"U1.{pin}" for pin in ("F10","F11","F12","F13","G13","H13","J13"))],
@@ -100,6 +101,7 @@ boot_paths = {
 for name, pins in boot_paths.items():
     assert connected(*pins), name
     print(name, "connected")
+assert not connected("U1.D8", "U_PMIC.LDO1"), "ADC ground shorted to SRAM supply"
 for ref in ["C_MPU_LOCAL", *(f"C_MPU_HF{i}" for i in range(1, 6))]:
     assert connected(ref+".pin1", "L_PMIC_MPU.pin2", "U1.F13"), ref
     assert connected(ref+".pin2", "U_PMIC.EP"), ref

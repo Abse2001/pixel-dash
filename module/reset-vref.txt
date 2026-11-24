@@ -46,7 +46,8 @@ TOUCH_SCL end-to-end connected
 CPU external RTC LDO selection and RTC IO supply on DCDC6 connected
 CPU N15 IO supply to sequenced 3.3 V connected
 Boot IO supply and P-row distribution to DCDC4 connected
-LDO1 and both SRAM input bypasses to five CPU 1.8 V pads connected
+LDO1 and both SRAM input bypasses to four CPU 1.8 V pads connected
+All twelve unused TSC_ADC terminals to system ground connected
 AM3354 J3 calibration to 49.9 ohm resistor connected
 AM3354 calibration resistor return to module ground connected
 MPU buck output and feedback to seven CPU supply balls connected

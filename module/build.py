@@ -190,6 +190,9 @@ for ref,(s,c) in parts.items():
         if ref == "U1" and (pname in module_ball or pname in module_ball.values()):
             key = balls[ref, pname]
         name=netname(key)
+        # Unused TSC_ADC terminals share VSS per TI SPRABN2A section 2.11.1.
+        if ref == "U1" and pname in {"A7","A8","A9","B6","B7","B8","B9","C7","C8","C9","D8","E8"}:
+            name = "GND_INTERNAL"
         if (ref,pname) in {("U1","J4"),("C_CPU_VREF","pin1")} or (group(ref)=="cpu_ref" and pname=="pin1"):name="CPU_DDR_VREF"
         if ref=="R_CPU_VREF_HIGH" and pname=="pin2":name=netname(balls["U_DDR_SWITCH","VOUT1"])
         if (ref,pname)==("U1","P15"):name="USB0_VBUS_SENSE"

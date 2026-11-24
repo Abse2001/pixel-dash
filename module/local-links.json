@@ -1544,57 +1544,6 @@
   },
   {
     "net": "VDD_LDO1_1V8",
-    "start": "Pad D8 [VDD_LDO1_1V8] of U1 on F.Cu",
-    "end": "Pad E9 [VDD_LDO1_1V8] of U1 on F.Cu",
-    "width": 0.3,
-    "layer": "F.Cu",
-    "points": [
-      [
-        27.000104,
-        28.449958
-      ],
-      [
-        27.79995,
-        29.250058
-      ]
-    ]
-  },
-  {
-    "net": "VDD_LDO1_1V8",
-    "start": "Pad E7 [VDD_LDO1_1V8] of U1 on F.Cu",
-    "end": "Pad D8 [VDD_LDO1_1V8] of U1 on F.Cu",
-    "width": 0.3,
-    "layer": "F.Cu",
-    "points": [
-      [
-        26.200004,
-        29.250058
-      ],
-      [
-        27.000104,
-        28.449958
-      ]
-    ]
-  },
-  {
-    "net": "VDD_LDO1_1V8",
-    "start": "Pad D10 [VDD_LDO1_1V8] of U1 on F.Cu",
-    "end": "Pad E9 [VDD_LDO1_1V8] of U1 on F.Cu",
-    "width": 0.3,
-    "layer": "F.Cu",
-    "points": [
-      [
-        28.60005,
-        28.449958
-      ],
-      [
-        27.79995,
-        29.250058
-      ]
-    ]
-  },
-  {
-    "net": "VDD_LDO1_1V8",
     "start": "Pad R10 [VDD_LDO1_1V8] of U1 on F.Cu",
     "end": "Pad P9 [VDD_LDO1_1V8] of U1 on F.Cu",
     "width": 0.3,
@@ -2923,11 +2872,11 @@
         27.650112
       ],
       [
-        25.77000000000001,
+        25.792,
         26.97000000000001
       ],
       [
-        25.77000000000001,
+        25.792,
         25.89000000000001
       ],
       [
@@ -6554,23 +6503,6 @@
     "net": "VDDS_RTC_1V8",
     "start": "U_PMIC.FB6",
     "end": "U1.B4",
-    "layer": "B.Cu",
-    "points": [
-      [
-        24.70499999999998,
-        25.41999999999998
-      ],
-      [
-        25.809999999999977,
-        27.889999999999976
-      ]
-    ],
-    "width": 0.25
-  },
-  {
-    "net": "VDDS_RTC_1V8",
-    "start": "U_PMIC.FB6",
-    "end": "U1.B4",
     "layer": "F.Cu",
     "points": [
       [
@@ -6755,7 +6687,7 @@
   {
     "net": "VDD_LDO1_1V8",
     "start": "U_PMIC.LDO1",
-    "end": "U1.D8",
+    "end": "U1.E7",
     "layer": "F.Cu",
     "points": [
       [
@@ -6772,7 +6704,7 @@
   {
     "net": "VDD_LDO1_1V8",
     "start": "U_PMIC.LDO1",
-    "end": "U1.D8",
+    "end": "U1.E7",
     "layer": "In2.Cu",
     "points": [
       [
@@ -6800,19 +6732,288 @@
   },
   {
     "net": "VDD_LDO1_1V8",
-    "start": "U_PMIC.LDO1",
-    "end": "U1.D8",
-    "layer": "F.Cu",
+    "start": "LDO1 feed via",
+    "end": "U1.E7",
     "points": [
       [
-        26.719999999999978,
-        28.019999999999975
+        26.719999,
+        28.019999
+      ],
+      [
+        26.601,
+        28.388
+      ],
+      [
+        26.601,
+        28.631
+      ],
+      [
+        26.200004,
+        29.250058
+      ]
+    ],
+    "width": 0.22,
+    "layer": "F.Cu"
+  },
+  {
+    "net": "VDD_LDO1_1V8",
+    "start": "U1.E7",
+    "end": "U1.E9",
+    "points": [
+      [
+        26.200004,
+        29.250058
+      ],
+      [
+        26.898,
+        28.847
+      ],
+      [
+        27.303,
+        28.874
+      ],
+      [
+        27.79995,
+        29.250058
+      ]
+    ],
+    "width": 0.22,
+    "layer": "F.Cu"
+  },
+  {
+    "net": "GND_INTERNAL",
+    "start": "GND_INTERNAL ground via",
+    "end": "U1.C9",
+    "points": [
+      [
+        27.45,
+        27.270116
+      ],
+      [
+        27.79995,
+        27.650112
+      ]
+    ],
+    "width": 0.15,
+    "layer": "F.Cu"
+  },
+  {
+    "net": "GND_INTERNAL",
+    "start": "GND_INTERNAL ground via",
+    "end": "U1.B8",
+    "points": [
+      [
+        27.394586,
+        26.474719
       ],
       [
         27.000104,
+        26.850012
+      ]
+    ],
+    "width": 0.15,
+    "layer": "F.Cu"
+  },
+  {
+    "net": "GND_INTERNAL",
+    "start": "GND_INTERNAL ground via",
+    "end": "U1.B9",
+    "points": [
+      [
+        27.45,
+        27.270116
+      ],
+      [
+        27.79995,
+        26.850012
+      ]
+    ],
+    "width": 0.15,
+    "layer": "F.Cu"
+  },
+  {
+    "net": "GND_INTERNAL",
+    "start": "GND_INTERNAL ground via",
+    "end": "U1.A8",
+    "points": [
+      [
+        27.394586,
+        26.474719
+      ],
+      [
+        27.000104,
+        26.049912
+      ]
+    ],
+    "width": 0.15,
+    "layer": "F.Cu"
+  },
+  {
+    "net": "GND_INTERNAL",
+    "start": "GND_INTERNAL ground via",
+    "end": "U1.A9",
+    "points": [
+      [
+        27.394586,
+        26.474719
+      ],
+      [
+        27.79995,
+        26.049912
+      ]
+    ],
+    "width": 0.15,
+    "layer": "F.Cu"
+  },
+  {
+    "net": "GND_INTERNAL",
+    "start": "GND_INTERNAL ground via",
+    "end": "U1.C8",
+    "points": [
+      [
+        27.45,
+        27.270116
+      ],
+      [
+        27.000104,
+        27.650112
+      ]
+    ],
+    "width": 0.15,
+    "layer": "F.Cu"
+  },
+  {
+    "net": "GND_INTERNAL",
+    "start": "U1.B8",
+    "end": "U1.B7",
+    "points": [
+      [
+        27.000104,
+        26.850012
+      ],
+      [
+        26.200004,
+        26.850012
+      ]
+    ],
+    "width": 0.15,
+    "layer": "F.Cu"
+  },
+  {
+    "net": "GND_INTERNAL",
+    "start": "U1.B7",
+    "end": "U1.C7",
+    "points": [
+      [
+        26.200004,
+        26.850012
+      ],
+      [
+        26.200004,
+        27.650112
+      ]
+    ],
+    "width": 0.15,
+    "layer": "F.Cu"
+  },
+  {
+    "net": "GND_INTERNAL",
+    "start": "U1.B7",
+    "end": "U1.A7",
+    "points": [
+      [
+        26.200004,
+        26.850012
+      ],
+      [
+        26.200004,
+        26.049912
+      ]
+    ],
+    "width": 0.15,
+    "layer": "F.Cu"
+  },
+  {
+    "net": "GND_INTERNAL",
+    "start": "U1.D8",
+    "end": "U1.C9",
+    "points": [
+      [
+        27.000104,
+        28.449958
+      ],
+      [
+        27.519,
+        28.658
+      ],
+      [
+        27.627,
+        28.766
+      ],
+      [
+        27.897,
+        28.82
+      ],
+      [
+        28.086,
+        28.658
+      ],
+      [
+        28.167,
+        28.469
+      ],
+      [
+        28.005,
+        27.956
+      ],
+      [
+        27.79995,
+        27.650112
+      ]
+    ],
+    "width": 0.12,
+    "layer": "F.Cu"
+  },
+  {
+    "net": "VDD_LDO1_1V8",
+    "start": "U1.E9",
+    "end": "U1.D10",
+    "points": [
+      [
+        27.79995,
+        29.250058
+      ],
+      [
+        28.302,
+        28.847
+      ],
+      [
+        28.60005,
         28.449958
       ]
     ],
-    "width": 0.25
+    "width": 0.22,
+    "layer": "F.Cu"
+  },
+  {
+    "net": "VDDS_RTC_1V8",
+    "start": "RTC source",
+    "end": "RTC via",
+    "points": [
+      [
+        24.704999,
+        25.419999
+      ],
+      [
+        24.981,
+        27.065
+      ],
+      [
+        25.809999,
+        27.889999
+      ]
+    ],
+    "width": 0.25,
+    "layer": "B.Cu"
   }
 ]
