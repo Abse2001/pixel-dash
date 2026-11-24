@@ -3,7 +3,7 @@ bit  target  CPU ball  contact  pull-to-CPU  CPU-to-carrier  pull-to-carrier  pu
 1 1 U1.R2 31 False False True True
 2 1 U1.R3 32 False False True True
 3 0 U1.R4 33 False False True True
-4 1 U1.T1 34 False False True True
+4 1 U1.T1 34 True True True True
 5 0 U1.T2 35 False False True True
 6 0 U1.T3 36 False False True True
 7 0 U1.T4 37 False False True True
@@ -19,6 +19,8 @@ Fitted word 0x4017. VDDSHV6 N5/P5 to DCDC4: True True
 PGOOD to PWRONRSTn: True
 DCDC4 both switch pins reach the separate inductor terminals.
 DCDC4 reaches both output capacitors and the three carrier supply contacts; both bypass returns reach ground.
+SYSBOOT4 pull and carrier LCD_D4 to CPU T1 connected
+SYSBOOT4 pull bias to sequenced 3.3 V connected
 SYSBOOT0 and LCD_D0 share CPU R1 with the fitted strap and carrier connected
 SYSBOOT0 high pull to sequenced 3.3 V connected
 PMIC PGOOD to CPU cold reset and pull connected

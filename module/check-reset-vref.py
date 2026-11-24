@@ -55,6 +55,8 @@ assert connected("U_PMIC.DCDC4","C_PMIC_IO_A.pin1","C_PMIC_IO_B.pin1","J_CARRIER
 assert connected("C_PMIC_IO_A.pin2","C_PMIC_IO_B.pin2","U_PMIC.EP")
 print("DCDC4 reaches both output capacitors and the three carrier supply contacts; both bypass returns reach ground.")
 boot_paths = {
+    "SYSBOOT4 pull and carrier LCD_D4 to CPU T1": ["R_SYSBOOT4.pin2","J_CARRIER.34","U1.T1"],
+    "SYSBOOT4 pull bias to sequenced 3.3 V": ["R_SYSBOOT4.pin1","U_PMIC.DCDC4"],
     "SYSBOOT0 and LCD_D0 share CPU R1 with the fitted strap and carrier": ["U1.R1", "J_CARRIER.30", "R_SYSBOOT0.pin2"],
     "SYSBOOT0 high pull to sequenced 3.3 V": ["R_SYSBOOT0.pin1", "U_PMIC.DCDC4"],
     "PMIC PGOOD to CPU cold reset and pull": ["U_PMIC.PGOOD","R_PMIC_POR.pin1","U1.B15"],
