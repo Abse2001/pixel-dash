@@ -198,6 +198,16 @@ for branch in strap_branches:
     name = branch["net"]
     strap_nodes = [node for ref,pin,node in pads[name] if ref.startswith("R_SYSBOOT") or ref == "J_CARRIER"]
     assert len(strap_nodes) == 2 and len(set(strap_nodes)) == 1, name
+# Check the USB reservation against the actual adjacent ground film, including
+# the antipad of the opposite conductor when these two through vias are fitted.
+usb = json.loads(Path(__file__).with_name("usb-corridor.json").read_text())
+for name, points in usb["points"].items():
+    sweep = LineString([point(p) for p in points]).buffer(usb["width_mm"]/2, quad_segs=48)
+    own_launch = point(points[0]).buffer(.305, quad_segs=64)
+    other_launch = next(point(path[0]) for net_name, path in usb["points"].items() if net_name != name)
+    reference = planes[usb["reference"]].difference(other_launch.buffer(.29, quad_segs=64))
+    loss = sweep.difference(own_launch).difference(reference).area
+    assert loss < 1e-8, ("USB reserved corridor lacks adjacent ground", name, loss)
 for n in [*signals, "LCD_D21", "THROUGH_L_SHOULDER", "THROUGH_STA", "THROUGH_LFT", "THROUGH_RGT", "THROUGH_UP", "USB0_VBUS_SENSE", "LCD_D23", "PMIC_IRQ", "PMIC_I2C_SCL", "LOCAL_BYPASS_D9", "LOCAL_BYPASS_D11", "LOCAL_BYPASS_C10", "CPU_WARM_RESET", "TOUCH_IRQ", "OSC0_BIAS_OUT", "OSC0_OUT_LOAD", "OSC0_BIAS_IN", "LCD_RESET", "channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net83", "VDD_RTC_CORE_1V0", "RTC_WAKE", "VDD_CORE", "VDD_LDO1_1V8", "VDD_IO_3V3_SEQ", "VDD_IO_3V3_SEQ", "VDDS_RTC_1V8", "TOUCH_SDA", "TOUCH_SCL", "VDD_IO_3V3_SEQ", "PMIC_I2C_SDA", "THROUGH_SD_CS", "THROUGH_SD_CMD", "THROUGH_SD_DAT1_PULLUP", "DEBUG_UART0_TX", "THROUGH_Y", "THROUGH_SD_CLK", "THROUGH_SD_MISO", "SD_DETECT", "AUDIO_PWM_INTERNAL", "THROUGH_A", "THROUGH_B", "THROUGH_R_SHOULDER", "JOY_L_CLICK", "DEBUG_UART0_RX", "THROUGH_X", "THROUGH_DN", "J_SD_PIN1", "CPU_DDR_VREF", "DDR_VREF", "DDR_VREF_CA", "DDR_ZQ", "DDR_VTP", *(branch["net"] for branch in strap_branches)]:
     launches=union_all([point(v["pos"]).buffer(v["diam"]/2+.155,quad_segs=64) for v in vias if v["net"]==n])
     for t in geom:

@@ -72,3 +72,27 @@ for net, ref, pin, xy, width in sites:
             else:
                 check(site.distance(shape) - .075, .075, net, "drill to source solder land")
     print(f"{net} {ref}.{pin} off-pad launch reservation passes")
+
+# The first inner-layer bend must remain available to both USB conductors.
+corridor = json.loads(Path(__file__).with_name("usb-corridor.json").read_text())
+width = corridor["width_mm"]
+pair = []
+for net, points in corridor["points"].items():
+    site = next(xy for name, _, _, xy, _ in sites if name == net)
+    if math.dist(site, points[0]) > .00001:
+        raise SystemExit(f"{net} USB corridor misses its reserved barrel")
+    route = LineString(points)
+    if not route.is_simple:
+        raise SystemExit(f"{net} USB reservation intersects itself")
+    pair.append(route)
+    for o in geometry:
+        if o["net"] == net:
+            continue
+        if o["kind"] == "via":
+            check(route.distance(Point(o["pos"])) - (width + o["diam"]) / 2,
+                  .1524, net, "USB corridor to via")
+        elif o.get("layer") == corridor["layer"] and o["kind"] == "track":
+            trace = LineString([o["start"], o["end"]])
+            check(route.distance(trace) - (width + o["width"]) / 2,
+                  .102, net, "USB corridor to trace")
+check(pair[0].distance(pair[1]) - width, corridor["min_pair_gap_mm"], "USB", "pair edge")
