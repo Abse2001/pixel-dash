@@ -55,6 +55,7 @@ assert connected("U_PMIC.DCDC4","C_PMIC_IO_A.pin1","C_PMIC_IO_B.pin1","J_CARRIER
 assert connected("C_PMIC_IO_A.pin2","C_PMIC_IO_B.pin2","U_PMIC.EP")
 print("DCDC4 reaches both output capacitors and the three carrier supply contacts; both bypass returns reach ground.")
 boot_paths = {
+    "Touch interrupt at CPU and carrier": ["U1.V14", "J_CARRIER.64"],
     "LDO1 and E7 to VDDS ball E6": ["U_PMIC.LDO1","U1.E7","U1.E6"],
     "LDO1 and its bypass to VDDS_OSC R11 and P9/R10": ["U_PMIC.LDO1","C_PMIC_LDO1.pin1","U1.R11","U1.R10","U1.P9"],
     "LDO1 to both USB analog 1.8 V balls and P14": ["U_PMIC.LDO1","U1.N16","U1.R16","U1.P14","C_PMIC_LDO1.pin1"],
