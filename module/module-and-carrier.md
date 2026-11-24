@@ -1,6 +1,6 @@
 # Six-layer module and handheld carrier
 
-The module takes VSYS and ground through the DF40 connector. It generates and sequences the CPU and DDR rails locally. This keeps the regulator-to-load and bypass return paths on the same PCB as the BGA lands. The current 38.20 × 46.60 mm outline is a routed baseline. A smaller outline requires a new placement and same-export verification.
+The module takes VSYS and ground through the DF40 connector. It generates and sequences the CPU and DDR rails locally. This keeps the regulator-to-load and bypass return paths on the same PCB as the BGA lands. The current 38.30 × 46.60 mm outline is a routed baseline. A smaller outline requires a new placement and same-export verification.
 
 The 119 populated references comprise the AM3354, DDR3L, TPS65218D0 PMIC, switched CPU DDR supply, oscillator crystal, DF40 plug and 113 passive components. The passives set boot and regulator defaults, support the oscillator, filter regulator inputs and outputs, bypass processor and memory supplies, or set the DDR reference and calibration levels. The switch button itself lives on the carrier. Its PMIC bias stays on the module so disconnecting the carrier cannot float the power-key input.
 
@@ -19,6 +19,8 @@ Use the individual contact and CPU pin assignments in [carrier-pinout.csv](carri
 KEY_UP uses DF40 contact 9 and AM3354 ZCZ V12 (GPMC_CLK, mode 7, GPIO2_1 on VDDSHV2). Configure the pad as an input with its receiver enabled and set GPIO2 bit 1 as an input before sampling the switch. V12 resets in mode 7 with a pull-down. Configure the run-time bias for the carrier switch wiring. The module-specific pin assignment supersedes V16 in the original handheld interface. [TI AM335x datasheet, Table 4-2](https://www.ti.com/lit/ds/symlink/am3354.pdf)
 
 KEY_RIGHT uses contact 12 and ZCZ T13 (GPMC_CSn3, mode 7, GPIO2_0 on VDDSHV2). Enable the input receiver and configure GPIO2 bit 0 as an input for the carrier switch. T13 resets in mode 7 with a pull-up. Its centered 0.15/0.30 mm through via requires nonconductive resin fill and copper cap at assembly.
+
+KEY_LEFT uses contact 11 and ZCZ U8 (GPMC_AD4, mode 7, GPIO1_4). Its VDDSHV1 supply lands P7 and P8 reach sequenced DCDC4. Enable the pad receiver and configure GPIO1 bit 4 as an input for the carrier switch. The reset-release bias is a pull-down. [TI AM335x datasheet, Table 4-2](https://www.ti.com/lit/ds/symlink/am3354.pdf)
 
 ## First code on hardware
 
