@@ -45,10 +45,22 @@ for bit in range(16):
     bias = any({source_pin, resistor + ".pin1"} <= set(group) for group in islands[bias_net])
     tap = any({cpu,contact,resistor+".pin2"} <= set(group) for group in islands[row["module_net"]])
     prefix = [bit, int(high), cpu, contact, panel, bool(bias and tap)]
+    if not bias or not tap:
+        missing = []
+        if not bias:
+            missing.append("pull supply")
+        if not tap:
+            missing.append("CPU/pull/contact continuity")
+        reason = "OPEN: " + " and ".join(missing)
+    else:
+        reason = ""
     for case in ("direct_powered","direct_unpowered","direct_panel_reset_low","direct_ramping"):
-        writer.writerow(prefix+[case,"","","","OPEN: panel input load at this state unbounded"])
+        writer.writerow(prefix+[case,"","","",reason or "OPEN: panel input load at this state unbounded"])
     for case, load_uA in (("panel_disconnected",0),("buffer_powered",20),
                            ("buffer_at_0V",20),("buffer_powered_panel_reset_low",20)):
+        if reason:
+            writer.writerow(prefix+[case,"","","",reason])
+            continue
         # 5 uA is a design allowance for board/connector leakage. 100 pF is a trial load.
         volts = (18 + 5 + load_uA)*1e-6 * 10100
         final = 3.135-volts if high else volts

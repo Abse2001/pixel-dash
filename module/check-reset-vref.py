@@ -18,6 +18,7 @@ def connected(*pins):
 with (here / "carrier-pinout.csv").open() as stream:
     connector = {row["signal"]: row for row in csv.DictReader(stream)}
 word = 0
+connected_mask = 0
 print("bit  target  CPU ball  contact  pull-to-CPU  CPU-to-carrier  pull-to-carrier  pull-to-source")
 for bit in range(16):
     row = connector[f"LCD_D{bit}"]
@@ -31,9 +32,15 @@ for bit in range(16):
     high = rail == "VDD_IO_3V3_SEQ"
     word |= int(high) << bit
     source = "U_PMIC.DCDC4" if high else "U_PMIC.EP"
+    if connected(*expected) and connected(resistor + ".pin1", source):
+        connected_mask |= 1 << bit
     print(bit, int(high), cpu, row["contact"], connected(expected[0], cpu),
           connected(cpu, carrier), connected(expected[0], carrier), connected(resistor + ".pin1", source))
 assert word == 0x4017, hex(word)
+boot_codes = [code for code in range(32) if ((code ^ word) & connected_mask & 0x1f) == 0]
+print(f"Drilled strap mask 0x{connected_mask:04x} ({connected_mask.bit_count()}/16). "
+      f"SYSBOOT[4:0] codes consistent with connected pulls: " +
+      ", ".join(f"0x{code:02x}" for code in boot_codes))
 print(f"Fitted word 0x{word:04x}. VDDSHV6 N5/P5 to DCDC4:",
       connected("U1.N5", "U_PMIC.DCDC4"), connected("U1.P5", "U_PMIC.DCDC4"))
 print("PGOOD to PWRONRSTn:", connected("U_PMIC.PGOOD", "U1.B15"))

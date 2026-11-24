@@ -7,30 +7,30 @@ bit,pull,cpu,contact,panel,source_to_cpu_pull_contact,carrier_case,dc_V,margin_V
 0,1,U1.R1,J_CARRIER.30,J_LCD.pin32,True,buffer_powered,2.7007,0.7007,1.363,CONDITIONAL
 0,1,U1.R1,J_CARRIER.30,J_LCD.pin32,True,buffer_at_0V,2.7007,0.7007,1.363,CONDITIONAL
 0,1,U1.R1,J_CARRIER.30,J_LCD.pin32,True,buffer_powered_panel_reset_low,2.7007,0.7007,1.363,CONDITIONAL
-1,1,U1.R2,J_CARRIER.31,J_LCD.pin31,False,direct_powered,,,,OPEN: panel input load at this state unbounded
-1,1,U1.R2,J_CARRIER.31,J_LCD.pin31,False,direct_unpowered,,,,OPEN: panel input load at this state unbounded
-1,1,U1.R2,J_CARRIER.31,J_LCD.pin31,False,direct_panel_reset_low,,,,OPEN: panel input load at this state unbounded
-1,1,U1.R2,J_CARRIER.31,J_LCD.pin31,False,direct_ramping,,,,OPEN: panel input load at this state unbounded
-1,1,U1.R2,J_CARRIER.31,J_LCD.pin31,False,panel_disconnected,2.9027,0.9027,1.180,CONDITIONAL
-1,1,U1.R2,J_CARRIER.31,J_LCD.pin31,False,buffer_powered,2.7007,0.7007,1.363,CONDITIONAL
-1,1,U1.R2,J_CARRIER.31,J_LCD.pin31,False,buffer_at_0V,2.7007,0.7007,1.363,CONDITIONAL
-1,1,U1.R2,J_CARRIER.31,J_LCD.pin31,False,buffer_powered_panel_reset_low,2.7007,0.7007,1.363,CONDITIONAL
-2,1,U1.R3,J_CARRIER.32,J_LCD.pin30,False,direct_powered,,,,OPEN: panel input load at this state unbounded
-2,1,U1.R3,J_CARRIER.32,J_LCD.pin30,False,direct_unpowered,,,,OPEN: panel input load at this state unbounded
-2,1,U1.R3,J_CARRIER.32,J_LCD.pin30,False,direct_panel_reset_low,,,,OPEN: panel input load at this state unbounded
-2,1,U1.R3,J_CARRIER.32,J_LCD.pin30,False,direct_ramping,,,,OPEN: panel input load at this state unbounded
-2,1,U1.R3,J_CARRIER.32,J_LCD.pin30,False,panel_disconnected,2.9027,0.9027,1.180,CONDITIONAL
-2,1,U1.R3,J_CARRIER.32,J_LCD.pin30,False,buffer_powered,2.7007,0.7007,1.363,CONDITIONAL
-2,1,U1.R3,J_CARRIER.32,J_LCD.pin30,False,buffer_at_0V,2.7007,0.7007,1.363,CONDITIONAL
-2,1,U1.R3,J_CARRIER.32,J_LCD.pin30,False,buffer_powered_panel_reset_low,2.7007,0.7007,1.363,CONDITIONAL
-3,0,U1.R4,J_CARRIER.33,J_LCD.pin29,False,direct_powered,,,,OPEN: panel input load at this state unbounded
-3,0,U1.R4,J_CARRIER.33,J_LCD.pin29,False,direct_unpowered,,,,OPEN: panel input load at this state unbounded
-3,0,U1.R4,J_CARRIER.33,J_LCD.pin29,False,direct_panel_reset_low,,,,OPEN: panel input load at this state unbounded
-3,0,U1.R4,J_CARRIER.33,J_LCD.pin29,False,direct_ramping,,,,OPEN: panel input load at this state unbounded
-3,0,U1.R4,J_CARRIER.33,J_LCD.pin29,False,panel_disconnected,0.2323,0.5677,1.757,CONDITIONAL
-3,0,U1.R4,J_CARRIER.33,J_LCD.pin29,False,buffer_powered,0.4343,0.3657,2.136,CONDITIONAL
-3,0,U1.R4,J_CARRIER.33,J_LCD.pin29,False,buffer_at_0V,0.4343,0.3657,2.136,CONDITIONAL
-3,0,U1.R4,J_CARRIER.33,J_LCD.pin29,False,buffer_powered_panel_reset_low,0.4343,0.3657,2.136,CONDITIONAL
+1,1,U1.R2,J_CARRIER.31,J_LCD.pin31,False,direct_powered,,,,OPEN: CPU/pull/contact continuity
+1,1,U1.R2,J_CARRIER.31,J_LCD.pin31,False,direct_unpowered,,,,OPEN: CPU/pull/contact continuity
+1,1,U1.R2,J_CARRIER.31,J_LCD.pin31,False,direct_panel_reset_low,,,,OPEN: CPU/pull/contact continuity
+1,1,U1.R2,J_CARRIER.31,J_LCD.pin31,False,direct_ramping,,,,OPEN: CPU/pull/contact continuity
+1,1,U1.R2,J_CARRIER.31,J_LCD.pin31,False,panel_disconnected,,,,OPEN: CPU/pull/contact continuity
+1,1,U1.R2,J_CARRIER.31,J_LCD.pin31,False,buffer_powered,,,,OPEN: CPU/pull/contact continuity
+1,1,U1.R2,J_CARRIER.31,J_LCD.pin31,False,buffer_at_0V,,,,OPEN: CPU/pull/contact continuity
+1,1,U1.R2,J_CARRIER.31,J_LCD.pin31,False,buffer_powered_panel_reset_low,,,,OPEN: CPU/pull/contact continuity
+2,1,U1.R3,J_CARRIER.32,J_LCD.pin30,False,direct_powered,,,,OPEN: CPU/pull/contact continuity
+2,1,U1.R3,J_CARRIER.32,J_LCD.pin30,False,direct_unpowered,,,,OPEN: CPU/pull/contact continuity
+2,1,U1.R3,J_CARRIER.32,J_LCD.pin30,False,direct_panel_reset_low,,,,OPEN: CPU/pull/contact continuity
+2,1,U1.R3,J_CARRIER.32,J_LCD.pin30,False,direct_ramping,,,,OPEN: CPU/pull/contact continuity
+2,1,U1.R3,J_CARRIER.32,J_LCD.pin30,False,panel_disconnected,,,,OPEN: CPU/pull/contact continuity
+2,1,U1.R3,J_CARRIER.32,J_LCD.pin30,False,buffer_powered,,,,OPEN: CPU/pull/contact continuity
+2,1,U1.R3,J_CARRIER.32,J_LCD.pin30,False,buffer_at_0V,,,,OPEN: CPU/pull/contact continuity
+2,1,U1.R3,J_CARRIER.32,J_LCD.pin30,False,buffer_powered_panel_reset_low,,,,OPEN: CPU/pull/contact continuity
+3,0,U1.R4,J_CARRIER.33,J_LCD.pin29,False,direct_powered,,,,OPEN: CPU/pull/contact continuity
+3,0,U1.R4,J_CARRIER.33,J_LCD.pin29,False,direct_unpowered,,,,OPEN: CPU/pull/contact continuity
+3,0,U1.R4,J_CARRIER.33,J_LCD.pin29,False,direct_panel_reset_low,,,,OPEN: CPU/pull/contact continuity
+3,0,U1.R4,J_CARRIER.33,J_LCD.pin29,False,direct_ramping,,,,OPEN: CPU/pull/contact continuity
+3,0,U1.R4,J_CARRIER.33,J_LCD.pin29,False,panel_disconnected,,,,OPEN: CPU/pull/contact continuity
+3,0,U1.R4,J_CARRIER.33,J_LCD.pin29,False,buffer_powered,,,,OPEN: CPU/pull/contact continuity
+3,0,U1.R4,J_CARRIER.33,J_LCD.pin29,False,buffer_at_0V,,,,OPEN: CPU/pull/contact continuity
+3,0,U1.R4,J_CARRIER.33,J_LCD.pin29,False,buffer_powered_panel_reset_low,,,,OPEN: CPU/pull/contact continuity
 4,1,U1.T1,J_CARRIER.34,J_LCD.pin28,True,direct_powered,,,,OPEN: panel input load at this state unbounded
 4,1,U1.T1,J_CARRIER.34,J_LCD.pin28,True,direct_unpowered,,,,OPEN: panel input load at this state unbounded
 4,1,U1.T1,J_CARRIER.34,J_LCD.pin28,True,direct_panel_reset_low,,,,OPEN: panel input load at this state unbounded
@@ -39,30 +39,30 @@ bit,pull,cpu,contact,panel,source_to_cpu_pull_contact,carrier_case,dc_V,margin_V
 4,1,U1.T1,J_CARRIER.34,J_LCD.pin28,True,buffer_powered,2.7007,0.7007,1.363,CONDITIONAL
 4,1,U1.T1,J_CARRIER.34,J_LCD.pin28,True,buffer_at_0V,2.7007,0.7007,1.363,CONDITIONAL
 4,1,U1.T1,J_CARRIER.34,J_LCD.pin28,True,buffer_powered_panel_reset_low,2.7007,0.7007,1.363,CONDITIONAL
-5,0,U1.T2,J_CARRIER.35,J_LCD.pin25,False,direct_powered,,,,OPEN: panel input load at this state unbounded
-5,0,U1.T2,J_CARRIER.35,J_LCD.pin25,False,direct_unpowered,,,,OPEN: panel input load at this state unbounded
-5,0,U1.T2,J_CARRIER.35,J_LCD.pin25,False,direct_panel_reset_low,,,,OPEN: panel input load at this state unbounded
-5,0,U1.T2,J_CARRIER.35,J_LCD.pin25,False,direct_ramping,,,,OPEN: panel input load at this state unbounded
-5,0,U1.T2,J_CARRIER.35,J_LCD.pin25,False,panel_disconnected,0.2323,0.5677,1.757,CONDITIONAL
-5,0,U1.T2,J_CARRIER.35,J_LCD.pin25,False,buffer_powered,0.4343,0.3657,2.136,CONDITIONAL
-5,0,U1.T2,J_CARRIER.35,J_LCD.pin25,False,buffer_at_0V,0.4343,0.3657,2.136,CONDITIONAL
-5,0,U1.T2,J_CARRIER.35,J_LCD.pin25,False,buffer_powered_panel_reset_low,0.4343,0.3657,2.136,CONDITIONAL
-6,0,U1.T3,J_CARRIER.36,J_LCD.pin24,False,direct_powered,,,,OPEN: panel input load at this state unbounded
-6,0,U1.T3,J_CARRIER.36,J_LCD.pin24,False,direct_unpowered,,,,OPEN: panel input load at this state unbounded
-6,0,U1.T3,J_CARRIER.36,J_LCD.pin24,False,direct_panel_reset_low,,,,OPEN: panel input load at this state unbounded
-6,0,U1.T3,J_CARRIER.36,J_LCD.pin24,False,direct_ramping,,,,OPEN: panel input load at this state unbounded
-6,0,U1.T3,J_CARRIER.36,J_LCD.pin24,False,panel_disconnected,0.2323,0.5677,1.757,CONDITIONAL
-6,0,U1.T3,J_CARRIER.36,J_LCD.pin24,False,buffer_powered,0.4343,0.3657,2.136,CONDITIONAL
-6,0,U1.T3,J_CARRIER.36,J_LCD.pin24,False,buffer_at_0V,0.4343,0.3657,2.136,CONDITIONAL
-6,0,U1.T3,J_CARRIER.36,J_LCD.pin24,False,buffer_powered_panel_reset_low,0.4343,0.3657,2.136,CONDITIONAL
-7,0,U1.T4,J_CARRIER.37,J_LCD.pin23,False,direct_powered,,,,OPEN: panel input load at this state unbounded
-7,0,U1.T4,J_CARRIER.37,J_LCD.pin23,False,direct_unpowered,,,,OPEN: panel input load at this state unbounded
-7,0,U1.T4,J_CARRIER.37,J_LCD.pin23,False,direct_panel_reset_low,,,,OPEN: panel input load at this state unbounded
-7,0,U1.T4,J_CARRIER.37,J_LCD.pin23,False,direct_ramping,,,,OPEN: panel input load at this state unbounded
-7,0,U1.T4,J_CARRIER.37,J_LCD.pin23,False,panel_disconnected,0.2323,0.5677,1.757,CONDITIONAL
-7,0,U1.T4,J_CARRIER.37,J_LCD.pin23,False,buffer_powered,0.4343,0.3657,2.136,CONDITIONAL
-7,0,U1.T4,J_CARRIER.37,J_LCD.pin23,False,buffer_at_0V,0.4343,0.3657,2.136,CONDITIONAL
-7,0,U1.T4,J_CARRIER.37,J_LCD.pin23,False,buffer_powered_panel_reset_low,0.4343,0.3657,2.136,CONDITIONAL
+5,0,U1.T2,J_CARRIER.35,J_LCD.pin25,False,direct_powered,,,,OPEN: CPU/pull/contact continuity
+5,0,U1.T2,J_CARRIER.35,J_LCD.pin25,False,direct_unpowered,,,,OPEN: CPU/pull/contact continuity
+5,0,U1.T2,J_CARRIER.35,J_LCD.pin25,False,direct_panel_reset_low,,,,OPEN: CPU/pull/contact continuity
+5,0,U1.T2,J_CARRIER.35,J_LCD.pin25,False,direct_ramping,,,,OPEN: CPU/pull/contact continuity
+5,0,U1.T2,J_CARRIER.35,J_LCD.pin25,False,panel_disconnected,,,,OPEN: CPU/pull/contact continuity
+5,0,U1.T2,J_CARRIER.35,J_LCD.pin25,False,buffer_powered,,,,OPEN: CPU/pull/contact continuity
+5,0,U1.T2,J_CARRIER.35,J_LCD.pin25,False,buffer_at_0V,,,,OPEN: CPU/pull/contact continuity
+5,0,U1.T2,J_CARRIER.35,J_LCD.pin25,False,buffer_powered_panel_reset_low,,,,OPEN: CPU/pull/contact continuity
+6,0,U1.T3,J_CARRIER.36,J_LCD.pin24,False,direct_powered,,,,OPEN: CPU/pull/contact continuity
+6,0,U1.T3,J_CARRIER.36,J_LCD.pin24,False,direct_unpowered,,,,OPEN: CPU/pull/contact continuity
+6,0,U1.T3,J_CARRIER.36,J_LCD.pin24,False,direct_panel_reset_low,,,,OPEN: CPU/pull/contact continuity
+6,0,U1.T3,J_CARRIER.36,J_LCD.pin24,False,direct_ramping,,,,OPEN: CPU/pull/contact continuity
+6,0,U1.T3,J_CARRIER.36,J_LCD.pin24,False,panel_disconnected,,,,OPEN: CPU/pull/contact continuity
+6,0,U1.T3,J_CARRIER.36,J_LCD.pin24,False,buffer_powered,,,,OPEN: CPU/pull/contact continuity
+6,0,U1.T3,J_CARRIER.36,J_LCD.pin24,False,buffer_at_0V,,,,OPEN: CPU/pull/contact continuity
+6,0,U1.T3,J_CARRIER.36,J_LCD.pin24,False,buffer_powered_panel_reset_low,,,,OPEN: CPU/pull/contact continuity
+7,0,U1.T4,J_CARRIER.37,J_LCD.pin23,False,direct_powered,,,,OPEN: CPU/pull/contact continuity
+7,0,U1.T4,J_CARRIER.37,J_LCD.pin23,False,direct_unpowered,,,,OPEN: CPU/pull/contact continuity
+7,0,U1.T4,J_CARRIER.37,J_LCD.pin23,False,direct_panel_reset_low,,,,OPEN: CPU/pull/contact continuity
+7,0,U1.T4,J_CARRIER.37,J_LCD.pin23,False,direct_ramping,,,,OPEN: CPU/pull/contact continuity
+7,0,U1.T4,J_CARRIER.37,J_LCD.pin23,False,panel_disconnected,,,,OPEN: CPU/pull/contact continuity
+7,0,U1.T4,J_CARRIER.37,J_LCD.pin23,False,buffer_powered,,,,OPEN: CPU/pull/contact continuity
+7,0,U1.T4,J_CARRIER.37,J_LCD.pin23,False,buffer_at_0V,,,,OPEN: CPU/pull/contact continuity
+7,0,U1.T4,J_CARRIER.37,J_LCD.pin23,False,buffer_powered_panel_reset_low,,,,OPEN: CPU/pull/contact continuity
 8,0,U1.U1,J_CARRIER.38,J_LCD.pin22,True,direct_powered,,,,OPEN: panel input load at this state unbounded
 8,0,U1.U1,J_CARRIER.38,J_LCD.pin22,True,direct_unpowered,,,,OPEN: panel input load at this state unbounded
 8,0,U1.U1,J_CARRIER.38,J_LCD.pin22,True,direct_panel_reset_low,,,,OPEN: panel input load at this state unbounded
@@ -71,30 +71,30 @@ bit,pull,cpu,contact,panel,source_to_cpu_pull_contact,carrier_case,dc_V,margin_V
 8,0,U1.U1,J_CARRIER.38,J_LCD.pin22,True,buffer_powered,0.4343,0.3657,2.136,CONDITIONAL
 8,0,U1.U1,J_CARRIER.38,J_LCD.pin22,True,buffer_at_0V,0.4343,0.3657,2.136,CONDITIONAL
 8,0,U1.U1,J_CARRIER.38,J_LCD.pin22,True,buffer_powered_panel_reset_low,0.4343,0.3657,2.136,CONDITIONAL
-9,0,U1.U2,J_CARRIER.39,J_LCD.pin21,False,direct_powered,,,,OPEN: panel input load at this state unbounded
-9,0,U1.U2,J_CARRIER.39,J_LCD.pin21,False,direct_unpowered,,,,OPEN: panel input load at this state unbounded
-9,0,U1.U2,J_CARRIER.39,J_LCD.pin21,False,direct_panel_reset_low,,,,OPEN: panel input load at this state unbounded
-9,0,U1.U2,J_CARRIER.39,J_LCD.pin21,False,direct_ramping,,,,OPEN: panel input load at this state unbounded
-9,0,U1.U2,J_CARRIER.39,J_LCD.pin21,False,panel_disconnected,0.2323,0.5677,1.757,CONDITIONAL
-9,0,U1.U2,J_CARRIER.39,J_LCD.pin21,False,buffer_powered,0.4343,0.3657,2.136,CONDITIONAL
-9,0,U1.U2,J_CARRIER.39,J_LCD.pin21,False,buffer_at_0V,0.4343,0.3657,2.136,CONDITIONAL
-9,0,U1.U2,J_CARRIER.39,J_LCD.pin21,False,buffer_powered_panel_reset_low,0.4343,0.3657,2.136,CONDITIONAL
-10,0,U1.U3,J_CARRIER.40,J_LCD.pin20,False,direct_powered,,,,OPEN: panel input load at this state unbounded
-10,0,U1.U3,J_CARRIER.40,J_LCD.pin20,False,direct_unpowered,,,,OPEN: panel input load at this state unbounded
-10,0,U1.U3,J_CARRIER.40,J_LCD.pin20,False,direct_panel_reset_low,,,,OPEN: panel input load at this state unbounded
-10,0,U1.U3,J_CARRIER.40,J_LCD.pin20,False,direct_ramping,,,,OPEN: panel input load at this state unbounded
-10,0,U1.U3,J_CARRIER.40,J_LCD.pin20,False,panel_disconnected,0.2323,0.5677,1.757,CONDITIONAL
-10,0,U1.U3,J_CARRIER.40,J_LCD.pin20,False,buffer_powered,0.4343,0.3657,2.136,CONDITIONAL
-10,0,U1.U3,J_CARRIER.40,J_LCD.pin20,False,buffer_at_0V,0.4343,0.3657,2.136,CONDITIONAL
-10,0,U1.U3,J_CARRIER.40,J_LCD.pin20,False,buffer_powered_panel_reset_low,0.4343,0.3657,2.136,CONDITIONAL
-11,0,U1.U4,J_CARRIER.41,J_LCD.pin16,False,direct_powered,,,,OPEN: panel input load at this state unbounded
-11,0,U1.U4,J_CARRIER.41,J_LCD.pin16,False,direct_unpowered,,,,OPEN: panel input load at this state unbounded
-11,0,U1.U4,J_CARRIER.41,J_LCD.pin16,False,direct_panel_reset_low,,,,OPEN: panel input load at this state unbounded
-11,0,U1.U4,J_CARRIER.41,J_LCD.pin16,False,direct_ramping,,,,OPEN: panel input load at this state unbounded
-11,0,U1.U4,J_CARRIER.41,J_LCD.pin16,False,panel_disconnected,0.2323,0.5677,1.757,CONDITIONAL
-11,0,U1.U4,J_CARRIER.41,J_LCD.pin16,False,buffer_powered,0.4343,0.3657,2.136,CONDITIONAL
-11,0,U1.U4,J_CARRIER.41,J_LCD.pin16,False,buffer_at_0V,0.4343,0.3657,2.136,CONDITIONAL
-11,0,U1.U4,J_CARRIER.41,J_LCD.pin16,False,buffer_powered_panel_reset_low,0.4343,0.3657,2.136,CONDITIONAL
+9,0,U1.U2,J_CARRIER.39,J_LCD.pin21,False,direct_powered,,,,OPEN: CPU/pull/contact continuity
+9,0,U1.U2,J_CARRIER.39,J_LCD.pin21,False,direct_unpowered,,,,OPEN: CPU/pull/contact continuity
+9,0,U1.U2,J_CARRIER.39,J_LCD.pin21,False,direct_panel_reset_low,,,,OPEN: CPU/pull/contact continuity
+9,0,U1.U2,J_CARRIER.39,J_LCD.pin21,False,direct_ramping,,,,OPEN: CPU/pull/contact continuity
+9,0,U1.U2,J_CARRIER.39,J_LCD.pin21,False,panel_disconnected,,,,OPEN: CPU/pull/contact continuity
+9,0,U1.U2,J_CARRIER.39,J_LCD.pin21,False,buffer_powered,,,,OPEN: CPU/pull/contact continuity
+9,0,U1.U2,J_CARRIER.39,J_LCD.pin21,False,buffer_at_0V,,,,OPEN: CPU/pull/contact continuity
+9,0,U1.U2,J_CARRIER.39,J_LCD.pin21,False,buffer_powered_panel_reset_low,,,,OPEN: CPU/pull/contact continuity
+10,0,U1.U3,J_CARRIER.40,J_LCD.pin20,False,direct_powered,,,,OPEN: CPU/pull/contact continuity
+10,0,U1.U3,J_CARRIER.40,J_LCD.pin20,False,direct_unpowered,,,,OPEN: CPU/pull/contact continuity
+10,0,U1.U3,J_CARRIER.40,J_LCD.pin20,False,direct_panel_reset_low,,,,OPEN: CPU/pull/contact continuity
+10,0,U1.U3,J_CARRIER.40,J_LCD.pin20,False,direct_ramping,,,,OPEN: CPU/pull/contact continuity
+10,0,U1.U3,J_CARRIER.40,J_LCD.pin20,False,panel_disconnected,,,,OPEN: CPU/pull/contact continuity
+10,0,U1.U3,J_CARRIER.40,J_LCD.pin20,False,buffer_powered,,,,OPEN: CPU/pull/contact continuity
+10,0,U1.U3,J_CARRIER.40,J_LCD.pin20,False,buffer_at_0V,,,,OPEN: CPU/pull/contact continuity
+10,0,U1.U3,J_CARRIER.40,J_LCD.pin20,False,buffer_powered_panel_reset_low,,,,OPEN: CPU/pull/contact continuity
+11,0,U1.U4,J_CARRIER.41,J_LCD.pin16,False,direct_powered,,,,OPEN: CPU/pull/contact continuity
+11,0,U1.U4,J_CARRIER.41,J_LCD.pin16,False,direct_unpowered,,,,OPEN: CPU/pull/contact continuity
+11,0,U1.U4,J_CARRIER.41,J_LCD.pin16,False,direct_panel_reset_low,,,,OPEN: CPU/pull/contact continuity
+11,0,U1.U4,J_CARRIER.41,J_LCD.pin16,False,direct_ramping,,,,OPEN: CPU/pull/contact continuity
+11,0,U1.U4,J_CARRIER.41,J_LCD.pin16,False,panel_disconnected,,,,OPEN: CPU/pull/contact continuity
+11,0,U1.U4,J_CARRIER.41,J_LCD.pin16,False,buffer_powered,,,,OPEN: CPU/pull/contact continuity
+11,0,U1.U4,J_CARRIER.41,J_LCD.pin16,False,buffer_at_0V,,,,OPEN: CPU/pull/contact continuity
+11,0,U1.U4,J_CARRIER.41,J_LCD.pin16,False,buffer_powered_panel_reset_low,,,,OPEN: CPU/pull/contact continuity
 12,0,U1.V2,J_CARRIER.42,J_LCD.pin15,True,direct_powered,,,,OPEN: panel input load at this state unbounded
 12,0,U1.V2,J_CARRIER.42,J_LCD.pin15,True,direct_unpowered,,,,OPEN: panel input load at this state unbounded
 12,0,U1.V2,J_CARRIER.42,J_LCD.pin15,True,direct_panel_reset_low,,,,OPEN: panel input load at this state unbounded
@@ -111,14 +111,14 @@ bit,pull,cpu,contact,panel,source_to_cpu_pull_contact,carrier_case,dc_V,margin_V
 13,0,U1.V3,J_CARRIER.43,J_LCD.pin14,True,buffer_powered,0.4343,0.3657,2.136,CONDITIONAL
 13,0,U1.V3,J_CARRIER.43,J_LCD.pin14,True,buffer_at_0V,0.4343,0.3657,2.136,CONDITIONAL
 13,0,U1.V3,J_CARRIER.43,J_LCD.pin14,True,buffer_powered_panel_reset_low,0.4343,0.3657,2.136,CONDITIONAL
-14,1,U1.V4,J_CARRIER.44,J_LCD.pin13,False,direct_powered,,,,OPEN: panel input load at this state unbounded
-14,1,U1.V4,J_CARRIER.44,J_LCD.pin13,False,direct_unpowered,,,,OPEN: panel input load at this state unbounded
-14,1,U1.V4,J_CARRIER.44,J_LCD.pin13,False,direct_panel_reset_low,,,,OPEN: panel input load at this state unbounded
-14,1,U1.V4,J_CARRIER.44,J_LCD.pin13,False,direct_ramping,,,,OPEN: panel input load at this state unbounded
-14,1,U1.V4,J_CARRIER.44,J_LCD.pin13,False,panel_disconnected,2.9027,0.9027,1.180,CONDITIONAL
-14,1,U1.V4,J_CARRIER.44,J_LCD.pin13,False,buffer_powered,2.7007,0.7007,1.363,CONDITIONAL
-14,1,U1.V4,J_CARRIER.44,J_LCD.pin13,False,buffer_at_0V,2.7007,0.7007,1.363,CONDITIONAL
-14,1,U1.V4,J_CARRIER.44,J_LCD.pin13,False,buffer_powered_panel_reset_low,2.7007,0.7007,1.363,CONDITIONAL
+14,1,U1.V4,J_CARRIER.44,J_LCD.pin13,False,direct_powered,,,,OPEN: CPU/pull/contact continuity
+14,1,U1.V4,J_CARRIER.44,J_LCD.pin13,False,direct_unpowered,,,,OPEN: CPU/pull/contact continuity
+14,1,U1.V4,J_CARRIER.44,J_LCD.pin13,False,direct_panel_reset_low,,,,OPEN: CPU/pull/contact continuity
+14,1,U1.V4,J_CARRIER.44,J_LCD.pin13,False,direct_ramping,,,,OPEN: CPU/pull/contact continuity
+14,1,U1.V4,J_CARRIER.44,J_LCD.pin13,False,panel_disconnected,,,,OPEN: CPU/pull/contact continuity
+14,1,U1.V4,J_CARRIER.44,J_LCD.pin13,False,buffer_powered,,,,OPEN: CPU/pull/contact continuity
+14,1,U1.V4,J_CARRIER.44,J_LCD.pin13,False,buffer_at_0V,,,,OPEN: CPU/pull/contact continuity
+14,1,U1.V4,J_CARRIER.44,J_LCD.pin13,False,buffer_powered_panel_reset_low,,,,OPEN: CPU/pull/contact continuity
 15,0,U1.T5,J_CARRIER.45,J_LCD.pin12,True,direct_powered,,,,OPEN: panel input load at this state unbounded
 15,0,U1.T5,J_CARRIER.45,J_LCD.pin12,True,direct_unpowered,,,,OPEN: panel input load at this state unbounded
 15,0,U1.T5,J_CARRIER.45,J_LCD.pin12,True,direct_panel_reset_low,,,,OPEN: panel input load at this state unbounded
