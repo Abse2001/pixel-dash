@@ -19,6 +19,7 @@ Fitted word 0x4017. VDDSHV6 N5/P5 to DCDC4: True True
 PGOOD to PWRONRSTn: True
 DCDC4 both switch pins reach the separate inductor terminals.
 DCDC4 reaches both output capacitors and the three carrier supply contacts; both bypass returns reach ground.
+LDO1 and E7 to VDDS ball E6 connected
 LDO1 and its bypass to VDDS_OSC R11 and P9/R10 connected
 LDO1 to both USB analog 1.8 V balls and P14 connected
 OSC0 feedback output and series drive input to XTALOUT connected
