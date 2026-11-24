@@ -31,8 +31,8 @@ x_mm,y_mm,net,hole_mm,land_mm,solder_land,face,nominal_bore_to_land_boundary_mm,
 4.450107,34.750004,VDDS_DDR,0.15,0.3,,,,off-pad
 4.570116,43.75,GND_INTERNAL,0.2,0.45,C_DDR3.pin2,B.Cu,0.15,centered
 4.765999,28.868999,DDR_A9,0.15,0.3,,,,off-pad
-4.800107,36.049949,DDR_VREF,0.15,0.3,C_H1_VREF.pin1,B.Cu,0.087,centered
 4.800107,36.049949,DDR_VREF,0.15,0.3,U_DDR.H1,F.Cu,0.12199,centered
+4.800107,36.049949,DDR_VREF,0.15,0.3,C_H1_VREF.pin1,B.Cu,0.087,centered
 4.800107,40.049942,VDDS_DDR,0.15,0.3,U_DDR.N1,F.Cu,0.12199,centered
 4.800107,40.049942,VDDS_DDR,0.15,0.3,C_DDR6.pin1,B.Cu,0.175,centered
 4.942108,35.519993,GND_INTERNAL,0.15,0.3,U_DDR.G1,F.Cu,-0.18297,annulus only
@@ -205,6 +205,7 @@ x_mm,y_mm,net,hole_mm,land_mm,solder_land,face,nominal_bore_to_land_boundary_mm,
 16.86,37.305,DDR_D7,0.15,0.3,,,,off-pad
 16.865,5.298,USB0_VBUS_SENSE,0.15,0.3,,,,off-pad
 16.899999,39.824999,DDR_VREF_CA,0.15,0.3,,,,off-pad
+17.12,32.369999,VDDS_DDR,0.15,0.3,,,,off-pad
 17.209999,33.359999,VDDS_DDR,0.15,0.3,,,,off-pad
 17.25,29.05,DDR_D12,0.15,0.3,,,,off-pad
 17.250068,18.79989,PMIC_I2C_SDA,0.15,0.3,U_PMIC.SDA,F.Cu,0.065,contained off-center
