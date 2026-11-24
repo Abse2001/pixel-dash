@@ -19,6 +19,8 @@ Fitted word 0x4017. VDDSHV6 N5/P5 to DCDC4: True True
 PGOOD to PWRONRSTn: True
 DCDC4 both switch pins reach the separate inductor terminals.
 DCDC4 reaches both output capacitors and the three carrier supply contacts; both bypass returns reach ground.
+OSC0 XTALIN at V10, crystal, input load and feedback connected
+OSC0 crystal grounds and both load-capacitor returns connected
 Panel RESET to carrier contact 60 connected
 SYSBOOT12 at CPU and carrier connected
 SYSBOOT12 physical pull bias connected
