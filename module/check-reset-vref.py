@@ -55,6 +55,7 @@ assert connected("U_PMIC.DCDC4","C_PMIC_IO_A.pin1","C_PMIC_IO_B.pin1","J_CARRIER
 assert connected("C_PMIC_IO_A.pin2","C_PMIC_IO_B.pin2","U_PMIC.EP")
 print("DCDC4 reaches both output capacitors and the three carrier supply contacts; both bypass returns reach ground.")
 boot_paths = {
+    "Panel RESET to carrier contact 60": ["U1.J18", "J_CARRIER.60"],
     "SYSBOOT12 at CPU and carrier": ["U1.V2", "J_CARRIER.42", "R_SYSBOOT12.pin2"],
     "SYSBOOT12 physical pull bias": ["R_SYSBOOT12.pin1", "U_PMIC.EP"],
     "SYSBOOT8 at CPU and carrier": ["U1.U1", "J_CARRIER.38", "R_SYSBOOT8.pin2"],

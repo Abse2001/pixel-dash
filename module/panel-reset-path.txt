@@ -1,3 +1,3 @@
 Panel logic supply J_LCD.pin7: inherited net raster_LCD_DVDD, other terminals: none
 Panel RESET J_LCD.pin44: inherited net system_LCD_RESET, other terminals: U1.J18
-Module RESET path U1.J18 to J_CARRIER.60: open
+Module RESET path U1.J18 to J_CARRIER.60: connected
