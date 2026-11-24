@@ -93,7 +93,7 @@ for name in ("pmic","connector","straps","switch","cpu_ref"):
 left,low,right,high=bounds(placed)
 left,low,right,high=math.floor(left-1),math.floor(low-1),math.ceil(right+1),math.ceil(high+1)
 # Perimeter strap channel, retaining 0.50 mm copper-to-edge clearance.
-right += 1.15
+right += 1.20
 low -= 0.00
 mm=k.FromMM
 def xy(x,y): return k.VECTOR2I(mm(x-left),mm(high-y))
@@ -108,8 +108,8 @@ def net(name):
         board.Add(nets[name])
     return nets[name]
 def netname(key): return labels.get(key,key)
-# Extend the connector-side edge by 0.40 mm without translating any component or route.
-perimeter = [(left, low), (left, high + .40), (right, high + .40), (right, low)]
+# Extend the connector-side edge by 0.60 mm without translating any component or route.
+perimeter = [(left, low), (left, high + .60), (right, high + .60), (right, low)]
 def zone(layer, rail=None, corners=None, priority=0, clearance=.13):
     z=k.ZONE(board);z.SetLayer(layer);z.SetNet(net(rail or netname(balls["SW_POWER","pin1"])));z.SetLocalClearance(mm(clearance))
     z.SetAssignedPriority(priority)
@@ -137,7 +137,7 @@ for index in range(1, 6):
              supplier_part_numbers={"jlcpcb": ["C15195"]}), geometry)
 local_bypasses = json.loads((here/"local-bypass-placements.json").read_text())
 # TI ZCZ pin functions, Table 4-49. Keep the module I2C1 bus on its carrier contacts.
-module_ball = {"D16": "B16", "D15": "J15", "V16": "V12"}
+module_ball = {"D16": "B16", "D15": "J15", "D17": "T13", "V16": "V12"}
 for original, replacement in module_ball.items():
     assert balls.get(("U1", replacement)) is None
     balls["U1", replacement] = balls["U1", original]
@@ -416,7 +416,7 @@ for i,foil in enumerate(foils):
         kind="core" if i in (1,3) else "prepreg"
         stack.append(f'(layer "dielectric {i+1}" (type "{kind}") (thickness {dielectrics[i]}) (material "FR4"))')
 board_path.write_text(board_path.read_text().replace("(setup\n", "(setup\n\t\t(stackup "+"\n".join(stack)+")\n",1))
-print(right-left,high-low+.40,len(parts)+1,len(routed),sorted(routed))
+print(right-left,high-low+.60,len(parts)+1,len(routed),sorted(routed))
 project=here/"pixel-dash-module.kicad_pro"
 settings=json.loads(project.read_text())
 settings["board"]["design_settings"]["rules"].update(
