@@ -1,6 +1,6 @@
 # Six-layer module and handheld carrier
 
-The module takes VSYS and ground through the DF40 connector. It generates and sequences the CPU and DDR rails locally. This keeps the regulator-to-load and bypass return paths on the same PCB as the BGA lands. The current 37.60 × 46.00 mm outline is a routed baseline. A smaller outline requires a new placement and same-export verification.
+The module takes VSYS and ground through the DF40 connector. It generates and sequences the CPU and DDR rails locally. This keeps the regulator-to-load and bypass return paths on the same PCB as the BGA lands. The current 37.90 × 46.00 mm outline is a routed baseline. A smaller outline requires a new placement and same-export verification.
 
 The 119 populated references comprise the AM3354, DDR3L, TPS65218D0 PMIC, switched CPU DDR supply, oscillator crystal, DF40 plug and 113 passive components. The passives set boot and regulator defaults, support the oscillator, filter regulator inputs and outputs, bypass processor and memory supplies, or set the DDR reference and calibration levels. The switch button itself lives on the carrier. Its PMIC bias stays on the module so disconnecting the carrier cannot float the power-key input.
 

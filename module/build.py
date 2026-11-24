@@ -93,7 +93,7 @@ for name in ("pmic","connector","straps","switch","cpu_ref"):
 left,low,right,high=bounds(placed)
 left,low,right,high=math.floor(left-1),math.floor(low-1),math.ceil(right+1),math.ceil(high+1)
 # Perimeter strap channel, retaining 0.50 mm copper-to-edge clearance.
-right += 0.60
+right += 0.90
 low -= 0.00
 mm=k.FromMM
 def xy(x,y): return k.VECTOR2I(mm(x-left),mm(high-y))

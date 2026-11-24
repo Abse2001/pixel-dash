@@ -326,6 +326,7 @@ x_mm,y_mm,net,hole_mm,land_mm,solder_land,face,nominal_bore_to_land_boundary_mm,
 23.475958,39.887088,SYSBOOT14_SENSE,0.15,0.3,,,,off-pad
 23.625058,25.525112,RTC_WAKE,0.15,0.3,,,,off-pad
 23.649999,9.649999,THROUGH_SD_MISO,0.15,0.3,,,,off-pad
+23.671,2.428,LCD_D23,0.15,0.3,,,,off-pad
 23.699889,11.750067,channel_unnamedsubcircuitsubcircuit_source_group_1_connectivity_net79,0.15,0.3,U_PMIC.L6,F.Cu,0.065,centered
 23.799958,32.44995,CPU_DDR_VREF,0.15,0.3,C_CPU_VREF.pin1,B.Cu,0.07386,contained off-center
 23.799958,32.44995,CPU_DDR_VREF,0.15,0.3,U1.J4,F.Cu,0.10498,centered
@@ -447,8 +448,10 @@ x_mm,y_mm,net,hole_mm,land_mm,solder_land,face,nominal_bore_to_land_boundary_mm,
 28.510116,24.45,VDDS_DDR_CPU,0.2,0.45,,,,off-pad
 28.53,32.040115,GND_INTERNAL,0.15,0.3,,,,off-pad
 28.549999,11.849999,DEBUG_UART0_TX,0.15,0.3,,,,off-pad
+28.60005,38.849987,LCD_D23,0.15,0.3,U1.U10,F.Cu,0.10498,centered
 28.665,2.47,SYSBOOT8_SENSE,0.15,0.3,,,,off-pad
 28.71005,35.234996,GND_INTERNAL,0.15,0.3,,,,off-pad
+28.714,4.437,LCD_D23,0.15,0.3,,,,off-pad
 28.789875,41.510039,GND_INTERNAL,0.2,0.45,,,,off-pad
 28.789999,22.969999,SYSBOOT13_SENSE,0.15,0.3,,,,off-pad
 28.795,44.785,SYSBOOT8_SENSE,0.15,0.3,,,,off-pad
@@ -514,6 +517,7 @@ x_mm,y_mm,net,hole_mm,land_mm,solder_land,face,nominal_bore_to_land_boundary_mm,
 31.0,2.844999,SYSBOOT3_SENSE,0.15,0.3,,,,off-pad
 31.009999,12.049999,SYSBOOT15_SENSE,0.15,0.3,,,,off-pad
 31.07,22.88,PMIC_I2C_SCL,0.15,0.3,,,,off-pad
+31.215,40.23,LCD_D23,0.15,0.3,,,,off-pad
 31.334999,33.609999,VDD_IO_3V3_SEQ,0.15,0.3,,,,off-pad
 31.4,4.445,SYSBOOT4_SENSE,0.15,0.3,,,,off-pad
 31.403146,34.452946,GND_INTERNAL,0.2,0.45,,,,off-pad
@@ -604,6 +608,8 @@ x_mm,y_mm,net,hole_mm,land_mm,solder_land,face,nominal_bore_to_land_boundary_mm,
 35.536319,31.299955,THROUGH_SD_CMD,0.15,0.3,,,,off-pad
 35.570088,26.049912,GND_INTERNAL,0.2,0.45,,,,off-pad
 35.570088,39.650088,GND_INTERNAL,0.2,0.45,,,,off-pad
+36.135,38.959,LCD_D23,0.15,0.3,,,,off-pad
 36.335,9.88,SYSBOOT8_SENSE,0.15,0.3,,,,off-pad
 36.635,37.285,LCD_RESET,0.15,0.3,,,,off-pad
 36.829999,7.789999,SYSBOOT13_SENSE,0.15,0.3,,,,off-pad
+37.201,4.478,LCD_D23,0.15,0.3,,,,off-pad
