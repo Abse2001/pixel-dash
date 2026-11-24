@@ -92,6 +92,21 @@ for e in geom:
 for i,v in assignments.items():
     owners[root(annuli[i][0])].add(v["net"])
 assert all(len(n)==1 for n in owners.values()),[n for n in owners.values() if len(n)>1]
+if len(sys.argv) > 3:
+    # Save the pad groups before a downstream supply or reference assertion can fail.
+    # Stable component/pin labels make the report independent of polygon order.
+    by_island = collections.defaultdict(list)
+    for net_name, endpoints in pads.items():
+        for ref, pin, node in endpoints:
+            by_island[net_name, node].append(f"{ref}.{pin}")
+    islands = collections.defaultdict(list)
+    for (net_name, node), pins in by_island.items():
+        islands[net_name].append(sorted(pins))
+    Path(sys.argv[3]).write_text(json.dumps(
+        {name: sorted(groups) for name, groups in sorted(islands.items())},
+        indent=2
+    ) + "\n")
+
 signals={n:ends for n,ends in pads.items() if len(ends)==2 and {a for a,b,c in ends}=={"U1","U_DDR"} and n.startswith("DDR_")}
 assert len(signals)==50
 opens=sorted(n for n,ends in signals.items() if ends[0][2]!=ends[1][2])
@@ -229,18 +244,3 @@ print("Full-width ground reference losses outside own launches (mm²):",dict(sor
 
 if miss:
     raise SystemExit("DDR ground coverage failed")
-
-if len(sys.argv) > 3:
-    # Identify individual pads on each physical island for targeted routing.
-    # Stable component/pin labels make the report independent of polygon order.
-    by_island = collections.defaultdict(list)
-    for net_name, endpoints in pads.items():
-        for ref, pin, node in endpoints:
-            by_island[net_name, node].append(f"{ref}.{pin}")
-    islands = collections.defaultdict(list)
-    for (net_name, node), pins in by_island.items():
-        islands[net_name].append(sorted(pins))
-    Path(sys.argv[3]).write_text(json.dumps(
-        {name: sorted(groups) for name, groups in sorted(islands.items())},
-        indent=2
-    ) + "\n")
