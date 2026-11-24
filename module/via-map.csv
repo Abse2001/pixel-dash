@@ -425,6 +425,7 @@ x_mm,y_mm,net,hole_mm,land_mm,solder_land,face,nominal_bore_to_land_boundary_mm,
 29.2,24.659768,GND_INTERNAL,0.2,0.45,C_MPU_HF1.pin2,B.Cu,0.15,centered
 29.2,25.5,VDD_MPU,0.2,0.45,C_MPU_HF1.pin1,B.Cu,0.15,centered
 29.215,7.165,SYSBOOT3_SENSE,0.15,0.3,,,,off-pad
+29.399896,38.849987,OSC0_BIAS_OUT,0.15,0.3,U1.U11,F.Cu,0.10498,centered
 29.509999,9.889999,LCD_RESET,0.15,0.3,,,,off-pad
 29.649999,2.049999,AUDIO_PWM_INTERNAL,0.15,0.3,,,,off-pad
 29.729884,30.45,GND_INTERNAL,0.2,0.45,,,,off-pad
@@ -471,6 +472,7 @@ x_mm,y_mm,net,hole_mm,land_mm,solder_land,face,nominal_bore_to_land_boundary_mm,
 31.749999,14.449999,THROUGH_SD_CLK,0.15,0.3,,,,off-pad
 31.75,2.844999,SYSBOOT5_SENSE,0.15,0.3,,,,off-pad
 31.836771,25.526284,VDDS_DDR_CPU,0.2,0.45,,,,off-pad
+31.884999,40.366999,OSC0_BIAS_OUT,0.15,0.3,,,,off-pad
 32.159999,36.84,DDR_CKE,0.2,0.45,,,,off-pad
 32.197933,29.672182,VDDS_DDR_CPU,0.2,0.45,,,,off-pad
 32.2,2.844999,SYSBOOT6_SENSE,0.15,0.3,,,,off-pad

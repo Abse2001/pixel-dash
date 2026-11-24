@@ -147,6 +147,9 @@ for ref,(s,c) in parts.items():
     if ref == "L_PMIC_IO":
         dx += .95
         dy -= .15
+    if ref == "C_DDR30":
+        dx += .075
+        dy += .075
     if ref == "R_VREF_LOW":
         dx += 1.37
         dy -= 6.06
