@@ -55,6 +55,7 @@ VDD_CORE local copper U1.G6 to U1.K6 connected
 VDD_CORE local copper U1.L6 to U1.N8 connected
 DCDC1 post-inductor CORE feed, output capacitor, feedback and CPU G10 connected
 DCDC1 to all 20 CPU CORE balls connected
+RTC external wake from PMIC with RTC-domain pull-up connected
 AM3354 J3 calibration to 49.9 ohm resistor connected
 AM3354 calibration resistor return to module ground connected
 MPU buck output and feedback to seven CPU supply balls connected
