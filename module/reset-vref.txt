@@ -14,11 +14,15 @@ bit  target  CPU ball  contact  pull-to-CPU  CPU-to-carrier  pull-to-carrier  pu
 12 0 U1.V2 42 True True True True
 13 0 U1.V3 43 False False True True
 14 1 U1.V4 44 False False True True
-15 0 U1.T5 45 False False True True
+15 0 U1.T5 45 True True True True
 Fitted word 0x4017. VDDSHV6 N5/P5 to DCDC4: True True
 PGOOD to PWRONRSTn: True
 DCDC4 both switch pins reach the separate inductor terminals.
 DCDC4 reaches both output capacitors and the three carrier supply contacts; both bypass returns reach ground.
+CPU C10 to its dedicated 1 uF local output capacitor connected
+C10 local capacitor return to CPU ground connected
+SYSBOOT15 at CPU and carrier connected
+SYSBOOT15 physical pull bias connected
 LDO1 to CPU 1.8 V supplies H15 and E14 connected
 LDO1 to CPU 1.8 V supply K13 connected
 Touch interrupt at CPU and carrier connected

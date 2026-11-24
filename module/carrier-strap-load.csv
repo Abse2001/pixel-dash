@@ -119,11 +119,11 @@ bit,pull,cpu,contact,panel,source_to_cpu_pull_contact,carrier_case,dc_V,margin_V
 14,1,U1.V4,J_CARRIER.44,J_LCD.pin13,False,buffer_powered,2.7007,0.7007,1.363,CONDITIONAL
 14,1,U1.V4,J_CARRIER.44,J_LCD.pin13,False,buffer_at_0V,2.7007,0.7007,1.363,CONDITIONAL
 14,1,U1.V4,J_CARRIER.44,J_LCD.pin13,False,buffer_powered_panel_reset_low,2.7007,0.7007,1.363,CONDITIONAL
-15,0,U1.T5,J_CARRIER.45,J_LCD.pin12,False,direct_powered,,,,OPEN: panel input load at this state unbounded
-15,0,U1.T5,J_CARRIER.45,J_LCD.pin12,False,direct_unpowered,,,,OPEN: panel input load at this state unbounded
-15,0,U1.T5,J_CARRIER.45,J_LCD.pin12,False,direct_panel_reset_low,,,,OPEN: panel input load at this state unbounded
-15,0,U1.T5,J_CARRIER.45,J_LCD.pin12,False,direct_ramping,,,,OPEN: panel input load at this state unbounded
-15,0,U1.T5,J_CARRIER.45,J_LCD.pin12,False,panel_disconnected,0.2323,0.5677,1.757,CONDITIONAL
-15,0,U1.T5,J_CARRIER.45,J_LCD.pin12,False,buffer_powered,0.4343,0.3657,2.136,CONDITIONAL
-15,0,U1.T5,J_CARRIER.45,J_LCD.pin12,False,buffer_at_0V,0.4343,0.3657,2.136,CONDITIONAL
-15,0,U1.T5,J_CARRIER.45,J_LCD.pin12,False,buffer_powered_panel_reset_low,0.4343,0.3657,2.136,CONDITIONAL
+15,0,U1.T5,J_CARRIER.45,J_LCD.pin12,True,direct_powered,,,,OPEN: panel input load at this state unbounded
+15,0,U1.T5,J_CARRIER.45,J_LCD.pin12,True,direct_unpowered,,,,OPEN: panel input load at this state unbounded
+15,0,U1.T5,J_CARRIER.45,J_LCD.pin12,True,direct_panel_reset_low,,,,OPEN: panel input load at this state unbounded
+15,0,U1.T5,J_CARRIER.45,J_LCD.pin12,True,direct_ramping,,,,OPEN: panel input load at this state unbounded
+15,0,U1.T5,J_CARRIER.45,J_LCD.pin12,True,panel_disconnected,0.2323,0.5677,1.757,CONDITIONAL
+15,0,U1.T5,J_CARRIER.45,J_LCD.pin12,True,buffer_powered,0.4343,0.3657,2.136,CONDITIONAL
+15,0,U1.T5,J_CARRIER.45,J_LCD.pin12,True,buffer_at_0V,0.4343,0.3657,2.136,CONDITIONAL
+15,0,U1.T5,J_CARRIER.45,J_LCD.pin12,True,buffer_powered_panel_reset_low,0.4343,0.3657,2.136,CONDITIONAL
