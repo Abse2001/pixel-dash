@@ -288,9 +288,29 @@ if (process.env.TOPUP) { const routes = await Bun.file(import.meta.dir + "/route
   for (const [name, r] of Object.entries(routes.nets) as any) { for (const g of r.segs) for (let i = 0; i + 1 < g.pts.length; i++) { if (g.layer === "top" || g.layer === "bottom") B.add({ ...seg(g.pts[i], g.pts[i + 1], 0.1), layers: [g.layer], net: name, kind: "trace" }); else innerSegs.push({ ...seg(g.pts[i], g.pts[i + 1], 0.1), layers: [], net: name, kind: "trace" }); nseg++ }
     for (const v of r.vias) B.add({ ...disc(v.x, v.y, v.d / 2), layers: BOTH, net: name, kind: "via" })
     const pin = pins.find((p) => p.conn === r.conn && p.pin === r.pin)!; B.items.find((i) => i.ref === `${r.conn}.${r.pin}`)!.net = name; pin.role = name }
+  // a high-speed DDR bypass capacitor must sit over solid VDDS_DDR copper (layer 3 west of the split, not the 3V3 corner of row P),
+  // or its VDDS_DDR via reaches the processor's column-5 VDDS_DDR balls only through thin links around the other supplies
+  // the capacitor's VDDS_DDR via must land in VDDS_DDR copper on layer 3 (same regions as planes.ts, 0.35 mm inside them)
+  const inVdds = (x: number, y: number, m = 0.35) => (x < -46.4 - m && !(x > -49.1 - m && y > 10.9 - m && y < 12.0 + m)) || (x < -37.6 - m && (y > 19.25 + m || y < 10.15 - m)) || (x < -41.6 - m && y > 12.0 + m && y < 18.35 - m)
+  const onDdrPlane = (p: Part | Pt) => "nets" in p ? padsOf(p as Part).filter((q) => (p as Part).nets[q.pin] === "VDDS_DDR").every((q) => inVdds(q.x, q.y)) : inVdds(p.x, p.y)
   const dist = (p: Pt) => Math.max(nearestBall("U1", "VDDS_DDR", p), nearestBall("U1", "GND", p)), hs = () => parts.filter((p) => p.name.startsWith("C_HS_CPU"))
-  for (let n = hs().length; n < 20; n++) if (!free(`C_HS_CPU_T${n + 1}`, "C100N_0402", { x: -48.4, y: 15.55 }, "VDDS_DDR", "GND", { anywhere: true, maxDist: 9.6, step: 0.15, ok: (p) => dist(p) <= 10.16 - 0.4, score: dist })) break
-  for (let n = hs().length; n < 20; n++) if (!free(`C_HS_CPU_T${n + 1}`, "C100N_0201", { x: -48.4, y: 15.55 }, "VDDS_DDR", "GND", { anywhere: true, maxDist: 9.6, step: 0.05, ok: (p) => dist(p) <= 10.16 - 0.4, score: dist })) break
+  { // under the processor: 0201 from a ground ball via to a new VDDS_DDR via between the balls, inside the layer-3 VDDS_DDR interior
+    let u = hs().filter((p) => p.name.startsWith("C_HS_CPU_U")).length
+    const inner = (v: Pt) => inVdds(v.x, v.y)
+    for (const g of vias.filter((v) => v.ball?.startsWith("U1.") && v.net === "GND" && inner(v)).sort((a, b) => nearestBall("U1", "VDDS_DDR", a) - nearestBall("U1", "VDDS_DDR", b))) { if (hs().length >= 20) break
+      const name = `C_HS_CPU_U${u + 1}`, q = anchored(name, "C100N_0201", g, "GND", "VDDS_DDR"); if (!q) continue
+      const nv = vias.find((v) => v.name === `V_${name}_2`), ok = dist(q) <= 10.16 - 0.4 && (!nv || inner(nv))
+      if (ok) u++; else uncommit(name) }
+    report.push(`top-up: ${u} high-speed DDR bypass capacitors under the processor on ground ball vias`) }
+  for (let n = hs().length; n < 20; n++) if (!free(`C_HS_CPU_T${n + 1}`, "C100N_0402", { x: -48.4, y: 15.55 }, "VDDS_DDR", "GND", { anywhere: true, maxDist: 12.5, step: 0.1, ok: (p) => dist(p) <= 10.16 - 0.4 && onDdrPlane(p), score: dist })) break
+  for (let n = hs().length; n < 20; n++) if (!free(`C_HS_CPU_T${n + 1}`, "C100N_0201", { x: -48.4, y: 15.55 }, "VDDS_DDR", "GND", { anywhere: true, maxDist: 12.5, step: 0.05, ok: (p) => dist(p) <= 10.16 - 0.4 && onDdrPlane(p), score: dist })) break
+  { // TI Table 7-65 note 7: an additional HS bypass capacitor may share a capacitor's two connection vias when it sits on the
+    // opposite side; top-side parts stay >= 1.0 mm (+ half their length) from both BGA bodies (JLCPCB assembly)
+    const clearOfBga = (x: number, y: number) => [[-51.3, -38.3, 8.65, 21.65], [-77.1, -62.9, 10.65, 19.65]].every(([x0, x1, y0, y1]) => Math.hypot(Math.max(x0 - x, 0, x - x1), Math.max(y0 - y, 0, y - y1)) >= 1.0 + 0.6)
+    let k = 0
+    for (const h of hs().filter((h) => h.layer === "bottom").sort((a, b) => dist(a) - dist(b))) { if (hs().length >= 20) break
+      const vv = vias.filter((v) => v.name.startsWith(`V_${h.name}_`) && v.net === "VDDS_DDR"); if (!vv.length || !clearOfBga(h.x, h.y) || !onDdrPlane(h)) continue
+      for (const part of ["C100N_0201", "C100N_0402"]) { const q = anchored(`C_HS_CPU_S${++k}`, part, vv[0], "VDDS_DDR", "GND", "top", true); if (q) { report.push(`top-up: ${q.name} on top, sharing the vias of ${h.name} (note 7)`); break } } } }
   report.push(`top-up: DDR high-speed bypass CPU now ${hs().length}/20, worst distance ${Math.max(...hs().map(dist)).toFixed(2)} mm (limit 10.16)`)
   if (!parts.some((p) => p.name === "C_VREF_CPU")) { const v = vias.find((v) => v.ball === "U1.J4")!, p = free("C_VREF_CPU", "C100N_0201", v, "DDR_VREF", "GND", { anywhere: true, maxDist: 14, step: 0.05 }) ?? free("C_VREF_CPU", "C100N_0402", v, "DDR_VREF", "GND", { anywhere: true, maxDist: 14, step: 0.15 }); if (p) report.push(`top-up: C_VREF_CPU ${Math.hypot(p.x - v.x, p.y - v.y).toFixed(2)} mm from the VREF via of U1.J4`) }
   free("C_BULK_1V8_2", "C10U_0603", U1("D10"), "VDD_1V8", "GND", { anywhere: true, maxDist: 8, viasPerPad: 2, step: 0.15 })

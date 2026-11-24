@@ -1,0 +1,7 @@
+VDD_CORE  0.40 A: worst ball 2.5 mV below the connector pins; plane loss 0.9 mW; peak current density 1.20 A/mm at (-48.6, 18.4, 'inner3'); copper above 1 A/mm 0.03 mm2
+VDD_MPU   1.00 A: worst ball 5.1 mV below the connector pins; plane loss 5.0 mW; peak current density 2.04 A/mm at (-53.2, 30.15, 'inner3'); copper above 1 A/mm 0.11 mm2
+VDDS_DDR  0.60 A: worst ball 7.4 mV below the connector pins; plane loss 2.6 mW; peak current density 1.32 A/mm at (-48.4, 16.3, 'inner3'); copper above 1 A/mm 0.02 mm2
+VDD_3V3   0.25 A: worst ball 15.4 mV below the connector pins; plane loss 3.6 mW; peak current density 2.49 A/mm at (-40.65, 7.9, 'inner2'); copper above 1 A/mm 0.99 mm2
+VDD_1V8   0.20 A: worst ball 14.2 mV below the connector pins; plane loss 1.7 mW; peak current density 1.29 A/mm at (-39.35, 15.65, 'inner2'); copper above 1 A/mm 0.06 mm2
+C_HS_CPU_T5              687 pH |     218 pH |   +468 pH
+all 20 in parallel incl. 450 pH of via per capacitor: real 72 pH, ideal 35 pH

@@ -1,0 +1,6 @@
+outer DDR trace 0.102 mm, 35 um copper, 15 um mask (er 3.8), reference = layer 2 ground
+prepreg L1-L2              | Z0 single | eff. er | CK pair (0.102 / 0.1 gap): Zodd, Zdiff
+1080  0.0764 mm er 3.91    |   56.1 ohm |  3.01   |  45.5 /  91.1 ohm
+3313  0.0994 mm er 4.10    |   63.3 ohm |  3.08   |  48.6 /  97.2 ohm
+2116  0.1194 mm er 4.16    |   69.1 ohm |  3.10   |  50.7 / 101.3 ohm
+7628  0.2104 mm er 4.40    |   88.8 ohm |  3.22   |  54.6 / 109.2 ohm

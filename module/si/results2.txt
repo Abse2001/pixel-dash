@@ -1,0 +1,101 @@
+ADDR/CTRL: worst net (A1), 42.31 mm, 18.07 mm of it at the 0.1 mm minimum gap between two aggressors, the rest at 4w;
+DDR3-800 (2.5 ns per bit), PRBS7 victim, 100 bits, rise 250 ps, lossy coupled lines, 2 vias per net, packages. Levels at the memory ball.
+prepreg Z0    Rs  die   aggressors | AC135 reached after | holds high >= (DC90 0.765) | holds low <= (DC90 0.585) | over / under (<= 0.4 V) | verdict
+1080   56.1  34  1.5  against    |   243 ps | 0.812 V | 0.538 V | 0.152 / 0.152 V | OK
+1080   56.1  34  1.5  with       |   268 ps | 0.810 V | 0.540 V | 0.298 / 0.298 V | OK
+1080   56.1  34  1.5  random     |   268 ps | 0.810 V | 0.540 V | 0.297 / 0.297 V | OK
+1080   56.1  34  3.0  against    |   330 ps | 0.810 V | 0.540 V | 0.087 / 0.087 V | OK
+1080   56.1  34  3.0  with       |   355 ps | 0.810 V | 0.540 V | 0.252 / 0.252 V | OK
+1080   56.1  34  3.0  random     |   354 ps | 0.810 V | 0.540 V | 0.251 / 0.251 V | OK
+1080   56.1  40  1.5  against    |   258 ps | 0.811 V | 0.539 V | 0.047 / 0.047 V | OK
+1080   56.1  40  1.5  with       |   279 ps | 0.810 V | 0.540 V | 0.196 / 0.196 V | OK
+1080   56.1  40  1.5  random     |   279 ps | 0.810 V | 0.540 V | 0.196 / 0.196 V | OK
+1080   56.1  40  3.0  against    |   347 ps | 0.811 V | 0.539 V | 0.014 / 0.014 V | OK
+1080   56.1  40  3.0  with       |   372 ps | 0.810 V | 0.540 V | 0.150 / 0.150 V | OK
+1080   56.1  40  3.0  random     |   372 ps | 0.810 V | 0.540 V | 0.149 / 0.150 V | OK
+1080   56.1  48  1.5  against    |   290 ps | 0.810 V | 0.540 V | 0.013 / 0.013 V | OK
+1080   56.1  48  1.5  with       |   297 ps | 0.812 V | 0.538 V | 0.080 / 0.080 V | OK
+1080   56.1  48  1.5  random     |   297 ps | 0.810 V | 0.540 V | 0.119 / 0.117 V | OK
+1080   56.1  48  3.0  against    |   371 ps | 0.812 V | 0.538 V | 0.002 / 0.002 V | OK
+1080   56.1  48  3.0  with       |   391 ps | 0.811 V | 0.539 V | 0.033 / 0.033 V | OK
+1080   56.1  48  3.0  random     |   391 ps | 0.811 V | 0.539 V | 0.095 / 0.095 V | OK
+1080   56.1  60  1.5  against    |   338 ps | 0.811 V | 0.539 V | 0.002 / 0.002 V | OK
+1080   56.1  60  1.5  with       |   331 ps | 0.811 V | 0.539 V | 0.007 / 0.007 V | OK
+1080   56.1  60  1.5  random     |   338 ps | 0.810 V | 0.540 V | 0.104 / 0.103 V | OK
+1080   56.1  60  3.0  against    |   414 ps | 0.812 V | 0.538 V | 0.001 / 0.001 V | OK
+1080   56.1  60  3.0  with       |   422 ps | 0.810 V | 0.540 V | 0.003 / 0.003 V | OK
+1080   56.1  60  3.0  random     |   423 ps | 0.810 V | 0.540 V | 0.087 / 0.087 V | OK
+3313   63.3  34  1.5  against    |   241 ps | 0.810 V | 0.540 V | 0.200 / 0.200 V | OK
+3313   63.3  34  1.5  with       |   274 ps | 0.813 V | 0.537 V | 0.383 / 0.383 V | OK
+3313   63.3  34  1.5  random     |   274 ps | 0.810 V | 0.540 V | 0.379 / 0.379 V | OK
+3313   63.3  34  3.0  against    |   330 ps | 0.812 V | 0.538 V | 0.130 / 0.130 V | OK
+3313   63.3  34  3.0  with       |   370 ps | 0.810 V | 0.540 V | 0.333 / 0.333 V | OK
+3313   63.3  34  3.0  random     |   366 ps | 0.810 V | 0.540 V | 0.332 / 0.332 V | OK
+3313   63.3  40  1.5  against    |   256 ps | 0.810 V | 0.540 V | 0.094 / 0.094 V | OK
+3313   63.3  40  1.5  with       |   286 ps | 0.810 V | 0.538 V | 0.281 / 0.281 V | OK
+3313   63.3  40  1.5  random     |   286 ps | 0.810 V | 0.540 V | 0.279 / 0.279 V | OK
+3313   63.3  40  3.0  against    |   346 ps | 0.812 V | 0.538 V | 0.030 / 0.030 V | OK
+3313   63.3  40  3.0  with       |   381 ps | 0.810 V | 0.540 V | 0.231 / 0.231 V | OK
+3313   63.3  40  3.0  random     |   380 ps | 0.810 V | 0.539 V | 0.231 / 0.231 V | OK
+3313   63.3  48  1.5  against    |   285 ps | 0.811 V | 0.539 V | 0.024 / 0.024 V | OK
+3313   63.3  48  1.5  with       |   302 ps | 0.810 V | 0.540 V | 0.164 / 0.164 V | OK
+3313   63.3  48  1.5  random     |   302 ps | 0.810 V | 0.539 V | 0.163 / 0.163 V | OK
+3313   63.3  48  3.0  against    |   368 ps | 0.812 V | 0.538 V | 0.005 / 0.005 V | OK
+3313   63.3  48  3.0  with       |   398 ps | 0.811 V | 0.539 V | 0.114 / 0.114 V | OK
+3313   63.3  48  3.0  random     |   398 ps | 0.810 V | 0.540 V | 0.121 / 0.121 V | OK
+3313   63.3  60  1.5  against    |   334 ps | 0.811 V | 0.539 V | 0.003 / 0.003 V | OK
+3313   63.3  60  1.5  with       |   332 ps | 0.810 V | 0.540 V | 0.020 / 0.020 V | OK
+3313   63.3  60  1.5  random     |   334 ps | 0.810 V | 0.540 V | 0.142 / 0.143 V | OK
+3313   63.3  60  3.0  against    |   407 ps | 0.810 V | 0.540 V | 0.001 / 0.001 V | OK
+3313   63.3  60  3.0  with       |   426 ps | 0.812 V | 0.538 V | 0.006 / 0.006 V | OK
+3313   63.3  60  3.0  random     |   426 ps | 0.810 V | 0.540 V | 0.111 / 0.112 V | OK
+2116   69.1  34  1.5  against    |   240 ps | 0.811 V | 0.539 V | 0.230 / 0.230 V | OK
+2116   69.1  34  1.5  with       |   281 ps | 0.811 V | 0.539 V | 0.448 / 0.448 V | FAIL
+2116   69.1  34  1.5  random     |   280 ps | 0.810 V | 0.540 V | 0.441 / 0.441 V | FAIL
+2116   69.1  34  3.0  against    |   330 ps | 0.810 V | 0.540 V | 0.158 / 0.158 V | OK
+2116   69.1  34  3.0  with       |   381 ps | 0.811 V | 0.539 V | 0.387 / 0.387 V | OK
+2116   69.1  34  3.0  random     |   376 ps | 0.810 V | 0.540 V | 0.384 / 0.386 V | OK
+2116   69.1  40  1.5  against    |   255 ps | 0.812 V | 0.538 V | 0.123 / 0.123 V | OK
+2116   69.1  40  1.5  with       |   292 ps | 0.812 V | 0.538 V | 0.344 / 0.344 V | OK
+2116   69.1  40  1.5  random     |   292 ps | 0.810 V | 0.540 V | 0.343 / 0.343 V | OK
+2116   69.1  40  3.0  against    |   346 ps | 0.812 V | 0.538 V | 0.054 / 0.054 V | OK
+2116   69.1  40  3.0  with       |   391 ps | 0.812 V | 0.538 V | 0.286 / 0.286 V | OK
+2116   69.1  40  3.0  random     |   389 ps | 0.810 V | 0.540 V | 0.285 / 0.286 V | OK
+2116   69.1  48  1.5  against    |   284 ps | 0.810 V | 0.540 V | 0.030 / 0.030 V | OK
+2116   69.1  48  1.5  with       |   309 ps | 0.810 V | 0.540 V | 0.229 / 0.229 V | OK
+2116   69.1  48  1.5  random     |   309 ps | 0.810 V | 0.539 V | 0.229 / 0.229 V | OK
+2116   69.1  48  3.0  against    |   367 ps | 0.812 V | 0.538 V | 0.012 / 0.012 V | OK
+2116   69.1  48  3.0  with       |   406 ps | 0.811 V | 0.539 V | 0.169 / 0.169 V | OK
+2116   69.1  48  3.0  random     |   405 ps | 0.810 V | 0.540 V | 0.168 / 0.169 V | OK
+2116   69.1  60  1.5  against    |   333 ps | 0.810 V | 0.540 V | 0.005 / 0.005 V | OK
+2116   69.1  60  1.5  with       |   337 ps | 0.810 V | 0.540 V | 0.085 / 0.085 V | OK
+2116   69.1  60  1.5  random     |   337 ps | 0.810 V | 0.540 V | 0.172 / 0.172 V | OK
+2116   69.1  60  3.0  against    |   404 ps | 0.811 V | 0.539 V | 0.001 / 0.001 V | OK
+2116   69.1  60  3.0  with       |   432 ps | 0.810 V | 0.540 V | 0.024 / 0.024 V | OK
+2116   69.1  60  3.0  random     |   431 ps | 0.810 V | 0.540 V | 0.126 / 0.127 V | OK
+
+processor ADDR/CTRL output impedance settings that pass every case, per prepreg:
+  1080 (56.1 ohm): 34 ohm, 40 ohm, 48 ohm, 60 ohm
+  3313 (63.3 ohm): 34 ohm, 40 ohm, 48 ohm, 60 ohm
+  2116 (69.1 ohm): 40 ohm, 48 ohm, 60 ohm
+
+CK / CKn pair, 400 MHz, complementary drive; differential level at the memory ball (DDR3L VIHdiff(AC) >= 0.27 V)
+  1080 gap 0.1 mm Rs 34: differential peak 1.632 / -1.632 V, +-0.27 V reached after 217 ps of each 1250 ps half period, single-ended over/under 0.141/0.141 V OK
+  1080 gap 0.2 mm Rs 34: differential peak 1.765 / -1.765 V, +-0.27 V reached after 222 ps of each 1250 ps half period, single-ended over/under 0.207/0.207 V OK
+  1080 gap 0.1 mm Rs 40: differential peak 1.434 / -1.434 V, +-0.27 V reached after 234 ps of each 1250 ps half period, single-ended over/under 0.042/0.042 V OK
+  1080 gap 0.2 mm Rs 40: differential peak 1.570 / -1.570 V, +-0.27 V reached after 240 ps of each 1250 ps half period, single-ended over/under 0.110/0.110 V OK
+  1080 gap 0.1 mm Rs 48: differential peak 1.325 / -1.325 V, +-0.27 V reached after 257 ps of each 1250 ps half period, single-ended over/under -0.013/-0.013 V OK
+  1080 gap 0.2 mm Rs 48: differential peak 1.345 / -1.345 V, +-0.27 V reached after 262 ps of each 1250 ps half period, single-ended over/under -0.003/-0.003 V OK
+  3313 gap 0.1 mm Rs 34: differential peak 1.713 / -1.713 V, +-0.27 V reached after 216 ps of each 1250 ps half period, single-ended over/under 0.181/0.181 V OK
+  3313 gap 0.2 mm Rs 34: differential peak 1.869 / -1.869 V, +-0.27 V reached after 219 ps of each 1250 ps half period, single-ended over/under 0.259/0.259 V OK
+  3313 gap 0.1 mm Rs 40: differential peak 1.517 / -1.517 V, +-0.27 V reached after 232 ps of each 1250 ps half period, single-ended over/under 0.083/0.083 V OK
+  3313 gap 0.2 mm Rs 40: differential peak 1.677 / -1.677 V, +-0.27 V reached after 238 ps of each 1250 ps half period, single-ended over/under 0.163/0.163 V OK
+  3313 gap 0.1 mm Rs 48: differential peak 1.316 / -1.316 V, +-0.27 V reached after 256 ps of each 1250 ps half period, single-ended over/under -0.017/-0.017 V OK
+  3313 gap 0.2 mm Rs 48: differential peak 1.452 / -1.452 V, +-0.27 V reached after 263 ps of each 1250 ps half period, single-ended over/under 0.051/0.051 V OK
+  2116 gap 0.1 mm Rs 34: differential peak 1.760 / -1.760 V, +-0.27 V reached after 216 ps of each 1250 ps half period, single-ended over/under 0.205/0.205 V OK
+  2116 gap 0.2 mm Rs 34: differential peak 1.937 / -1.937 V, +-0.27 V reached after 217 ps of each 1250 ps half period, single-ended over/under 0.293/0.293 V OK
+  2116 gap 0.1 mm Rs 40: differential peak 1.565 / -1.565 V, +-0.27 V reached after 232 ps of each 1250 ps half period, single-ended over/under 0.108/0.108 V OK
+  2116 gap 0.2 mm Rs 40: differential peak 1.746 / -1.746 V, +-0.27 V reached after 236 ps of each 1250 ps half period, single-ended over/under 0.198/0.198 V OK
+  2116 gap 0.1 mm Rs 48: differential peak 1.341 / -1.341 V, +-0.27 V reached after 256 ps of each 1250 ps half period, single-ended over/under -0.005/-0.005 V OK
+  2116 gap 0.2 mm Rs 48: differential peak 1.522 / -1.522 V, +-0.27 V reached after 263 ps of each 1250 ps half period, single-ended over/under 0.086/0.086 V OK
+si-exit 0

@@ -14,18 +14,20 @@ const XB = +(process.env.XB ?? -46.4) // layer 3: VDDS_DDR west of this, 3V3 / 1
 // trunk order, with the layers a net may use (first = preferred) and where it is filled
 // skeleton order: the nets with the fewest ways through first, the big planes last
 // the 3V3 balls N5, P5, P6, P7 sit west of the layer-3 split: this corner of layer 3 is 3V3 too
+// layer 3 north and south of the processor's 3V3/1V8 rows carries VDDS_DDR too, so DDR bypass capacitors there sit on their plane
+const DDRBAND = (x: number, y: number) => (x < -37.6 && (y > 19.25 || y < 10.15)) || (x < -41.6 && y > 12.0 && y < 18.35) // + the core-ball interior (no 3V3 balls there)
 const SW = (x: number, y: number) => x > -49.1 && x < XB && y > 10.9 && y < 12.0 // row P only: N6 above it is a 1V8 ball
 const NETS: { name: string; layers: number[]; fill: Record<number, (x: number, y: number) => boolean> }[] = [
   { name: "GND", layers: [0], fill: { 0: () => true, 3: () => true } },
   ...["VDDS_RTC", ...plan.innerNets].map((name: string) => ({ name, layers: [2, 1], fill: {} })),
   { name: "DDR_VREF", layers: [1, 2], fill: { 2: (x: number, y: number) => x < -53 && x > -76 && y > 9 && y < 21 } }, // the channel between the two chips; the rest of layer 4 is left to core and MPU,
-  { name: "VDD_3V3", layers: [1, 2], fill: { 1: (x: number, y: number) => x >= XB || SW(x, y) } },
+  { name: "VDD_3V3", layers: [1, 2], fill: { 1: (x: number, y: number) => (x >= XB || SW(x, y)) && !DDRBAND(x, y) } },
   { name: "VDD_1V8", layers: [1, 2], fill: { 2: (x: number, y: number) => x >= XB && y < 13 } }, // layer 3 east is the 3V3 plane; 1V8 fills the lower part of layer 4 and runs fattened feeds elsewhere
-  { name: "VDDS_DDR", layers: [1, 2], fill: { 1: (x: number, y: number) => x < XB && !SW(x, y) } },
+  { name: "VDDS_DDR", layers: [1, 2], fill: { 1: (x: number, y: number) => (x < XB && !SW(x, y)) || DDRBAND(x, y) } },
   { name: "VDD_MPU", layers: [2, 1], fill: { 2: () => true } },
   { name: "VDD_CORE", layers: [2, 1], fill: { 2: () => true } },
 ]
-const CENTRE4 = new Set(["VDD_CORE", "VDD_MPU"]), CENTRE3 = new Set(["VDD_1V8", "VDD_3V3", "VDDS_DDR"]) // who may cross the middle of the processor on layers 4 / 3 cheaply
+const CENTRE4 = new Set(["VDD_CORE", "VDD_MPU"]), CENTRE3 = new Set(["VDDS_DDR"]) // who may cross the middle of the processor on layers 4 / 3 cheaply (layer 3 there is VDDS_DDR copper for the DDR bypass capacitors)
 const idx = new Map(NETS.map((n, i) => [n.name, i + 1]))
 // ---------- vias ----------
 type V = { x: number; y: number; d: number; net: string }
