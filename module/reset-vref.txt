@@ -48,6 +48,11 @@ CPU N15 IO supply to sequenced 3.3 V connected
 Boot IO supply and P-row distribution to DCDC4 connected
 LDO1 and both SRAM input bypasses to four CPU 1.8 V pads connected
 All twelve unused TSC_ADC terminals to system ground connected
+DCDC4 to USB1 analog 3.3 V supply R15 connected
+VDD_LDO1_1V8 local copper U1.R10 to U1.R11 connected
+VDD_LDO1_1V8 local copper U1.N16 to U1.R16 connected
+VDD_CORE local copper U1.G6 to U1.K6 connected
+VDD_CORE local copper U1.L6 to U1.N8 connected
 AM3354 J3 calibration to 49.9 ohm resistor connected
 AM3354 calibration resistor return to module ground connected
 MPU buck output and feedback to seven CPU supply balls connected
