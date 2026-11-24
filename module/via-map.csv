@@ -475,6 +475,7 @@ x_mm,y_mm,net,hole_mm,land_mm,solder_land,face,nominal_bore_to_land_boundary_mm,
 31.74989,13.157358,GND_INTERNAL,0.2,0.45,C_PMIC_RTC_CORE.pin2,F.Cu,0.64251,centered
 31.749999,14.449999,THROUGH_SD_CLK,0.15,0.3,,,,off-pad
 31.75,2.844999,SYSBOOT5_SENSE,0.15,0.3,,,,off-pad
+31.799942,29.250058,VDD_LDO1_1V8,0.15,0.3,U1.E14,F.Cu,0.10498,centered
 31.799942,36.449942,VDD_LDO1_1V8,0.15,0.3,U1.P14,F.Cu,0.10498,centered
 31.836771,25.526284,VDDS_DDR_CPU,0.2,0.45,,,,off-pad
 31.884999,40.366999,OSC0_BIAS_OUT,0.15,0.3,,,,off-pad
@@ -501,6 +502,7 @@ x_mm,y_mm,net,hole_mm,land_mm,solder_land,face,nominal_bore_to_land_boundary_mm,
 32.95,7.155,SYSBOOT13_SENSE,0.15,0.3,,,,off-pad
 33.0,25.6,VDD_MPU,0.2,0.45,C_MPU_HF4.pin1,B.Cu,0.15,centered
 33.0,26.440232,GND_INTERNAL,0.2,0.45,C_MPU_HF4.pin2,B.Cu,0.15,centered
+33.000042,31.073104,VDD_LDO1_1V8,0.15,0.3,,,,off-pad
 33.049999,32.029882,VDDS_DDR_CPU,0.2,0.45,,,,off-pad
 33.095999,33.627999,TOUCH_SCL,0.15,0.3,,,,off-pad
 33.149999,30.449999,THROUGH_SD_MISO,0.15,0.3,,,,off-pad
@@ -526,6 +528,7 @@ x_mm,y_mm,net,hole_mm,land_mm,solder_land,face,nominal_bore_to_land_boundary_mm,
 34.415,4.76,SYSBOOT15_SENSE,0.15,0.3,,,,off-pad
 34.442579,40.5,VDDS_DDR_CPU,0.2,0.45,,,,off-pad
 34.449999,30.449999,THROUGH_SD_CLK,0.15,0.3,,,,off-pad
+34.559999,31.939999,VDD_LDO1_1V8,0.15,0.3,,,,off-pad
 34.649999,28.749999,DEBUG_UART0_TX,0.15,0.3,,,,off-pad
 34.729999,34.429999,LCD_RESET,0.15,0.3,,,,off-pad
 34.749999,27.249999,SD_DETECT,0.15,0.3,,,,off-pad
