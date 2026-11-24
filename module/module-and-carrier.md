@@ -41,3 +41,7 @@ arm-none-eabi-objcopy -O binary /tmp/pixel-uart0.elf /tmp/pixel-uart0.bin
 ```
 
 Send `pixel-uart0.bin` in the cold-boot XMODEM test above. Expect `Pixel Dash SRAM CONTROL_STATUS=0x` followed by eight hexadecimal digits on contact 66. Save the complete word. Decode SYSBOOT as `((word >> 8) & 0xff00) | (word & 0xff)`. Device and revision fields can make two raw words differ while the strap bits agree. Build the MMC0 SPL separately once the module and carrier are ready for power-on testing.
+
+### USB0 launch study
+
+Moving the local SYSBOOT12 via to (28.078, 2.535) mm and the front joystick-click trace opens space behind DF40 contacts 24 and 25. The proposed 0.15/0.30 mm off-pad through vias are at (27.220, 2.820) mm for D+ and (27.650, 2.775) mm for D−. A separate four-launch drill export preserved all earlier pad connections and adjacent references. The proposed barrels and isolated stubs are omitted from this saved board. The connector and CPU still need a continuous differential route. A bounded four-signal-layer centerline search with paired drill positions found no full corridor on this placement. USB differential impedance, delay matching and discontinuities require verification on the completed pair.
