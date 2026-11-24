@@ -132,6 +132,7 @@ cpu_balls = sorted(pin for ref,pin in switched if ref == "U1")
 assert len(cpu_balls) == 7
 fed = [pin for pin in cpu_balls if switched["U1",pin] == cpu_root]
 assert len(fed) == 7, ("switched CPU rail connectivity regression", fed)
+assert all(node == cpu_root for node in switched.values()), "isolated switched rail load or bypass"
 print(f"Switched DDR output reaches {len(fed)}/7 CPU DDR balls. Open:", ", ".join(pin for pin in cpu_balls if pin not in fed) or "none")
 # Verify the entire timed track body against the island of its measured receiver.
 # One micrometre covers the independent Gerber/arc polygonization on either edge.
@@ -169,7 +170,7 @@ for branch in strap_branches:
     name = branch["net"]
     strap_nodes = [node for ref,pin,node in pads[name] if ref.startswith("R_SYSBOOT") or ref == "J_CARRIER"]
     assert len(strap_nodes) == 2 and len(set(strap_nodes)) == 1, name
-for n in [*signals, "VDD_LDO1_1V8", "VDD_IO_3V3_SEQ", "VDD_IO_3V3_SEQ", "VDDS_RTC_1V8", "TOUCH_SDA", "TOUCH_SCL", "VDD_IO_3V3_SEQ", "PMIC_I2C_SDA", "THROUGH_SD_CS", "THROUGH_SD_CMD", "THROUGH_SD_DAT1_PULLUP", "DEBUG_UART0_TX", "THROUGH_Y", "THROUGH_SD_CLK", "THROUGH_SD_MISO", "SD_DETECT", "AUDIO_PWM_INTERNAL", "THROUGH_A", "THROUGH_B", "THROUGH_R_SHOULDER", "JOY_L_CLICK", "DEBUG_UART0_RX", "THROUGH_X", "THROUGH_DN", "J_SD_PIN1", "CPU_DDR_VREF", "DDR_VREF", "DDR_VREF_CA", "DDR_ZQ", "DDR_VTP", *(branch["net"] for branch in strap_branches)]:
+for n in [*signals, "VDD_CORE", "VDD_LDO1_1V8", "VDD_IO_3V3_SEQ", "VDD_IO_3V3_SEQ", "VDDS_RTC_1V8", "TOUCH_SDA", "TOUCH_SCL", "VDD_IO_3V3_SEQ", "PMIC_I2C_SDA", "THROUGH_SD_CS", "THROUGH_SD_CMD", "THROUGH_SD_DAT1_PULLUP", "DEBUG_UART0_TX", "THROUGH_Y", "THROUGH_SD_CLK", "THROUGH_SD_MISO", "SD_DETECT", "AUDIO_PWM_INTERNAL", "THROUGH_A", "THROUGH_B", "THROUGH_R_SHOULDER", "JOY_L_CLICK", "DEBUG_UART0_RX", "THROUGH_X", "THROUGH_DN", "J_SD_PIN1", "CPU_DDR_VREF", "DDR_VREF", "DDR_VREF_CA", "DDR_ZQ", "DDR_VTP", *(branch["net"] for branch in strap_branches)]:
     launches=union_all([point(v["pos"]).buffer(v["diam"]/2+.155,quad_segs=64) for v in vias if v["net"]==n])
     for t in geom:
         if t["kind"]!="track" or t["net"]!=n:continue

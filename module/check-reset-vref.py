@@ -89,6 +89,7 @@ boot_paths = {
     "VDD_LDO1_1V8 local copper U1.N16 to U1.R16": ["U1.N16","U1.R16"],
     "VDD_CORE local copper U1.G6 to U1.K6": ["U1.G6","U1.K6"],
     "VDD_CORE local copper U1.L6 to U1.N8": ["U1.L6","U1.N8"],
+    "DCDC1 post-inductor CORE feed, output capacitor, feedback and CPU G10": ["L_PMIC_CORE.pin2", "C_PMIC_CORE.pin1", "U_PMIC.FB1", "U1.G10"],
     "AM3354 J3 calibration to 49.9 ohm resistor": ["U1.J3","R_VTP.pin1"],
     "AM3354 calibration resistor return to module ground": ["R_VTP.pin2","U_PMIC.EP"],
     "MPU buck output and feedback to seven CPU supply balls": ["U_PMIC.FB2","L_PMIC_MPU.pin2","C_PMIC_MPU.pin1", *(f"U1.{pin}" for pin in ("F10","F11","F12","F13","G13","H13","J13"))],
