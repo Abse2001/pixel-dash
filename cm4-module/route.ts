@@ -24,7 +24,7 @@ for (const [name, r] of Object.entries(prev.nets) as any) { if (!plan.nets.find(
 // ---------- nets ----------
 type Term = { ref: string; x: number; y: number; layer: string; shape: { pts: Pt[]; r: number }; kind: string }
 type Net = { name: string; terms: Term[]; inner: boolean; path?: number[]; id: number }
-const nets: Net[] = (plan.nets as any[]).filter((n) => n.inner === (MODE === "inner")).map((n, i) => ({ ...n, id: 0 }))
+const nets: Net[] = (plan.nets as any[]).filter((n) => n.inner === (MODE === "inner") && (!process.env.ONLY || process.env.ONLY.split(",").includes(n.name))).map((n, i) => ({ ...n, id: 0 }))
 const netId = new Map<string, number>(); const idOf = (n: string) => { let i = netId.get(n); if (!i) netId.set(n, (i = netId.size + 1)); return i }
 nets.forEach((n) => (n.id = idOf(n.name)))
 // ---------- static masks: 0 free, id = only that net, -1 nobody ----------
@@ -80,7 +80,8 @@ function stampNet(n: Net, d: number) { const p = n.path; if (!p) return
 // ---------- search ----------
 const VIA_COST = +(process.env.VIA_COST ?? 6)
 let pres = 0.6
-const gScore = new Float32Array(NL * NN), from = new Int32Array(NL * NN), seen = new Int32Array(NL * NN), goal = new Int32Array(NL * NN); let stampId = 0, goalId = 0
+// gScore in Float64: Float32 rounding made equal-cost paths look better and re-queue each other endlessly
+const gScore = new Float64Array(NL * NN), from = new Int32Array(NL * NN), seen = new Int32Array(NL * NN), goal = new Int32Array(NL * NN); let stampId = 0, goalId = 0
 const heap: number[] = [], hkey: number[] = []
 const hpush = (k: number, n: number) => { let i = heap.length; heap.push(n); hkey.push(k); while (i > 0) { const p = (i - 1) >> 1; if (hkey[p] <= hkey[i]) break; [heap[p], heap[i]] = [heap[i], heap[p]]; [hkey[p], hkey[i]] = [hkey[i], hkey[p]]; i = p } }
 const hpop = () => { const top = heap[0], n = heap.pop()!, k = hkey.pop()!; if (heap.length) { heap[0] = n; hkey[0] = k; let i = 0; for (;;) { const a = 2 * i + 1, b = a + 1; let m = i; if (a < heap.length && hkey[a] < hkey[m]) m = a; if (b < heap.length && hkey[b] < hkey[m]) m = b; if (m === i) break; [heap[m], heap[i]] = [heap[i], heap[m]]; [hkey[m], hkey[i]] = [hkey[i], hkey[m]]; i = m } } return top }
@@ -97,7 +98,9 @@ function route(n: Net): boolean { const id = n.id, tcs = TC.get(n)!, okT = (l: n
     const viaGoal = new Set(tc.via); const tx = n.terms[k].x, ty = n.terms[k].y, h = (c: number) => Math.hypot(wx(c % NX) - tx, wy((c / NX) | 0) - ty) / P
     for (const u of tree) { seen[u] = stampId; gScore[u] = 0; from[u] = -1; hpush(h(u % NN), u) }
     let end = -1
-    while (heap.length) { const u = hpop(), l = (u / NN) | 0, c = u % NN, i = c % NX, j = (c / NX) | 0, g = gScore[u]
+    let pops = 0
+    while (heap.length) { if (++pops % 2000000 === 0 && process.env.VERBOSE) console.error(`    ${n.name} -> ${n.terms[k].ref}: ${pops} pops, heap ${heap.length}`); const key = hkey[0], u = hpop(), l = (u / NN) | 0, c = u % NN, i = c % NX, j = (c / NX) | 0, g = gScore[u]
+      if (key > g + h(c) + 1e-9) continue // stale entry: a cheaper way here was found after it was queued
       if (goal[u] === goalId) { end = u; break }
       const relax = (v: number, cost: number) => { const ng = g + cost; if (seen[v] !== stampId || ng < gScore[v]) { seen[v] = stampId; gScore[v] = ng; from[v] = u; hpush(ng + h(v % NN), v) } }
       for (let q = 0; q < 16; q += 2) { const ii = i + D8[q], jj = j + D8[q + 1]; if (ii < 0 || jj < 0 || ii >= NX || jj >= NY) continue; const c2 = jj * NX + ii
@@ -124,7 +127,7 @@ let rs = +(process.env.SEED ?? 1) >>> 0; const rnd = () => { rs = (rs + 0x6d2b79
 const t0 = performance.now(); let order = nets.map((_, i) => i)
 const MAXIT = +(process.env.MAXIT ?? 80); let solved = false
 for (let it = 1; it <= MAXIT; it++) { let failed = 0
-  for (const k of order) { const n = nets[k], t1 = performance.now(); stampNet(n, -1); n.path = undefined; if (!route(n)) { failed++; if (it === 1) console.log(`  ${n.name}: no path (${failTerm})`) } stampNet(n, 1); if (it === 1 && process.env.VERBOSE) console.log(`  ${n.name} ${((performance.now() - t1) / 1e3).toFixed(2)}s`) }
+  for (const k of order) { const n = nets[k], t1 = performance.now(); stampNet(n, -1); n.path = undefined; if (!route(n)) { failed++; if (it === 1) console.log(`  ${n.name}: no path (${failTerm})`) } stampNet(n, 1); if (it === 1 && process.env.VERBOSE) console.error(`  ${n.name} ${n.terms.length} terms ${((performance.now() - t1) / 1e3).toFixed(2)}s`) }
   let nbad = 0; const badNets: string[] = []
   for (const n of nets) { if (!n.path) { nbad++; badNets.push(n.name + "(unrouted)"); continue } const bad = conflicts(n)
     for (const u of bad) { const l = (u / NN) | 0, c = u % NN; hist[l][c] = Math.min(hist[l][c] + 0.4, 6); histV[c] = Math.min(histV[c] + 0.2, 3) }

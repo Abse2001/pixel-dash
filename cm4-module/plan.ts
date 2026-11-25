@@ -5,6 +5,8 @@
 // maps to it by a pure rotation: x = CM4.x0 + v, y = CM4.y0 - u (see frame.ts).
 import { Board, disc, seg, rect, gap, type Item, type Layer, type Pt } from "./geom"
 import { EDGE, HOLES, J1, J2 } from "./frame"
+import { PARTS } from "./parts-info"
+export { PARTS }
 import { CM4, SIGNALS, GPIO_PINS, POOL, EXTRA_GPIO, PARTS as NETLIST, PLANE_NETS } from "./design/netlist"
 const EXT = import.meta.dir + "/../external/ddr-route"
 const DDR = EXT + "/out/module9/ddr-cpu-ram.routed.json"
@@ -83,29 +85,6 @@ const FP: Record<string, { pads: { pin: string; x: number; y: number; w: number;
 const G = (k: string) => { const p = PADS[k]; return { pads: p.pads.map((q) => ({ ...q })), body: [p.body[0] + 0.2, p.body[1] + 0.2] as [number, number] } }
 Object.assign(FP, { PMIC: G("PMIC"), PHY: G("PHY"), BUCK: G("BUCK"), IND: G("L2U2"), CM4_HDR: { ...G("CM4_HDR"), body: [22.0, 3.86] }, G0402: G("R0402"), G0603: G("C0603"), G0805: G("C0805"),
   XTAL25: { pads: [[-1.1, -0.8, 1], [1.1, -0.8, 2], [1.1, 0.8, 3], [-1.1, 0.8, 4]].map(([x, y, n]) => ({ pin: "pin" + n, x, y, w: 1.4, h: 1.15 })), body: [3.7, 3.0] } })
-/** part type -> footprint and either the imported tscircuit component (as module 0.4.4) or value + LCSC number */
-export const PARTS: Record<string, { fp: string; comp?: string; file?: string; value?: string; lcsc?: string }> = {
-  C100N_0201: { fp: "C0201", comp: "TMK063ABJ104KP_F", file: "../am3354/imports/TMK063ABJ104KP_F" },
-  C100N_0402: { fp: "C0402", comp: "CL05B104KO5NNNC", file: "../imports/CL05B104KO5NNNC" },
-  C1U_0402: { fp: "C0402", comp: "CL05A105KA5NQNC", file: "./imports/CL05A105KA5NQNC" },
-  C10U_0603: { fp: "C0603", comp: "CL10A106KP8NNNC", file: "../imports/CL10A106KP8NNNC" },
-  C15P_0402: { fp: "C0402", comp: "A_0402CG150F500NT", file: "../imports/A_0402CG150F500NT" },
-  R240_0201: { fp: "R0201", comp: "RC0201FR_07240RL", file: "../am3354/imports/RC0201FR_07240RL" },
-  R49R9_0402: { fp: "R0402", comp: "A_0402WGF499JTCE", file: "../am3354/imports/A_0402WGF499JTCE" },
-  R1K_0402: { fp: "R0402", comp: "A_0402WGF1001TCE", file: "../imports/A_0402WGF1001TCE" },
-  XTAL_24M: { fp: "XTAL3225", comp: "TXM24M0004322DBCDO00T", file: "./imports/TXM24M0004322DBCDO00T" },
-  // new on the CM4 module
-  PMIC: { fp: "PMIC", value: "TPS65217DRSLR", lcsc: "C702315" }, PHY: { fp: "PHY", value: "LAN8720A-CP-TR", lcsc: "C45223" }, BUCK: { fp: "BUCK", value: "SY8089A1AAC", lcsc: "C479074" },
-  IND: { fp: "IND", value: "2.2uH WIP201610P-2R2ML", lcsc: "C315717" }, XTAL_25M: { fp: "XTAL25", value: "25MHz K3A250001210", lcsc: "C18213377" },
-  CM4_HDR: { fp: "CM4_HDR", value: "DF40C-100DP-0.4V(51)", lcsc: "C531031" },
-  R100K: { fp: "G0402", value: "100k", lcsc: "C25741" }, R10K: { fp: "G0402", value: "10k", lcsc: "C25744" }, R1K: { fp: "G0402", value: "1k", lcsc: "C11702" },
-  R2K2: { fp: "G0402", value: "2.2k", lcsc: "C25879" }, R4K7: { fp: "G0402", value: "4.7k", lcsc: "C25900" }, R1K5: { fp: "G0402", value: "1.5k", lcsc: "C25867" },
-  R12K1: { fp: "G0402", value: "12.1k 1%", lcsc: "C25852" }, R22K: { fp: "G0402", value: "22k 1%", lcsc: "C25768" }, R200K: { fp: "G0402", value: "200k 1%", lcsc: "C25764" },
-  R49R9: { fp: "G0402", value: "49.9 1%", lcsc: "C25120" }, R0: { fp: "G0402", value: "0", lcsc: "C17168" },
-  C22U_0603: { fp: "G0603", value: "22uF 6.3V", lcsc: "C59461" }, C22U_0805: { fp: "G0805", value: "22uF 25V", lcsc: "C45783" }, C4U7_0603: { fp: "G0603", value: "4.7uF 16V", lcsc: "C19666" },
-  C4U7_0402: { fp: "G0402", value: "4.7uF 10V", lcsc: "C23733" }, C2U2_0402: { fp: "G0402", value: "2.2uF 6.3V", lcsc: "C12530" }, C10U_0402: { fp: "G0402", value: "10uF 6.3V", lcsc: "C15525" },
-  C470P_0402: { fp: "G0402", value: "470pF", lcsc: "C1537" },
-}
 /** world pads of a part (bottom side parts are mirrored, as tscircuit renders them) */
 export const padsOf = (p: { part: string; x: number; y: number; rot: number; layer: Layer }) => { const f = FP[PARTS[p.part].fp], c = Math.cos(p.rot * Math.PI / 180), s = Math.sin(p.rot * Math.PI / 180), m = p.layer === "bottom" ? -1 : 1
   return f.pads.map((q) => ({ pin: q.pin, x: p.x + m * q.x * c - q.y * s, y: p.y + m * q.x * s + q.y * c, shape: rect(p.x + m * q.x * c - q.y * s, p.y + m * q.x * s + q.y * c, q.w, q.h, p.rot) })) }
@@ -332,7 +311,11 @@ const toPad = (ref: string, pin: string, ep: string) => { const q = pad(ref, pin
 const at = (ref: string, pin: string) => { const q = pad(ref, pin); return { x: q.x, y: q.y } }
 /** a two-pin netlist part near a point; vias in the pads whose net is a plane */
 function near(ref: string, p: Pt, o: { layers?: Layer[]; maxDist?: number; anywhere?: boolean; vias?: number; ok?: (q: Part) => boolean } = {}) { const n = NL[ref], v = Object.entries(n.nets).filter(([, net]) => PLANE.has(net)).map(([pin]) => pin)
-  return free(ref, n.part, p, n.nets.pin1, n.nets.pin2, { layers: o.layers ?? ["top", "bottom"], maxDist: o.maxDist ?? 6, viaPins: v, viasPerPad: o.vias ?? 1, anywhere: o.anywhere ?? true, ok: o.ok, step: 0.1 }) }
+  // a pad the router has to reach needs room around it: at least 5 of 16 probes 0.5 mm out clear of other copper and part bodies
+  const room = (q: Part) => padsOf(q).every((pd) => { const net = q.nets[pd.pin]; if (PLANE.has(net)) return true; let k = 0
+    for (let a = 0; a < 16; a++) { const x = pd.x + 0.55 * Math.cos(a * Math.PI / 8), y = pd.y + 0.55 * Math.sin(a * Math.PI / 8), d = disc(x, y, 0.05)
+      if (!B.hits(d, [q.layer], net, 0.1).length && !bodies.some((b) => b.layer === q.layer && gap(d, b.s) < 0)) k++ } return k >= 5 })
+  return free(ref, n.part, p, n.nets.pin1, n.nets.pin2, { layers: o.layers ?? ["top", "bottom"], maxDist: o.maxDist ?? 6, viaPins: v, viasPerPad: o.vias ?? 1, anywhere: o.anywhere ?? true, ok: (q) => room(q) && (!o.ok || o.ok(q)), step: 0.1 }) }
 tick("power")
 // TPS65217D on top, east of the processor. Rotation 0: pins 1-12 west side (top to bottom), 13-24 south, 25-36 east, 37-48 north.
 const PM = { x: -30.65, y: 13.45 } // on the router grid (x0 + 0.1 i): the 0.4 mm pin pitch then lands on grid lines

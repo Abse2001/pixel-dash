@@ -4,7 +4,7 @@
 import { Board, disc, seg, rect, gap, type Item, type Layer } from "./geom"
 const dir = import.meta.dir
 const cj: any[] = await Bun.file(dir + "/dist/module.circuit.json").json(), plan = await Bun.file(dir + "/plan.json").json()
-const routes = await Bun.file(dir + "/routes.json").json(), names: Record<string, string> = await Bun.file("/home/user/ddr-route/net-names.json").json()
+const routes = await Bun.file(dir + "/routes.json").json(), names: Record<string, string> = await Bun.file(dir + "/../external/ddr-route/net-names.json").json()
 const E = plan.edge, CX = (E.x0 + E.x1) / 2, CY = (E.y0 + E.y1) / 2, MIN = +(process.env.MIN ?? 0.09)
 const out: string[] = []; let fail = 0; const bad = (m: string) => { out.push("FAIL  " + m); fail++ }, ok = (m: string) => out.push("PASS  " + m)
 // ---------- nets of pads ----------
@@ -13,8 +13,7 @@ const sp = new Map(cj.filter((e) => e.type === "source_port").map((e) => [e.sour
 const padNet = new Map<string, string>() // "REF.pin" -> net
 for (const [k, n] of Object.entries(plan.ballNet as Record<string, string>)) padNet.set(k, n)
 for (const p of plan.parts) for (const [pin, n] of Object.entries(p.nets as Record<string, string>)) padNet.set(`${p.name}.${pin}`, n)
-for (const p of plan.pins) if (p.role !== "SIG") padNet.set(`${p.conn}.${p.pin}`, p.role)
-for (const [n, r] of Object.entries(routes.nets) as any) padNet.set(`${r.conn}.${r.pin}`, n)
+for (const p of plan.pins) if (p.role !== "NC") padNet.set(`${p.conn}.${p.pin}`, p.role)
 const B = new Board(), LAY = ["top", "inner1", "inner2", "inner3", "inner4", "bottom"]
 type It = Item & { id: number }; const all: It[] = []; const add = (s: any, layers: string[], net: string, kind: string, ref = "") => { const it = B.add({ ...s, layers: layers as Layer[], net, kind, ref }) as It; it.id = all.length; all.push(it); return it }
 // pads
@@ -38,8 +37,9 @@ for (const v of cj.filter((e) => e.type === "pcb_via")) { let net = v.net_name
   if (!net) { const near = all.find((i) => i.kind === "via" && Math.hypot(i.pts[0].x - v.x - CX, i.pts[0].y - v.y - CY) < 0.01); if (near) continue; net = "?:" + v.pcb_via_id }
   add(disc(v.x + CX, v.y + CY, v.outer_diameter / 2), LAY, net, "via") }
 { // nothing required may be missing, and no ball that needs a part may be left as a one-pad net
-  const names = new Set([...pc.values()]), miss = (plan.required ?? []).filter((n: string) => !names.has(n)).concat(["C_VREF_CPU"].filter((n) => !names.has(n)))
-  ;(miss.length ? bad : ok)(`required parts present (${(plan.required ?? []).length + 1} checked)${miss.length ? ": MISSING " + miss.join(" ") : ""}`)
+  const need = [...(plan.required ?? []), "C_VREF_CPU", ...(await import("./design/netlist")).PARTS.map((p: any) => p.ref)]
+  const names = new Set([...pc.values()]), miss = need.filter((n: string) => !names.has(n))
+  ;(miss.length ? bad : ok)(`required parts present (${need.length} checked: processor/DDR support and every part of the CM4 netlist)${miss.length ? ": MISSING " + miss.join(" ") : ""}`)
   const cnt = new Map<string, number>(); for (const it of all) if (it.kind === "pad") cnt.set(it.net, (cnt.get(it.net) ?? 0) + 1)
   const lone = [...cnt].filter(([n, k]) => k === 1 && !n.startsWith("open:") && !n.startsWith("NC:")).map(([n]) => n)
   ;(lone.length ? bad : ok)(`no net ends at a single pad: ${lone.length ? lone.join(" ") : "none"}`) }
@@ -89,6 +89,14 @@ const inPour = (q: any, k: number) => q.x > pb[k].x0 && q.x < pb[k].x1 && q.y > 
   ;(shorts ? bad : ok)(`no copper of different nets touches (${shorts} contacts)`)
   ;(split.length ? bad : ok)(`every net is one connected piece: ${single - split.length}/${single} nets${split.length ? "; split: " + split.slice(0, 14).map(([n, s]) => `${n}(${s.size})`).join(" ") : ""}`)
   const want = new Set([...Object.values(plan.ballNet as Record<string, string>)]); const missing = [...want].filter((n) => !byNet.has(n)); if (missing.length) bad("nets without copper: " + missing.join(" "))
-  // nets that must reach the connector
-  const noPin = (plan.signals as any[]).filter((s) => !routes.nets[s.name]).map((s) => s.name); (noPin.length ? bad : ok)(`all ${plan.signals.length} handheld signals reach a connector pin${noPin.length ? " - missing: " + noPin.join(" ") : ""}`) }
+  // every routed net joins all its terminals (balls, part pads, CM4 pins): the terminal pads are one piece
+  const termless = (plan.nets as any[]).filter((n) => { const roots = new Set(n.terms.map((t: any) => { const it = all.find((i) => i.kind === "pad" && i.ref === t.ref) ?? all.find((i) => i.kind === "pad" && i.net === n.name && Math.hypot(i.pts.reduce((a: number, p: any) => a + p.x, 0) / i.pts.length - t.x, i.pts.reduce((a: number, p: any) => a + p.y, 0) / i.pts.length - t.y) < 0.01); return it ? find(it.id) : -1 - Math.random() })); return roots.size !== 1 }).map((n) => n.name)
+  ;(termless.length ? bad : ok)(`all ${plan.nets.length} signal nets join every terminal (${(plan.nets as any[]).reduce((s, n) => s + n.terms.length, 0)} balls, pads and CM4 pins)${termless.length ? " - not joined: " + termless.join(" ") : ""}`) }
+{ // board edge and mounting holes (JLCPCB: copper >= 0.2 mm from a routed edge; holes keep 0.4 mm)
+  let min = 9, where = "", hmin = 9, hwhere = ""
+  for (const it of all) { for (const p of it.pts) { const d = Math.min(p.x - E.x0, E.x1 - p.x, p.y - E.y0, E.y1 - p.y) - it.r; if (d < min) { min = d; where = `${it.net} ${it.kind} (${(p.x).toFixed(2)}, ${p.y.toFixed(2)})` } }
+    for (const h of plan.holes) { const g = gap(disc(h.x, h.y, h.d / 2), it); if (g < hmin) { hmin = g; hwhere = `${it.net} ${it.kind}` } } }
+  for (const p of pours) for (const v of [p.outer, ...p.holes].flat()) { const d = Math.min(v.x - E.x0, E.x1 - v.x, v.y - E.y0, E.y1 - v.y); if (d < min) { min = d; where = `${p.net} pour on ${p.layer}` } for (const h of plan.holes) { const g = Math.hypot(v.x - h.x, v.y - h.y) - h.d / 2; if (g < hmin) { hmin = g; hwhere = `${p.net} pour on ${p.layer}` } } }
+  ;(min < 0.2 - 1e-6 ? bad : ok)(`copper >= 0.20 mm from the board edge: minimum ${min.toFixed(3)} mm (${where})`)
+  ;(hmin < 0.4 - 1e-6 ? bad : ok)(`copper >= 0.40 mm from the mounting holes: minimum ${hmin.toFixed(3)} mm (${hwhere})`) }
 console.log(out.join("\n")); console.log(fail ? `MODULE RESULT: FAIL (${fail})` : "MODULE RESULT: PASS")
