@@ -48,7 +48,8 @@
   "C_BULK_DDR_CPU1",
   "C_BULK_DDR_CPU2",
   "C_BULK_DDR_RAM1",
-  "C_BULK_DDR_RAM2"
+  "C_BULK_DDR_RAM2",
+  "C_VREF_CPU"
  ],
  "ddrInner": [],
  "innerNets": [
@@ -4839,6 +4840,330 @@
     "pin1": "VIN5",
     "pin2": "USB0_VBUS"
    }
+  },
+  {
+   "name": "C_HS_CPU_T4",
+   "part": "C100N_0402",
+   "x": -46.5,
+   "y": 22.45,
+   "rot": 0,
+   "layer": "bottom",
+   "nets": {
+    "pin1": "VDDS_DDR",
+    "pin2": "GND"
+   }
+  },
+  {
+   "name": "C_HS_CPU_T5",
+   "part": "C100N_0402",
+   "x": -47.2,
+   "y": 23.25,
+   "rot": 0,
+   "layer": "bottom",
+   "nets": {
+    "pin1": "VDDS_DDR",
+    "pin2": "GND"
+   }
+  },
+  {
+   "name": "C_HS_CPU_T6",
+   "part": "C100N_0402",
+   "x": -45.6,
+   "y": 23.25,
+   "rot": 0,
+   "layer": "bottom",
+   "nets": {
+    "pin1": "VDDS_DDR",
+    "pin2": "GND"
+   }
+  },
+  {
+   "name": "C_HS_CPU_T7",
+   "part": "C100N_0402",
+   "x": -47.7,
+   "y": 24.05,
+   "rot": 0,
+   "layer": "bottom",
+   "nets": {
+    "pin1": "VDDS_DDR",
+    "pin2": "GND"
+   }
+  },
+  {
+   "name": "C_HS_CPU_T8",
+   "part": "C100N_0402",
+   "x": -44.4,
+   "y": 22.85,
+   "rot": 90,
+   "layer": "bottom",
+   "nets": {
+    "pin1": "VDDS_DDR",
+    "pin2": "GND"
+   }
+  },
+  {
+   "name": "C_HS_CPU_T9",
+   "part": "C100N_0402",
+   "x": -45.5,
+   "y": 24.05,
+   "rot": 0,
+   "layer": "bottom",
+   "nets": {
+    "pin1": "VDDS_DDR",
+    "pin2": "GND"
+   }
+  },
+  {
+   "name": "C_HS_CPU_T10",
+   "part": "C100N_0402",
+   "x": -43.3,
+   "y": 22.05,
+   "rot": 90,
+   "layer": "bottom",
+   "nets": {
+    "pin1": "VDDS_DDR",
+    "pin2": "GND"
+   }
+  },
+  {
+   "name": "C_HS_CPU_T11",
+   "part": "C100N_0402",
+   "x": -42.4,
+   "y": 21.15,
+   "rot": 90,
+   "layer": "bottom",
+   "nets": {
+    "pin1": "VDDS_DDR",
+    "pin2": "GND"
+   }
+  },
+  {
+   "name": "C_HS_CPU_T12",
+   "part": "C100N_0402",
+   "x": -41.6,
+   "y": 19.65,
+   "rot": 90,
+   "layer": "bottom",
+   "nets": {
+    "pin1": "VDDS_DDR",
+    "pin2": "GND"
+   }
+  },
+  {
+   "name": "C_HS_CPU_T13",
+   "part": "C100N_0402",
+   "x": -43.6,
+   "y": 23.65,
+   "rot": 90,
+   "layer": "bottom",
+   "nets": {
+    "pin1": "VDDS_DDR",
+    "pin2": "GND"
+   }
+  },
+  {
+   "name": "C_HS_CPU_T14",
+   "part": "C100N_0402",
+   "x": -45.2,
+   "y": 24.85,
+   "rot": 0,
+   "layer": "bottom",
+   "nets": {
+    "pin1": "VDDS_DDR",
+    "pin2": "GND"
+   }
+  },
+  {
+   "name": "C_HS_CPU_T15",
+   "part": "C100N_0402",
+   "x": -47.3,
+   "y": 25.65,
+   "rot": 0,
+   "layer": "bottom",
+   "nets": {
+    "pin1": "VDDS_DDR",
+    "pin2": "GND"
+   }
+  },
+  {
+   "name": "C_HS_CPU_T16",
+   "part": "C100N_0402",
+   "x": -42.5,
+   "y": 22.75,
+   "rot": 90,
+   "layer": "bottom",
+   "nets": {
+    "pin1": "VDDS_DDR",
+    "pin2": "GND"
+   }
+  },
+  {
+   "name": "C_HS_CPU_T17",
+   "part": "C100N_0402",
+   "x": -41.6,
+   "y": 21.25,
+   "rot": 90,
+   "layer": "bottom",
+   "nets": {
+    "pin1": "VDDS_DDR",
+    "pin2": "GND"
+   }
+  },
+  {
+   "name": "C_HS_CPU_T18",
+   "part": "C100N_0402",
+   "x": -45.7,
+   "y": 25.65,
+   "rot": 0,
+   "layer": "bottom",
+   "nets": {
+    "pin1": "VDDS_DDR",
+    "pin2": "GND"
+   }
+  },
+  {
+   "name": "C_HS_CPU_T19",
+   "part": "C100N_0402",
+   "x": -44.1,
+   "y": 24.45,
+   "rot": 90,
+   "layer": "top",
+   "nets": {
+    "pin1": "VDDS_DDR",
+    "pin2": "GND"
+   }
+  },
+  {
+   "name": "C_HS_CPU_T20",
+   "part": "C100N_0402",
+   "x": -40.8,
+   "y": 19.65,
+   "rot": 90,
+   "layer": "bottom",
+   "nets": {
+    "pin1": "VDDS_DDR",
+    "pin2": "GND"
+   }
+  },
+  {
+   "name": "C_VREF_CPU",
+   "part": "C100N_0201",
+   "x": -44.8,
+   "y": 9.2501,
+   "rot": 90,
+   "layer": "bottom",
+   "nets": {
+    "pin1": "DDR_VREF",
+    "pin2": "GND"
+   }
+  },
+  {
+   "name": "C_BULK_1V8_2",
+   "part": "C10U_0603",
+   "x": -40.8499,
+   "y": 22.65,
+   "rot": 0,
+   "layer": "bottom",
+   "nets": {
+    "pin1": "VDD_1V8",
+    "pin2": "GND"
+   }
+  },
+  {
+   "name": "C_X_MPU_1",
+   "part": "C100N_0402",
+   "x": -40.0499,
+   "y": 17.9,
+   "rot": 90,
+   "layer": "bottom",
+   "nets": {
+    "pin1": "VDD_MPU",
+    "pin2": "GND"
+   }
+  },
+  {
+   "name": "C_X_MPU_2",
+   "part": "C100N_0402",
+   "x": -39.1499,
+   "y": 17.15,
+   "rot": 90,
+   "layer": "bottom",
+   "nets": {
+    "pin1": "VDD_MPU",
+    "pin2": "GND"
+   }
+  },
+  {
+   "name": "C_X_1V8_1",
+   "part": "C100N_0402",
+   "x": -39.2,
+   "y": 14.6999,
+   "rot": 90,
+   "layer": "bottom",
+   "nets": {
+    "pin1": "VDD_1V8",
+    "pin2": "GND"
+   }
+  },
+  {
+   "name": "C_X_1V8_2",
+   "part": "C100N_0402",
+   "x": -38.3,
+   "y": 16.3499,
+   "rot": 90,
+   "layer": "bottom",
+   "nets": {
+    "pin1": "VDD_1V8",
+    "pin2": "GND"
+   }
+  },
+  {
+   "name": "C_X_1V8_3",
+   "part": "C100N_0402",
+   "x": -42.1001,
+   "y": 8.8,
+   "rot": 0,
+   "layer": "bottom",
+   "nets": {
+    "pin1": "VDD_1V8",
+    "pin2": "GND"
+   }
+  },
+  {
+   "name": "C_X_3V3_1",
+   "part": "C100N_0402",
+   "x": -40.55,
+   "y": 10.3501,
+   "rot": 0,
+   "layer": "bottom",
+   "nets": {
+    "pin1": "VDD_3V3",
+    "pin2": "GND"
+   }
+  },
+  {
+   "name": "C_X_3V3_2",
+   "part": "C100N_0402",
+   "x": -40.85,
+   "y": 9.1501,
+   "rot": 90,
+   "layer": "bottom",
+   "nets": {
+    "pin1": "VDD_3V3",
+    "pin2": "GND"
+   }
+  },
+  {
+   "name": "C_X_3V3_3",
+   "part": "C100N_0402",
+   "x": -39.95,
+   "y": 19.4999,
+   "rot": 90,
+   "layer": "bottom",
+   "nets": {
+    "pin1": "VDD_3V3",
+    "pin2": "GND"
+   }
   }
  ],
  "vias": [
@@ -9023,6 +9348,454 @@
    "name": "V_STITCH_18",
    "x": -65.9499,
    "y": 9.1501,
+   "net": "GND",
+   "d": 0.3,
+   "hole": 0.1
+  },
+  {
+   "name": "V_C_HS_CPU_T4_1",
+   "x": -46.0799,
+   "y": 22.45,
+   "net": "VDDS_DDR",
+   "d": 0.3,
+   "hole": 0.1
+  },
+  {
+   "name": "V_C_HS_CPU_T4_2",
+   "x": -46.9201,
+   "y": 22.45,
+   "net": "GND",
+   "d": 0.3,
+   "hole": 0.1
+  },
+  {
+   "name": "V_C_HS_CPU_T5_1",
+   "x": -46.7799,
+   "y": 23.25,
+   "net": "VDDS_DDR",
+   "d": 0.3,
+   "hole": 0.1
+  },
+  {
+   "name": "V_C_HS_CPU_T5_2",
+   "x": -47.6201,
+   "y": 23.25,
+   "net": "GND",
+   "d": 0.3,
+   "hole": 0.1
+  },
+  {
+   "name": "V_C_HS_CPU_T6_1",
+   "x": -45.1799,
+   "y": 23.25,
+   "net": "VDDS_DDR",
+   "d": 0.3,
+   "hole": 0.1
+  },
+  {
+   "name": "V_C_HS_CPU_T6_2",
+   "x": -46.0201,
+   "y": 23.25,
+   "net": "GND",
+   "d": 0.3,
+   "hole": 0.1
+  },
+  {
+   "name": "V_C_HS_CPU_T7_1",
+   "x": -47.2799,
+   "y": 24.05,
+   "net": "VDDS_DDR",
+   "d": 0.3,
+   "hole": 0.1
+  },
+  {
+   "name": "V_C_HS_CPU_T7_2",
+   "x": -48.1201,
+   "y": 24.05,
+   "net": "GND",
+   "d": 0.3,
+   "hole": 0.1
+  },
+  {
+   "name": "V_C_HS_CPU_T8_1",
+   "x": -44.4,
+   "y": 23.2701,
+   "net": "VDDS_DDR",
+   "d": 0.3,
+   "hole": 0.1
+  },
+  {
+   "name": "V_C_HS_CPU_T8_2",
+   "x": -44.4,
+   "y": 22.4299,
+   "net": "GND",
+   "d": 0.3,
+   "hole": 0.1
+  },
+  {
+   "name": "V_C_HS_CPU_T9_1",
+   "x": -45.0799,
+   "y": 24.05,
+   "net": "VDDS_DDR",
+   "d": 0.3,
+   "hole": 0.1
+  },
+  {
+   "name": "V_C_HS_CPU_T9_2",
+   "x": -45.9201,
+   "y": 24.05,
+   "net": "GND",
+   "d": 0.3,
+   "hole": 0.1
+  },
+  {
+   "name": "V_C_HS_CPU_T10_1",
+   "x": -43.3,
+   "y": 22.4701,
+   "net": "VDDS_DDR",
+   "d": 0.3,
+   "hole": 0.1
+  },
+  {
+   "name": "V_C_HS_CPU_T10_2",
+   "x": -43.3,
+   "y": 21.6299,
+   "net": "GND",
+   "d": 0.3,
+   "hole": 0.1
+  },
+  {
+   "name": "V_C_HS_CPU_T11_1",
+   "x": -42.4,
+   "y": 21.5701,
+   "net": "VDDS_DDR",
+   "d": 0.3,
+   "hole": 0.1
+  },
+  {
+   "name": "V_C_HS_CPU_T11_2",
+   "x": -42.4,
+   "y": 20.7299,
+   "net": "GND",
+   "d": 0.3,
+   "hole": 0.1
+  },
+  {
+   "name": "V_C_HS_CPU_T12_1",
+   "x": -41.6,
+   "y": 20.0701,
+   "net": "VDDS_DDR",
+   "d": 0.3,
+   "hole": 0.1
+  },
+  {
+   "name": "V_C_HS_CPU_T12_2",
+   "x": -41.6,
+   "y": 19.2299,
+   "net": "GND",
+   "d": 0.3,
+   "hole": 0.1
+  },
+  {
+   "name": "V_C_HS_CPU_T13_1",
+   "x": -43.6,
+   "y": 24.0701,
+   "net": "VDDS_DDR",
+   "d": 0.3,
+   "hole": 0.1
+  },
+  {
+   "name": "V_C_HS_CPU_T13_2",
+   "x": -43.6,
+   "y": 23.2299,
+   "net": "GND",
+   "d": 0.3,
+   "hole": 0.1
+  },
+  {
+   "name": "V_C_HS_CPU_T14_1",
+   "x": -44.7799,
+   "y": 24.85,
+   "net": "VDDS_DDR",
+   "d": 0.3,
+   "hole": 0.1
+  },
+  {
+   "name": "V_C_HS_CPU_T14_2",
+   "x": -45.6201,
+   "y": 24.85,
+   "net": "GND",
+   "d": 0.3,
+   "hole": 0.1
+  },
+  {
+   "name": "V_C_HS_CPU_T15_1",
+   "x": -46.8799,
+   "y": 25.65,
+   "net": "VDDS_DDR",
+   "d": 0.3,
+   "hole": 0.1
+  },
+  {
+   "name": "V_C_HS_CPU_T15_2",
+   "x": -47.7201,
+   "y": 25.65,
+   "net": "GND",
+   "d": 0.3,
+   "hole": 0.1
+  },
+  {
+   "name": "V_C_HS_CPU_T16_1",
+   "x": -42.5,
+   "y": 23.1701,
+   "net": "VDDS_DDR",
+   "d": 0.3,
+   "hole": 0.1
+  },
+  {
+   "name": "V_C_HS_CPU_T16_2",
+   "x": -42.5,
+   "y": 22.3299,
+   "net": "GND",
+   "d": 0.3,
+   "hole": 0.1
+  },
+  {
+   "name": "V_C_HS_CPU_T17_1",
+   "x": -41.6,
+   "y": 21.6701,
+   "net": "VDDS_DDR",
+   "d": 0.3,
+   "hole": 0.1
+  },
+  {
+   "name": "V_C_HS_CPU_T17_2",
+   "x": -41.6,
+   "y": 20.8299,
+   "net": "GND",
+   "d": 0.3,
+   "hole": 0.1
+  },
+  {
+   "name": "V_C_HS_CPU_T18_1",
+   "x": -45.2799,
+   "y": 25.65,
+   "net": "VDDS_DDR",
+   "d": 0.3,
+   "hole": 0.1
+  },
+  {
+   "name": "V_C_HS_CPU_T18_2",
+   "x": -46.1201,
+   "y": 25.65,
+   "net": "GND",
+   "d": 0.3,
+   "hole": 0.1
+  },
+  {
+   "name": "V_C_HS_CPU_T19_1",
+   "x": -44.1,
+   "y": 24.0299,
+   "net": "VDDS_DDR",
+   "d": 0.3,
+   "hole": 0.1
+  },
+  {
+   "name": "V_C_HS_CPU_T19_2",
+   "x": -44.1,
+   "y": 24.8701,
+   "net": "GND",
+   "d": 0.3,
+   "hole": 0.1
+  },
+  {
+   "name": "V_C_HS_CPU_T20_1",
+   "x": -40.8,
+   "y": 20.0701,
+   "net": "VDDS_DDR",
+   "d": 0.3,
+   "hole": 0.1
+  },
+  {
+   "name": "V_C_HS_CPU_T20_2",
+   "x": -40.8,
+   "y": 19.2299,
+   "net": "GND",
+   "d": 0.3,
+   "hole": 0.1
+  },
+  {
+   "name": "V_C_VREF_CPU_1",
+   "x": -44.8,
+   "y": 9.5244,
+   "net": "DDR_VREF",
+   "d": 0.3,
+   "hole": 0.1
+  },
+  {
+   "name": "V_C_VREF_CPU_2",
+   "x": -44.8,
+   "y": 8.9758,
+   "net": "GND",
+   "d": 0.3,
+   "hole": 0.1
+  },
+  {
+   "name": "V_C_BULK_1V8_2_1",
+   "x": -40.1499,
+   "y": 22.4,
+   "net": "VDD_1V8",
+   "d": 0.3,
+   "hole": 0.1
+  },
+  {
+   "name": "V_C_BULK_1V8_2_2",
+   "x": -40.1499,
+   "y": 22.9,
+   "net": "VDD_1V8",
+   "d": 0.3,
+   "hole": 0.1
+  },
+  {
+   "name": "V_C_BULK_1V8_2_3",
+   "x": -41.5499,
+   "y": 22.4,
+   "net": "GND",
+   "d": 0.3,
+   "hole": 0.1
+  },
+  {
+   "name": "V_C_BULK_1V8_2_4",
+   "x": -41.5499,
+   "y": 22.9,
+   "net": "GND",
+   "d": 0.3,
+   "hole": 0.1
+  },
+  {
+   "name": "V_C_X_MPU_1_1",
+   "x": -40.0499,
+   "y": 18.3201,
+   "net": "VDD_MPU",
+   "d": 0.3,
+   "hole": 0.1
+  },
+  {
+   "name": "V_C_X_MPU_1_2",
+   "x": -40.0499,
+   "y": 17.4799,
+   "net": "GND",
+   "d": 0.3,
+   "hole": 0.1
+  },
+  {
+   "name": "V_C_X_MPU_2_1",
+   "x": -39.1499,
+   "y": 17.5701,
+   "net": "VDD_MPU",
+   "d": 0.3,
+   "hole": 0.1
+  },
+  {
+   "name": "V_C_X_MPU_2_2",
+   "x": -39.1499,
+   "y": 16.7299,
+   "net": "GND",
+   "d": 0.3,
+   "hole": 0.1
+  },
+  {
+   "name": "V_C_X_1V8_1_1",
+   "x": -39.2,
+   "y": 15.12,
+   "net": "VDD_1V8",
+   "d": 0.3,
+   "hole": 0.1
+  },
+  {
+   "name": "V_C_X_1V8_1_2",
+   "x": -39.2,
+   "y": 14.2798,
+   "net": "GND",
+   "d": 0.3,
+   "hole": 0.1
+  },
+  {
+   "name": "V_C_X_1V8_2_1",
+   "x": -38.3,
+   "y": 16.77,
+   "net": "VDD_1V8",
+   "d": 0.3,
+   "hole": 0.1
+  },
+  {
+   "name": "V_C_X_1V8_2_2",
+   "x": -38.3,
+   "y": 15.9298,
+   "net": "GND",
+   "d": 0.3,
+   "hole": 0.1
+  },
+  {
+   "name": "V_C_X_1V8_3_1",
+   "x": -41.68,
+   "y": 8.8,
+   "net": "VDD_1V8",
+   "d": 0.3,
+   "hole": 0.1
+  },
+  {
+   "name": "V_C_X_1V8_3_2",
+   "x": -42.5202,
+   "y": 8.8,
+   "net": "GND",
+   "d": 0.3,
+   "hole": 0.1
+  },
+  {
+   "name": "V_C_X_3V3_1_1",
+   "x": -40.1299,
+   "y": 10.3501,
+   "net": "VDD_3V3",
+   "d": 0.3,
+   "hole": 0.1
+  },
+  {
+   "name": "V_C_X_3V3_1_2",
+   "x": -40.9701,
+   "y": 10.3501,
+   "net": "GND",
+   "d": 0.3,
+   "hole": 0.1
+  },
+  {
+   "name": "V_C_X_3V3_2_1",
+   "x": -40.85,
+   "y": 9.5702,
+   "net": "VDD_3V3",
+   "d": 0.3,
+   "hole": 0.1
+  },
+  {
+   "name": "V_C_X_3V3_2_2",
+   "x": -40.85,
+   "y": 8.73,
+   "net": "GND",
+   "d": 0.3,
+   "hole": 0.1
+  },
+  {
+   "name": "V_C_X_3V3_3_1",
+   "x": -39.95,
+   "y": 19.92,
+   "net": "VDD_3V3",
+   "d": 0.3,
+   "hole": 0.1
+  },
+  {
+   "name": "V_C_X_3V3_3_2",
+   "x": -39.95,
+   "y": 19.0798,
    "net": "GND",
    "d": 0.3,
    "hole": 0.1

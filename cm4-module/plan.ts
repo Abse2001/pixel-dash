@@ -412,7 +412,9 @@ report.push(`router nets: ${nets.length} (${nets.filter((n) => n.inner).length} 
   report.push(`ground stitching: ${added} vias added; ${far} DDR vias still have no ground via within 1.5 mm`) }
 
 // ---------- top-up after the signals are routed (TOPUP=1): what did not fit clear of the signal escape goes into the space the routes left ----------
-if (process.env.TOPUP) { const routes = await Bun.file(import.meta.dir + "/routes.json").json(); let nseg = 0
+// PREPLACE=1 runs this placement before routing (no routes yet): the autorouter then routes around every bypass capacitor
+const LATE = !!(process.env.TOPUP || process.env.PREPLACE)
+if (LATE) { const routes = process.env.TOPUP ? await Bun.file(import.meta.dir + "/routes.json").json() : { nets: {} }; let nseg = 0
   for (const [name, r] of Object.entries(routes.nets) as any) { for (const g of r.segs) for (let i = 0; i + 1 < g.pts.length; i++) { if (g.layer === "top" || g.layer === "bottom") B.add({ ...seg(g.pts[i], g.pts[i + 1], 0.1), layers: [g.layer], net: name, kind: "trace" }); else innerSegs.push({ ...seg(g.pts[i], g.pts[i + 1], 0.1), layers: [], net: name, kind: "trace" }); nseg++ }
     for (const v of r.vias) B.add({ ...disc(v.x, v.y, v.d / 2), layers: BOTH, net: name, kind: "via" }) }
   // a high-speed DDR bypass capacitor must sit over solid VDDS_DDR copper (layer 3 west of the split, not the 3V3 corner of row P),
@@ -450,7 +452,7 @@ for (const h of holes) { const hit = B.hits(disc(h.x, h.y, h.d / 2), BOTH, "HOLE
 const unassigned = Object.keys(ball).filter((k) => !ballNet[k])
 report.push(`balls without a net (left open): U1 ${unassigned.filter((k) => k.startsWith("U1.")).length}, U_DDR ${unassigned.filter((k) => k.startsWith("U_DDR.")).map((k) => k.slice(6)).join(" ")}`)
 for (const [k, n] of Object.entries(ballNet)) if (PLANE.has(n) && !vias.some((v) => v.ball === k)) report.push(`!! ${k} (${n}) has no via`)
-const REQUIRED = ["R_VTP", "R_ZQ", "R_VREF_TOP", "R_VREF_BOT", "C_VREF_DIV", "C_VREF_DQ", "C_VREF_CA", "C_VBB_MPU", "C_SRAM_CORE", "C_SRAM_MPU", "C_CAP_RTC", "C_VDDS_RTC", "Y_OSC0", "C_OSC0_IN", "C_OSC0_OUT", "J1", "J2", "C_BULK_DDR_CPU1", "C_BULK_DDR_CPU2", "C_BULK_DDR_RAM1", "C_BULK_DDR_RAM2", ...(process.env.TOPUP ? ["C_VREF_CPU"] : [])]
+const REQUIRED = ["R_VTP", "R_ZQ", "R_VREF_TOP", "R_VREF_BOT", "C_VREF_DIV", "C_VREF_DQ", "C_VREF_CA", "C_VBB_MPU", "C_SRAM_CORE", "C_SRAM_MPU", "C_CAP_RTC", "C_VDDS_RTC", "Y_OSC0", "C_OSC0_IN", "C_OSC0_OUT", "J1", "J2", "C_BULK_DDR_CPU1", "C_BULK_DDR_CPU2", "C_BULK_DDR_RAM1", "C_BULK_DDR_RAM2", ...(process.env.TOPUP || process.env.PREPLACE ? ["C_VREF_CPU"] : [])]
 const missing = REQUIRED.filter((n) => !parts.some((p) => p.name === n)); if (missing.length) report.push("!! REQUIRED PARTS NOT PLACED: " + missing.join(" "))
 console.log(report.join("\n")); console.log(`${parts.length} parts, ${vias.length} vias, ${signals.length} signals, pins: ${pins.filter((p) => p.role === "SIG").length} free signal pins, ${pins.filter((p) => p.role === "GND").length} ground pins`)
 await Bun.write(import.meta.dir + "/plan.json", JSON.stringify({ edge: EDGE, holes, required: REQUIRED, ddrInner, innerNets, planeNets: [...PLANE], ballNet, ball, signals, parts, vias, links, paths, pins, unassigned, nets }, null, 1))
