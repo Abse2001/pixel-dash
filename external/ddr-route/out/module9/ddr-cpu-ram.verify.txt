@@ -1,0 +1,56 @@
+DDR_BYTE0: 11 nets, length 24.265..24.373 mm, window [-, 24.800], skew 0.108 mm (4.3 mil) / limit 0.635 mm
+   D0=24.27/2v D1=24.27/2v D2=24.27/2v D3=24.27/2v D4=24.27/2v D5=24.26/2v D6=24.37/2v D7=24.27/2v DQM0=24.27/2v DQS0=24.26/2v DQSn0=24.26/2v
+DDR_BYTE1: 11 nets, length 17.865..17.908 mm, window [-, 18.400], skew 0.043 mm (1.7 mil) / limit 0.635 mm
+   D8=17.87/2v D9=17.87/2v D10=17.86/2v D11=17.87/2v D12=17.87/2v D13=17.87/2v D14=17.91/2v D15=17.87/2v DQM1=17.87/2v DQS1=17.87/2v DQSn1=17.87/2v
+DDR_ADDR_CTRL_CK: 27 nets, length 41.884..42.314 mm, window [39.950, 42.490], skew 0.430 mm (16.9 mil) / limit 0.635 mm
+   RASn=41.93/2v CK=41.92/2v ODT=41.93/2v CASn=41.92/2v CKn=41.92/2v CKE=41.93/2v CSn0=41.93/2v WEn=41.88/2v A10=41.93/2v BA0=41.93/2v BA2=41.93/2v A15=41.92/2v A3=42.31/2v A0=41.93/2v A12=41.93/2v BA1=41.92/2v A5=41.93/2v A2=41.93/2v A1=41.92/2v A4=41.93/2v A7=41.93/2v A9=41.93/2v A11=41.93/2v A6=41.93/2v A13=41.92/2v A14=41.92/2v A8=41.93/2v
+  TI nominal-length window for DDR_BYTE0: [-, 24.80] mm -> routed 24.26..24.37 mm: inside
+  TI nominal-length window for DDR_BYTE1: [-, 18.40] mm -> routed 17.86..17.91 mm: inside
+  TI nominal-length window for DDR_ADDR_CTRL_CK: [39.95, 42.49] mm -> routed 41.88..42.31 mm: inside
+pair CK/CKn: skew 0.0001 mm (0.0 mil) / limit 0.127 mm
+pair DQS0/DQSn0: skew 0.0001 mm (0.0 mil) / limit 0.127 mm
+pair DQS1/DQSn1: skew 0.0001 mm (0.0 mil) / limit 0.127 mm
+fixed (power fanout) traces included in clearance checks: 156
+copper by layer (mm): top=761.0 bottom=888.2; vias=256
+min gaps (mm): trace-trace 0.1240 [A5~A7 @bottom (-60.54,24.49)]; trace-pad 0.1293 [A12 @top near (-51.60,20.35)]; via-trace 0.1212 [DQS1 via~DQS0 @bottom (-65.40,14.20)]; via-pad(other net) 0.1623; via hole-hole 0.2531
+RESULT: PASS
+
+-- spacing (3w same class, 4w other class / clock; may fall to minimum for <= 1250 mil = 31.75 mm of routed length)
+     A1      below-spec spacing on 18.07 of 41.92 mm
+     CKE     below-spec spacing on 16.62 of 41.93 mm
+     A7      below-spec spacing on 16.50 of 41.93 mm
+     A11     below-spec spacing on 14.20 of 41.93 mm
+     A12     below-spec spacing on 12.86 of 41.93 mm
+     CSn0    below-spec spacing on 12.37 of 41.93 mm
+     A5      below-spec spacing on 12.34 of 41.93 mm
+     A3      below-spec spacing on 12.32 of 42.31 mm
+PASS  spacing allowance: 0 nets exceed 1250 mil at minimum spacing
+-- lengths and skew
+PASS  DDR_BYTE0: skew 0.108 mm (4.3 mil) <= 25 mil
+PASS  DDR_BYTE0: nominal length 24.37 <= DQLM 24.80 mm
+PASS  DDR_BYTE1: skew 0.043 mm (1.7 mil) <= 25 mil
+PASS  DDR_BYTE1: nominal length 17.91 <= DQLM 18.40 mm
+PASS  DDR_ADDR_CTRL_CK: skew 0.430 mm (16.9 mil) <= 25 mil
+PASS  DDR_ADDR_CTRL_CK: nominal length 41.88..42.31 inside CACLM-50..CACLM+50 = 39.95..42.49 mm
+PASS  DDR_ADDR_CTRL_CK: A1+A2 length 42.31 <= 2500 mil (63.5 mm)
+PASS  pair CK/CKn: skew 0.00 mil <= 5 mil; vias 2/2
+PASS  pair CK/CKn: equal via count
+PASS  pair DQS0/DQSn0: skew 0.00 mil <= 5 mil; vias 2/2
+PASS  pair DQS0/DQSn0: equal via count
+PASS  pair DQS1/DQSn1: skew 0.00 mil <= 5 mil; vias 2/2
+PASS  pair DQS1/DQSn1: equal via count
+-- placement / stackup
+     placement: {"dx":-5,"dy":0,"rot":90,"cpuCenter":{"x":-44.8,"y":15.15},"ramCenter":{"x":-70,"y":15.15},"centerDistance":25.200000000000003}
+PASS  signal routing layers: top, bottom (top over L2 ground, bottom over L5 ground; planes adjacent)
+     DDR_BYTE0: via barrel + inner-layer slow-down, as extra length: 1.93..1.93 mm (spread 0.00 mm = 0 mil; not a TI table row)
+     DDR_BYTE1: via barrel + inner-layer slow-down, as extra length: 1.93..1.93 mm (spread 0.00 mm = 0 mil; not a TI table row)
+     DDR_ADDR_CTRL_CK: via barrel + inner-layer slow-down, as extra length: 1.93..1.93 mm (spread 0.00 mm = 0 mil; not a TI table row)
+     DDR routing region (signal copper bounds): x -77.40..-46.40, y 6.95..27.05
+     plane drops inside the region by net: {"GND":32,"VDDS_RTC_1V8":2,"VDD_RTC_CORE_1V0":1,"VDDS_DDR_CPU":7,"VDD_IO_3V3_SEQ":4,"VDD_LDO1_1V8":3,"VDD_CORE":7,"VDDS_DDR":18}
+     via-in-pad allowed on this board: 187 of 256 vias are in a pad (needs filled vias)
+PASS  reference planes by stackup: top over GND (L2), bottom over GND (L5), full VDDS_DDR plane on L3; other supplies on L4
+-- vias per net: D13:2 D15:2 D12:2 DQSn1:2 D14:2 D11:2 D9:2 DQS1:2 D10:2 DQM1:2 D8:2 D0:2 DQM0:2 D2:2 DQS0:2 D1:2 D7:2 D6:2 DQSn0:2 D4:2 D3:2 D5:2 RASn:2 CK:2 ODT:2 CASn:2 CKn:2 CKE:2 CSn0:2 WEn:2 A10:2 BA0:2 BA2:2 A15:2 A3:2 A0:2 A12:2 BA1:2 A5:2 A2:2 A1:2 A4:2 A7:2 A9:2 A11:2 A6:2 A13:2 A14:2 A8:2 RESETn:2
+SPEC RESULT: PASS
+
+PASS  same-net gaps >= 0.09 mm: 0 below (min seen 0.094)
+PASS  corners >= 75 deg (jogs < 0.075 mm collapsed): 0 sharper
