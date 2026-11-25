@@ -46,7 +46,7 @@ if (process.env.SRJ_ONLY) process.exit(0)
 // ---------- solve ----------
 const solver = new mod[PIPELINE](srj, process.env.EFFORT ? { effort: +process.env.EFFORT } : undefined)
 const t0 = performance.now(); let last = 0
-while (!solver.solved && !solver.failed) { solver.step(); const t = performance.now(); if (t - last > 30000) { last = t; console.log(`  ${((t - t0) / 1e3).toFixed(0)}s, iteration ${solver.iterations}, stage ${solver.activeSubSolver?.constructor?.name ?? solver.currentPipelineStepIndex ?? ""}`) } }
+while (!solver.solved && !solver.failed) { solver.step(); const t = performance.now(); if (t - last > 30000) { last = t; console.log(`  ${((t - t0) / 1e3).toFixed(0)}s, iteration ${solver.iterations}, stage ${solver.activeSubSolver?.constructor?.name ?? solver.currentPipelineStepIndex ?? ""}${solver.activeSubSolver?.activeSubSolver ? " / " + solver.activeSubSolver.activeSubSolver.constructor?.name : ""}, rss ${(process.memoryUsage().rss / 2 ** 30).toFixed(1)} GB`) } }
 console.log(`${solver.solved ? "solved" : "FAILED: " + solver.error} in ${((performance.now() - t0) / 1e3).toFixed(0)}s`)
 if (!solver.solved) process.exit(1)
 // ---------- output: routes.json ----------
