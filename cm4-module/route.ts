@@ -147,7 +147,10 @@ for (const n of nets) { if (!n.path) continue; const segs: { layer: string; pts:
     curL = l; cur.push(p) }
   flush()
   out.nets[n.name] = { terms: n.terms.map((t) => t.ref), segs, vias, length: +segs.reduce((s, g) => s + g.pts.slice(1).reduce((t, p, i) => t + Math.hypot(p.x - g.pts[i].x, p.y - g.pts[i].y), 0), 0).toFixed(2) } }
-if (solved || process.env.KEEP) await Bun.write(dir + "/routes.json", JSON.stringify(out))
+if (solved || process.env.KEEP) await Bun.write(process.env.OUT ?? dir + "/routes.json", JSON.stringify(out))
 const R = nets.filter((n) => n.path).map((n) => out.nets[n.name]) as any[]
 console.log(`${solved ? "SOLVED" : "NOT SOLVED"}: ${R.length}/${nets.length} nets, ${R.reduce((s, n) => s + n.vias.length, 0)} vias, total ${R.reduce((s, n) => s + n.length, 0).toFixed(0)} mm, longest ${Math.max(...R.map((n) => n.length))} mm`)
 const un = nets.filter((n) => !n.path).map((n) => n.name); if (un.length) console.log("unrouted:", un.join(" "))
+if (process.env.SHOWBAD) { const cnt = new Map<string, number>()
+  for (const n of nets) { if (!n.path) continue; for (const u of conflicts(n)) { const l = (u / NN) | 0, c = u % NN, k = `${LAYERS[l]} (${(Math.round(wx(c % NX) * 2) / 2).toFixed(1)}, ${(Math.round(wy((c / NX) | 0) * 2) / 2).toFixed(1)})`; cnt.set(k, (cnt.get(k) ?? 0) + 1) } }
+  console.log("conflict hot spots (0.5 mm cells):", [...cnt].sort((a, b) => b[1] - a[1]).slice(0, 25).map(([k, v]) => `${k}:${v}`).join("  ")) }

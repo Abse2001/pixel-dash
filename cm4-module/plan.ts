@@ -39,8 +39,10 @@ Object.assign(ballNet, {
 // from POOL by the shortest total ball-to-pin distance (an optimal assignment)
 const cm4PinXY = (n: number) => { const c = n <= 100 ? J1 : J2, m = (n - 1) % 100 + 1, k = (m - 1) >> 1; return { x: c.x + 9.8 - 0.4 * k, y: c.y + (m % 2 ? 1.355 : -1.355) } }
 const signals: { name: string; ball: string; mode: number; fn: string }[] = SIGNALS.map((s) => ({ name: s.net, ball: s.ball, mode: s.mode, fn: s.fn }))
-{ const want = [...Object.entries(GPIO_PINS).map(([n, p]) => ({ n, at: cm4PinXY(p) })), ...EXTRA_GPIO.map((n) => ({ n, at: { x: -38.5, y: 27 } }))] // PHY_nRST: at the PHY
-  const cost = want.map((w) => POOL.map((b) => { const q = ball["U1." + b]; return Math.hypot(q.x - w.at.x, q.y - w.at.y) }))
+{ const want = [...Object.entries(GPIO_PINS).map(([n, p]) => ({ n, at: cm4PinXY(p) })), ...EXTRA_GPIO.map((n) => ({ n, at: { x: -34.5, y: 29.6 } }))] // PHY_nRST: at the PHY
+  // distance plus 4 mm per ring of depth: balls on the outer rows escape without crowding the RMII/MMC cluster
+  const ROWS = "ABCDEFGHJKLMNPRTUV", depth = (b: string) => { const r = ROWS.indexOf(b[0]), c = +b.slice(1) - 1; return Math.min(r, 17 - r, c, 17 - c) }
+  const cost = want.map((w) => POOL.map((b) => { const q = ball["U1." + b]; return Math.hypot(q.x - w.at.x, q.y - w.at.y) + 4 * depth(b) }))
   for (const [i, j] of hungarian(cost)) signals.push({ name: want[i].n, ball: POOL[j], mode: 7, fn: "GPIO" }) }
 for (const s of signals) { if (ballNet["U1." + s.ball]) throw Error(`ball ${s.ball} used twice: ${s.name} / ${ballNet["U1." + s.ball]}`); ballNet["U1." + s.ball] = s.name }
 const PLANE = new Set(PLANE_NETS)
@@ -97,7 +99,7 @@ function partBlocked(p: Omit<Part, "name">, bodyGap = 0.1): string | null {
   for (const q of padsOf(p)) { const h = B.hits(q.shape, [p.layer], p.nets[q.pin] ?? "?", CLR); if (h.length) return `pad ${q.pin} vs ${h[0].net} ${h[0].kind}` }
   return null }
 function commitPart(p: Part) { parts.push(p); bodies.push({ layer: p.layer, s: bodyOf(p), ref: p.name }); for (const q of padsOf(p)) B.add({ ...q.shape, layers: [p.layer], net: p.nets[q.pin] ?? "NC:" + p.name + "." + q.pin, kind: "pad", ref: p.name + "." + q.pin }); return p }
-const viaBlocked = (x: number, y: number, net: string, d = 0.3) => { if (innerSegs.some((s) => s.net !== net && gap(disc(x, y, d / 2), s) < 0.13)) return "inner trace"; if (B.near(disc(x, y, 0.45), 0).some((it) => it.layers.length === 2 && it.net === net && Math.hypot(it.pts[0].x - x, it.pts[0].y - y) > 0.02 && Math.hypot(it.pts[0].x - x, it.pts[0].y - y) < 0.45)) return "own via too close"; if (x < EDGE.x0 + 0.45 || x > EDGE.x1 - 0.45 || y < EDGE.y0 + 0.45 || y > EDGE.y1 - 0.45) return "edge"; const h = B.hits(disc(x, y, d / 2), BOTH, net, CLR); return h.length ? `${h[0].net} ${h[0].kind}` : null }
+const viaBlocked = (x: number, y: number, net: string, d = 0.3) => { if (innerSegs.some((s) => s.net !== net && gap(disc(x, y, d / 2), s) < 0.13)) return "inner trace"; if (B.near(disc(x, y, 0.45), 0).some((it) => it.layers.length === 2 && it.net === net && Math.hypot(it.pts[0].x - x, it.pts[0].y - y) > 0.02 && Math.hypot(it.pts[0].x - x, it.pts[0].y - y) < 0.45)) return "own via too close"; if (x < EDGE.x0 + 0.45 || x > EDGE.x1 - 0.45 || y < EDGE.y0 + 0.45 || y > EDGE.y1 - 0.45) return "edge"; if (bodies.some((b) => b.ref === "KEEP" && gap(disc(x, y, d / 2), b.s) < 0.05)) return "pin corridor"; const h = B.hits(disc(x, y, d / 2), BOTH, net, CLR); return h.length ? `${h[0].net} ${h[0].kind}` : null }
 const viaAt = (x: number, y: number, net: string, tol = 0.02) => vias.find((v) => v.net === net && Math.hypot(v.x - x, v.y - y) <= tol)
 // chip bodies
 bodies.push({ layer: "top", s: rect(-44.8, 15.15, 15.3, 15.3), ref: "U1" }, { layer: "top", s: rect(-70, 15.15, 14.3, 9.3), ref: "U_DDR" })
@@ -182,14 +184,14 @@ function anchored(name: string, part: string, at: Pt, net1: string, net2: string
   if (!best) return null
   commitPart(best.p); if (best.nv) addVia({ name: `V_${name}_2`, x: best.nv.x, y: best.nv.y, net: net2, d: 0.3, hole: 0.1 }); return best.p }
 /** a two-pad part anywhere near a point, with its own via(s) inside the pads listed in `viaPins` */
-function free(name: string, part: string, near: Pt, net1: string, net2: string, o: { layers?: Layer[]; maxDist?: number; viasPerPad?: number; step?: number; score?: (p: Part) => number; viaPins?: string[]; ok?: (p: Part) => boolean; anywhere?: boolean } = {}): Part | null {
+function free(name: string, part: string, near: Pt, net1: string, net2: string, o: { layers?: Layer[]; maxDist?: number; viasPerPad?: number; step?: number; score?: (p: Part) => number; viaPins?: string[]; ok?: (p: Part) => boolean; late?: (p: Part) => boolean; anywhere?: boolean } = {}): Part | null {
   const n = o.viasPerPad ?? 1, R = o.maxDist ?? 6, st = o.step ?? 0.1, ls = o.layers ?? (["bottom", "top"] as Layer[]), cands: { p: Part; cost: number }[] = []
   for (const layer of ls) for (let dx = -R; dx <= R + 1e-9; dx += st) for (let dy = -R; dy <= R + 1e-9; dy += st) { const d = Math.hypot(dx, dy); if (d > R) continue
     for (const rot of [0, 90]) { const p: Part = { name, part, x: r3(near.x + dx), y: r3(near.y + dy), rot, layer, nets: { pin1: net1, pin2: net2 } }
       if ((o.ok && !o.ok(p)) || (!o.anywhere && [[0, 0], [0.9, 0], [-0.9, 0], [0, 0.9], [0, -0.9]].some(([ax, ay]) => escapeZone(p.x + ax, p.y + ay)))) continue
       cands.push({ p, cost: (o.score ? o.score(p) : d) + (layer === ls[0] ? 0 : 0.5) }) } }
   cands.sort((a, b) => a.cost - b.cost); tick(`${name}: ${cands.length} candidates`)
-  for (const { p } of cands) { if (partBlocked(p, 0.2)) continue
+  for (const { p } of cands) { if (partBlocked(p, 0.2) || (o.late && !o.late(p))) continue
     const vs: (Pt & { net: string })[] = []; let ok = true
     for (const q of padsOf(p)) { if (o.viaPins && !o.viaPins.includes(q.pin)) continue; const net = p.nets[q.pin]
       for (let i = 0; i < n && ok; i++) { const t = n === 1 ? 0 : (i - (n - 1) / 2) * 0.5, v = { x: r3(q.x + (p.rot === 0 ? 0 : t)), y: r3(q.y + (p.rot === 0 ? t : 0)), net }; if (viaBlocked(v.x, v.y, net)) ok = false; else vs.push(v) } if (!ok) break }
@@ -308,6 +310,12 @@ function innerVia(ref: string, pin: string) { const q = pad(ref, pin), p = parts
 /** a ground pin next to the exposed pad: a trace inward onto it */
 const toPad = (ref: string, pin: string, ep: string) => { const q = pad(ref, pin), e = pad(ref, ep), p = parts.find((r) => r.name === ref)!, ax = Math.abs(q.x - p.x) > Math.abs(q.y - p.y), c = ax ? { x: p.x, y: q.y } : { x: q.x, y: p.y }, d = Math.hypot(c.x - q.x, c.y - q.y)
   if (gap(disc(c.x, c.y, 0.001), e.shape) > 0) return innerVia(ref, pin); ptrace("GND", parts.find((r) => r.name === ref)!.layer, [{ x: q.x, y: q.y }, { x: r3(q.x + (c.x - q.x) / d * 1.0), y: r3(q.y + (c.y - q.y) / d * 1.0) }], 0.2, `${ref}.${pin}`, `${ref}.${ep}`) }
+/** keep a corridor in front of every signal pin of a fixed IC: no part body and no via lands there, so the router can always leave the pin along its axis */
+function corridors(ref: string, len = 1.2) { const p = parts.find((r) => r.name === ref)!
+  for (const q of padsOf(p)) { const net = p.nets[q.pin]; if (!net || PLANE.has(net) || done.has(net)) continue
+    const side = Math.abs(q.x - p.x) > Math.abs(q.y - p.y), dx = side ? Math.sign(q.x - p.x) : 0, dy = side ? 0 : Math.sign(q.y - p.y)
+    const half = Math.max(...q.shape.pts.map((t) => Math.abs(side ? t.x - q.x : t.y - q.y))), cx = q.x + dx * (half + len / 2), cy = q.y + dy * (half + len / 2)
+    bodies.push({ layer: p.layer, s: rect(cx, cy, side ? len : 0.35, side ? 0.35 : len), ref: "KEEP" }) } }
 const at = (ref: string, pin: string) => { const q = pad(ref, pin); return { x: q.x, y: q.y } }
 /** a two-pin netlist part near a point; vias in the pads whose net is a plane */
 function near(ref: string, p: Pt, o: { layers?: Layer[]; maxDist?: number; anywhere?: boolean; vias?: number; ok?: (q: Part) => boolean } = {}) { const n = NL[ref], v = Object.entries(n.nets).filter(([, net]) => PLANE.has(net)).map(([pin]) => pin)
@@ -315,11 +323,12 @@ function near(ref: string, p: Pt, o: { layers?: Layer[]; maxDist?: number; anywh
   const room = (q: Part) => padsOf(q).every((pd) => { const net = q.nets[pd.pin]; if (PLANE.has(net)) return true; let k = 0
     for (let a = 0; a < 16; a++) { const x = pd.x + 0.55 * Math.cos(a * Math.PI / 8), y = pd.y + 0.55 * Math.sin(a * Math.PI / 8), d = disc(x, y, 0.05)
       if (!B.hits(d, [q.layer], net, 0.1).length && !bodies.some((b) => b.layer === q.layer && gap(d, b.s) < 0)) k++ } return k >= 5 })
-  return free(ref, n.part, p, n.nets.pin1, n.nets.pin2, { layers: o.layers ?? ["top", "bottom"], maxDist: o.maxDist ?? 6, viaPins: v, viasPerPad: o.vias ?? 1, anywhere: o.anywhere ?? true, ok: (q) => room(q) && (!o.ok || o.ok(q)), step: 0.1 }) }
+  return free(ref, n.part, p, n.nets.pin1, n.nets.pin2, { layers: o.layers ?? ["top", "bottom"], maxDist: o.maxDist ?? 6, viaPins: v, viasPerPad: o.vias ?? 1, anywhere: o.anywhere ?? true, ok: o.ok, late: room, step: 0.1 }) }
 tick("power")
+const done = new Set(["LX1", "LX2", "LX3", "LX_3V3", "LX_1V8", "PMIC_BAT"]) // drawn here, not routed again
 // TPS65217D on top, east of the processor. Rotation 0: pins 1-12 west side (top to bottom), 13-24 south, 25-36 east, 37-48 north.
 const PM = { x: -30.65, y: 13.45 } // on the router grid (x0 + 0.1 i): the 0.4 mm pin pitch then lands on grid lines
-placeAt("U_PMIC", PM.x, PM.y, 0)
+placeAt("U_PMIC", PM.x, PM.y, 0); corridors("U_PMIC")
 // exposed pad: a 3 x 3 grid of ground vias
 for (const dx of [-1.2, 0, 1.2]) for (const dy of [-1.0, 0, 1.0]) addVia({ name: `V_U_PMIC_EP_${dx}_${dy}`, x: r3(PM.x + dx), y: r3(PM.y + dy), net: "GND", d: 0.3, hole: 0.1 })
 // battery pins tied together and left open (case 2)
@@ -327,7 +336,7 @@ ptrace("PMIC_BAT", "top", [at("U_PMIC", "pin4"), at("U_PMIC", "pin6")], 0.2, "U_
 const SIDE: Record<string, Pt> = { W: { x: -1, y: 0 }, S: { x: 0, y: -1 }, E: { x: 1, y: 0 }, N: { x: 0, y: 1 } }
 const sideOf = (pin: number) => pin <= 12 ? "W" : pin <= 24 ? "S" : pin <= 36 ? "E" : "N"
 // switch nodes: inductors next to their L pins, wide top-layer traces
-placeAt("L_DCDC1", PM.x - 1.3, PM.y - 6.2, 90); placeAt("L_DCDC2", PM.x + 1.9, PM.y - 6.2, 90); placeAt("L_DCDC3", PM.x + 5.0, PM.y - 0.3, 90)
+placeAt("L_DCDC1", PM.x - 1.3, PM.y - 6.2, 90); placeAt("L_DCDC2", PM.x + 1.9, PM.y - 6.2, 90); placeAt("L_DCDC3", PM.x + 5.0, PM.y + 1.1, 90)
 for (const [l, pin, L] of [["LX1", "pin20", "L_DCDC1"], ["LX2", "pin23", "L_DCDC2"], ["LX3", "pin31", "L_DCDC3"]] as const) { const q = pad(L, "pin1")
   if (!maze(l, { ...at("U_PMIC", pin), layer: "top" }, (x, y, ly) => ly === "top" && gap(disc(x, y, 0.001), q.shape) < -0.1, 0.3, { layers: ["top"], from: `U_PMIC.${pin}`, to: `${L}.pin1`, win: 7 })) report.push(`!! ${l}: no switch-node trace`) }
 // plane pins of the PMIC: a short stub to a via (the supply pins get the most copper: two vias where they fit)
@@ -340,18 +349,19 @@ for (const [c, l] of [["C_DCDC1", "L_DCDC1"], ["C_DCDC2", "L_DCDC2"], ["C_DCDC3"
 for (const [c, pin] of [["C_SYS", "pin7"], ["C_VIN12", "pin21"], ["C_VIN3", "pin32"], ["C_VINLDO", "pin2"], ["C_AC", "pin10"], ["C_LDO1", "pin3"], ["C_LDO2", "pin1"], ["C_LDO3", "pin40"], ["C_LDO4", "pin43"], ["C_INTLDO", "pin48"], ["C_BYPASS", "pin47"]])
   near(c, at("U_PMIC", pin), { vias: c === "C_SYS" || c.startsWith("C_VIN") ? 2 : 1, maxDist: 5 })
 for (const [r, pin] of [["R_PB", "pin25"], ["R_GLOBAL_EN", "pin44"], ["R_WAKE", "pin13"], ["R_INT", "pin45"], ["R_PGOOD", "pin26"], ["R_SDA0", "pin27"], ["R_SCL0", "pin28"]]) near(r, at("U_PMIC", pin), { maxDist: 6 })
-// 3.3 V and 1.8 V bucks, north of the PMIC. SY8089 rotation 0: EN (+1.2,-0.95), GND (+1.2,0), LX (+1.2,+0.95), IN (-1.2,+0.95), FB (-1.2,-0.95)
+// 3.3 V and 1.8 V bucks on the bottom, north of the PMIC (the top there is the processor's escape to J1 and the PMIC).
+// SY8089 rotation 0 seen from the bottom (mirrored): EN, GND, LX on the west side, IN, FB on the east side; inductor west.
 for (const [b, y] of [["3V3", 25.6], ["1V8", 21.3]] as const) { const U = `U_${b}`, L = `L_${b}`
-  placeAt(U, -33.3, y, 0); placeAt(L, -29.6, y + 0.6, 0)
+  placeAt(U, -29.8, y, 0, "bottom"); placeAt(L, -33.5, y + 0.6, 0, "bottom"); corridors(U, 0.8)
   padVias(U, "pin2", 1); padVias(L, "pin2", 3)
-  if (!maze(`LX_${b}`, { ...at(U, "pin3"), layer: "top" }, (x, yy, ly) => ly === "top" && gap(disc(x, yy, 0.001), pad(L, "pin1").shape) < -0.1, 0.3, { layers: ["top"], from: `${U}.pin3`, to: `${L}.pin1`, win: 5 })) report.push(`!! LX_${b}: no switch-node trace`)
-  stubVia(U, "pin4", { x: -1, y: 0 }, 0.3, 0.75)
+  if (!maze(`LX_${b}`, { ...at(U, "pin3"), layer: "bottom" }, (x, yy, ly) => ly === "bottom" && gap(disc(x, yy, 0.001), pad(L, "pin1").shape) < -0.1, 0.3, { layers: ["bottom"], from: `${U}.pin3`, to: `${L}.pin1`, win: 5 })) report.push(`!! LX_${b}: no switch-node trace`)
+  stubVia(U, "pin4", { x: 1, y: 0 }, 0.3, 0.75)
   near(`C_IN_${b}`, at(U, "pin4"), { vias: 2, maxDist: 4 }); near(`C_OUT_${b}`, at(L, "pin2"), { vias: 2, maxDist: 4 })
   near(`R_FBT_${b}`, at(U, "pin5"), { maxDist: 4 }); near(`R_FBB_${b}`, at(U, "pin5"), { maxDist: 4 }) }
-// LAN8720A north of the processor, rotation 270: MDI pins face J1 (north), RMII face the processor (south), crystal pins west
+// LAN8720A north-east of the processor, rotation 270: MDI pins face north (J1 is to the north-west), RMII face south, crystal pins west
 tick("phy")
-const PH = { x: -39.0, y: 27.3 }
-placeAt("U_PHY", PH.x, PH.y, 270)
+const PH = { x: -34.5, y: 29.6 }
+placeAt("U_PHY", PH.x, PH.y, 270); corridors("U_PHY")
 for (const dx of [-0.6, 0.6]) for (const dy of [-0.6, 0.6]) addVia({ name: `V_U_PHY_EP_${dx}_${dy}`, x: r3(PH.x + dx), y: r3(PH.y + dy), net: "GND", d: 0.3, hole: 0.1 })
 placeAt("Y_PHY", PH.x - 4.45, PH.y + 0.1, 90)
 for (const g of ["pin2", "pin4"]) padVias("Y_PHY", g, 1)
@@ -364,13 +374,14 @@ tick("straps")
 const ballOf = (net: string) => { const s = signals.find((q) => q.name === net)!; return ball["U1." + s.ball] }
 for (let i = 0; i < 16; i++) near(`R_SB${i}`, ballOf(`SYSBOOT${i}`), { maxDist: 12, layers: ["bottom", "top"] })
 for (const r of ["R_RPB0", "R_RPB2"]) near(r, at(r === "R_RPB0" ? "R_SB0" : "R_SB2", "pin1"), { maxDist: 8, layers: ["bottom", "top"] })
-for (const n of ["SD_CMD", "SD_DAT0", "SD_DAT1", "SD_DAT2", "SD_DAT3", "SD_PWR_ON", "GPIO2_SDA1", "GPIO3_SCL1", "ID_SD", "ID_SC"]) { const r = NETLIST.find((p) => p.part.startsWith("R") && Object.values(p.nets).includes(n) && p.ref !== "R_PGOOD")!.ref; near(r, ballOf(n), { maxDist: 10 }) }
+// pull-ups between the processor and J1, under the CM4 pin of their net (the top over J1 stays free for via-in-pad at its pins)
+const pinXY = (net: string) => { const p = pins.find((q) => q.role === net)!; return { x: p.x, y: p.y } }
+for (const n of ["SD_CMD", "SD_DAT0", "SD_DAT1", "SD_DAT2", "SD_DAT3", "SD_PWR_ON", "GPIO2_SDA1", "GPIO3_SCL1", "ID_SD", "ID_SC"]) { const r = NETLIST.find((p) => p.part.startsWith("R") && Object.values(p.nets).includes(n) && p.ref !== "R_PGOOD")!.ref; near(r, { x: pinXY(n).x, y: 27.6 }, { maxDist: 10, layers: ["bottom", "top"] }) }
 near("R_VBUS", ballOf("USB0_VBUS"), { maxDist: 10 })
 for (const p of NETLIST) if (!parts.some((q) => q.name === p.ref)) report.push(`!! ${p.ref} (${p.part}) not placed`)
 // ---------- nets for the router: every non-plane net of the circuit with all its terminals ----------
 // (switch nodes and the PMIC battery tie are drawn above; they are not routed again)
 function innerBall(b: string) { return /^[RTUV][1-6]$/.test(b) || ["B5", "C5", "C6"].includes(b) }
-const done = new Set(["LX1", "LX2", "LX3", "LX_3V3", "LX_1V8", "PMIC_BAT"])
 type Term = { ref: string; x: number; y: number; layer: Layer; shape: { pts: Pt[]; r: number }; kind: "ball" | "pad" | "pin" }
 const netTerms = new Map<string, Term[]>()
 const addTerm = (net: string, t: Term) => { if (!net || PLANE.has(net) || done.has(net) || net.startsWith("NC")) return; if (!netTerms.has(net)) netTerms.set(net, []); netTerms.get(net)!.push(t) }

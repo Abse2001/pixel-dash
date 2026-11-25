@@ -19,8 +19,8 @@ export const SIGNALS: Sig[] = [
   // 40-pin header functions (Raspberry Pi numbering) on the processor's matching peripherals
   { net: "GPIO2_SDA1", ball: "D18", mode: 3, fn: "I2C2_SDA", cm4: 58 },
   { net: "GPIO3_SCL1", ball: "D17", mode: 3, fn: "I2C2_SCL", cm4: 56 },
-  { net: "ID_SD", ball: "D16", mode: 3, fn: "I2C1_SDA", cm4: 36 },
-  { net: "ID_SC", ball: "D15", mode: 3, fn: "I2C1_SCL", cm4: 35 },
+  { net: "ID_SD", ball: "E18", mode: 3, fn: "I2C1_SDA (UART0_CTSn pad)", cm4: 36 },
+  { net: "ID_SC", ball: "E17", mode: 3, fn: "I2C1_SCL (UART0_RTSn pad)", cm4: 35 },
   { net: "GPIO14_TXD", ball: "E16", mode: 0, fn: "UART0_TXD (boot console)", cm4: 55 },
   { net: "GPIO15_RXD", ball: "E15", mode: 0, fn: "UART0_RXD (boot console)", cm4: 51 },
   { net: "GPIO11_SCLK", ball: "A17", mode: 0, fn: "SPI0_SCLK", cm4: 38 },
@@ -75,7 +75,7 @@ export const GPIO_PINS: Record<string, number> = {
   LED_nACT: 21, LED_nPWR: 95, CAM_GPIO: 97, SD_PWR_ON: 75, nEXTRST: 100, ETH_nLED1: 19, ETH_nLED2: 17, ETH_nLED3: 15,
 }
 /** GPIO-capable balls left free by the functions above (mode 7 = gpio) */
-export const POOL = ["A14", "A15", "B12", "C12", "C13", "C18", "D14", "E17", "E18", "F15", "F16", "H16", "J17", "J18", "K15", "K18", "L16", "L17", "L18", "R13", "V14", "R14", "V15", "U15", "T15", "V16", "U16", "T16", "V17", "U18", "T13", "V12"]
+export const POOL = ["A14", "A15", "B12", "C12", "C13", "C18", "D14", "F15", "F16", "H16", "J17", "J18", "K15", "K18", "L16", "L17", "L18", "R13", "V14", "R14", "V15", "U15", "T15", "V16", "U16", "T16", "V17", "U18", "T13", "V12"]
 /** a GPIO that is not a CM4 pin */
 export const EXTRA_GPIO = ["PHY_nRST"]
 for (const s of SIGNALS) if (s.cm4) CM4[s.cm4] = s.net
