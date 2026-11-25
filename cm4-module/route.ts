@@ -11,7 +11,9 @@ const E = plan.edge, P = 0.1, X0 = E.x0, Y0 = E.y0, NX = Math.round((E.x1 - X0) 
 const W = 0.1, CLR = 0.1, CLR_DDR = +(process.env.CLR_DDR ?? 0.31), VIA_D = 0.3
 const gx = (x: number) => Math.round((x - X0) / P), gy = (y: number) => Math.round((y - Y0) / P), wx = (i: number) => X0 + i * P, wy = (j: number) => Y0 + j * P
 const MODE = process.env.MODE ?? "outer"
-const LAYERS = MODE === "inner" ? ["top", "inner3", "bottom"] : ["top", "bottom"], NL = LAYERS.length
+// L4=1: the outer pass may also use layer 4 in the strip between the processor and J1 (y > L4Y), where layer 4 carries no core/MPU copper the processor needs
+const L4 = MODE === "outer" && !!process.env.L4, L4Y = +(process.env.L4Y ?? 23.4)
+const LAYERS = MODE === "inner" ? ["top", "inner3", "bottom"] : L4 ? ["top", "bottom", "inner3"] : ["top", "bottom"], NL = LAYERS.length
 // inside the processor's ball field a via sits exactly on a ball centre (via-in-pad) or >= 0.45 mm from every ball centre
 const offBallAt = (x: number, y: number) => { if (x < -51.6 - 0.45 || x > -38.0 + 0.45 || y < 8.35 - 0.45 || y > 21.95 + 0.45) return false
   const kx = Math.min(17, Math.max(0, Math.round((x + 51.6) / 0.8))), ky = Math.min(17, Math.max(0, Math.round((21.95 - y) / 0.8))), d = Math.hypot(x - (-51.6 + 0.8 * kx), y - (21.95 - 0.8 * ky)); return d > 0.02 && d < 0.45 }
@@ -41,13 +43,14 @@ for (const it of items) { if (!it.layers.length) continue
   const ddr = it.kind === "ddr" || it.kind === "ddrvia", id = it.net.startsWith("NC:") || it.net === "HOLE" ? -1 : idOf(it.net), out = (x: number, y: number) => !inCpu(x, y)
   for (const ln of it.layers) { const l = L(ln); if (l < 0) continue; stamp(it, statT[l], id, CLR + W / 2 + 0.005); if (ddr) stamp(it, statT[l], id, CLR_DDR + W / 2 + 0.005, out) }
   // through vias have a pad on layer 4 too: 0.1 mm to it keeps 0.2 mm to the 0.1 mm hole
-  if (MODE === "inner" && it.layers.length === 2) stamp(it, statT[L("inner3")], id, CLR + W / 2 + 0.005)
+  if (L("inner3") >= 0 && it.layers.length === 2) stamp(it, statT[L("inner3")], id, CLR + W / 2 + 0.005)
   stamp(it, statV, id, CLR + VIA_D / 2 + 0.005); if (ddr) stamp(it, statV, id, CLR_DDR + VIA_D / 2 + 0.005, out) }
 // vias with a pad smaller than 0.3 mm (layer-4 dips of the DDR block): keep the same distance to the hole as for a 0.3 mm pad
 for (const it of items) if (it.layers.length === 2 && it.pts.length === 1 && it.r < 0.149) { const big = { pts: it.pts, r: 0.15 }, id = idOf(it.net); for (let l = 0; l < NL; l++) stamp(big, statT[l], id, CLR + W / 2 + 0.005) }
 // layer-4 copper: the DDR sections there, the inner pass's traces: closed to vias; in the inner pass also to its traces
-for (const g of plan.ddrInner ?? []) { const it = { pts: [g.a, g.b], r: 0.051 }; stamp(it, statV, idOf(g.net), 0.13 + VIA_D / 2 + 0.005); if (MODE === "inner") stamp(it, statT[L("inner3")], idOf(g.net), (g.a.x > -56 ? 0.13 : CLR_DDR) + W / 2 + 0.005) }
-for (const [name, n] of Object.entries(prev.nets) as any) for (const g of n.segs) if (g.layer === "inner3") for (let i = 0; i + 1 < g.pts.length; i++) stamp({ pts: [g.pts[i], g.pts[i + 1]], r: 0.05 }, statV, idOf(name), 0.13 + VIA_D / 2 + 0.005)
+for (const g of plan.ddrInner ?? []) { const it = { pts: [g.a, g.b], r: 0.051 }; stamp(it, statV, idOf(g.net), 0.13 + VIA_D / 2 + 0.005); if (L("inner3") >= 0) stamp(it, statT[L("inner3")], idOf(g.net), (g.a.x > -56 ? 0.13 : CLR_DDR) + W / 2 + 0.005) }
+for (const [name, n] of Object.entries(prev.nets) as any) for (const g of n.segs) if (g.layer === "inner3") for (let i = 0; i + 1 < g.pts.length; i++) { stamp({ pts: [g.pts[i], g.pts[i + 1]], r: 0.05 }, statV, idOf(name), 0.13 + VIA_D / 2 + 0.005); if (L4) stamp({ pts: [g.pts[i], g.pts[i + 1]], r: 0.05 }, statT[L("inner3")], idOf(name), 0.13 + W / 2 + 0.005) }
+if (L4) { const l = L("inner3"); for (let j = 0; j < NY; j++) for (let i = 0; i < NX; i++) if (!(wy(j) > L4Y)) statT[l][j * NX + i] = -1 }
 // no tracks between the pads of a part or under its body, no vias under a part (the BGAs and the connectors excepted: their pads are the obstacle)
 const padsOfRef = new Map<string, Item[]>(); for (const it of items) if (it.kind === "pad" && it.ref) { const r = it.ref.split(".")[0]; if (!padsOfRef.has(r)) padsOfRef.set(r, []); padsOfRef.get(r)!.push(it) }
 for (const b of bodies) { if (b.ref === "U1" || b.ref === "U_DDR" || b.ref === "HOLE" || /^J\d/.test(b.ref)) continue; const l = L(b.layer), ps = padsOfRef.get(b.ref) ?? []
