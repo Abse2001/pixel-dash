@@ -30,8 +30,8 @@ export const SIGNALS: Sig[] = [
   { net: "GPIO7_CE1", ball: "C15", mode: 0, fn: "SPI0_CS1", cm4: 37 },
   { net: "GPIO18_PCM_CLK", ball: "A13", mode: 0, fn: "MCASP0_ACLKX", cm4: 49 },
   { net: "GPIO19_PCM_FS", ball: "B13", mode: 0, fn: "MCASP0_FSX", cm4: 26 },
-  { net: "GPIO20_PCM_DIN", ball: "D13", mode: 0, fn: "MCASP0_AXR1", cm4: 27 },
-  { net: "GPIO21_PCM_DOUT", ball: "D12", mode: 0, fn: "MCASP0_AXR0", cm4: 25 },
+  { net: "GPIO20_PCM_DIN", ball: "B12", mode: 2, fn: "MCASP0_AXR2 (MCASP0_ACLKR pad)", cm4: 27 },
+  { net: "GPIO21_PCM_DOUT", ball: "A14", mode: 2, fn: "MCASP0_AXR3 (MCASP0_AHCLKX pad)", cm4: 25 },
   { net: "GPIO12_PWM0", ball: "U14", mode: 6, fn: "EHRPWM1A", cm4: 31 },
   { net: "GPIO13_PWM1", ball: "T14", mode: 6, fn: "EHRPWM1B", cm4: 28 },
   // SD card on the carrier (CM4 Lite pins), MMC0, the boot device
@@ -75,7 +75,7 @@ export const GPIO_PINS: Record<string, number> = {
   LED_nACT: 21, LED_nPWR: 95, CAM_GPIO: 97, SD_PWR_ON: 75, nEXTRST: 100, ETH_nLED1: 19, ETH_nLED2: 17, ETH_nLED3: 15,
 }
 /** GPIO-capable balls left free by the functions above (mode 7 = gpio) */
-export const POOL = ["A14", "A15", "B12", "C12", "C13", "C18", "D14", "F15", "F16", "H16", "J17", "J18", "K15", "K18", "L16", "L17", "L18", "R13", "V14", "R14", "V15", "U15", "T15", "V16", "U16", "T16", "V17", "U18", "T13", "V12"]
+export const POOL = ["A15", "C12", "C13", "C18", "D14", "F15", "F16", "H16", "J17", "J18", "K15", "K18", "L16", "L17", "L18", "R13", "V14", "R14", "V15", "U15", "T15", "V16", "U16", "T16", "V17", "U18", "T13", "V12"]
 /** a GPIO that is not a CM4 pin */
 export const EXTRA_GPIO = ["PHY_nRST"]
 for (const s of SIGNALS) if (s.cm4) CM4[s.cm4] = s.net
