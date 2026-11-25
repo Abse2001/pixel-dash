@@ -42,3 +42,5 @@ the local checkout; nothing of it is committed upstream.
 | Date | Solver revision | Input | Result |
 |---|---|---|---|
 | 2026-11-25 | npm 0.0.1156, default pipeline | 2 signal layers (top/bottom) | failed after 33 s: `No path for 37 (SYSBOOT2_mst1) after allowing movable routes to be rerouted`. Expected: SYSBOOT2 starts at a ball the DDR copper boxes in on both outer layers; 0.4.4 routed those nets on layer 4. Not a solver issue: the input lacked layer 4. |
+| 2026-11-25 | npm 0.0.1156, default pipeline | 3 signal layers (top / layer 4 / bottom), 100 nets, 234 terminals, 8084 obstacles | killed by the out-of-memory killer after 856 s at about 9 GB resident, in a late stage (minified class name `solverClass`). Not pursued: the current source does not show it (next row). |
+| 2026-11-25 | source `dc19141` (v0.0.1164), default pipeline | same input | **solved in 1104 s**: 100 nets, 134 traces, 602 vias, 2829 mm (top 286, layer 4 217, bottom 232 segments). |

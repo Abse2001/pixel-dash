@@ -411,11 +411,10 @@ report.push(`router nets: ${nets.length} (${nets.filter((n) => n.inner).length} 
     if (best) { addVia({ name: `V_STITCH_${++added}`, x: best.x, y: best.y, net: "GND", d: 0.3, hole: 0.1 }) } else far++ }
   report.push(`ground stitching: ${added} vias added; ${far} DDR vias still have no ground via within 1.5 mm`) }
 
-// ---------- top-up after the handheld signals are routed (TOPUP=1): what did not fit clear of the signal escape goes into the space the routes left ----------
+// ---------- top-up after the signals are routed (TOPUP=1): what did not fit clear of the signal escape goes into the space the routes left ----------
 if (process.env.TOPUP) { const routes = await Bun.file(import.meta.dir + "/routes.json").json(); let nseg = 0
   for (const [name, r] of Object.entries(routes.nets) as any) { for (const g of r.segs) for (let i = 0; i + 1 < g.pts.length; i++) { if (g.layer === "top" || g.layer === "bottom") B.add({ ...seg(g.pts[i], g.pts[i + 1], 0.1), layers: [g.layer], net: name, kind: "trace" }); else innerSegs.push({ ...seg(g.pts[i], g.pts[i + 1], 0.1), layers: [], net: name, kind: "trace" }); nseg++ }
-    for (const v of r.vias) B.add({ ...disc(v.x, v.y, v.d / 2), layers: BOTH, net: name, kind: "via" })
-    const pin = pins.find((p) => p.conn === r.conn && p.pin === r.pin)!; B.items.find((i) => i.ref === `${r.conn}.${r.pin}`)!.net = name; pin.role = name }
+    for (const v of r.vias) B.add({ ...disc(v.x, v.y, v.d / 2), layers: BOTH, net: name, kind: "via" }) }
   // a high-speed DDR bypass capacitor must sit over solid VDDS_DDR copper (layer 3 west of the split, not the 3V3 corner of row P),
   // or its VDDS_DDR via reaches the processor's column-5 VDDS_DDR balls only through thin links around the other supplies
   // the capacitor's VDDS_DDR via must land in VDDS_DDR copper on layer 3 (same regions as planes.ts, 0.35 mm inside them)
