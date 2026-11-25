@@ -50,7 +50,9 @@ for (const it of items) if (it.layers.length === 2 && it.pts.length === 1 && it.
 // layer-4 copper: the DDR sections there, the inner pass's traces: closed to vias; in the inner pass also to its traces
 for (const g of plan.ddrInner ?? []) { const it = { pts: [g.a, g.b], r: 0.051 }; stamp(it, statV, idOf(g.net), 0.13 + VIA_D / 2 + 0.005); if (L("inner3") >= 0) stamp(it, statT[L("inner3")], idOf(g.net), (g.a.x > -56 ? 0.13 : CLR_DDR) + W / 2 + 0.005) }
 for (const [name, n] of Object.entries(prev.nets) as any) for (const g of n.segs) if (g.layer === "inner3") for (let i = 0; i + 1 < g.pts.length; i++) { stamp({ pts: [g.pts[i], g.pts[i + 1]], r: 0.05 }, statV, idOf(name), 0.13 + VIA_D / 2 + 0.005); if (L4) stamp({ pts: [g.pts[i], g.pts[i + 1]], r: 0.05 }, statT[L("inner3")], idOf(name), 0.13 + W / 2 + 0.005) }
-if (L4) { const l = L("inner3"); for (let j = 0; j < NY; j++) for (let i = 0; i < NX; i++) if (!(wy(j) > L4Y)) statT[l][j * NX + i] = -1 }
+// where a layer may carry traces (a via only needs clearance on every layer, not routability)
+const routable = LAYERS.map(() => new Uint8Array(NN).fill(1))
+if (L4) { const l = L("inner3"); for (let j = 0; j < NY; j++) for (let i = 0; i < NX; i++) if (!(wy(j) > L4Y)) routable[l][j * NX + i] = 0 }
 // no tracks between the pads of a part or under its body, no vias under a part (the BGAs and the connectors excepted: their pads are the obstacle)
 const padsOfRef = new Map<string, Item[]>(); for (const it of items) if (it.kind === "pad" && it.ref) { const r = it.ref.split(".")[0]; if (!padsOfRef.has(r)) padsOfRef.set(r, []); padsOfRef.get(r)!.push(it) }
 for (const b of bodies) { if (b.ref === "U1" || b.ref === "U_DDR" || b.ref === "HOLE" || /^J\d/.test(b.ref)) continue; const l = L(b.layer), ps = padsOfRef.get(b.ref) ?? []
@@ -113,7 +115,8 @@ function route(n: Net): boolean { const id = n.id, tcs = TC.get(n)!, okT = (l: n
   seed(order[0])
   for (const k of order.slice(1)) { const tc = tcs[k]; stampId++; goalId++; heap.length = 0; hkey.length = 0
     for (const [l, cs] of tc.onLayer) for (const c of cs) goal[l * NN + c] = goalId
-    const viaGoal = new Set(tc.via); const tx = n.terms[k].x, ty = n.terms[k].y, h = (c: number) => Math.hypot(wx(c % NX) - tx, wy((c / NX) | 0) - ty) / P
+    const viaGoal = new Set(tc.via); const gp: Pt[] = (n.terms[k] as any).kind === "pool" ? (n.terms[k] as any).balls : [n.terms[k]]
+    const h = (c: number) => { const x = wx(c % NX), y = wy((c / NX) | 0); let m = 1e9; for (const p of gp) { const d = Math.hypot(x - p.x, y - p.y); if (d < m) m = d } return Math.max(0, m - 0.5) / P } // admissible: distance to the nearest goal
     for (const u of tree) { seen[u] = stampId; gScore[u] = 0; from[u] = -1; hpush(h(u % NN), u) }
     let end = -1
     let pops = 0
@@ -122,8 +125,8 @@ function route(n: Net): boolean { const id = n.id, tcs = TC.get(n)!, okT = (l: n
       if (goal[u] === goalId) { end = u; break }
       const relax = (v: number, cost: number) => { const ng = g + cost; if (seen[v] !== stampId || ng < gScore[v]) { seen[v] = stampId; gScore[v] = ng; from[v] = u; hpush(ng + h(v % NN), v) } }
       for (let q = 0; q < 16; q += 2) { const ii = i + D8[q], jj = j + D8[q + 1]; if (ii < 0 || jj < 0 || ii >= NX || jj >= NY) continue; const c2 = jj * NX + ii
-        if (!okT(l, c2)) continue
-        if (D8[q] !== 0 && D8[q + 1] !== 0 && (!okT(l, j * NX + ii) || !okT(l, jj * NX + i))) continue
+        if (!okT(l, c2) || !routable[l][c2]) continue
+        if (D8[q] !== 0 && D8[q + 1] !== 0 && (!okT(l, j * NX + ii) || !okT(l, jj * NX + i) || !routable[l][j * NX + ii] || !routable[l][jj * NX + i])) continue
         const occ = Math.max(0, tNear2[l][c2] + vNear3[c2]) // how many foreign tracks/vias claim this cell (PathFinder: cost grows with the overuse)
         const z = l === TOP ? zoneT[c2] : 0, gb = goalBall.get(l * NN + c2)
         relax(l * NN + c2, (D8[q] !== 0 && D8[q + 1] !== 0 ? 1.4142 : 1) * (1 + hist[l][c2]) * (1 + pres * occ) + pres * 4 * occ + (z ? 1 + pres * 2 + histZone[z] : 0) + (gb && goal[l * NN + c2] === goalId ? pres * 8 * ballUse[gb] + histBall[gb] : 0)) }
@@ -182,4 +185,6 @@ if (process.env.SHOWBAD) { const owner = new Map<number, Set<string>>()
     for (let q = 0; q < O2.length; q += 2) { const cc = (j + O2[q + 1]) * NX + i + O2[q]; const key = l * NN + cc; if (!owner.has(key)) owner.set(key, new Set()); owner.get(key)!.add(n.name) } } }
   const pairs = new Map<string, { n: number; at: string }>()
   for (const n of nets) { if (!n.path) continue; for (const u of conflicts(n)) { for (const o of owner.get(u) ?? []) if (o !== n.name) { const k = [n.name, o].sort().join(" x "), c = u % NN; const e = pairs.get(k) ?? { n: 0, at: `${LAYERS[(u / NN) | 0]} (${wx(c % NX).toFixed(1)}, ${wy((c / NX) | 0).toFixed(1)})` }; e.n++; pairs.set(k, e) } } }
+  let zoneBad = 0, ballBad = 0; for (const n of nets) { if (!n.path) continue; const p = n.path; for (let k = 0; k < p.length; k++) { if (p[k] < 0) continue; const l = (p[k] / NN) | 0, c = p[k] % NN; if (l === TOP && zoneT[c] && zoneT[c] !== n.ball) zoneBad++ } if (n.ball && ballUse[n.ball] > 1) ballBad++ }
+  console.log(`pool-ball zone violations: ${zoneBad} nodes; nets sharing a ball: ${ballBad}`)
   console.log("conflicting pairs:\n" + [...pairs].sort((a, b) => b[1].n - a[1].n).slice(0, 40).map(([k, v]) => `  ${k}: ${v.n} at ${v.at}`).join("\n")) }

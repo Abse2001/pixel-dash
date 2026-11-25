@@ -46,9 +46,9 @@ const signals: { name: string; ball: string; mode: number; fn: string }[] = SIGN
   const cost = want.map((w) => POOL.map((b) => { const q = ball["U1." + b]; return Math.hypot(q.x - w.at.x, q.y - w.at.y) + 4 * depth(b) }))
   // the router picks each GPIO's ball from POOL (any pool ball, one net per ball); after routing (TOPUP) the choice is read back
   const routed = process.env.TOPUP && (await Bun.file(import.meta.dir + "/routes.json").exists()) ? (await Bun.file(import.meta.dir + "/routes.json").json()).nets : {}
-  for (const w of want) if (routed[w.n]?.ball) signals.push({ name: w.n, ball: routed[w.n].ball, mode: 7, fn: "GPIO" }); else poolNets.push(w.n)
-  if (process.env.TOPUP && poolNets.length) throw Error("routes.json has no ball for " + poolNets.join(" "))
-  void cost; void hungarian }
+  if (process.env.POOL) { for (const w of want) if (routed[w.n]?.ball) signals.push({ name: w.n, ball: routed[w.n].ball, mode: 7, fn: "GPIO" }); else poolNets.push(w.n)
+    if (process.env.TOPUP && poolNets.length) throw Error("routes.json has no ball for " + poolNets.join(" ")) }
+  else for (const [i, j] of hungarian(cost)) signals.push({ name: want[i].n, ball: POOL[j], mode: 7, fn: "GPIO" }) } // optimal fixed assignment (distance + depth)
 for (const s of signals) { if (ballNet["U1." + s.ball]) throw Error(`ball ${s.ball} used twice: ${s.name} / ${ballNet["U1." + s.ball]}`); ballNet["U1." + s.ball] = s.name }
 const PLANE = new Set(PLANE_NETS)
 /** minimum-cost assignment rows -> columns (rows <= columns), Kuhn-Munkres with potentials */
