@@ -35,6 +35,7 @@ Object.assign(ballNet, {
   "U1.V10": "OSC0_IN", "U1.U11": "OSC0_OUT", "U1.J4": "DDR_VREF", "U1.J3": "DDR_VTP",
   "U_DDR.H1": "DDR_VREF", "U_DDR.M8": "DDR_VREF", "U_DDR.L8": "DDR_ZQ",
 })
+const poolNets: string[] = []
 // signals: processor balls with a fixed function (design/netlist.ts), plus the plain GPIOs, whose balls are picked
 // from POOL by the shortest total ball-to-pin distance (an optimal assignment)
 const cm4PinXY = (n: number) => { const c = n <= 100 ? J1 : J2, m = (n - 1) % 100 + 1, k = (m - 1) >> 1; return { x: c.x + 9.8 - 0.4 * k, y: c.y + (m % 2 ? 1.355 : -1.355) } }
@@ -43,7 +44,11 @@ const signals: { name: string; ball: string; mode: number; fn: string }[] = SIGN
   // distance plus 4 mm per ring of depth: balls on the outer rows escape without crowding the RMII/MMC cluster
   const ROWS = "ABCDEFGHJKLMNPRTUV", depth = (b: string) => { const r = ROWS.indexOf(b[0]), c = +b.slice(1) - 1; return Math.min(r, 17 - r, c, 17 - c) }
   const cost = want.map((w) => POOL.map((b) => { const q = ball["U1." + b]; return Math.hypot(q.x - w.at.x, q.y - w.at.y) + 4 * depth(b) }))
-  for (const [i, j] of hungarian(cost)) signals.push({ name: want[i].n, ball: POOL[j], mode: 7, fn: "GPIO" }) }
+  // the router picks each GPIO's ball from POOL (any pool ball, one net per ball); after routing (TOPUP) the choice is read back
+  const routed = process.env.TOPUP && (await Bun.file(import.meta.dir + "/routes.json").exists()) ? (await Bun.file(import.meta.dir + "/routes.json").json()).nets : {}
+  for (const w of want) if (routed[w.n]?.ball) signals.push({ name: w.n, ball: routed[w.n].ball, mode: 7, fn: "GPIO" }); else poolNets.push(w.n)
+  if (process.env.TOPUP && poolNets.length) throw Error("routes.json has no ball for " + poolNets.join(" "))
+  void cost; void hungarian }
 for (const s of signals) { if (ballNet["U1." + s.ball]) throw Error(`ball ${s.ball} used twice: ${s.name} / ${ballNet["U1." + s.ball]}`); ballNet["U1." + s.ball] = s.name }
 const PLANE = new Set(PLANE_NETS)
 /** minimum-cost assignment rows -> columns (rows <= columns), Kuhn-Munkres with potentials */
@@ -388,6 +393,9 @@ const addTerm = (net: string, t: Term) => { if (!net || PLANE.has(net) || done.h
 for (const s of signals) { const b = ball["U1." + s.ball]; addTerm(s.name, { ref: "U1." + s.ball, x: b.x, y: b.y, layer: "top", shape: disc(b.x, b.y, b.r), kind: "ball" }) }
 for (const n of NETLIST) { const p = parts.find((q) => q.name === n.ref); if (!p) continue; for (const q of padsOf(p)) addTerm(p.nets[q.pin], { ref: `${p.name}.${q.pin}`, x: r3(q.x), y: r3(q.y), layer: p.layer, shape: q.shape, kind: "pad" }) }
 for (const p of pins) { const it = B.items.find((i) => i.ref === `${p.conn}.${p.pin}`)!; addTerm(p.role, { ref: `${p.conn}.${p.pin}`, x: p.x, y: p.y, layer: "bottom", shape: { pts: it.pts, r: it.r }, kind: "pin" }) }
+// GPIOs without a ball yet: a "pool" terminal, last, that the router may end on any free pool ball
+for (const n of poolNets) { const bs = POOL.map((b) => ({ ref: "U1." + b, ...ball["U1." + b] })), c = { x: bs.reduce((s, b) => s + b.x, 0) / bs.length, y: bs.reduce((s, b) => s + b.y, 0) / bs.length }
+  if (!netTerms.has(n)) netTerms.set(n, []); netTerms.get(n)!.push({ ref: "POOL", x: r3(c.x), y: r3(c.y), layer: "top", shape: disc(c.x, c.y, 0), kind: "pool", balls: bs } as any) }
 const nets = [...netTerms].map(([name, terms]) => ({ name, terms, inner: terms.some((t) => t.kind === "ball" && innerBall(t.ref.slice(3))) }))
 for (const n of nets) if (n.terms.length < 2) report.push(`!! net ${n.name} has ${n.terms.length} terminal`)
 report.push(`router nets: ${nets.length} (${nets.filter((n) => n.inner).length} start at boxed-in balls), ${nets.reduce((s, n) => s + n.terms.length, 0)} terminals`)
