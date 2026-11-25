@@ -106,11 +106,11 @@ function route(n: Net): boolean { const id = n.id, tcs = TC.get(n)!, okT = (l: n
       for (let q = 0; q < 16; q += 2) { const ii = i + D8[q], jj = j + D8[q + 1]; if (ii < 0 || jj < 0 || ii >= NX || jj >= NY) continue; const c2 = jj * NX + ii
         if (!okT(l, c2)) continue
         if (D8[q] !== 0 && D8[q + 1] !== 0 && (!okT(l, j * NX + ii) || !okT(l, jj * NX + i))) continue
-        const occ = tNear2[l][c2] + vNear3[c2] > 0 ? 1 : 0
+        const occ = Math.max(0, tNear2[l][c2] + vNear3[c2]) // how many foreign tracks/vias claim this cell (PathFinder: cost grows with the overuse)
         relax(l * NN + c2, (D8[q] !== 0 && D8[q + 1] !== 0 ? 1.4142 : 1) * (1 + hist[l][c2]) * (1 + pres * occ) + pres * 4 * occ) }
       // via to every other layer here: anywhere legal, or into the target pad (via-in-pad); not beside the inner pass's ball via
       const legal = viaGoal.has(c) || ((statV[c] === 0 || statV[c] === id) && !offBall[c] && LAYERS.every((_, k2) => okT(k2, c)))
-      if (legal) { const occ = vNear4[c] + LAYERS.reduce((s, _, k2) => s + tNear3[k2][c], 0) > 0 ? 1 : 0
+      if (legal) { const occ = Math.max(0, vNear4[c] + LAYERS.reduce((s, _, k2) => s + tNear3[k2][c], 0))
         for (let l2 = 0; l2 < NL; l2++) if (l2 !== l) { const v = l2 * NN + c; relax(v, VIA_COST * (1 + histV[c]) * (1 + pres * occ) + pres * 8 * occ); if (viaGoal.has(c)) goal[v] = goalId } } }
     if (end < 0) { failTerm = `${n.terms[k].ref}: ${[...tc.onLayer].map(([l, cs]) => LAYERS[l] + " " + cs.length).join(", ")} cells, ${tc.via.length} via cells`; return false }
     const seg: number[] = []; for (let u = end; u !== -1; u = from[u]) seg.unshift(u)
@@ -130,11 +130,11 @@ for (let it = 1; it <= MAXIT; it++) { let failed = 0
   for (const k of order) { const n = nets[k], t1 = performance.now(); stampNet(n, -1); n.path = undefined; if (!route(n)) { failed++; if (it === 1) console.log(`  ${n.name}: no path (${failTerm})`) } stampNet(n, 1); if (it === 1 && process.env.VERBOSE) console.error(`  ${n.name} ${n.terms.length} terms ${((performance.now() - t1) / 1e3).toFixed(2)}s`) }
   let nbad = 0; const badNets: string[] = []
   for (const n of nets) { if (!n.path) { nbad++; badNets.push(n.name + "(unrouted)"); continue } const bad = conflicts(n)
-    for (const u of bad) { const l = (u / NN) | 0, c = u % NN; hist[l][c] = Math.min(hist[l][c] + 0.4, 6); histV[c] = Math.min(histV[c] + 0.2, 3) }
+    for (const u of bad) { const l = (u / NN) | 0, c = u % NN; hist[l][c] = Math.min(hist[l][c] + 0.4, +(process.env.HMAX ?? 40)); histV[c] = Math.min(histV[c] + 0.2, 20) }
     if (bad.length) { nbad++; badNets.push(n.name) } }
   if (it % 5 === 0 || nbad === 0 || it === 1) console.log(`iter ${it}: ${nbad} nets in conflict, ${failed} unrouted, pres ${pres.toFixed(2)}, ${((performance.now() - t0) / 1e3).toFixed(0)}s ${nbad && nbad < 10 ? badNets.join(" ") : ""}`)
   if (nbad === 0) { solved = true; break }
-  pres = Math.min(pres * 1.25, 25); for (let i = order.length - 1; i > 0; i--) { const j = Math.floor(rnd() * (i + 1)); [order[i], order[j]] = [order[j], order[i]] } }
+  pres = Math.min(pres * 1.25, +(process.env.PMAX ?? 400)); for (let i = order.length - 1; i > 0; i--) { const j = Math.floor(rnd() * (i + 1)); [order[i], order[j]] = [order[j], order[i]] } }
 // ---------- output ----------
 const out: any = { solved, nets: { ...prev.nets } as Record<string, any> }
 const known = new Set<string>(); for (const v of plan.vias) known.add(`${(+v.x).toFixed(3)},${(+v.y).toFixed(3)}`)
