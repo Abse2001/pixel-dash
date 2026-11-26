@@ -1,8 +1,7 @@
 // The CM4 module's circuit beyond the routed DDR block: CM4 connector pin map, processor pin assignment,
-// power (TPS65217D + two SY8089 bucks), Ethernet PHY (LAN8720A), boot straps, pull-ups.
+// power (TPS65217D + two SY8089 bucks), boot straps, pull-ups. No Ethernet: networking is over USB0.
 // Sources: CM4 datasheet (pin table, section 2), AM3354 datasheet SPRS717 (ball/mux table), AM335x TRM SPRUH73
 // Table 26-7 (SYSBOOT), TPS65217 datasheet SLVSB64I (pins, section 9.2.2.2 case 2: 5 V on AC, no battery),
-// LAN8720A datasheet DS00002165B (straps, REF_CLK-out mode).
 
 /** CM4 connector pin -> module net ("" = not connected). Pins 1-100 on J1, 101-200 on J2. */
 export const CM4: Record<number, string> = {}
@@ -55,33 +54,22 @@ export const SIGNALS: Sig[] = [
   { net: "PMIC_POWER_EN", ball: "C6", mode: 0, fn: "to PMIC PWR_EN" },
   { net: "EXT_WAKEUP", ball: "C5", mode: 0, fn: "from PMIC nWAKEUP" },
   { net: "NMIn", ball: "B18", mode: 0, fn: "EXTINTn, from PMIC nINT" },
-  // RMII to the LAN8720A
-  { net: "RMII_REFCLK", ball: "H18", mode: 0, fn: "RMII1_REF_CLK (50 MHz from the PHY)" },
-  { net: "RMII_CRS_DV", ball: "H17", mode: 1, fn: "RMII1_CRS_DV" },
-  { net: "RMII_RXER", ball: "J15", mode: 1, fn: "RMII1_RXER" },
-  { net: "RMII_TXEN", ball: "J16", mode: 1, fn: "RMII1_TXEN" },
-  { net: "RMII_TXD0", ball: "K17", mode: 1, fn: "RMII1_TXD0" },
-  { net: "RMII_TXD1", ball: "K16", mode: 1, fn: "RMII1_TXD1" },
-  { net: "RMII_RXD0", ball: "M16", mode: 1, fn: "RMII1_RXD0" },
-  { net: "RMII_RXD1", ball: "L15", mode: 1, fn: "RMII1_RXD1" },
-  { net: "MDIO", ball: "M17", mode: 0, fn: "MDIO_DATA" },
-  { net: "MDC", ball: "M18", mode: 0, fn: "MDIO_CLK" },
   // boot straps: LCD_DATA[15:0] = SYSBOOT[15:0]
   ...Array.from({ length: 16 }, (_, i) => ({ net: `SYSBOOT${i}`, ball: ["R1", "R2", "R3", "R4", "T1", "T2", "T3", "T4", "U1", "U2", "U3", "U4", "V2", "V3", "V4", "T5"][i], mode: 0, fn: `LCD_DATA${i} (SYSBOOT${i}), strap` })),
 ]
 /** plain GPIOs (mode 7): CM4 pins whose ball is chosen by plan.ts from POOL (shortest assignment) */
 export const GPIO_PINS: Record<string, number> = {
   GPIO4: 54, GPIO5: 34, GPIO6: 30, GPIO16: 29, GPIO17: 50, GPIO22: 46, GPIO23: 47, GPIO24: 45, GPIO25: 41, GPIO26: 24, GPIO27: 48,
-  LED_nACT: 21, LED_nPWR: 95, CAM_GPIO: 97, SD_PWR_ON: 75, nEXTRST: 100, ETH_nLED1: 19, ETH_nLED2: 17, ETH_nLED3: 15,
+  LED_nACT: 21, LED_nPWR: 95, CAM_GPIO: 97, SD_PWR_ON: 75, nEXTRST: 100,
 }
 /** GPIO-capable balls left free by the functions above (mode 7 = gpio) */
-export const POOL = ["A15", "C12", "C13", "C18", "D14", "F15", "F16", "H16", "J17", "J18", "K15", "K18", "L16", "L17", "L18", "R13", "V14", "R14", "V15", "U15", "T15", "V16", "U16", "T16", "V17", "U18", "T13", "V12"]
+export const POOL = ["H18", "H17", "J15", "J16", "K17", "K16", "M16", "L15", "M17", "M18", "A15", "C12", "C13", "C18", "D14", "F15", "F16", "H16", "J17", "J18", "K15", "K18", "L16", "L17", "L18", "R13", "V14", "R14", "V15", "U15", "T15", "V16", "U16", "T16", "V17", "U18", "T13", "V12"]
 /** a GPIO that is not a CM4 pin */
-export const EXTRA_GPIO = ["PHY_nRST"]
+export const EXTRA_GPIO: string[] = []
 for (const s of SIGNALS) if (s.cm4) CM4[s.cm4] = s.net
 for (const [n, p] of Object.entries(GPIO_PINS)) CM4[p] = n
-// Ethernet: TX pair on CM4 pair 0 (RJ45 1/2), RX pair on pair 1 (RJ45 3/6); pairs 2 and 3 are not used at 100 Mbit/s
-Object.assign(CM4, { 12: "ETH_TX_P", 10: "ETH_TX_N", 4: "ETH_RX_P", 6: "ETH_RX_N", 93: "nRPIBOOT", 99: "GLOBAL_EN" })
+// No Ethernet on this module (networking over USB0): the CM4 Ethernet pins and LED pins are left unconnected.
+Object.assign(CM4, { 93: "nRPIBOOT", 99: "GLOBAL_EN" })
 
 /** two-pin passives and ICs: ref -> part type, pin -> net */
 export type Part = { ref: string; part: string; nets: Record<string, string>; note?: string }
@@ -112,19 +100,6 @@ for (const [b, en, out, rt, rb] of [["3V3", "LDO4_OUT", "VDD_3V3", "R100K", "R22
   two(`L_${b}`, "IND", `LX_${b}`, out); two(`C_IN_${b}`, "C10U_0603", "VIN5", "GND"); two(`C_OUT_${b}`, "C22U_0603", out, "GND")
   two(`R_FBT_${b}`, rt, out, `FB_${b}`); two(`R_FBB_${b}`, rb, `FB_${b}`, "GND")
 }
-// ---- LAN8720A, REF_CLK-out mode (nINTSEL low), PHY address 0, MODE 111 from its internal pull-ups ----
-P("U_PHY", "PHY", {
-  pin1: "VDD_3V3", pin2: "PHY_LED2", pin3: "", pin4: "PHY_XO", pin5: "PHY_XI", pin6: "PHY_VDDCR", pin7: "RMII_RXD1", pin8: "RMII_RXD0", pin9: "VDD_3V3", pin10: "RMII_RXER", pin11: "RMII_CRS_DV", pin12: "MDIO",
-  pin13: "MDC", pin14: "RMII_REFCLK", pin15: "PHY_nRST", pin16: "RMII_TXEN", pin17: "RMII_TXD0", pin18: "RMII_TXD1", pin19: "VDD_3V3", pin20: "ETH_TX_N", pin21: "ETH_TX_P", pin22: "ETH_RX_N", pin23: "ETH_RX_P", pin24: "PHY_RBIAS", pin25: "GND",
-}, "LAN8720A 10/100 PHY")
-P("Y_PHY", "XTAL_25M", { pin1: "PHY_XI", pin3: "PHY_XO", pin2: "GND", pin4: "GND" })
-two("C_PHY_XI", "C15P_0402", "PHY_XI", "GND"); two("C_PHY_XO", "C15P_0402", "PHY_XO", "GND")
-two("R_PHY_RBIAS", "R12K1", "PHY_RBIAS", "GND"); two("R_PHY_LED2", "R10K", "PHY_LED2", "GND", "nINTSEL low: pin 14 is the 50 MHz REF_CLK output")
-two("R_PHY_RST", "R10K", "PHY_nRST", "GND", "PHY held in reset until software releases it (straps then come from the PHY's own pull-ups)")
-two("R_MDIO", "R1K5", "MDIO", "VDD_3V3")
-for (const n of ["ETH_TX_P", "ETH_TX_N", "ETH_RX_P", "ETH_RX_N"]) two(`R_${n}`, "R49R9", n, "VDD_3V3", "LAN8720A line termination and bias")
-two("C_PHY_VDDCR1", "C1U_0402", "PHY_VDDCR", "GND"); two("C_PHY_VDDCR2", "C470P_0402", "PHY_VDDCR", "GND")
-for (const n of ["1", "2", "3"]) two(`C_PHY_${n}`, "C100N_0402", "VDD_3V3", "GND"); two("C_PHY_BULK", "C4U7_0402", "VDD_3V3", "GND")
 // ---- boot straps: SYSBOOT = 0x4017 (24 MHz; MMC0, SPI0, UART0, USB0); nRPIBOOT low clears bits 2 and 0: 10010b = NAND, NANDI2C, USB0, UART0 ----
 const WORD = 0x4017
 for (let i = 0; i < 16; i++) two(`R_SB${i}`, "R10K", `SYSBOOT${i}`, WORD & (1 << i) ? "VDD_3V3" : "GND")

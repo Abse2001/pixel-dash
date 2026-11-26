@@ -14,7 +14,6 @@ import { A_0402WGF1001TCE } from "../imports/A_0402WGF1001TCE"
 import { TXM24M0004322DBCDO00T } from "./imports/TXM24M0004322DBCDO00T"
 import { CL05A105KA5NQNC } from "./imports/CL05A105KA5NQNC"
 import { TPS65217DRSLR } from "./imports/TPS65217DRSLR"
-import { LAN8720A_CP_TR } from "./imports/LAN8720A_CP_TR"
 import { SY8089A1AAC } from "./imports/SY8089A1AAC"
 import { WIP201610P_2R2ML } from "./imports/WIP201610P_2R2ML"
 import { cm4HeaderFootprint, PMIC_FP } from "./parts"
@@ -31,7 +30,6 @@ function render(p: any) { const t = PARTS[p.part], common: any = { key: p.name, 
   const spn = { jlcpcb: [t.lcsc!] }
   switch (p.part) {
     case "PMIC": return <TPS65217DRSLR {...common} footprint={PMIC_FP} />
-    case "PHY": return <LAN8720A_CP_TR {...common} />
     case "BUCK": return <SY8089A1AAC {...common} />
     case "IND": return <WIP201610P_2R2ML {...common} />
     case "XTAL_25M": return <chip {...common} footprint={xtal25} manufacturerPartNumber="K3A250001210" supplierPartNumbers={spn} pinLabels={{ pin1: "X1", pin2: "GND1", pin3: "X2", pin4: "GND2" }} />
@@ -51,7 +49,7 @@ circuit.add(
   </board>,
 )
 await circuit.renderUntilSettled()
-const cj: any[] = circuit.getCircuitJson().filter((e: any) => e.type !== "pcb_silkscreen_text" || ["U1", "U_DDR", "U_PMIC", "U_PHY", "J1", "J2"].includes(e.text)) // small designators do not fit; the assembly data carries them
+const cj: any[] = circuit.getCircuitJson().filter((e: any) => e.type !== "pcb_silkscreen_text" || ["U1", "U_DDR", "U_PMIC", "J1", "J2"].includes(e.text)) // small designators do not fit; the assembly data carries them
 const errs = cj.filter((e) => e.type.includes("error")); const kinds: Record<string, number> = {}; for (const e of errs) kinds[e.type] = (kinds[e.type] ?? 0) + 1
 // ---------- add the planned copper ----------
 const ALL = ["top", "inner1", "inner2", "inner3", "inner4", "bottom"]; let n = 0

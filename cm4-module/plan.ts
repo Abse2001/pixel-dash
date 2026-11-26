@@ -1,5 +1,5 @@
 // Placement planner for the CM4 module. Loads the fixed, verified DDR block (unchanged, same coordinates) and adds
-// everything else: processor/memory support parts as in module 0.4.4, the CM4 connectors, power, Ethernet PHY,
+// everything else: processor/memory support parts as in module 0.4.4, the CM4 connectors, power,
 // boot straps and pull-ups. Output: cm4-module/plan.json (+ plan-items.json for the router, plots and checks).
 // Frame: the DDR block's coordinates (mm). The CM4 frame (top view, y up, holes at (0,0) (33,0) (0,48) (33,48))
 // maps to it by a pure rotation: x = CM4.x0 + v, y = CM4.y0 - u (see frame.ts).
@@ -41,7 +41,7 @@ const poolNets: string[] = []
 const cm4PinXY = (n: number) => { const c = n <= 100 ? J1 : J2, m = (n - 1) % 100 + 1, k = (m - 1) >> 1; return { x: c.x + 9.8 - 0.4 * k, y: c.y + (m % 2 ? 1.355 : -1.355) } }
 const signals: { name: string; ball: string; mode: number; fn: string }[] = SIGNALS.map((s) => ({ name: s.net, ball: s.ball, mode: s.mode, fn: s.fn }))
 { const want = [...Object.entries(GPIO_PINS).map(([n, p]) => ({ n, at: cm4PinXY(p) })), ...EXTRA_GPIO.map((n) => ({ n, at: { x: -34.5, y: 29.6 } }))] // PHY_nRST: at the PHY
-  // distance plus 4 mm per ring of depth: balls on the outer rows escape without crowding the RMII/MMC cluster
+  // distance plus 4 mm per ring of depth: balls on the outer rows escape without crowding the MMC cluster
   const ROWS = "ABCDEFGHJKLMNPRTUV", depth = (b: string) => { const r = ROWS.indexOf(b[0]), c = +b.slice(1) - 1; return Math.min(r, 17 - r, c, 17 - c) }
   const cost = want.map((w) => POOL.map((b) => { const q = ball["U1." + b]; return Math.hypot(q.x - w.at.x, q.y - w.at.y) + 4 * depth(b) }))
   // the router picks each GPIO's ball from POOL (any pool ball, one net per ball); after routing (TOPUP) the choice is read back
@@ -289,7 +289,7 @@ for (const [name, net, near, layers] of [
 free("R_VREF_TOP", "R1K_0402", { x: -58, y: 5.5 }, "VDDS_DDR", "DDR_VREF", { maxDist: 8 })
 { const rt = parts.find((p) => p.name === "R_VREF_TOP"); if (rt) { free("R_VREF_BOT", "R1K_0402", rt, "DDR_VREF", "GND", { maxDist: 3, layers: [rt.layer] }); free("C_VREF_DIV", "C100N_0402", rt, "DDR_VREF", "GND", { maxDist: 3, layers: [rt.layer] }) } }
 
-// ---------- CM4 module circuits: power, Ethernet PHY, straps, pull-ups (design/netlist.ts) ----------
+// ---------- CM4 module circuits: power, straps, pull-ups (design/netlist.ts) ----------
 const NL = Object.fromEntries(NETLIST.map((p) => [p.ref, p]))
 const pad = (ref: string, pin: string) => { const p = parts.find((q) => q.name === ref)!; return padsOf(p).find((q) => q.pin === pin)! }
 const ptrace = (net: string, layer: Layer, pts: Pt[], w: number, from: string, to: string) => { for (let i = 0; i + 1 < pts.length; i++) { const s = seg(pts[i], pts[i + 1], w), h = B.hits(s, [layer], net, 0.1); if (h.length) report.push(`!! trace ${net} ${from}->${to} hits ${h[0].net} ${h[0].kind} ${h[0].ref ?? ""}`); B.add({ ...s, layers: [layer], net, kind: "trace" }) } paths.push({ net, layer, pts, w, from, to }) }
@@ -363,17 +363,6 @@ for (const [b, y] of [["3V3", 25.6], ["1V8", 21.3]] as const) { const U = `U_${b
   stubVia(U, "pin4", { x: 1, y: 0 }, 0.3, 0.75)
   near(`C_IN_${b}`, at(U, "pin4"), { vias: 2, maxDist: 4 }); near(`C_OUT_${b}`, at(L, "pin2"), { vias: 2, maxDist: 4 })
   near(`R_FBT_${b}`, at(U, "pin5"), { maxDist: 4 }); near(`R_FBB_${b}`, at(U, "pin5"), { maxDist: 4 }) }
-// LAN8720A north-east of the processor, rotation 270: MDI pins face north (J1 is to the north-west), RMII face south, crystal pins west
-tick("phy")
-const PH = { x: -34.5, y: 29.6 }
-placeAt("U_PHY", PH.x, PH.y, 270); corridors("U_PHY")
-for (const dx of [-0.6, 0.6]) for (const dy of [-0.6, 0.6]) addVia({ name: `V_U_PHY_EP_${dx}_${dy}`, x: r3(PH.x + dx), y: r3(PH.y + dy), net: "GND", d: 0.3, hole: 0.1 })
-placeAt("Y_PHY", PH.x - 4.45, PH.y + 0.1, 90)
-for (const g of ["pin2", "pin4"]) padVias("Y_PHY", g, 1)
-for (const n of [1, 9, 19]) { const save = report.length; if (!stubVia("U_PHY", "pin" + n, ({ 1: { x: -1, y: 0 }, 9: { x: 0, y: -1 }, 19: { x: 0, y: 1 } } as any)[n], 0.2)) { report.length = save; innerVia("U_PHY", "pin" + n) } }
-for (const [c, p] of [["C_PHY_XI", at("Y_PHY", "pin1")], ["C_PHY_XO", at("Y_PHY", "pin3")], ["C_PHY_1", at("U_PHY", "pin1")], ["C_PHY_2", at("U_PHY", "pin9")], ["C_PHY_3", at("U_PHY", "pin19")], ["C_PHY_BULK", at("U_PHY", "pin19")],
-  ["C_PHY_VDDCR1", at("U_PHY", "pin6")], ["C_PHY_VDDCR2", at("U_PHY", "pin6")], ["R_PHY_RBIAS", at("U_PHY", "pin24")], ["R_PHY_LED2", at("U_PHY", "pin2")], ["R_PHY_RST", at("U_PHY", "pin15")], ["R_MDIO", at("U_PHY", "pin12")],
-  ["R_ETH_TX_P", at("U_PHY", "pin21")], ["R_ETH_TX_N", at("U_PHY", "pin20")], ["R_ETH_RX_P", at("U_PHY", "pin23")], ["R_ETH_RX_N", at("U_PHY", "pin22")]] as [string, Pt][]) near(c, p, { maxDist: 6 })
 // straps and pull-ups next to the processor ball (or the PMIC) of their net
 tick("straps")
 const ballOf = (net: string) => { const s = signals.find((q) => q.name === net)!; return ball["U1." + s.ball] }

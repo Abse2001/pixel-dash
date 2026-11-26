@@ -11,8 +11,8 @@ export const PARTS: Record<string, { fp: string; comp?: string; file?: string; v
   R1K_0402: { fp: "R0402", comp: "A_0402WGF1001TCE", file: "../imports/A_0402WGF1001TCE" },
   XTAL_24M: { fp: "XTAL3225", comp: "TXM24M0004322DBCDO00T", file: "./imports/TXM24M0004322DBCDO00T" },
   // new on the CM4 module
-  PMIC: { fp: "PMIC", value: "TPS65217DRSLR", lcsc: "C702315" }, PHY: { fp: "PHY", value: "LAN8720A-CP-TR", lcsc: "C45223" }, BUCK: { fp: "BUCK", value: "SY8089A1AAC", lcsc: "C479074" },
-  IND: { fp: "IND", value: "2.2uH WIP201610P-2R2ML", lcsc: "C315717" }, XTAL_25M: { fp: "XTAL25", value: "25MHz K3A250001210", lcsc: "C18213377" },
+  PMIC: { fp: "PMIC", value: "TPS65217DRSLR", lcsc: "C702315" }, BUCK: { fp: "BUCK", value: "SY8089A1AAC", lcsc: "C479074" },
+  IND: { fp: "IND", value: "2.2uH WIP201610P-2R2ML", lcsc: "C315717" },
   CM4_HDR: { fp: "CM4_HDR", value: "DF40C-100DP-0.4V(51)", lcsc: "C531031" },
   R100K: { fp: "G0402", value: "100k", lcsc: "C25741" }, R10K: { fp: "G0402", value: "10k", lcsc: "C25744" }, R1K: { fp: "G0402", value: "1k", lcsc: "C11702" },
   R2K2: { fp: "G0402", value: "2.2k", lcsc: "C25879" }, R4K7: { fp: "G0402", value: "4.7k", lcsc: "C25900" }, R1K5: { fp: "G0402", value: "1.5k", lcsc: "C25867" },
