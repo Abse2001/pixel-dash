@@ -12,9 +12,6 @@ for (const p of [77, 79, 81, 83, 85, 87]) CM4[p] = "VIN5"
 for (const p of [84, 86]) CM4[p] = "VDD_3V3"
 for (const p of [88, 90]) CM4[p] = "VDD_1V8"
 
-// boot strap word (SYSBOOT[15:0], see the straps below); the bits strapped low share the net SYSBOOT_LO
-const WORD = 0x4017
-const sbNet = (i: number) => (WORD & (1 << i) ? `SYSBOOT${i}` : "SYSBOOT_LO")
 /** signals: net -> processor ball, pinmux mode, CM4 pin (if any), what it is */
 export type Sig = { net: string; ball: string; mode: number; fn: string; cm4?: number }
 export const SIGNALS: Sig[] = [
@@ -59,8 +56,7 @@ export const SIGNALS: Sig[] = [
   { net: "EXT_WAKEUP", ball: "C5", mode: 0, fn: "from PMIC nWAKEUP" },
   { net: "NMIn", ball: "B18", mode: 0, fn: "EXTINTn, from PMIC nINT" },
   // boot straps: LCD_DATA[15:0] = SYSBOOT[15:0]
-  // the eleven bits strapped low share one net and one pull-down (see the straps below); the five high bits keep their own
-  ...Array.from({ length: 16 }, (_, i) => ({ net: sbNet(i), ball: ["R1", "R2", "R3", "R4", "T1", "T2", "T3", "T4", "U1", "U2", "U3", "U4", "V2", "V3", "V4", "T5"][i], mode: 0, fn: `LCD_DATA${i} (SYSBOOT${i}), strap` })),
+  ...Array.from({ length: 16 }, (_, i) => ({ net: `SYSBOOT${i}`, ball: ["R1", "R2", "R3", "R4", "T1", "T2", "T3", "T4", "U1", "U2", "U3", "U4", "V2", "V3", "V4", "T5"][i], mode: 0, fn: `LCD_DATA${i} (SYSBOOT${i}), strap` })),
 ]
 /** plain GPIOs (mode 7): CM4 pins whose ball is chosen by plan.ts from POOL (shortest assignment) */
 export const GPIO_PINS: Record<string, number> = {
@@ -106,14 +102,8 @@ for (const [b, en, out, rt, rb] of [["3V3", "LDO4_OUT", "VDD_3V3", "R100K", "R22
   two(`R_FBT_${b}`, rt, out, `FB_${b}`); two(`R_FBB_${b}`, rb, `FB_${b}`, "GND")
 }
 // ---- boot straps: SYSBOOT = 0x4017 (24 MHz; MMC0, SPI0, UART0, USB0); nRPIBOOT low clears bits 2 and 0: 10010b = NAND, NANDI2C, USB0, UART0 ----
-// The eleven bits strapped low (3, 5-13, 15) are tied together and share one 10 kOhm pull-down (SYSBOOT_LO): they are
-// inputs with no internal pull during reset (Table 26-7, reset state Z) and draw only leakage, so one resistor holds them
-// all low. Their balls are neighbours in the processor's south-west corner, so the router links them under the chip and
-// one trace leaves the ball field instead of eleven. The five high bits keep a pull-up each: nRPIBOOT pulls bits 0 and 2
-// low through 1 kOhm, which must not drag any other bit with them. Software must leave LCD_DATA[15:0] as inputs (they are
-// not used on this module): two of the tied pins driven to different levels would short each other.
-for (let i = 0; i < 16; i++) if (WORD & (1 << i)) two(`R_SB${i}`, "R10K", `SYSBOOT${i}`, "VDD_3V3")
-two("R_SB_LO", "R10K", "SYSBOOT_LO", "GND")
+const WORD = 0x4017
+for (let i = 0; i < 16; i++) two(`R_SB${i}`, "R10K", `SYSBOOT${i}`, WORD & (1 << i) ? "VDD_3V3" : "GND")
 two("R_RPB0", "R1K", "SYSBOOT0", "nRPIBOOT"); two("R_RPB2", "R1K", "SYSBOOT2", "nRPIBOOT")
 // ---- pull-ups ----
 for (const n of ["SD_CMD", "SD_DAT0", "SD_DAT1", "SD_DAT2", "SD_DAT3"]) two(`R_${n}`, "R10K", n, "VDD_3V3")
