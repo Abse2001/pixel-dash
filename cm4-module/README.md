@@ -77,22 +77,29 @@ Verified for this routing: all 6570 DDR trace points and 100 DDR vias of `module
 
 1. **Board thickness**: 1.0 mm (JLCPCB allows the 0.1 mm via hole only up to 1.0 mm). A real CM4 is 1.2 mm +-10 %
    (CM4 datasheet 3.1); mating is unaffected, the module sits 0.2 mm lower.
-2. **Bottom-side height**: on the standard 1.5 mm stacking (carrier DF40C-100DS) the gap under the module is 1.5 mm.
-   The tallest bottom parts are the SY8089 (SOT-23-5, up to about 1.45 mm by package standard) and the 0805 22 uF
-   (about 1.25 mm nominal): check their datasheet maxima, or use a 3.0 mm stacking carrier (DF40HC(3.0)-100DS).
+2. **Bottom-side height** (checked): on the standard 1.5 mm stacking (carrier DF40C-100DS) the gap under the module
+   is 1.5 mm. Datasheet maxima of the tallest bottom parts: C_SYS 22 uF 0805 CL21A226MAQNNNE 1.40 mm (1.25 +-0.15,
+   Samsung code Q), SY8089 SOT-23-5 1.30 mm (Silergy outline), 2.2 uH WIP201610P about 1.0 mm (2016-10 size), 0603
+   MLCCs 0.90 mm. Everything fits; C_SYS leaves 0.1 mm. A 3.0 mm stacking carrier (DF40HC(3.0)-100DS) leaves 1.6 mm more.
 3. **RUN_PG (pin 92)** is the processor's PWRONRSTn, a 1.8 V-domain signal: check what the carrier expects on it.
 4. **Carrier current**: the module supplies 3.3 V and 1.8 V to the carrier on J1 84-90; the carrier's load on them
    must fit the SY8089 budget left after the module.
 5. **USB0_VBUS** is tied to the 5 V input (abs. max 5.25 V): a carrier 5 V above 5.25 V is out of spec for that ball.
 6. **USB pair**: D+ 16.68 mm with 0 vias, D- 16.66 mm with 2 vias (a 0.7 mm hop to the top layer where the bottom has
    no unbroken ground under it). About 10 ps at a 2083 ps bit time; TI recommends equal via counts.
-7. **Supply feeds**: the plane builder reports narrow (< 0.2 mm) links on several supplies (feed width in the
-   `planes.ts` output); an IR-drop pass like the original module's `irdrop.py` has not been run on this layout.
+7. **Supply drop** (checked, `irdrop.py`, results in `power-results.txt`): DC drop over the four inner layers from each
+   regulator's output to its loads. VDD_MPU gets a 0.55 mm trunk on layer 4 from the PMIC to the processor core and
+   VIN5 a 0.45 mm trunk on layer 3 (`FAT` in `planes.ts`): VDD_MPU 21.7 mV at 1.0 A (was 108 mV), VDD_CORE 6.7 mV at
+   0.4 A, VDDS_DDR 10.5 mV at 0.6 A, VIN5 60-70 mV at 1.1-1.6 A. 3.3 V and 1.8 V drop 5-7 mV to the processor; to the
+   carrier's CM4 pins they drop 28 / 38 mV at 0.2 A each and 83 / 114 mV at the CM4's 0.6 A limit. **Keep the
+   carrier's load on the module's 3.3 V and 1.8 V outputs to about 0.2 A each** (the CM4 itself allows 0.6 A).
 8. **Decoupling**: the eight optional extra 100 nF caps (C_X_*) sit 6-7.6 mm from their balls (outside the escape
    ring); the 20 DDR high-speed caps are within TI's limit (worst 9.1 mm of 10.16 mm).
 9. **Courtyards**: tscircuit reports 94 courtyard overlaps (default courtyard margins, mostly under the BGA);
    every pad pair on a side is at least 0.206 mm apart (JLCPCB 0402 spacing passes).
-10. **CM4 geometry**: outline, holes and connector positions follow the RK3566 CM4 module's frame; check them
-    against the CM4 mechanical drawing before ordering.
+10. **CM4 geometry** (checked against the CM4 datasheet, figure 4): 55 x 40 mm, M2.5 holes 3.5 mm in from each
+    edge, connector centres 21.5 mm from the holes, pins 1-100 along one long edge with pin 1 (outer row) at the far
+    end from those holes, pin 101 on the inner row; the frame is a rotation of the CM4's, not a mirror. Connector rows
+    are 3.04 mm from the long edges (CM4IO KiCad footprint; the drawing rounds to 3).
 11. **JLCPCB**: 6 layers, 1.0 mm, ENIG, 0.1 mm hole / 0.3 mm pad, via-in-pad (epoxy fill + cap), both sides
     assembled. Outer prepreg 1080 or 3313 (not 7628) to keep the 0.1 mm outer traces near 50-75 ohm.

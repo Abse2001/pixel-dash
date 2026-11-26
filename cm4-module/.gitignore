@@ -3,3 +3,4 @@ dist/
 pb/routes*.json
 pb/copper*.json
 pb/run_*.log
+planes-raster.json

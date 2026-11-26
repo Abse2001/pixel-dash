@@ -95,14 +95,24 @@ function boxAll(pred: (c: number) => boolean, k: number): Uint8Array { const S =
   for (let j = k; j < NY - k; j++) for (let i = k; i < NX - k; i++) { const a = S[(j - k) * (NX + 1) + i - k], b = S[(j - k) * (NX + 1) + i + k + 1], c = S[(j + k + 1) * (NX + 1) + i - k], d = S[(j + k + 1) * (NX + 1) + i + k + 1]; if (d - b - c + a === 0) out[j * NX + i] = 1 }
   return out }
 const TK = 1, GAPK = 4 // skeleton half-width (cells) and its distance to other nets' copper (cells)
+// wide trunks (half-width in cells, 0.05 mm each) for the supplies that carry the most current from a regulator on
+// this module: VDD_MPU (up to 1 A, PMIC to the processor core on layer 4) and VIN5 (5 V from the CM4 pins to the PMIC
+// and the bucks). FAT=0 turns them off.
+const FAT: Record<string, number> = process.env.FAT === "0" ? {} : { VDD_MPU: 5, VIN5: 4 }
+// where a trunk must also reach besides the vias it can get to at its width: VDD_MPU's copper just east of the ball
+// field (its balls are inside the field, where no wide trunk fits), through the band between the field and the PMIC
+const FAT_TO: Record<string, Pt[]> = { VDD_MPU: [{ x: -36.0, y: 16.5 }] }
 const D8 = [1, 0, -1, 0, 0, 1, 0, -1, 1, 1, 1, -1, -1, 1, -1, -1]
 for (const [ni, net] of NETS.entries()) { const k = ni + 1, mine = vias.filter((v) => v.net === net.name); if (!mine.length) continue
   const cellOf = (v: V) => cj(v.y) * NX + ci(v.x)
-  const valid = net.layers.map((l) => { const a = boxAll((c) => (stat[c] === 0 || stat[c] === k) && !blockL[l][c], TK), b = boxAll((c) => owner[l][c] === 0 || owner[l][c] === k, GAPK); for (let c = 0; c < NN; c++) a[c] &= b[c]; return a })
   const connected = new Uint8Array(mine.length), byCell = new Map<number, number[]>(); mine.forEach((v, m) => { const c = cellOf(v); byCell.set(c, [...(byCell.get(c) ?? []), m]) })
-  const claim = (l: number, c: number) => { const i = c % NX, j = (c / NX) | 0; for (let dj = -TK; dj <= TK; dj++) for (let di = -TK; di <= TK; di++) { const c2 = (j + dj) * NX + i + di; owner[l][c2] = k; trunk[l][c2] = 1 } }
   // start at a connector pin of the net when it has one
   const start = Math.max(0, mine.findIndex((v) => isSource(net.name, v)))
+  // high-current supplies: first a wide trunk to every via it can reach at that width, then the thin skeleton for the
+  // rest, grown from the trunk
+  for (const [pass, tk] of (FAT[net.name] ? [FAT[net.name], TK] : [TK]).entries()) {
+  const valid = net.layers.map((l) => { const a = boxAll((c) => (stat[c] === 0 || stat[c] === k) && !blockL[l][c], tk), b = boxAll((c) => owner[l][c] === 0 || owner[l][c] === k, GAPK + tk - TK); for (let c = 0; c < NN; c++) a[c] &= b[c]; return a })
+  const claim = (l: number, c: number) => { const i = c % NX, j = (c / NX) | 0; for (let dj = -tk; dj <= tk; dj++) for (let di = -tk; di <= tk; di++) { const c2 = (j + dj) * NX + i + di; owner[l][c2] = k; trunk[l][c2] = 1 } }
   // cheapest-first search over every allowed layer at once; a reached via feeds all layers and the search goes on
   { const L = net.layers, dist = L.map(() => new Float32Array(NN).fill(1e9)), pred = L.map(() => new Int32Array(NN).fill(-1)), heap: number[] = [], key: number[] = []
     const hpush = (kk: number, n: number) => { let i = heap.length; heap.push(n); key.push(kk); while (i > 0) { const p = (i - 1) >> 1; if (key[p] <= key[i]) break; [heap[p], heap[i]] = [heap[i], heap[p]]; [key[p], key[i]] = [key[i], key[p]]; i = p } }
@@ -110,13 +120,22 @@ for (const [ni, net] of NETS.entries()) { const k = ni + 1, mine = vias.filter((
     const factor = (s: number, c: number) => { const l = L[s], x = cx(c % NX), y = cy((c / NX) | 0), centre = x > -48.0 && x < -41.6 && y > 11.9 && y < 18.4
       return (s === 0 ? 1 : 4) * (centre && l === 2 && !CENTRE4.has(net.name) ? 30 : 1) * (centre && l === 1 && !CENTRE3.has(net.name) ? 8 : 1) }
     const feed = (m: number) => { connected[m] = 1; const c = cellOf(mine[m]); L.forEach((_, s) => { if (valid[s][c]) { dist[s][c] = 0; pred[s][c] = -1; hpush(0, s * NN + c) } }) }
-    feed(start)
+    // a wide trunk starts and ends within STUB of a via (the cells right at a via are usually too tight for it); the
+    // thin pass then joins every via to the trunk with a short stub
+    const wide = tk > TK, near = new Map<number, number[]>(), STUB = Math.round(0.8 / P)
+    const goals: { x: number; y: number }[] = wide ? [...mine, ...(FAT_TO[net.name] ?? [])] : []
+    goals.forEach((v, m) => { const i0 = ci(v.x), j0 = cj(v.y); for (let dj = -STUB; dj <= STUB; dj++) for (let di = -STUB; di <= STUB; di++) { if (Math.hypot(di, dj) > STUB) continue; const c = (j0 + dj) * NX + i0 + di; if (c >= 0 && c < NN) near.set(c, [...(near.get(c) ?? []), m]) } })
+    const reached = new Uint8Array(goals.length)
+    if (wide) { reached[start] = 1; for (const [c, ms] of near) if (ms.includes(start)) L.forEach((_, s) => { if (valid[s][c]) { dist[s][c] = 0; pred[s][c] = -1; hpush(0, s * NN + c) } }) }
+    else if (pass === 0 || !L.some((l) => trunk[l].some((t, c) => t && owner[l][c] === k))) feed(start)
+    else { mine.forEach((_, m) => { if (connected[m]) feed(m) }); L.forEach((l, s) => { for (let c = 0; c < NN; c++) if (trunk[l][c] && owner[l][c] === k && valid[s][c]) { dist[s][c] = 0; pred[s][c] = -1; hpush(0, s * NN + c) } }) }
     while (heap.length) { const [u, du] = hpop(), s = (u / NN) | 0, c = u % NN, l = L[s]; if (du > dist[s][c]) continue
       const i = c % NX, j = (c / NX) | 0
-      for (const m of byCell.get(c) ?? []) if (!connected[m]) { const way: number[] = []; for (let b = c; b !== -1; b = pred[s][b]) { way.push(b); if (trunk[l][b] && owner[l][b] === k) break }
+      if (wide) { for (const m of near.get(c) ?? []) if (!reached[m]) { reached[m] = 1; for (let b = c; b !== -1; b = pred[s][b]) { claim(l, b); if (dist[s][b] === 0) break } dist[s][c] = 0 } }
+      else for (const m of byCell.get(c) ?? []) if (!connected[m]) { const way: number[] = []; for (let b = c; b !== -1; b = pred[s][b]) { way.push(b); if (trunk[l][b] && owner[l][b] === k) break }
         for (const b of way) claim(l, b); feed(m) }
       for (let d = 0; d < 16; d += 2) { const ii = i + D8[d], jj = j + D8[d + 1]; if (ii < 0 || jj < 0 || ii >= NX || jj >= NY) continue; const c2 = jj * NX + ii; if (!valid[s][c2]) continue
-        const nd = Math.fround(dist[s][c] + (d < 8 ? 1 : 1.4142) * factor(s, c2)); if (nd < dist[s][c2]) { dist[s][c2] = nd; pred[s][c2] = c; hpush(nd, s * NN + c2) } } } }
+        const nd = Math.fround(dist[s][c] + (d < 8 ? 1 : 1.4142) * factor(s, c2)); if (nd < dist[s][c2]) { dist[s][c2] = nd; pred[s][c2] = c; hpush(nd, s * NN + c2) } } } } }
   const miss = mine.filter((_, m) => !connected[m])
   report.push(`${net.name}: ${mine.length - miss.length}/${mine.length} vias on the skeleton${miss.length ? " !! missing " + miss.slice(0, 6).map((v) => `(${v.x.toFixed(2)}, ${v.y.toFixed(2)})`).join(" ") : ""}`) }
 // CORRIDORS_OUT=<file>: every supply's skeleton cells per layer (the router keeps foreign vias off them, and foreign
