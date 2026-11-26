@@ -47,9 +47,12 @@ const KEEPOUT_L4: [number, number, number, number, ("all" | undefined)?][] = [ /
   // lies there, so signals go around it through the outer signal rings, which keep their escape vias (dog-bones) as in
   // any BGA fan-out; no via may cut the core's plane webs and no crossing can be resolved inside it.
   [-48.8, 11.15, -40.8, 19.15, "all"],
-  [-52.0, 11.95, -46.8, 19.15], // west block: the VDDS_DDR side of the processor
+  // the rest of the ball field on layer 4: every signal ball has its via in the pad (plan.ts), so no new via is needed
+  // between the balls and none may go there, and no layer-4 trace cuts the plane mesh; the corners where the balls the
+  // DDR copper boxes in leave on layer 4 stay open (they are routed in that corner before the plane is filled)
+  [-52.0, 11.15, -37.6, 19.55], [-46.8, 19.55, -37.6, 22.35], [-46.8, 7.95, -37.6, 11.15],
   [-74.0, 11.55, -63.6, 18.75], // memory ball field
-  [-45.6, 19.15, -44.8, 21.55], // the 1.8 V ball out in the north signal rows (U1 row 21.15) keeps its web to the core
+  [-37.6, 7.0, -35.0, 23.0], // the band between the ball field and the PMIC/bucks: the supplies' way into the field
   // Tried and dropped: a three-row east feed entry through the signal rings, the whole east power column and the strip
   // under J1 (signal balls and parts inside a no-via strip cannot leave the top layer: port-point pathing fails).
 ]

@@ -231,8 +231,11 @@ function attachAll() {
 
 // ---------- ball vias, regulator capacitors, calibration ----------
 for (const k of ["U1.B9", "U1.A9", "U1.J4", "U_DDR.H1", "U_DDR.M8"]) ballVia(k)
-// balls the DDR copper boxes in on both outer layers: via-in-pad now (the DDR route keeps the spot free), routed on layer 4 later
-for (const s of signals) if (innerBall(s.ball)) { const v = ballVia("U1." + s.ball), b = ball["U1." + s.ball]; if (!v || Math.hypot(v.x - b.x, v.y - b.y) > 1e-3) report.push(`!! ${s.name} (${s.ball}): no centred via-in-pad`) }
+// every signal ball gets its via in the pad (filled and capped): via-in-pad fan-out keeps the diagonal sites between the
+// balls free, so the inner planes run through the whole ball field as a mesh between the ball vias (a dog-bone via sits
+// 0.57 mm from its neighbours' ball vias, too close for any plane web). The balls the DDR copper boxes in on both outer
+// layers need it anyway (they leave on layer 4).
+for (const s of signals) { const v = ballVia("U1." + s.ball), b = ball["U1." + s.ball]; if (!v || Math.hypot(v.x - b.x, v.y - b.y) > 1e-3) report.push(`!! ${s.name} (${s.ball}): no centred via-in-pad`) }
 // ---------- crystal (top side, below the processor) ----------
 { const Y = commitPart({ name: "Y_OSC0", part: "XTAL_24M", x: -43.55, y: 4.8, rot: 90, layer: "top", nets: { pin3: "OSC0_IN", pin1: "OSC0_OUT", pin2: "GND", pin4: "GND" } })
   const yp = Object.fromEntries(padsOf(Y).map((q) => [q.pin, q]))
