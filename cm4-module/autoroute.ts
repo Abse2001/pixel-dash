@@ -12,12 +12,18 @@ const E = plan.edge, W = 0.1, CLR = 0.1, DDR_EXTRA = 0.31 - CLR // TI Table 7-68
 const inCpu = (x: number, y: number) => x > -52.4 && x < -37.2 && y > 7.55 && y < 22.75
 // signal layers: top, layer 4 (inner3 on the board, "inner1" for the solver) and bottom; layers 2, 3 and 5 are planes,
 // which the plane builder fills around the vias and the layer-4 traces afterwards
-const LAYERS = ["top", "inner1", "bottom"], toSolver: Record<string, string> = { top: "top", inner3: "inner1", bottom: "bottom" }, toBoard: Record<string, string> = { top: "top", inner1: "inner3", bottom: "bottom" }
+// Two passes, as a plane layer is normally used: PASS=escape routes only the nets whose balls the DDR copper boxes in on
+// both outer layers (they need layer 4 to get out); PASS=main routes every other net on the outer layers only, so layer 4
+// stays plane copper (vias may pierce it, the plane flows around them; no traces). Without PASS: one pass, three layers.
+const PASS = process.env.PASS ?? "", TWO = PASS === "main"
+const LAYERS = TWO ? ["top", "bottom"] : ["top", "inner1", "bottom"], toBoard: Record<string, string> = { top: "top", inner1: "inner3", bottom: "bottom" }
+// layer-4 copper in the outer-layer pass: a via must not pierce it, and a two-layer problem can only say so by blocking both outer layers there
+const toSolver: Record<string, string | string[]> = TWO ? { top: "top", inner3: ["top", "bottom"], bottom: "bottom" } : { top: "top", inner3: "inner1", bottom: "bottom" }
 const r4 = (v: number) => +v.toFixed(4)
 // ---------- obstacles: all copper already on the board ----------
 const routedNets = new Set((plan.nets as any[]).map((n) => n.name))
 const obstacles: any[] = []
-function obstacle(it: Item, extra = 0) { const layers = it.layers.length === 2 && it.pts.length === 1 && (it.kind === "via" || it.kind === "ddrvia" || it.kind === "hole") ? LAYERS : (it.layers as string[]).map((l) => toSolver[l]).filter(Boolean); if (!layers.length) return
+function obstacle(it: Item, extra = 0) { const layers = it.layers.length === 2 && it.pts.length === 1 && (it.kind === "via" || it.kind === "ddrvia" || it.kind === "hole") ? LAYERS : [...new Set((it.layers as string[]).flatMap((l) => toSolver[l] ?? []))]; if (!layers.length) return
   const connectedTo = it.net.startsWith("NC:") || it.net === "HOLE" ? [] : [it.net], base = { layers, connectedTo, ...(it.kind === "hole" ? { isNonPlatedHole: true, connectedTo: [] } : {}) }
   const r = it.r + extra
   if (it.pts.length === 1) return obstacles.push({ ...base, type: "rect", shape: "circle", center: { x: r4(it.pts[0].x), y: r4(it.pts[0].y) }, width: r4(2 * r), height: r4(2 * r) })
@@ -47,14 +53,21 @@ const KEEPOUT_L4: [number, number, number, number, ("all" | undefined)?][] = [ /
   // Tried and dropped: a three-row east feed entry through the signal rings, the whole east power column and the strip
   // under J1 (signal balls and parts inside a no-via strip cannot leave the top layer: port-point pathing fails).
 ]
-for (const [x0, y0, x1, y1, all] of KEEPOUT_L4.filter((_, i) => !process.env.KEEPOUTS || process.env.KEEPOUTS.split(",").includes(String(i)))) obstacles.push({ type: "rect", layers: all ? LAYERS : ["inner1"], connectedTo: [], center: { x: r4((x0 + x1) / 2), y: r4((y0 + y1) / 2) }, width: r4(x1 - x0), height: r4(y1 - y0) })
+for (const [x0, y0, x1, y1, all] of KEEPOUT_L4.filter((_, i) => !process.env.KEEPOUTS || process.env.KEEPOUTS.split(",").includes(String(i)))) obstacles.push({ type: "rect", layers: all || TWO ? LAYERS : ["inner1"], connectedTo: [], center: { x: r4((x0 + x1) / 2), y: r4((y0 + y1) / 2) }, width: r4(x1 - x0), height: r4(y1 - y0) })
+// the escape pass's copper is fixed in the main pass (its layer-4 sections block vias, see toSolver)
+const ESCAPE_FILE = dir + "/routes-escape.json"
+const escaped = TWO ? (await Bun.file(ESCAPE_FILE).json()).nets as Record<string, any> : {}
+for (const [net, r] of Object.entries(escaped)) { for (const g of r.segs) for (let i = 0; i + 1 < g.pts.length; i++) obstacle({ pts: [g.pts[i], g.pts[i + 1]], r: (g.w ?? W) / 2, layers: [g.layer], net, kind: "trace" } as any)
+  for (const v of r.vias) obstacle({ pts: [{ x: v.x, y: v.y }], r: v.d / 2, layers: ["top", "bottom"], net, kind: "via" } as any) }
 // ---------- connections: every signal net with all its terminals ----------
 function point(t: any) { const it = items.find((i) => i.ref === t.ref && i.layers.length)
   // a ball that already has its via in the pad (the planner drills one for every ball the DDR copper boxes in) is reachable on both layers
   const via = t.kind === "ball" && (plan.vias as any[]).some((v) => v.ball === t.ref && Math.hypot(v.x - t.x, v.y - t.y) < 1e-3)
   return { x: r4(t.x), y: r4(t.y), ...(via ? { layers: LAYERS } : { layer: t.layer }), pointId: t.ref, port_selector: t.ref, ...(it ? {} : {}) } }
-const connections = (plan.nets as any[]).map((n) => ({ name: n.name, pointsToConnect: n.terms.map(point) }))
-const srj = { layerCount: 3, minTraceWidth: W, nominalTraceWidth: W, minViaHoleDiameter: 0.1, minViaPadDiameter: 0.3, defaultObstacleMargin: CLR, minTraceToPadEdgeClearance: CLR, minBoardEdgeClearance: 0.2,
+const boxedNet = (n: any) => n.terms.some((t: any) => t.kind === "ball" && (plan.vias as any[]).some((v) => v.ball === t.ref && Math.hypot(v.x - t.x, v.y - t.y) < 1e-3))
+const passNets = (plan.nets as any[]).filter((n) => PASS === "escape" ? boxedNet(n) : TWO ? !boxedNet(n) && !escaped[n.name] : true)
+const connections = passNets.map((n) => ({ name: n.name, pointsToConnect: n.terms.map(point) }))
+const srj = { layerCount: LAYERS.length, minTraceWidth: W, nominalTraceWidth: W, minViaHoleDiameter: 0.1, minViaPadDiameter: 0.3, defaultObstacleMargin: CLR, minTraceToPadEdgeClearance: CLR, minBoardEdgeClearance: 0.2,
   minViaHoleEdgeToViaHoleEdgeClearance: 0.2, minViaEdgeToPadEdgeClearance: CLR, allowViaInPad: true, obstacles, connections, bounds: { minX: E.x0, maxX: E.x1, minY: E.y0, maxY: E.y1 },
   outline: [{ x: E.x0, y: E.y0 }, { x: E.x1, y: E.y0 }, { x: E.x1, y: E.y1 }, { x: E.x0, y: E.y1 }] }
 await Bun.write(process.env.SRJ_OUT ?? dir + "/autoroute.srj.json", JSON.stringify(srj))
@@ -103,6 +116,7 @@ for (const t of traces) { const net = netOf(t.connection_name); if (!net) throw 
     if (bl !== layer) { flush(); layer = bl } cur.push({ x: r4(p.x), y: r4(p.y) }) }
   flush() }
 for (const r of Object.values(out.nets) as any[]) r.length = +r.segs.reduce((s: number, g: any) => s + g.pts.slice(1).reduce((a: number, p: Pt, i: number) => a + Math.hypot(p.x - g.pts[i].x, p.y - g.pts[i].y), 0), 0).toFixed(2)
-const missing = [...routedNets].filter((n) => !out.nets[n]); if (missing.length) { console.log("!! no trace for", missing.join(" ")); process.exit(1) }
-await Bun.write(process.env.OUT ?? dir + "/routes.json", JSON.stringify(out))
+const missing = passNets.map((n) => n.name).filter((n) => !out.nets[n]); if (missing.length) { console.log("!! no trace for", missing.join(" ")); process.exit(1) }
+if (TWO) { Object.assign(out.nets, escaped); out.router += " (escape pass + outer-layer pass)" }
+await Bun.write(process.env.OUT ?? (PASS === "escape" ? ESCAPE_FILE : dir + "/routes.json"), JSON.stringify(out))
 console.log(`routes.json: ${Object.keys(out.nets).length} nets, ${traces.length} traces, ${(Object.values(out.nets) as any[]).reduce((s, r) => s + r.vias.length, 0)} vias`)
