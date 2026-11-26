@@ -31,6 +31,17 @@ for (const it of items) { if (!it.layers.length) continue
   obstacle(it, ddr && !it.pts.every((q) => inCpu(q.x, q.y)) ? DDR_EXTRA : 0) }
 // the DDR block's sections on layer 4
 for (const g of plan.ddrInner ?? []) obstacle({ pts: [g.a, g.b], r: 0.051, layers: ["inner3" as any], net: g.net, kind: "ddr" }, [g.a, g.b].every((q: Pt) => inCpu(q.x, q.y)) ? 0 : DDR_EXTRA)
+// ---------- layer-4 keep-outs: where layer 4 is plane copper the board needs (no trace there, and no new via through it) ----------
+// - the processor's ball field: its core/MPU (layer 4) and ground/supply (layers 2, 3, 5) plane webs run between the
+//   0.8 mm-pitch ball vias; a via between the balls cuts them. Only the two corners where the balls the DDR copper boxes in
+//   leave on layer 4 (LCD/SYSBOOT, south-west; RTC/PMIC control, north-west) stay open. The memory's ball field likewise.
+// - the east power column (core/MPU feeds from the PMIC, +5 V) and the strip under J1 (+5 V, 1.8 V and 3.3 V to the CM4 pins).
+const KEEPOUT_L4: [number, number, number, number][] = [ // x0, y0, x1, y1
+  [-46.8, 7.95, -37.6, 22.35], [-52.0, 11.95, -46.8, 19.15], // processor ball field without its two corners
+  [-74.0, 11.55, -63.6, 18.75], // memory ball field
+  [-37.6, E.y0, E.x1, E.y1], [E.x0, 29.4, -37.6, E.y1], // east power column, strip under J1
+]
+for (const [x0, y0, x1, y1] of KEEPOUT_L4) obstacles.push({ type: "rect", layers: ["inner1"], connectedTo: [], center: { x: r4((x0 + x1) / 2), y: r4((y0 + y1) / 2) }, width: r4(x1 - x0), height: r4(y1 - y0) })
 // ---------- connections: every signal net with all its terminals ----------
 function point(t: any) { const it = items.find((i) => i.ref === t.ref && i.layers.length)
   // a ball that already has its via in the pad (the planner drills one for every ball the DDR copper boxes in) is reachable on both layers

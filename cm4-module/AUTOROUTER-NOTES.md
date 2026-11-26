@@ -19,6 +19,13 @@ repro / fix PRs. Fixes are general (no special cases for this board, no relaxed 
   solver's 0.10 mm clearance adds up to 0.31 mm.
 - **Rules**: 0.10 mm traces and clearance, 0.1/0.3 mm vias, via-in-pad allowed (filled and capped vias are ordered),
   0.20 mm to the board edge, 0.20 mm hole to hole.
+- **Layer-4 keep-outs** (`KEEPOUT_L4`, obstacles on layer 4 only with no net): the processor's and the memory's ball
+  fields (except the two processor corners where the boxed-in balls leave on layer 4), the east power column and the strip
+  under J1. Layer 4 is plane copper there (core/MPU, +5 V, 1.8 V/3.3 V feeds). Because a through via crosses layer 4, the same
+  keep-out stops new vias there: in a 0.8 mm-pitch ball field the plane webs between the ball vias are about 0.25 mm wide and
+  a via between the balls cuts them (first autorouted board: GND, VDDS_DDR, core, MPU and 1.8 V all split into several
+  pieces). The outer layers stay open for the escape traces. This is the same rule module 0.4.4's router applied (a via in
+  the ball field only on a ball centre or >= 0.45 mm from all of them), expressed with plain SRJ obstacles.
 - **Connections**: every signal net with all its terminals (processor balls, part pads, CM4 connector pins). A ball
   whose via-in-pad the planner already drilled (the balls boxed in by the DDR copper) is a terminal on all three layers.
 
