@@ -49,7 +49,7 @@ function point(t: any) { const it = items.find((i) => i.ref === t.ref && i.layer
   return { x: r4(t.x), y: r4(t.y), ...(via ? { layers: LAYERS } : { layer: t.layer }), pointId: t.ref, port_selector: t.ref, ...(it ? {} : {}) } }
 const connections = (plan.nets as any[]).map((n) => ({ name: n.name, pointsToConnect: n.terms.map(point) }))
 const srj = { layerCount: 3, minTraceWidth: W, nominalTraceWidth: W, minViaHoleDiameter: 0.1, minViaPadDiameter: 0.3, defaultObstacleMargin: CLR, minTraceToPadEdgeClearance: CLR, minBoardEdgeClearance: 0.2,
-  minViaHoleEdgeToViaHoleEdgeClearance: 0.2, allowViaInPad: true, obstacles, connections, bounds: { minX: E.x0, maxX: E.x1, minY: E.y0, maxY: E.y1 },
+  minViaHoleEdgeToViaHoleEdgeClearance: 0.2, minViaEdgeToPadEdgeClearance: CLR, allowViaInPad: true, obstacles, connections, bounds: { minX: E.x0, maxX: E.x1, minY: E.y0, maxY: E.y1 },
   outline: [{ x: E.x0, y: E.y0 }, { x: E.x1, y: E.y0 }, { x: E.x1, y: E.y1 }, { x: E.x0, y: E.y1 }] }
 await Bun.write(process.env.SRJ_OUT ?? dir + "/autoroute.srj.json", JSON.stringify(srj))
 console.log(`SRJ: ${obstacles.length} obstacles, ${connections.length} connections, ${connections.reduce((s, c) => s + c.pointsToConnect.length, 0)} terminals; pipeline ${PIPELINE}`)
