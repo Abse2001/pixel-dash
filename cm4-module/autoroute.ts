@@ -65,7 +65,12 @@ function point(t: any) { const it = items.find((i) => i.ref === t.ref && i.layer
   const via = t.kind === "ball" && (plan.vias as any[]).some((v) => v.ball === t.ref && Math.hypot(v.x - t.x, v.y - t.y) < 1e-3)
   return { x: r4(t.x), y: r4(t.y), ...(via ? { layers: LAYERS } : { layer: t.layer }), pointId: t.ref, port_selector: t.ref, ...(it ? {} : {}) } }
 const boxedNet = (n: any) => n.terms.some((t: any) => t.kind === "ball" && (plan.vias as any[]).some((v) => v.ball === t.ref && Math.hypot(v.x - t.x, v.y - t.y) < 1e-3))
-const passNets = (plan.nets as any[]).filter((n) => PASS === "escape" ? boxedNet(n) : TWO ? !boxedNet(n) && !escaped[n.name] : true)
+// the escape cluster: the boxed-in nets and every net that shares a two-pin part (strap, pull-up) with one of them, since
+// those parts sit in the same corner and the outer-layer pass cannot reach them across the escape copper
+const partOf = (ref: string) => ref.split(".")[0], twoPin = (part: string) => /^[RCL]_/.test(part)
+const boxedParts = new Set((plan.nets as any[]).filter(boxedNet).flatMap((n) => n.terms.map((t: any) => partOf(t.ref)).filter(twoPin)))
+const escapeNet = (n: any) => boxedNet(n) || n.terms.some((t: any) => boxedParts.has(partOf(t.ref)))
+const passNets = (plan.nets as any[]).filter((n) => PASS === "escape" ? escapeNet(n) : TWO ? !escapeNet(n) && !escaped[n.name] : true)
 const connections = passNets.map((n) => ({ name: n.name, pointsToConnect: n.terms.map(point) }))
 const srj = { layerCount: LAYERS.length, minTraceWidth: W, nominalTraceWidth: W, minViaHoleDiameter: 0.1, minViaPadDiameter: 0.3, defaultObstacleMargin: CLR, minTraceToPadEdgeClearance: CLR, minBoardEdgeClearance: 0.2,
   minViaHoleEdgeToViaHoleEdgeClearance: 0.2, minViaEdgeToPadEdgeClearance: CLR, allowViaInPad: true, obstacles, connections, bounds: { minX: E.x0, maxX: E.x1, minY: E.y0, maxY: E.y1 },
