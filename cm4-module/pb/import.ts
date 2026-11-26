@@ -9,7 +9,11 @@ for (const [name, r] of Object.entries(rj.nets) as [string, any][]) {
   const terms = ((plan.nets as any[]).find((n) => n.name === name)?.terms ?? []).map((t: any) => t.ref)
   const segs = r.segs.map((s: any) => ({ layer: s.layer, w: s.w, pts: s.pts }))
   const length = +segs.reduce((a: number, g: any) => a + g.pts.slice(1).reduce((b: number, p: any, i: number) => b + Math.hypot(p.x - g.pts[i].x, p.y - g.pts[i].y), 0), 0).toFixed(2)
-  out.nets[name] = { terms, segs, vias: r.vias.map((v: any) => ({ x: v.x, y: v.y, d: v.d, hole: v.hole })), length }
+  // two vias of one net whose centres are within a via radius are one via (two branches of the net's tree changed
+  // layer at neighbouring grid cells): keep the first, whose pad covers the other's trace ends
+  const vias: any[] = []
+  for (const v of r.vias) if (!vias.some((u) => Math.hypot(u.x - v.x, u.y - v.y) < Math.min(u.d, v.d) / 2)) vias.push({ x: v.x, y: v.y, d: v.d, hole: v.hole })
+  out.nets[name] = { terms, segs, vias, length }
 }
 await Bun.write(root + "/routes.json", JSON.stringify(out))
 console.log(`routes.json from ${src}: ${Object.keys(out.nets).length} nets, ${Object.values(out.nets).reduce((s: number, r: any) => s + r.vias.length, 0)} vias; failed ${rj.failed?.length ?? 0}, in conflict ${rj.conflicts?.length ?? 0}`)

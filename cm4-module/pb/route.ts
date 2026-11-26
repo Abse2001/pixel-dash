@@ -115,7 +115,8 @@ const neck = new Uint8Array(NN), bgaBox = new Map<string, number[]>()
   for (let j = 0; j < NY; j++) for (let i = 0; i < NX; i++) {
     const x = wx(i), y = wy(j), c = j * NX + i
     blockT[3][c] += 1000; blockTW[3][c] += 1000; blockTB[3][c] += 1000
-    if (x >= CORE_ISLAND[0] && x <= CORE_ISLAND[2] && y >= CORE_ISLAND[1] && y <= CORE_ISLAND[3]) { blockT[1][c] += 1000; blockTW[1][c] += 1000; blockTB[1][c] += 1000 }
+    // no signal ball lies in the core, so no other net needs a via there either (a via would cut the islands on 3 and 4)
+    if (x >= CORE_ISLAND[0] && x <= CORE_ISLAND[2] && y >= CORE_ISLAND[1] && y <= CORE_ISLAND[3]) { blockT[1][c] += 1000; blockTW[1][c] += 1000; blockTB[1][c] += 1000; blockV[c] += 1000 }
   }
 }
 // ground layers (GND_SIG): kept solid under the BGA / fine-pitch fields and under the routed DDR copper (fast: the

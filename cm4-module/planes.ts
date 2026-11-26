@@ -66,7 +66,7 @@ const ci = (x: number) => Math.floor((x - E.x0) / P), cj = (y: number) => Math.f
 const ANTI = +(process.env.ANTI ?? 0.125) // copper to via pad: 0.2 mm to the wall of a 0.1 mm hole (JLCPCB inner layers: 0.2 mm), 0.3 mm webs between ball vias
 const stat = new Int8Array(NN)
 for (let j = 0; j < NY; j++) for (let i = 0; i < NX; i++) { const x = cx(i), y = cy(j); if (x < E.x0 + 0.3 || x > E.x1 - 0.3 || y < E.y0 + 0.3 || y > E.y1 - 0.3) stat[j * NX + i] = 127 }
-for (const h of plan.holes) { const R = h.d / 2 + 0.4; for (let j = cj(h.y - R); j <= cj(h.y + R); j++) for (let i = ci(h.x - R); i <= ci(h.x + R); i++) if (i >= 0 && j >= 0 && i < NX && j < NY && Math.hypot(cx(i) - h.x, cy(j) - h.y) < R) stat[j * NX + i] = 127 }
+for (const h of plan.holes) { const R = h.d / 2 + 0.4 + P * 0.75; // a cell closes when any part of it, not only its centre, is within 0.4 mm for (let j = cj(h.y - R); j <= cj(h.y + R); j++) for (let i = ci(h.x - R); i <= ci(h.x + R); i++) if (i >= 0 && j >= 0 && i < NX && j < NY && Math.hypot(cx(i) - h.x, cy(j) - h.y) < R) stat[j * NX + i] = 127 }
 for (const v of vias) { const R = Math.max(v.d, 0.3) / 2 + ANTI, k = idx.get(v.net) ?? 127 // exact: a cell is closed when any part of its square is nearer than R
   for (let j = Math.max(0, cj(v.y - R) - 1); j <= Math.min(NY - 1, cj(v.y + R) + 1); j++) for (let i = Math.max(0, ci(v.x - R) - 1); i <= Math.min(NX - 1, ci(v.x + R) + 1); i++) if (Math.hypot(Math.max(Math.abs(cx(i) - v.x) - P / 2, 0), Math.max(Math.abs(cy(j) - v.y) - P / 2, 0)) < R - 1e-9) { const c = j * NX + i; stat[c] = stat[c] === 0 || stat[c] === k ? k : 127 } }
 // signal traces on an inner layer: no plane copper within 0.15 mm of them
