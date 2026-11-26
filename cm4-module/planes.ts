@@ -53,7 +53,7 @@ for (const v of vias) { const R = Math.max(v.d, 0.3) / 2 + ANTI, k = idx.get(v.n
 // signal traces on an inner layer: no plane copper within 0.15 mm of them
 const blockL = LAYERS.map(() => new Uint8Array(NN))
 for (const n of Object.values(routes.nets) as any[]) for (const g of n.segs) { const l = LAYERS.indexOf(g.layer); if (l < 0) continue
-  for (let i = 0; i + 1 < g.pts.length; i++) { const a = g.pts[i], b = g.pts[i + 1], R = 0.05 + 0.15 + P / 2, dx = b.x - a.x, dy = b.y - a.y, len2 = dx * dx + dy * dy
+  for (let i = 0; i + 1 < g.pts.length; i++) { const a = g.pts[i], b = g.pts[i + 1], R = (g.w ?? 0.1) / 2 + 0.15 + P / 2, dx = b.x - a.x, dy = b.y - a.y, len2 = dx * dx + dy * dy
     for (let j = Math.max(0, cj(Math.min(a.y, b.y) - R)); j <= Math.min(NY - 1, cj(Math.max(a.y, b.y) + R)); j++) for (let i2 = Math.max(0, ci(Math.min(a.x, b.x) - R)); i2 <= Math.min(NX - 1, ci(Math.max(a.x, b.x) + R)); i2++) { const t = len2 ? Math.max(0, Math.min(1, ((cx(i2) - a.x) * dx + (cy(j) - a.y) * dy) / len2)) : 0
       if (Math.hypot(cx(i2) - a.x - t * dx, cy(j) - a.y - t * dy) < R) blockL[l][j * NX + i2] = 1 } } }
 for (const g of plan.ddrInner ?? []) { const l = 2, a = g.a, b = g.b, R = 0.051 + 0.15 + P / 2, dx = b.x - a.x, dy = b.y - a.y, len2 = dx * dx + dy * dy // DDR sections on layer 4

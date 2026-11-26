@@ -66,7 +66,7 @@ const trace = (pts: any[], layer: string, w: number, net: string) => cj.push({ t
     flush() } }
 for (const v of plan.vias as any[]) via(v, v.net)
 for (const p of plan.paths as any[]) trace(p.pts, p.layer, p.w, p.net)
-for (const [name, r] of Object.entries(routes.nets) as any) { for (const s of r.segs) trace(s.pts, s.layer, 0.1, name); for (const v of r.vias) via(v, name) }
+for (const [name, r] of Object.entries(routes.nets) as any) { for (const s of r.segs) trace(s.pts, s.layer, s.w ?? 0.1, name); for (const v of r.vias) via(v, name) }
 // big shapes first: a Gerber consumer draws each shape dark and then clears its holes, which would wipe a small shape drawn earlier inside such a hole
 for (const p of [...pours].sort((a, b) => b.area - a.area)) cj.push({ type: "pcb_copper_pour", pcb_copper_pour_id: `m_pour_${n++}`, shape: "brep", layer: p.layer, net_name: p.net, covered_with_solder_mask: true,
   brep_shape: { outer_ring: { vertices: p.outer.map((q: any) => ({ x: q.x - CX, y: q.y - CY })) }, inner_rings: p.holes.map((h: any[]) => ({ vertices: h.map((q) => ({ x: q.x - CX, y: q.y - CY })) })) } })

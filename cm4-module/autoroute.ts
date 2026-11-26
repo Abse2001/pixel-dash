@@ -44,22 +44,25 @@ await Bun.write(dir + "/autoroute.srj.json", JSON.stringify(srj))
 console.log(`SRJ: ${obstacles.length} obstacles, ${connections.length} connections, ${connections.reduce((s, c) => s + c.pointsToConnect.length, 0)} terminals; pipeline ${PIPELINE}`)
 if (process.env.SRJ_ONLY) process.exit(0)
 // ---------- solve ----------
-const solver = new mod[PIPELINE](srj, process.env.EFFORT ? { effort: +process.env.EFFORT } : undefined)
+// FROM_TRACES=1: convert the saved solver output (autoroute.traces.json) again without solving
+const solver: any = process.env.FROM_TRACES ? { solved: true, failed: false, getOutputSimplifiedPcbTraces: () => JSON.parse(require("node:fs").readFileSync(dir + "/autoroute.traces.json", "utf8")) } : new mod[PIPELINE](srj, process.env.EFFORT ? { effort: +process.env.EFFORT } : undefined)
 const t0 = performance.now(); let last = 0
 while (!solver.solved && !solver.failed) { solver.step(); const t = performance.now(); if (t - last > 30000) { last = t; console.log(`  ${((t - t0) / 1e3).toFixed(0)}s, iteration ${solver.iterations}, stage ${solver.activeSubSolver?.constructor?.name ?? solver.currentPipelineStepIndex ?? ""}${solver.activeSubSolver?.activeSubSolver ? " / " + solver.activeSubSolver.activeSubSolver.constructor?.name : ""}, rss ${(process.memoryUsage().rss / 2 ** 30).toFixed(1)} GB`) } }
 console.log(`${solver.solved ? "solved" : "FAILED: " + solver.error} in ${((performance.now() - t0) / 1e3).toFixed(0)}s`)
 if (!solver.solved) process.exit(1)
 // ---------- output: routes.json ----------
 const traces: any[] = solver.getOutputSimplifiedPcbTraces()
+if (!process.env.FROM_TRACES) await Bun.write(dir + "/autoroute.traces.json", JSON.stringify(traces)) // the solver's raw output
 const netOf = (name: string) => routedNets.has(name) ? name : [...routedNets].filter((n) => name.startsWith(n)).sort((a, b) => b.length - a.length)[0]
 const out: any = { solved: true, router: `@tscircuit/capacity-autorouter ${PIPELINE}`, nets: {} }
 for (const t of traces) { const net = netOf(t.connection_name); if (!net) throw Error("trace for an unknown connection " + t.connection_name)
   const r = (out.nets[net] ??= { terms: (plan.nets as any[]).find((n) => n.name === net).terms.map((q: any) => q.ref), segs: [], vias: [], length: 0 })
-  let cur: Pt[] = [], layer = ""
-  const flush = () => { if (cur.length > 1) r.segs.push({ layer, pts: cur }); cur = [] }
+  let cur: Pt[] = [], layer = "", w = W
+  const flush = () => { if (cur.length > 1) r.segs.push({ layer, w, pts: cur }); cur = [] }
   for (const p of t.route) { if (p.route_type === "via") { flush(); r.vias.push({ x: r4(p.x), y: r4(p.y), d: p.via_diameter ?? 0.3, hole: p.via_hole_diameter ?? 0.1 }); layer = ""; continue }
     if (p.route_type !== "wire") throw Error(`unexpected route element ${p.route_type} in ${t.connection_name}`)
-    if (Math.abs((p.width ?? W) - W) > 1e-6) throw Error(`trace width ${p.width} in ${t.connection_name}`)
+    if ((p.width ?? W) < W - 1e-6) throw Error(`trace width ${p.width} below the minimum in ${t.connection_name}`)
+    if (Math.abs((p.width ?? W) - w) > 1e-6) { const last = cur.at(-1); flush(); if (last) cur.push(last); w = p.width ?? W } // the solver may widen a trace where there is room
     const bl = toBoard[p.layer]; if (!bl) throw Error(`trace on layer ${p.layer}`)
     if (bl !== layer) { flush(); layer = bl } cur.push({ x: r4(p.x), y: r4(p.y) }) }
   flush() }
