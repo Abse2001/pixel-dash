@@ -6,7 +6,7 @@ set -e
 cd "$(dirname "$0")"
 bun design/pads.tsx > /dev/null    # pad geometry of the new parts as tscircuit renders them
 PREPLACE=1 bun plan.ts             # every part, via and fixed trace, bypass capacitors included, around the fixed DDR copper
-bun autoroute.ts                   # signal nets: tscircuit autorouter, default pipeline (top, layer 4, bottom)
+EFFORT=${EFFORT:-2} bun autoroute.ts  # signal nets: tscircuit autorouter, default pipeline (top, layer 4, bottom)
 bun planes.ts                      # inner-layer copper
 bun build.tsx                      # dist/module.circuit.json
 bun check.ts                       # whole-board check
