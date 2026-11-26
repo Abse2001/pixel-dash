@@ -2,7 +2,7 @@
 # Rebuilds the CM4 module from the verified DDR block (external/ddr-route/out/module9) to fabrication files, following
 # the RK3566 module's routing playbook: placement and fixed copper first, supply islands and their corridors, then the
 # negotiated-congestion router for everything else, then planes and an independent check.
-#   ROUTE=1  also re-route (pb/route.ts; long: run several SEEDs in parallel by hand and import the best, see pb/README.md)
+#   ROUTE=1  also re-route (pb/route.ts; long: run several SEEDs in parallel by hand and import the best, see README.md)
 set -e
 cd "$(dirname "$0")"
 bun design/pads.tsx > /dev/null                                   # pad geometry of the parts as tscircuit renders them

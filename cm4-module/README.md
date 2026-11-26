@@ -1,0 +1,98 @@
+# AM3354 + DDR3L module in Raspberry Pi CM4 format
+
+A 40 x 55 mm, 6-layer, 1.0 mm board that plugs into a CM4 carrier (the CM4 IO board or a custom one) through the CM4's
+two 100-pin connectors. It carries the AM3354BZCZD80 (U1), the MT41K512M16VRP DDR3L (U_DDR) with the DDR routing of
+the original module unchanged, a TPS65217D power chip and two SY8089 bucks, the boot straps and the pull-ups, and
+maps what the AM3354 can do onto the CM4 pins (`fab/pinmap.csv`).
+
+Status: routed, whole-board check passes (`check.ts`: MODULE RESULT PASS). See "Before ordering" for what still
+needs a decision or a check outside this repository.
+
+## What it does on a CM4 carrier
+
+| CM4 function | Here |
+|---|---|
+| +5 V in (J1 77-87) | VIN5: the module makes every rail itself (TPS65217D: VDD_CORE, VDD_MPU, VDDS_DDR, RTC; SY8089: 3.3 V, 1.8 V) |
+| +3.3 V / +1.8 V out (J1 84/86, 88/90) | the module's 3.3 V and 1.8 V rails |
+| GLOBAL_EN (99), RUN_PG (92), nRPIBOOT (93) | PMIC enable; processor reset (PWRONRSTn); USB boot (see straps) |
+| GPIO2-27 on the 40-pin header | GPIO / UART0 (console) / I2C2 / SPI0 / McASP0 (PCM) / EHRPWM1, per `fab/pinmap.csv` |
+| ID_SD / ID_SC (HAT EEPROM) | I2C1 |
+| SD card (CM4 Lite pins) | MMC0, the boot device (SD_PWR_ON on a GPIO) |
+| USB 2.0 (J2 103/105), USB_OTG_ID (101) | USB0; OTG_ID read on a GPIO with a 10 k pull-up, the role set in software |
+| LED_nACT, LED_nPWR, CAM_GPIO, nEXTRST | GPIOs |
+| Ethernet, HDMI, MIPI CSI/DSI, PCIe, WiFi | not connected (the AM3354 has none of these, and Ethernet was dropped on purpose; networking is over USB) |
+
+200 CM4 pins: 47 signals, 51 ground, 10 power, 92 not connected.
+
+Boot straps: SYSBOOT[15:0] = 0x4017 (24 MHz crystal; boot order MMC0, SPI0, UART0, USB0), one 10 k resistor per bit.
+nRPIBOOT pulls bits 0 and 2 low through 1 k: 10010b = NAND, NANDI2C, USB0, UART0, so the carrier's USB-boot
+button/jumper boots the AM3354 from USB.
+
+## Board
+
+| Layer | Use |
+|---|---|
+| L1 top | signals, the BGAs, the PMIC, crystal |
+| L2 | ground |
+| L3 | supply islands: VDDS_DDR, VDD_3V3, VDD_1V8, SYS, VIN5, DDR_VREF, DDR_ZQ, DDR_VTP |
+| L4 | VDD_CORE and VDD_MPU islands under the processor's power core, thin 1.8 V / 3.3 V links; signals elsewhere |
+| L5 | ground (slow signals may cross it away from the BGAs' reference areas) |
+| L6 bottom | signals, decoupling, the bucks, CM4 connectors J1/J2 (Hirose DF40C-100DP-0.4V(51), LCSC C531031) |
+
+Through vias only: 0.1 mm holes in 0.3 mm pads, via-in-pad throughout (epoxy-filled and capped). Trace/space 0.1/0.1 mm.
+
+## Files
+
+- `fab/gerbers/`, `fab/bom.csv` (160 parts, 52 top / 108 bottom), `fab/cpl.csv`: for a fab/assembly quote.
+- `fab/pinmap.csv`: every CM4 pin with its net, processor ball and pinmux mode.
+- `fab/views/*.png`: one picture per copper layer.
+- `dist/module.circuit.json`: the board as tscircuit circuit JSON.
+- `pb/routing.json`: the signal routing the board is built from.
+
+## Rebuilding
+
+`make.sh` runs the chain and ends with the whole-board check:
+
+1. `plan.ts` loads the routed, verified DDR block (`external/ddr-route/out/module9`) as fixed copper and places
+   every other part and via. No freely placed part goes into the processor's outer ball rows or the 2 mm band outside
+   them on the three non-DDR sides (the escape ring); the SYSBOOT straps sit in the free strip above J2.
+2. `planes.ts` (`ROUTES=none`) computes each supply's skeleton (its corridors); `pb/export.ts` writes the router input.
+3. `pb/import.ts pb/routing.json` imports the routing; `planes.ts` builds the inner-layer copper around it.
+4. `build.tsx` renders `dist/module.circuit.json`; `check.ts` checks it (pad positions, clearances, shorts, holes,
+   board edge, every net one piece, every signal net joining all its terminals).
+5. `export.ts` and `layers.py` write `fab/`.
+
+Re-routing (only after a placement or netlist change): `pb/route.ts` is the negotiated-congestion router of the
+RK3566 CM4 module (routing playbook). Run several seeds in parallel and keep the best:
+
+    cd pb && OUT=_s6 SEED=6 MAXIT=100 GND_SIG=1 GND_SIG_BGA=1 bun route.ts
+
+then re-route whatever is left in conflict strictly on the finished copper with `pb/reroute.py` (two-terminal nets;
+the order matters), check, and copy the result to `pb/routing.json`. The current routing is seed 6 with GPIO7_CE1,
+GPIO21_PCM_DOUT, GPIO22 and GPIO23 re-routed in that order.
+
+Verified for this routing: all 6570 DDR trace points and 100 DDR vias of `module9` are in the built board unchanged.
+
+## Before ordering
+
+1. **Board thickness**: 1.0 mm (JLCPCB allows the 0.1 mm via hole only up to 1.0 mm). A real CM4 is 1.2 mm +-10 %
+   (CM4 datasheet 3.1); mating is unaffected, the module sits 0.2 mm lower.
+2. **Bottom-side height**: on the standard 1.5 mm stacking (carrier DF40C-100DS) the gap under the module is 1.5 mm.
+   The tallest bottom parts are the SY8089 (SOT-23-5, up to about 1.45 mm by package standard) and the 0805 22 uF
+   (about 1.25 mm nominal): check their datasheet maxima, or use a 3.0 mm stacking carrier (DF40HC(3.0)-100DS).
+3. **RUN_PG (pin 92)** is the processor's PWRONRSTn, a 1.8 V-domain signal: check what the carrier expects on it.
+4. **Carrier current**: the module supplies 3.3 V and 1.8 V to the carrier on J1 84-90; the carrier's load on them
+   must fit the SY8089 budget left after the module.
+5. **USB0_VBUS** is tied to the 5 V input (abs. max 5.25 V): a carrier 5 V above 5.25 V is out of spec for that ball.
+6. **USB pair**: D+ 16.68 mm with 0 vias, D- 16.66 mm with 2 vias (a 0.7 mm hop to the top layer where the bottom has
+   no unbroken ground under it). About 10 ps at a 2083 ps bit time; TI recommends equal via counts.
+7. **Supply feeds**: the plane builder reports narrow (< 0.2 mm) links on several supplies (feed width in the
+   `planes.ts` output); an IR-drop pass like the original module's `irdrop.py` has not been run on this layout.
+8. **Decoupling**: the eight optional extra 100 nF caps (C_X_*) sit 6-7.6 mm from their balls (outside the escape
+   ring); the 20 DDR high-speed caps are within TI's limit (worst 9.1 mm of 10.16 mm).
+9. **Courtyards**: tscircuit reports 94 courtyard overlaps (default courtyard margins, mostly under the BGA);
+   every pad pair on a side is at least 0.206 mm apart (JLCPCB 0402 spacing passes).
+10. **CM4 geometry**: outline, holes and connector positions follow the RK3566 CM4 module's frame; check them
+    against the CM4 mechanical drawing before ordering.
+11. **JLCPCB**: 6 layers, 1.0 mm, ENIG, 0.1 mm hole / 0.3 mm pad, via-in-pad (epoxy fill + cap), both sides
+    assembled. Outer prepreg 1080 or 3313 (not 7628) to keep the 0.1 mm outer traces near 50-75 ohm.
