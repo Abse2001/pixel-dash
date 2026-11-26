@@ -33,7 +33,7 @@ const NETS: { name: string; layers: number[]; fill: Record<number, (x: number, y
   { name: "VDD_CORE", layers: [2, 1], fill: { 2: (x: number, y: number) => y < NORTH && !(x > EAST && y > 19.0) } },
 ]
 // STACK=pb (routing playbook): every supply is an island on layer 3; layers 2 and 5 ground; layer 4 carries signals only
-const PB = process.env.STACK === "pb"
+const PB = (process.env.STACK ?? "pb") === "pb" // STACK=old: the earlier layout (core/MPU/1V8 on layer 4 as planes)
 const CORE_AREA = (x: number, y: number) => y < NORTH && x >= XB && !SYSBOX(x, y)
 if (PB) NETS.splice(0, NETS.length,
   { name: "GND", layers: [0, 3], fill: { 0: () => true, 3: () => true } },
