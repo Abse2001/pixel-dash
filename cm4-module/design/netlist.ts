@@ -46,7 +46,8 @@ export const SIGNALS: Sig[] = [
   // USB 2.0 OTG
   { net: "USB0_DP", ball: "N17", mode: 0, fn: "USB0_DP", cm4: 105 },
   { net: "USB0_DM", ball: "N18", mode: 0, fn: "USB0_DM", cm4: 103 },
-  { net: "USB0_ID", ball: "P16", mode: 0, fn: "USB0_ID", cm4: 101 },
+  // USB0_ID (P16) is left open: it is rated 2.1 V max while CM4 USB_OTG_ID (pin 101) is a 3.3 V signal. The role is set in
+  // software (USB mode register / Linux dr_mode); pin 101 is read on a 3.3 V GPIO instead (USB_OTG_ID below).
   { net: "USB0_VBUS", ball: "P15", mode: 0, fn: "USB0_VBUS (from the module's 5 V through R_VBUS)" },
   // reset and PMIC control
   { net: "PWRONRSTn", ball: "B15", mode: 0, fn: "power-on reset from PMIC PGOOD (1 kOhm), CM4 RUN_PG", cm4: 92 },
@@ -60,7 +61,7 @@ export const SIGNALS: Sig[] = [
 /** plain GPIOs (mode 7): CM4 pins whose ball is chosen by plan.ts from POOL (shortest assignment) */
 export const GPIO_PINS: Record<string, number> = {
   GPIO4: 54, GPIO5: 34, GPIO6: 30, GPIO16: 29, GPIO17: 50, GPIO22: 46, GPIO23: 47, GPIO24: 45, GPIO25: 41, GPIO26: 24, GPIO27: 48,
-  LED_nACT: 21, LED_nPWR: 95, CAM_GPIO: 97, SD_PWR_ON: 75, nEXTRST: 100,
+  LED_nACT: 21, LED_nPWR: 95, CAM_GPIO: 97, SD_PWR_ON: 75, nEXTRST: 100, USB_OTG_ID: 101,
 }
 /** GPIO-capable balls left free by the functions above (mode 7 = gpio) */
 export const POOL = ["H18", "H17", "J15", "J16", "K17", "K16", "M16", "L15", "M17", "M18", "A15", "C12", "C13", "C18", "D14", "F15", "F16", "H16", "J17", "J18", "K15", "K18", "L16", "L17", "L18", "R13", "V14", "R14", "V15", "U15", "T15", "V16", "U16", "T16", "V17", "U18", "T13", "V12"]
@@ -106,6 +107,7 @@ for (let i = 0; i < 16; i++) two(`R_SB${i}`, "R10K", `SYSBOOT${i}`, WORD & (1 <<
 two("R_RPB0", "R1K", "SYSBOOT0", "nRPIBOOT"); two("R_RPB2", "R1K", "SYSBOOT2", "nRPIBOOT")
 // ---- pull-ups ----
 for (const n of ["SD_CMD", "SD_DAT0", "SD_DAT1", "SD_DAT2", "SD_DAT3"]) two(`R_${n}`, "R10K", n, "VDD_3V3")
+two("R_OTG_ID", "R10K", "USB_OTG_ID", "VDD_3V3", "CM4: USB_OTG_ID is pulled up on the module; the carrier grounds it for host mode")
 two("R_SD_PWR_ON", "R10K", "SD_PWR_ON", "VDD_3V3", "CM4: pull-up so the carrier's SD power switch defaults to on")
 two("R_SDA2", "R2K2", "GPIO2_SDA1", "VDD_3V3"); two("R_SCL2", "R2K2", "GPIO3_SCL1", "VDD_3V3")
 two("R_ID_SD", "R4K7", "ID_SD", "VDD_3V3"); two("R_ID_SC", "R4K7", "ID_SC", "VDD_3V3")

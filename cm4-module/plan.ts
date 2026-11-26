@@ -370,7 +370,7 @@ for (let i = 0; i < 16; i++) near(`R_SB${i}`, ballOf(`SYSBOOT${i}`), { maxDist: 
 for (const r of ["R_RPB0", "R_RPB2"]) near(r, at(r === "R_RPB0" ? "R_SB0" : "R_SB2", "pin1"), { maxDist: 8, layers: ["bottom", "top"] })
 // pull-ups between the processor and J1, under the CM4 pin of their net (the top over J1 stays free for via-in-pad at its pins)
 const pinXY = (net: string) => { const p = pins.find((q) => q.role === net)!; return { x: p.x, y: p.y } }
-for (const n of ["SD_CMD", "SD_DAT0", "SD_DAT1", "SD_DAT2", "SD_DAT3", "SD_PWR_ON", "GPIO2_SDA1", "GPIO3_SCL1", "ID_SD", "ID_SC"]) { const r = NETLIST.find((p) => p.part.startsWith("R") && Object.values(p.nets).includes(n) && p.ref !== "R_PGOOD")!.ref; near(r, { x: pinXY(n).x, y: 27.6 }, { maxDist: 10, layers: ["bottom", "top"] }) }
+for (const n of ["SD_CMD", "SD_DAT0", "SD_DAT1", "SD_DAT2", "SD_DAT3", "SD_PWR_ON", "GPIO2_SDA1", "GPIO3_SCL1", "ID_SD", "ID_SC", "USB_OTG_ID"]) { const r = NETLIST.find((p) => p.part.startsWith("R") && Object.values(p.nets).includes(n) && p.ref !== "R_PGOOD")!.ref; near(r, { x: pinXY(n).x, y: 27.6 }, { maxDist: 10, layers: ["bottom", "top"] }) }
 near("R_VBUS", ballOf("USB0_VBUS"), { maxDist: 10 })
 for (const p of NETLIST) if (!parts.some((q) => q.name === p.ref)) report.push(`!! ${p.ref} (${p.part}) not placed`)
 // ---------- nets for the router: every non-plane net of the circuit with all its terminals ----------
