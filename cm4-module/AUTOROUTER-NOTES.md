@@ -41,8 +41,9 @@ the local checkout; nothing of it is committed upstream.
 
 | # | Solver / stage | Symptom on this board | Cause | Local fix | Upstream |
 |---|---|---|---|---|---|
-
-(filled in as issues are found)
+| 1 | Input (this board), port-point pathing | With layer-4 keep-outs over the east power column, `PreparedPortPointRoutingSolver ran out of iterations` (37 s at effort 1, 41 s at effort 4, 172 s with effort let through, see 3). | **My approach, not the solver.** A keep-out on layer 4 also forbids vias (a through via crosses layer 4), so the whole PMIC/buck column had no place to change layers. Found by bisecting the keep-out groups (only the east column fails). | Keep-outs only where blocking vias is the point (processor and memory ball fields). | none |
+| 2 | SRJ input model | No way to say "this layer is a plane here: no traces, vias allowed", or "use this layer only as a last resort". Obstacles block traces and vias together; layer preferences exist only for buses (`preferredLayer`, `allowedLayers`). | Missing feature. On a 6-layer board with planes the router either gets fewer layers than the board has or may route anywhere on a plane. | none yet: the plane builder carves around layer-4 traces and the plane check verifies the supplies | candidate repro PR |
+| 3 | Pipeline 9, `getPipeline9PortPointPathingInput.ts` | `effort` above 1 does not raise the port-point pathing budget. | `effort: Math.min(1, pipeline.effort)` (from #4046, no stated reason), while the pipeline's own comment says budgets scale with effort. | Tried locally on branch `local/cm4-module`; did not help here (issue 1 was the cause), so not used. | candidate PR, low priority |
 
 ## Runs
 
