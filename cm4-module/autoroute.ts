@@ -66,7 +66,7 @@ console.log(`${solver.solved ? "solved" : "FAILED: " + solver.error} in ${((perf
 if (!solver.solved) process.exit(1)
 // ---------- output: routes.json ----------
 const traces: any[] = solver.getOutputSimplifiedPcbTraces()
-if (!process.env.FROM_TRACES) await Bun.write(dir + "/autoroute.traces.json", JSON.stringify(traces)) // the solver's raw output
+if (!process.env.FROM_TRACES) await Bun.write(process.env.TRACES_OUT ?? dir + "/autoroute.traces.json", JSON.stringify(traces)) // the solver's raw output
 const netOf = (name: string) => routedNets.has(name) ? name : [...routedNets].filter((n) => name.startsWith(n)).sort((a, b) => b.length - a.length)[0]
 const out: any = { solved: true, router: `@tscircuit/capacity-autorouter ${PIPELINE}`, nets: {} }
 for (const t of traces) { const net = netOf(t.connection_name); if (!net) throw Error("trace for an unknown connection " + t.connection_name)
