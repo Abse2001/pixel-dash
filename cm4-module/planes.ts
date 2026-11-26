@@ -122,7 +122,7 @@ for (const [ni, net] of NETS.entries()) { const k = ni + 1, mine = vias.filter((
 // CORRIDORS_OUT=<file>: every supply's skeleton cells per layer (the router keeps foreign vias off them, and foreign
 // traces off them on their layer), from a run without signal routes
 if (process.env.CORRIDORS_OUT) { const out: { net: string; layer: string; cells: [number, number][] }[] = []
-  for (const [l, layer] of LAYERS.entries()) for (const [ni, net] of NETS.entries()) { if (net.name === "GND") continue; const k = ni + 1, cells: [number, number][] = []
+  for (const [l, layer] of LAYERS.entries()) for (const [ni, net] of NETS.entries()) { const k = ni + 1, cells: [number, number][] = []
     for (let c = 0; c < NN; c++) if (trunk[l][c] && owner[l][c] === k) cells.push([+cx(c % NX).toFixed(3), +cy((c / NX) | 0).toFixed(3)])
     if (cells.length) out.push({ net: net.name, layer, cells }) }
   await Bun.write(process.env.CORRIDORS_OUT, JSON.stringify(out)); console.log(`corridors: ${out.length} net/layer sets, ${out.reduce((s, o) => s + o.cells.length, 0)} cells -> ${process.env.CORRIDORS_OUT}`) }

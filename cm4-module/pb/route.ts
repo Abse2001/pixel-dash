@@ -145,12 +145,17 @@ if (GND_SIG) {
 const corr = new Int16Array(NN).fill(-1), corrT = ALL_L.map(() => new Int16Array(NN).fill(-1)), corrName: string[] = []
 if (!process.env.PLANES_ONLY && (await Bun.file(dir + "/corridors.json").exists())) {
   const cs = await Bun.file(dir + "/corridors.json").json()
-  const R = Math.round(+(process.env.KEEP ?? 0.1) / P) // widened by KEEP on each side
+  // widened so the plane keeps its skeleton: a trace centre stays half a trace + the plane's 0.15 mm clearance + a cell
+  // away (KEEP_T), a via centre a via radius + its 0.125 mm antipad + a cell away (KEEP_V). Ground corridors only keep
+  // traces off (slow signals may cross the ground layers, but must not wall a ground via off); vias may pierce ground.
+  const RT = Math.round(+(process.env.KEEP_T ?? 0.25) / P), RV = Math.round(+(process.env.KEEP_V ?? 0.3) / P)
   for (const c of cs) {
-    const id = corrName.length; corrName.push(c.net); const l = L_OF[c.layer]
+    const id = corrName.length; corrName.push(c.net); const l = L_OF[c.layer], gnd = c.net === "GND"
+    if (gnd && l === undefined) continue
     for (const [x, y] of c.cells) { const i0 = gx(x), j0 = gy(y)
-      for (let dj = -R; dj <= R; dj++) for (let di = -R; di <= R; di++) { const i = i0 + di, j = j0 + dj; if (i < 0 || j < 0 || i >= NX || j >= NY) continue; const cc = j * NX + i
-        if (corr[cc] < 0) corr[cc] = id; if (l !== undefined && corrT[l][cc] < 0) corrT[l][cc] = id } } }
+      for (let dj = -RV; dj <= RV; dj++) for (let di = -RV; di <= RV; di++) { const i = i0 + di, j = j0 + dj; if (i < 0 || j < 0 || i >= NX || j >= NY) continue; const cc = j * NX + i, d2 = di * di + dj * dj
+        if (!gnd && d2 <= RV * RV && corr[cc] < 0) corr[cc] = id
+        if (l !== undefined && d2 <= RT * RT && corrT[l][cc] < 0) corrT[l][cc] = id } } }
   console.log("corridors", cs.length, "via cells", corr.reduce((s, v) => s + (v >= 0 ? 1 : 0), 0))
 }
 const objsByNet = new Map<string, Obj[]>()
