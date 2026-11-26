@@ -30,7 +30,10 @@ const blocked = new Uint8Array(NX * NY) // 1: no strip centre of the current net
 function blockAround(x: number, y: number, R: number) { for (let j = Math.max(0, cj(y - R) - 1); j <= Math.min(NY - 1, cj(y + R) + 1); j++) for (let i = Math.max(0, ci(x - R) - 1); i <= Math.min(NX - 1, ci(x + R) + 1); i++) if (Math.hypot(cx(i) - x, cy(j) - y) < R) blocked[j * NX + i] = 1 }
 // Feeds cross the BGA's signal rings where signal traffic is lightest: the south rings (the east and north rings carry
 // most of the escaping signals and their vias; a strip through them removes a row or column of via sites there).
-const NO_FEED = [{ x0: -52.4, y0: 19.15, x1: -36.8, y1: 23.2 }, { x0: -40.8, y0: 11.15, x1: -36.8, y1: 19.15 }]
+// The south-west and north-west corners are where the balls the DDR copper boxes in escape on layer 4 (SYSBOOT straps,
+// RTC/PMIC control), so feeds stay out of those too.
+const NO_FEED = [{ x0: -52.4, y0: 19.15, x1: -36.8, y1: 23.2 }, { x0: -40.8, y0: 11.15, x1: -36.8, y1: 19.15 },
+  { x0: -56.0, y0: 3.0, x1: -45.6, y1: 11.15 }, { x0: -56.0, y0: 19.15, x1: -45.6, y1: 26.0 }]
 const out: { net: string; w: number; pts: Pt[] }[] = []
 const report: string[] = []
 for (const f of FEEDS) {
