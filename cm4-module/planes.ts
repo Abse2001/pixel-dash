@@ -6,7 +6,8 @@
 import type { Pt } from "./geom"
 const dir = import.meta.dir
 const plan = await Bun.file(dir + "/plan.json").json(), items = (await Bun.file(dir + "/plan-items.json").json()).items as any[]
-const routes = (await Bun.file(dir + "/routes.json").exists()) ? await Bun.file(dir + "/routes.json").json() : { nets: {} }
+const ROUTES = process.env.ROUTES ?? dir + "/routes.json" // ROUTES=none: planes from the fixed copper only
+const routes = ROUTES !== "none" && (await Bun.file(ROUTES).exists()) ? await Bun.file(ROUTES).json() : { nets: {} }
 const P = 0.05, E = plan.edge, NX = Math.round((E.x1 - E.x0) / P), NY = Math.round((E.y1 - E.y0) / P), NN = NX * NY
 const cx = (i: number) => E.x0 + (i + 0.5) * P, cy = (j: number) => E.y0 + (j + 0.5) * P
 const LAYERS = ["inner1", "inner2", "inner3", "inner4"] as const
@@ -31,10 +32,28 @@ const NETS: { name: string; layers: number[]; fill: Record<number, (x: number, y
   { name: "VDD_MPU", layers: [2, 1], fill: { 2: (x: number, y: number) => y < NORTH && !(x > EAST && y > 19.0) } },
   { name: "VDD_CORE", layers: [2, 1], fill: { 2: (x: number, y: number) => y < NORTH && !(x > EAST && y > 19.0) } },
 ]
+// STACK=pb (routing playbook): every supply is an island on layer 3; layers 2 and 5 ground; layer 4 carries signals only
+const PB = process.env.STACK === "pb"
+const CORE_AREA = (x: number, y: number) => y < NORTH && x >= XB && !SYSBOX(x, y)
+if (PB) NETS.splice(0, NETS.length,
+  { name: "GND", layers: [0, 3], fill: { 0: () => true, 3: () => true } },
+  // VDDS_RTC is a small rail: routed as a trace by the signal router (playbook), not a plane island
+  ...plan.innerNets.map((name: string) => ({ name, layers: [1], fill: {} })),
+  { name: "DDR_VREF", layers: [1], fill: { 1: (x: number, y: number) => x < -53 && x > -76 && y > 9 && y < 21 } },
+  { name: "SYS", layers: [1], fill: { 1: (x: number, y: number) => SYSBOX(x, y) } },
+  { name: "VIN5", layers: [1], fill: { 1: (x: number, y: number) => y > NORTH } },
+  // core and MPU: layer-4 islands under the processor and their feeds from the PMIC (the AM335x ball map interleaves
+  // five supplies in its core; one layer cannot keep them all in one piece each); everything else on layer 3
+  { name: "VDD_MPU", layers: [2], fill: { 2: CORE_AREA } },
+  { name: "VDD_CORE", layers: [2], fill: { 2: CORE_AREA } },
+  { name: "VDD_3V3", layers: [1], fill: { 1: CORE_AREA } },
+  { name: "VDD_1V8", layers: [1, 2], fill: { 1: CORE_AREA } }) // low current (I/O, PLL, USB PHY): may link through layer 4 where layer 3 is taken
+if (PB) NETS.splice(NETS.findIndex((n) => n.name === "VDD_MPU"), 0,
+  { name: "VDDS_DDR", layers: [1], fill: { 1: (x: number, y: number) => y < NORTH && ((x < XB && !SW(x, y)) || DDRBAND(x, y)) } })
 /** where each supply comes from: the feed-width check starts there */
 const SOURCE: Record<string, RegExp> = { VIN5: /^V_J1_/, SYS: /^V_U_PMIC_pin(7|8)$/, VDDS_DDR: /^V_L_DCDC1_pin2/, VDD_MPU: /^V_L_DCDC2_pin2/, VDD_CORE: /^V_L_DCDC3_pin2/, VDD_3V3: /^V_L_3V3_pin2/, VDD_1V8: /^V_L_1V8_pin2/, VDDS_RTC: /^V_U_PMIC_pin3$/ }
 const isSource = (net: string, v: { x: number; y: number }) => !!SOURCE[net] && plan.vias.some((p: any) => SOURCE[net].test(p.name) && p.net === net && p.x === v.x && p.y === v.y)
-const CENTRE4 = new Set(["VDD_CORE", "VDD_MPU"]), CENTRE3 = new Set(["VDDS_DDR"]) // who may cross the middle of the processor on layers 4 / 3 cheaply (layer 3 there is VDDS_DDR copper for the DDR bypass capacitors)
+const CENTRE4 = new Set(["VDD_CORE", "VDD_MPU"]), CENTRE3 = new Set(PB ? ["VDD_1V8", "VDD_3V3"] : ["VDDS_DDR"]) // PB: layer 3 inside the processor core belongs to 1.8 V and 3.3 V (VDDS_DDR reaches its west column from the west) // who may cross the middle of the processor on layers 4 / 3 cheaply (layer 3 there is VDDS_DDR copper for the DDR bypass capacitors)
 const idx = new Map(NETS.map((n, i) => [n.name, i + 1]))
 // ---------- vias ----------
 type V = { x: number; y: number; d: number; net: string }
@@ -100,6 +119,13 @@ for (const [ni, net] of NETS.entries()) { const k = ni + 1, mine = vias.filter((
         const nd = Math.fround(dist[s][c] + (d < 8 ? 1 : 1.4142) * factor(s, c2)); if (nd < dist[s][c2]) { dist[s][c2] = nd; pred[s][c2] = c; hpush(nd, s * NN + c2) } } } }
   const miss = mine.filter((_, m) => !connected[m])
   report.push(`${net.name}: ${mine.length - miss.length}/${mine.length} vias on the skeleton${miss.length ? " !! missing " + miss.slice(0, 6).map((v) => `(${v.x.toFixed(2)}, ${v.y.toFixed(2)})`).join(" ") : ""}`) }
+// CORRIDORS_OUT=<file>: every supply's skeleton cells per layer (the router keeps foreign vias off them, and foreign
+// traces off them on their layer), from a run without signal routes
+if (process.env.CORRIDORS_OUT) { const out: { net: string; layer: string; cells: [number, number][] }[] = []
+  for (const [l, layer] of LAYERS.entries()) for (const [ni, net] of NETS.entries()) { if (net.name === "GND") continue; const k = ni + 1, cells: [number, number][] = []
+    for (let c = 0; c < NN; c++) if (trunk[l][c] && owner[l][c] === k) cells.push([+cx(c % NX).toFixed(3), +cy((c / NX) | 0).toFixed(3)])
+    if (cells.length) out.push({ net: net.name, layer, cells }) }
+  await Bun.write(process.env.CORRIDORS_OUT, JSON.stringify(out)); console.log(`corridors: ${out.length} net/layer sets, ${out.reduce((s, o) => s + o.cells.length, 0)} cells -> ${process.env.CORRIDORS_OUT}`) }
 // ---------- fill ----------
 const FG = 3 // fill copper stays this many cells (0.15 mm + cell) from another net's copper
 for (const [l] of LAYERS.entries()) { const own = owner[l], fillers = NETS.map((n, ni) => ({ k: ni + 1, f: n.fill[l] })).filter((n) => n.f)
