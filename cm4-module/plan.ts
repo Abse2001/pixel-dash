@@ -41,14 +41,17 @@ const poolNets: string[] = []
 const cm4PinXY = (n: number) => { const c = n <= 100 ? J1 : J2, m = (n - 1) % 100 + 1, k = (m - 1) >> 1; return { x: c.x + 9.8 - 0.4 * k, y: c.y + (m % 2 ? 1.355 : -1.355) } }
 const signals: { name: string; ball: string; mode: number; fn: string }[] = SIGNALS.map((s) => ({ name: s.net, ball: s.ball, mode: s.mode, fn: s.fn }))
 { const want = [...Object.entries(GPIO_PINS).map(([n, p]) => ({ n, at: cm4PinXY(p) })), ...EXTRA_GPIO.map((n) => ({ n, at: { x: -34.5, y: 29.6 } }))] // PHY_nRST: at the PHY
-  // distance plus 4 mm per ring of depth: balls on the outer rows escape without crowding the MMC cluster
+  // balls of the three outer rings only (they escape without vias into the core), by plain ball-to-pin distance: a
+  // minimum total Euclidean assignment has no two ball-to-pin segments crossing, so the GPIO bundle reaches the
+  // connector in the order it leaves the processor instead of scrambled (a scramble costs two vias per crossing)
   const ROWS = "ABCDEFGHJKLMNPRTUV", depth = (b: string) => { const r = ROWS.indexOf(b[0]), c = +b.slice(1) - 1; return Math.min(r, 17 - r, c, 17 - c) }
-  const cost = want.map((w) => POOL.map((b) => { const q = ball["U1." + b]; return Math.hypot(q.x - w.at.x, q.y - w.at.y) + 4 * depth(b) }))
+  const POOL_OUTER = POOL.filter((b) => depth(b) <= 2)
+  const cost = want.map((w) => POOL_OUTER.map((b) => { const q = ball["U1." + b]; return Math.hypot(q.x - w.at.x, q.y - w.at.y) }))
   // the router picks each GPIO's ball from POOL (any pool ball, one net per ball); after routing (TOPUP) the choice is read back
   const routed = process.env.TOPUP && (await Bun.file(import.meta.dir + "/routes.json").exists()) ? (await Bun.file(import.meta.dir + "/routes.json").json()).nets : {}
   if (process.env.POOL) { for (const w of want) if (routed[w.n]?.ball) signals.push({ name: w.n, ball: routed[w.n].ball, mode: 7, fn: "GPIO" }); else poolNets.push(w.n)
     if (process.env.TOPUP && poolNets.length) throw Error("routes.json has no ball for " + poolNets.join(" ")) }
-  else for (const [i, j] of hungarian(cost)) signals.push({ name: want[i].n, ball: POOL[j], mode: 7, fn: "GPIO" }) } // optimal fixed assignment (distance + depth)
+  else for (const [i, j] of hungarian(cost)) signals.push({ name: want[i].n, ball: POOL_OUTER[j], mode: 7, fn: "GPIO" }) } // optimal fixed assignment (distance)
 for (const s of signals) { if (ballNet["U1." + s.ball]) throw Error(`ball ${s.ball} used twice: ${s.name} / ${ballNet["U1." + s.ball]}`); ballNet["U1." + s.ball] = s.name }
 const PLANE = new Set(PLANE_NETS)
 /** minimum-cost assignment rows -> columns (rows <= columns), Kuhn-Munkres with potentials */

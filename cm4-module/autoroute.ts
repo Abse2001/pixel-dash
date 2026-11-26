@@ -36,12 +36,18 @@ for (const g of plan.ddrInner ?? []) obstacle({ pts: [g.a, g.b], r: 0.051, layer
 //   0.8 mm-pitch ball vias; a via between the balls cuts them. Only the two corners where the balls the DDR copper boxes in
 //   leave on layer 4 (LCD/SYSBOOT, south-west; RTC/PMIC control, north-west) stay open. The memory's ball field likewise.
 // - the east power column (core/MPU feeds from the PMIC, +5 V) and the strip under J1 (+5 V, 1.8 V and 3.3 V to the CM4 pins).
-const KEEPOUT_L4: [number, number, number, number][] = [ // x0, y0, x1, y1
-  [-46.8, 7.95, -37.6, 22.35], [-52.0, 11.95, -46.8, 19.15], // processor ball field without its two corners
+const KEEPOUT_L4: [number, number, number, number, ("all" | undefined)?][] = [ // x0, y0, x1, y1, "all" = every routed layer
+  // processor: the power/ground core (columns 5-14, rows 11.55-18.75) plus half a pitch, on every layer: no signal ball
+  // lies there, so signals go around it through the outer signal rings, which keep their escape vias (dog-bones) as in
+  // any BGA fan-out; no via may cut the core's plane webs and no crossing can be resolved inside it.
+  [-48.8, 11.15, -40.8, 19.15, "all"],
+  [-52.0, 11.95, -46.8, 19.15], // west block: the VDDS_DDR side of the processor
   [-74.0, 11.55, -63.6, 18.75], // memory ball field
-  [-37.6, E.y0, E.x1, E.y1], [E.x0, 29.4, -37.6, E.y1], // east power column, strip under J1
+  [-45.6, 19.15, -44.8, 21.55], // the 1.8 V ball out in the north signal rows (U1 row 21.15) keeps its web to the core
+  // Tried and dropped: a three-row east feed entry through the signal rings, the whole east power column and the strip
+  // under J1 (signal balls and parts inside a no-via strip cannot leave the top layer: port-point pathing fails).
 ]
-for (const [x0, y0, x1, y1] of KEEPOUT_L4.filter((_, i) => !process.env.KEEPOUTS || process.env.KEEPOUTS.split(",").includes(String(i)))) obstacles.push({ type: "rect", layers: ["inner1"], connectedTo: [], center: { x: r4((x0 + x1) / 2), y: r4((y0 + y1) / 2) }, width: r4(x1 - x0), height: r4(y1 - y0) })
+for (const [x0, y0, x1, y1, all] of KEEPOUT_L4.filter((_, i) => !process.env.KEEPOUTS || process.env.KEEPOUTS.split(",").includes(String(i)))) obstacles.push({ type: "rect", layers: all ? LAYERS : ["inner1"], connectedTo: [], center: { x: r4((x0 + x1) / 2), y: r4((y0 + y1) / 2) }, width: r4(x1 - x0), height: r4(y1 - y0) })
 // ---------- connections: every signal net with all its terminals ----------
 function point(t: any) { const it = items.find((i) => i.ref === t.ref && i.layers.length)
   // a ball that already has its via in the pad (the planner drills one for every ball the DDR copper boxes in) is reachable on both layers
@@ -75,7 +81,11 @@ while (!solver.solved && !solver.failed) { solver.step()
   if (process.env.DUMP_STAGE && solver.activeSubSolver?.constructor?.name === process.env.DUMP_STAGE) { await Bun.write(process.env.DUMP_OUT ?? dir + "/stage-input.json", JSON.stringify(solver.activeSubSolver.getConstructorParams())); console.log("dumped " + process.env.DUMP_STAGE); process.exit(0) }
   const t = performance.now(); if (t - last > 30000) { last = t; console.log(`  ${((t - t0) / 1e3).toFixed(0)}s, iteration ${solver.iterations}, stage ${solver.activeSubSolver?.constructor?.name ?? solver.currentPipelineStepIndex ?? ""}${solver.activeSubSolver?.activeSubSolver ? " / " + solver.activeSubSolver.activeSubSolver.constructor?.name : ""}, rss ${(process.memoryUsage().rss / 2 ** 30).toFixed(1)} GB`) } }
 console.log(`${solver.solved ? "solved" : "FAILED: " + solver.error} in ${((performance.now() - t0) / 1e3).toFixed(0)}s`)
-if (!solver.solved) process.exit(1)
+if (!solver.solved) { // FAIL_DUMP=<file>: save the high-density node that failed (its port points and bounds) for diagnosis
+  if (process.env.FAIL_DUMP) { const hd = solver.highDensityRouteSolver; const id = /Failed to solve 1 nodes, ([^.]+)\./.exec(solver.error ?? "")?.[1]; const all = [hd?.activeNode, ...(hd?.unsolvedNodePortPoints ?? []), ...(solver.highDensityNodePortPoints ?? [])].filter(Boolean); const node = all.find((n: any) => n.capacityMeshNodeId === id) ?? hd?.activeNode
+    if (node) { await Bun.write(process.env.FAIL_DUMP, JSON.stringify(node)); console.log("failed node saved to " + process.env.FAIL_DUMP) }
+    console.log("high-density stats: " + JSON.stringify(hd?.stats)) }
+  process.exit(1) }
 // ---------- output: routes.json ----------
 const traces: any[] = solver.getOutputSimplifiedPcbTraces()
 if (!process.env.FROM_TRACES) await Bun.write(process.env.TRACES_OUT ?? dir + "/autoroute.traces.json", JSON.stringify(traces)) // the solver's raw output
