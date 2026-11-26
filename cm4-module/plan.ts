@@ -372,12 +372,13 @@ for (const [b, y] of [["3V3", 25.6], ["1V8", 21.3]] as const) { const U = `U_${b
 // straps and pull-ups next to the processor ball (or the PMIC) of their net
 tick("straps")
 const ballOf = (net: string) => { const s = signals.find((q) => q.name === net)!; return ball["U1." + s.ball] }
-// The 16 SYSBOOT balls are a 4 x 4 block in the processor's south-west corner (rows R-V, columns 1-4): every strap
-// escapes south through the band below the ball field, so the resistors stay out of that band (anywhere: false) and
-// keep 1.3 mm from each other on their side, which leaves every pad a way in on more than one layer.
-const straps: Part[] = []
-for (let i = 0; i < 16; i++) { const p = near(`R_SB${i}`, ballOf(`SYSBOOT${i}`), { maxDist: 14, layers: ["bottom", "top"], anywhere: false, ok: (q) => !straps.some((o) => o.layer === q.layer && Math.hypot(o.x - q.x, o.y - q.y) < 1.3) }); if (p) straps.push(p) }
-for (const r of ["R_RPB0", "R_RPB2"]) near(r, at(r === "R_RPB0" ? "R_SB0" : "R_SB2", "pin1"), { maxDist: 8, layers: ["bottom", "top"] })
+// The 16 SYSBOOT balls are a 4 x 4 block in the processor's south-west corner (rows R-V, columns 1-4). Their straps
+// go into the strip between the ball field and the board's south edge, which nothing else uses (J2 is on the bottom
+// there and its few vias leave the top free): a strap's through-via to GND / 3V3 blocks every layer, so none of them sits
+// in the band south of the ball field that the escaping signals cross. The straps keep 1.3 mm from each other on their side.
+const straps: Part[] = [], STRIP = 2.6
+for (let i = 0; i < 16; i++) { const b = ballOf(`SYSBOOT${i}`), p = near(`R_SB${i}`, { x: b.x, y: 0.5 }, { maxDist: 9, layers: ["top", "bottom"], anywhere: false, ok: (q) => q.y <= STRIP && !straps.some((o) => o.layer === q.layer && Math.hypot(o.x - q.x, o.y - q.y) < 1.3) }); if (p) straps.push(p) }
+for (const r of ["R_RPB0", "R_RPB2"]) near(r, at(r === "R_RPB0" ? "R_SB0" : "R_SB2", "pin1"), { maxDist: 8, layers: ["top", "bottom"], anywhere: false, ok: (q) => q.y <= STRIP })
 // pull-ups between the processor and J1, under the CM4 pin of their net (the top over J1 stays free for via-in-pad at its pins)
 const pinXY = (net: string) => { const p = pins.find((q) => q.role === net)!; return { x: p.x, y: p.y } }
 for (const n of ["SD_CMD", "SD_DAT0", "SD_DAT1", "SD_DAT2", "SD_DAT3", "SD_PWR_ON", "GPIO2_SDA1", "GPIO3_SCL1", "ID_SD", "ID_SC", "USB_OTG_ID"]) { const r = NETLIST.find((p) => p.part.startsWith("R") && Object.values(p.nets).includes(n) && p.ref !== "R_PGOOD")!.ref; near(r, { x: pinXY(n).x, y: 27.6 }, { maxDist: 10, layers: ["bottom", "top"] }) }
