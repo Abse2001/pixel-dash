@@ -41,7 +41,7 @@ const KEEPOUT_L4: [number, number, number, number][] = [ // x0, y0, x1, y1
   [-74.0, 11.55, -63.6, 18.75], // memory ball field
   [-37.6, E.y0, E.x1, E.y1], [E.x0, 29.4, -37.6, E.y1], // east power column, strip under J1
 ]
-for (const [x0, y0, x1, y1] of KEEPOUT_L4) obstacles.push({ type: "rect", layers: ["inner1"], connectedTo: [], center: { x: r4((x0 + x1) / 2), y: r4((y0 + y1) / 2) }, width: r4(x1 - x0), height: r4(y1 - y0) })
+for (const [x0, y0, x1, y1] of KEEPOUT_L4.filter((_, i) => !process.env.KEEPOUTS || process.env.KEEPOUTS.split(",").includes(String(i)))) obstacles.push({ type: "rect", layers: ["inner1"], connectedTo: [], center: { x: r4((x0 + x1) / 2), y: r4((y0 + y1) / 2) }, width: r4(x1 - x0), height: r4(y1 - y0) })
 // ---------- connections: every signal net with all its terminals ----------
 function point(t: any) { const it = items.find((i) => i.ref === t.ref && i.layers.length)
   // a ball that already has its via in the pad (the planner drills one for every ball the DDR copper boxes in) is reachable on both layers
@@ -51,7 +51,7 @@ const connections = (plan.nets as any[]).map((n) => ({ name: n.name, pointsToCon
 const srj = { layerCount: 3, minTraceWidth: W, nominalTraceWidth: W, minViaHoleDiameter: 0.1, minViaPadDiameter: 0.3, defaultObstacleMargin: CLR, minTraceToPadEdgeClearance: CLR, minBoardEdgeClearance: 0.2,
   minViaHoleEdgeToViaHoleEdgeClearance: 0.2, allowViaInPad: true, obstacles, connections, bounds: { minX: E.x0, maxX: E.x1, minY: E.y0, maxY: E.y1 },
   outline: [{ x: E.x0, y: E.y0 }, { x: E.x1, y: E.y0 }, { x: E.x1, y: E.y1 }, { x: E.x0, y: E.y1 }] }
-await Bun.write(dir + "/autoroute.srj.json", JSON.stringify(srj))
+await Bun.write(process.env.SRJ_OUT ?? dir + "/autoroute.srj.json", JSON.stringify(srj))
 console.log(`SRJ: ${obstacles.length} obstacles, ${connections.length} connections, ${connections.reduce((s, c) => s + c.pointsToConnect.length, 0)} terminals; pipeline ${PIPELINE}`)
 if (process.env.SRJ_ONLY) process.exit(0)
 // ---------- solve ----------
