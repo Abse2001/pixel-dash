@@ -11,7 +11,7 @@ console.log("gerber files:", Object.entries(files).map(([n, t]) => `${n} (${(t.l
 const INFO: Record<string, [string, string, string]> = { // value, package, LCSC part
   C100N_0201: ["100nF", "0201", "C76939"], C100N_0402: ["100nF", "0402", "C1525"], C1U_0402: ["1uF", "0402", "C52923"], C10U_0603: ["10uF", "0603", "C19702"], C15P_0402: ["15pF", "0402", "C285151"],
   R240_0201: ["240R 1%", "0201", ""], R49R9_0402: ["49.9R 1%", "0402", ""], R1K_0402: ["1k 1%", "0402", ""], XTAL_24M: ["24MHz 10pF", "SMD3225-4P", ""] }
-{ const { PARTS } = await import("./parts-info"), PKG: Record<string, string> = { G0402: "0402", G0603: "0603", G0805: "0805", PMIC: "VQFN-48 6x6", PHY: "QFN-24 4x4", BUCK: "SOT-23-5", IND: "0806", XTAL25: "SMD3225-4P", CM4_HDR: "DF40C-100DP" }
+{ const { PARTS } = await import("./parts-info"), PKG: Record<string, string> = { G0402: "0402", G0603: "0603", G0805: "0805", PMIC: "VQFN-48 6x6", PHY: "QFN-24 4x4", BUCK: "SOT-23-5", NFET: "SOT-23", IND: "0806", XTAL25: "SMD3225-4P", CM4_HDR: "DF40C-100DP" }
   for (const [k, v] of Object.entries(PARTS)) if (v.lcsc) INFO[k] = [v.value!, PKG[v.fp] ?? v.fp, v.lcsc] }
 // LCSC numbers of the parts imported earlier come from their import files
 const imp: Record<string, string> = { R240_0201: "../am3354/imports/RC0201FR_07240RL.tsx", R49R9_0402: "../am3354/imports/A_0402WGF499JTCE.tsx", R1K_0402: "../imports/A_0402WGF1001TCE.tsx", XTAL_24M: "./imports/TXM24M0004322DBCDO00T.tsx", C100N_0201: "../am3354/imports/TMK063ABJ104KP_F.tsx", C10U_0603: "../imports/CL10A106KP8NNNC.tsx", C100N_0402: "../imports/CL05B104KO5NNNC.tsx", C15P_0402: "../imports/A_0402CG150F500NT.tsx" }

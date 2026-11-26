@@ -50,7 +50,7 @@ export const SIGNALS: Sig[] = [
   // software (USB mode register / Linux dr_mode); pin 101 is read on a 3.3 V GPIO instead (USB_OTG_ID below).
   { net: "USB0_VBUS", ball: "P15", mode: 0, fn: "USB0_VBUS (from the module's 5 V through R_VBUS)" },
   // reset and PMIC control
-  { net: "PWRONRSTn", ball: "B15", mode: 0, fn: "power-on reset from PMIC PGOOD (1 kOhm), CM4 RUN_PG", cm4: 92 },
+  { net: "PWRONRSTn", ball: "B15", mode: 0, fn: "power-on reset from PMIC PGOOD (1 kOhm); CM4 RUN_PG through Q_RUN_PG" },
   { net: "RTC_PWRONRSTn", ball: "B5", mode: 0, fn: "from PMIC LDO_PGOOD" },
   { net: "PMIC_POWER_EN", ball: "C6", mode: 0, fn: "to PMIC PWR_EN" },
   { net: "EXT_WAKEUP", ball: "C5", mode: 0, fn: "from PMIC nWAKEUP" },
@@ -70,7 +70,7 @@ export const EXTRA_GPIO: string[] = []
 for (const s of SIGNALS) if (s.cm4) CM4[s.cm4] = s.net
 for (const [n, p] of Object.entries(GPIO_PINS)) CM4[p] = n
 // No Ethernet on this module (networking over USB0): the CM4 Ethernet pins and LED pins are left unconnected.
-Object.assign(CM4, { 93: "nRPIBOOT", 99: "GLOBAL_EN" })
+Object.assign(CM4, { 92: "RUN_PG", 93: "nRPIBOOT", 99: "GLOBAL_EN" })
 
 /** two-pin passives and ICs: ref -> part type, pin -> net */
 export type Part = { ref: string; part: string; nets: Record<string, string>; note?: string }
@@ -93,6 +93,12 @@ two("C_INTLDO", "C100N_0402", "PMIC_INTLDO", "GND"); two("C_BYPASS", "C10U_0402"
 two("R_PB", "R100K", "PMIC_PB", "SYS", "PB_IN high: no push-button (the AC input wakes the PMIC)")
 two("R_GLOBAL_EN", "R100K", "GLOBAL_EN", "SYS", "nRESET pull-up; the carrier pulls GLOBAL_EN low to power off (CM4: 100 k to +5 V)")
 two("R_WAKE", "R100K", "EXT_WAKEUP", "VDDS_RTC"); two("R_INT", "R10K", "NMIn", "VDD_3V3")
+// CM4 RUN_PG (pin 92) is a 3.3 V signal with a 10 kOhm pull-up on a real CM4: high = running, the carrier pulls it low
+// (through 220 Ohm) to reset. PWRONRSTn here is driven by the PMIC's PGOOD, which goes only to VIO (VDDS_RTC, 1.8 V).
+// A bidirectional N-MOSFET level shifter (gate on 1.8 V, source on PWRONRSTn, drain on RUN_PG) gives the carrier the
+// CM4's 3.3 V levels and passes its low through to PWRONRSTn. Si2302CDS: VGS(th) 0.40-0.85 V.
+P("Q_RUN_PG", "NFET", { pin1: "VDDS_RTC", pin2: "PWRONRSTn", pin3: "RUN_PG" }, "RUN_PG level shifter")
+two("R_RUN_PG", "R10K", "RUN_PG", "VDD_3V3", "RUN_PG pull-up (CM4: 10 kOhm to 3.3 V)")
 two("R_PGOOD", "R1K", "PMIC_PGOOD", "PWRONRSTn", "lets the carrier pull RUN_PG low (CM4: through 220 ohm) against the push-pull PGOOD")
 two("R_SDA0", "R2K2", "I2C0_SDA", "VDD_3V3"); two("R_SCL0", "R2K2", "I2C0_SCL", "VDD_3V3")
 // ---- 3.3 V and 1.8 V bucks from 5 V, switched on by the PMIC's LDO4 / LDO3 outputs ----
@@ -111,6 +117,9 @@ two("R_OTG_ID", "R10K", "USB_OTG_ID", "VDD_3V3", "CM4: USB_OTG_ID is pulled up o
 two("R_SD_PWR_ON", "R10K", "SD_PWR_ON", "VDD_3V3", "CM4: pull-up so the carrier's SD power switch defaults to on")
 two("R_SDA2", "R2K2", "GPIO2_SDA1", "VDD_3V3"); two("R_SCL2", "R2K2", "GPIO3_SCL1", "VDD_3V3")
 two("R_ID_SD", "R4K7", "ID_SD", "VDD_3V3"); two("R_ID_SC", "R4K7", "ID_SC", "VDD_3V3")
-two("R_VBUS", "R0", "VIN5", "USB0_VBUS", "USB0 VBUS sense from the module's 5 V (CM4 carriers do not bring VBUS to the module)")
+// USB0_VBUS: abs. max and recommended max are both 5.25 V (AM335x datasheet), the CM4's +5 V input may be 4.75-5.25 V:
+// no margin, so 1 kOhm in series limits the current into the comparator input during an overshoot. The pin draws only
+// the comparator's bias (USB OTG: >= 40 kOhm), so it still sees > 4.6 V at a 4.75 V input (VBUS valid: 4.4 V).
+two("R_VBUS", "R1K", "VIN5", "USB0_VBUS", "USB0 VBUS sense from the module's 5 V through 1 kOhm (CM4 carriers do not bring VBUS to the module)")
 
 export const PLANE_NETS = ["GND", "VDDS_DDR", "VDD_CORE", "VDD_MPU", "VDD_3V3", "VDD_1V8", "VDDS_RTC", "DDR_VREF", "VIN5", "SYS"]

@@ -159,3 +159,5 @@ C_X_1V8_3,7.5999mm,-10.3500mm,Bottom,0
 C_X_3V3_1,9.7500mm,-10.2999mm,Bottom,0
 C_X_3V3_2,6.0000mm,-10.2999mm,Bottom,0
 C_X_3V3_3,10.9500mm,10.2499mm,Bottom,90
+Q_RUN_PG,-10.1869mm,12.9261mm,Top,270
+R_RUN_PG,-9.7869mm,12.7886mm,Bottom,0

@@ -12,6 +12,7 @@ export const PARTS: Record<string, { fp: string; comp?: string; file?: string; v
   XTAL_24M: { fp: "XTAL3225", comp: "TXM24M0004322DBCDO00T", file: "./imports/TXM24M0004322DBCDO00T" },
   // new on the CM4 module
   PMIC: { fp: "PMIC", value: "TPS65217DRSLR", lcsc: "C702315" }, BUCK: { fp: "BUCK", value: "SY8089A1AAC", lcsc: "C479074" },
+  NFET: { fp: "NFET", value: "Si2302CDS-T1-GE3", lcsc: "C10488" },
   IND: { fp: "IND", value: "2.2uH WIP201610P-2R2ML", lcsc: "C315717" },
   CM4_HDR: { fp: "CM4_HDR", value: "DF40C-100DP-0.4V(51)", lcsc: "C531031" },
   R100K: { fp: "G0402", value: "100k", lcsc: "C25741" }, R10K: { fp: "G0402", value: "10k", lcsc: "C25744" }, R1K: { fp: "G0402", value: "1k", lcsc: "C11702" },

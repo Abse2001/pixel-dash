@@ -7,7 +7,7 @@ set -e
 cd "$(dirname "$0")"
 bun design/pads.tsx > /dev/null                                   # pad geometry of the parts as tscircuit renders them
 PREPLACE=1 bun plan.ts                                            # every part, via and fixed trace around the fixed DDR copper
-ROUTES=none CORRIDORS_OUT=pb/corridors.json bun planes.ts > /dev/null  # supply islands without signals: their corridors
+FAT=0 ROUTES=none CORRIDORS_OUT=pb/corridors.json bun planes.ts > /dev/null  # supply islands without signals: their (thin) corridors
 bun pb/export.ts                                                  # router input: pads, fixed copper, nets
 if [ -n "$ROUTE" ]; then (cd pb && SEED=${SEED:-1} MAXIT=${MAXIT:-80} OUT=_make bun route.ts) && bun pb/import.ts pb/routes_make.json
 else bun pb/import.ts ${PB_ROUTES:-pb/routing.json}; fi             # the chosen routing (pb/routing.json) -> routes.json

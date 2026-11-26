@@ -14,7 +14,7 @@ needs a decision or a check outside this repository.
 |---|---|
 | +5 V in (J1 77-87) | VIN5: the module makes every rail itself (TPS65217D: VDD_CORE, VDD_MPU, VDDS_DDR, RTC; SY8089: 3.3 V, 1.8 V) |
 | +3.3 V / +1.8 V out (J1 84/86, 88/90) | the module's 3.3 V and 1.8 V rails |
-| GLOBAL_EN (99), RUN_PG (92), nRPIBOOT (93) | PMIC enable; processor reset (PWRONRSTn); USB boot (see straps) |
+| GLOBAL_EN (99), RUN_PG (92), nRPIBOOT (93) | PMIC enable; RUN_PG as on a CM4 (3.3 V, 10 k pull-up, high = running, pull low to reset) through a MOSFET level shifter to PWRONRSTn; USB boot (see straps) |
 | GPIO2-27 on the 40-pin header | GPIO / UART0 (console) / I2C2 / SPI0 / McASP0 (PCM) / EHRPWM1, per `fab/pinmap.csv` |
 | ID_SD / ID_SC (HAT EEPROM) | I2C1 |
 | SD card (CM4 Lite pins) | MMC0, the boot device (SD_PWR_ON on a GPIO) |
@@ -43,7 +43,7 @@ Through vias only: 0.1 mm holes in 0.3 mm pads, via-in-pad throughout (epoxy-fil
 
 ## Files
 
-- `fab/gerbers/`, `fab/bom.csv` (160 parts, 52 top / 108 bottom), `fab/cpl.csv`: for a fab/assembly quote.
+- `fab/gerbers/`, `fab/bom.csv` (162 parts, 53 top / 109 bottom), `fab/cpl.csv`: for a fab/assembly quote.
 - `fab/pinmap.csv`: every CM4 pin with its net, processor ball and pinmux mode.
 - `fab/views/*.png`: one picture per copper layer.
 - `dist/module.circuit.json`: the board as tscircuit circuit JSON.
@@ -69,7 +69,13 @@ RK3566 CM4 module (routing playbook). Run several seeds in parallel and keep the
 
 then re-route whatever is left in conflict strictly on the finished copper with `pb/reroute.py` (two-terminal nets;
 the order matters), check, and copy the result to `pb/routing.json`. The current routing is seed 6 with GPIO7_CE1,
-GPIO21_PCM_DOUT, GPIO22 and GPIO23 re-routed in that order.
+GPIO21_PCM_DOUT, GPIO22 and GPIO23 re-routed in that order, then the RUN_PG level shifter added with an incremental
+re-route from that routing (the router's resume mode, 0 conflicts after 9 passes):
+
+    cd pb && OUT=_q POLISH=routing.json RENEG=1 RENEG_NETS=PWRONRSTn,RUN_PG,VDDS_RTC SEED=6 MAXIT=40 GND_SIG=1 GND_SIG_BGA=1 bun route.ts
+
+(`make.sh` exports the router's corridors with `FAT=0`: the routing was made around the thin supply skeletons; the
+wide power trunks are laid around the finished routing.)
 
 Verified for this routing: all 6570 DDR trace points and 100 DDR vias of `module9` are in the built board unchanged.
 
@@ -81,18 +87,23 @@ Verified for this routing: all 6570 DDR trace points and 100 DDR vias of `module
    is 1.5 mm. Datasheet maxima of the tallest bottom parts: C_SYS 22 uF 0805 CL21A226MAQNNNE 1.40 mm (1.25 +-0.15,
    Samsung code Q), SY8089 SOT-23-5 1.30 mm (Silergy outline), 2.2 uH WIP201610P about 1.0 mm (2016-10 size), 0603
    MLCCs 0.90 mm. Everything fits; C_SYS leaves 0.1 mm. A 3.0 mm stacking carrier (DF40HC(3.0)-100DS) leaves 1.6 mm more.
-3. **RUN_PG (pin 92)** is the processor's PWRONRSTn, a 1.8 V-domain signal: check what the carrier expects on it.
+3. **RUN_PG (pin 92)** (done): PWRONRSTn is driven by the PMIC's PGOOD at 1.8 V (its VIO is VDDS_RTC; PWRONRSTn
+   accepts it, VIH 1.35 V, and tolerates 3.3 V). Q_RUN_PG (Si2302CDS, VGS(th) 0.40-0.85 V; gate on VDDS_RTC, source
+   on PWRONRSTn, drain on RUN_PG) with R_RUN_PG 10 k to 3.3 V makes pin 92 behave as on a CM4: 3.3 V high once the
+   PMIC reports power good, and a carrier pulling it low (CM4: through 220 ohm) resets the processor.
 4. **Carrier current**: the module supplies 3.3 V and 1.8 V to the carrier on J1 84-90; the carrier's load on them
    must fit the SY8089 budget left after the module.
-5. **USB0_VBUS** is tied to the 5 V input (abs. max 5.25 V): a carrier 5 V above 5.25 V is out of spec for that ball.
-6. **USB pair**: D+ 16.68 mm with 0 vias, D- 16.66 mm with 2 vias (a 0.7 mm hop to the top layer where the bottom has
-   no unbroken ground under it). About 10 ps at a 2083 ps bit time; TI recommends equal via counts.
+5. **USB0_VBUS** (done): abs. max and recommended max 5.25 V (AM335x datasheet), the same as the CM4's +5 V upper
+   limit. R_VBUS is 1 k (was 0 ohm) to limit the current into the comparator input during an overshoot; the pin still
+   sees > 4.6 V at a 4.75 V input. A carrier's +5 V must stay within the CM4 spec (4.75-5.25 V).
+6. **USB pair**: D+ and D- both on the bottom layer with no vias, 16.55 and 16.43 mm.
 7. **Supply drop** (checked, `irdrop.py`, results in `power-results.txt`): DC drop over the four inner layers from each
-   regulator's output to its loads. VDD_MPU gets a 0.55 mm trunk on layer 4 from the PMIC to the processor core and
-   VIN5 a 0.45 mm trunk on layer 3 (`FAT` in `planes.ts`): VDD_MPU 21.7 mV at 1.0 A (was 108 mV), VDD_CORE 6.7 mV at
-   0.4 A, VDDS_DDR 10.5 mV at 0.6 A, VIN5 60-70 mV at 1.1-1.6 A. 3.3 V and 1.8 V drop 5-7 mV to the processor; to the
-   carrier's CM4 pins they drop 28 / 38 mV at 0.2 A each and 83 / 114 mV at the CM4's 0.6 A limit. **Keep the
-   carrier's load on the module's 3.3 V and 1.8 V outputs to about 0.2 A each** (the CM4 itself allows 0.6 A).
+   regulator's output to its loads. VDD_MPU's layer-4 copper also fills the PMIC's SYS area (SYS is on layer 3 only),
+   so its 1 A from DCDC2 no longer runs through a single thin link; VIN5 gets a 0.45 mm trunk on layer 3 (`FAT` in
+   `planes.ts`). VDD_MPU 26 mV at 1.0 A (was 108 mV), VDD_CORE 6 mV at 0.4 A, VDDS_DDR 11 mV at 0.6 A, VIN5 59-69 mV
+   at 1.1-1.6 A. 3.3 V and 1.8 V drop 5-7 mV to the processor; to the carrier's CM4 pins they drop 33 / 38 mV at 0.2 A
+   each and 97 / 114 mV at the CM4's 0.6 A limit. **Keep the carrier's load on the module's 3.3 V and 1.8 V outputs to
+   about 0.2 A each** (the CM4 itself allows 0.6 A).
 8. **Decoupling**: the eight optional extra 100 nF caps (C_X_*) sit 6-7.6 mm from their balls (outside the escape
    ring); the 20 DDR high-speed caps are within TI's limit (worst 9.1 mm of 10.16 mm).
 9. **Courtyards**: tscircuit reports 94 courtyard overlaps (default courtyard margins, mostly under the BGA);

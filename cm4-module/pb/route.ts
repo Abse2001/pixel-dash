@@ -663,8 +663,11 @@ if (process.env.POLISH) {
     // neighbours join the negotiation as soon as they conflict
     const skewed = nets.filter((n) => n.partner && Math.abs(lenOf(n) - lenOf(n.partner!)) > Math.max(LIM(n.name), +(process.env.RENEG_MIN ?? 1.0)))
     dirty = skewed.flatMap((n) => [n, n.partner!])
+    // RENEG_NETS=a,b: also rip up and re-route these nets (a changed netlist); nets the loaded routing lacks join too
+    const named = new Set((process.env.RENEG_NETS ?? "").split(",").filter(Boolean))
+    for (const n of nets) if ((named.has(n.name) || !rj.nets[n.name]) && !dirty.includes(n)) dirty.push(n)
     pres = +(process.env.PRESET ?? 2)
-    console.log("renegotiate from the loaded routing; skewed pairs:", skewed.map((n) => n.name).join(","))
+    console.log("renegotiate from the loaded routing; skewed pairs:", skewed.map((n) => n.name).join(","), "; re-routed:", dirty.map((n) => n.name).join(","))
   }
   if (!process.env.RENEG) {
   for (const lead of nets.filter((n) => n.partner)) {

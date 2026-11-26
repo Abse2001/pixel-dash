@@ -31,6 +31,7 @@ function render(p: any) { const t = PARTS[p.part], common: any = { key: p.name, 
   switch (p.part) {
     case "PMIC": return <TPS65217DRSLR {...common} footprint={PMIC_FP} />
     case "BUCK": return <SY8089A1AAC {...common} />
+    case "NFET": return <chip {...common} footprint="sot23" manufacturerPartNumber="Si2302CDS-T1-GE3" supplierPartNumbers={spn} pinLabels={{ pin1: "G", pin2: "S", pin3: "D" }} />
     case "IND": return <WIP201610P_2R2ML {...common} />
     case "XTAL_25M": return <chip {...common} footprint={xtal25} manufacturerPartNumber="K3A250001210" supplierPartNumbers={spn} pinLabels={{ pin1: "X1", pin2: "GND1", pin3: "X2", pin4: "GND2" }} />
     case "CM4_HDR": return <chip {...common} footprint={cm4HeaderFootprint()} manufacturerPartNumber="DF40C-100DP-0.4V(51)" supplierPartNumbers={spn} pinLabels={Object.fromEntries(Array.from({ length: 104 }, (_, i) => [`pin${i + 1}`, `P${i + 1}`]))} />

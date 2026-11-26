@@ -1,14 +1,14 @@
 carrier load on 3.3 V and 1.8 V: 0.60 A each
-VDD_CORE  0.40 A: worst load 6.7 mV below the source; plane loss 2.2 mW; peak current density 3.10 A/mm at (-25.5, 15.15, 'inner3'); copper above 1 A/mm 0.03 mm2
-VDD_MPU   1.00 A: worst load 21.7 mV below the source; plane loss 21.1 mW; peak current density 4.72 A/mm at (-39.15, 14.55, 'inner3'); copper above 1 A/mm 6.29 mm2
-VDDS_DDR  0.60 A: worst load 10.5 mV below the source; plane loss 5.0 mW; peak current density 2.10 A/mm at (-32.8, 7.85, 'inner2'); copper above 1 A/mm 0.01 mm2
-VDD_3V3   0.85 A: worst load 83.0 mV below the source; plane loss 50.7 mW; peak current density 5.97 A/mm at (-47.4, 27.75, 'inner2'); copper above 1 A/mm 4.09 mm2
-VDD_1V8   0.80 A: worst load 113.9 mV below the source; plane loss 68.6 mW; peak current density 5.97 A/mm at (-58.5, 29.8, 'inner2'); copper above 1 A/mm 5.85 mm2
-VIN5      1.60 A: worst load 69.8 mV below the source; plane loss 76.3 mW; peak current density 5.97 A/mm at (-29.45, 26.3, 'inner2'); copper above 1 A/mm 18.91 mm2
+VDD_CORE  0.40 A: worst load 6.2 mV below the source; plane loss 2.0 mW; peak current density 3.10 A/mm at (-25.5, 15.15, 'inner3'); copper above 1 A/mm 0.03 mm2
+VDD_MPU   1.00 A: worst load 26.2 mV below the source; plane loss 25.6 mW; peak current density 5.90 A/mm at (-39.0, 16.8, 'inner3'); copper above 1 A/mm 4.64 mm2
+VDDS_DDR  0.60 A: worst load 10.6 mV below the source; plane loss 5.1 mW; peak current density 2.10 A/mm at (-32.8, 7.85, 'inner2'); copper above 1 A/mm 0.01 mm2
+VDD_3V3   0.85 A: worst load 96.5 mV below the source; plane loss 58.7 mW; peak current density 5.97 A/mm at (-61.1, 27.6, 'inner2'); copper above 1 A/mm 4.56 mm2
+VDD_1V8   0.80 A: worst load 114.3 mV below the source; plane loss 68.8 mW; peak current density 5.97 A/mm at (-58.5, 29.8, 'inner2'); copper above 1 A/mm 6.21 mm2
+VIN5      1.60 A: worst load 69.0 mV below the source; plane loss 74.9 mW; peak current density 5.97 A/mm at (-29.45, 26.3, 'inner2'); copper above 1 A/mm 18.74 mm2
 carrier load on 3.3 V and 1.8 V: 0.20 A each
-VDD_CORE  0.40 A: worst load 6.7 mV below the source; plane loss 2.2 mW; peak current density 3.10 A/mm at (-25.5, 15.15, 'inner3'); copper above 1 A/mm 0.03 mm2
-VDD_MPU   1.00 A: worst load 21.7 mV below the source; plane loss 21.1 mW; peak current density 4.72 A/mm at (-39.15, 14.55, 'inner3'); copper above 1 A/mm 6.29 mm2
-VDDS_DDR  0.60 A: worst load 10.5 mV below the source; plane loss 5.0 mW; peak current density 2.10 A/mm at (-32.8, 7.85, 'inner2'); copper above 1 A/mm 0.01 mm2
-VDD_3V3   0.45 A: worst load 27.9 mV below the source; plane loss 6.6 mW; peak current density 2.08 A/mm at (-40.75, 18.55, 'inner2'); copper above 1 A/mm 2.67 mm2
-VDD_1V8   0.40 A: worst load 38.1 mV below the source; plane loss 8.3 mW; peak current density 1.99 A/mm at (-58.5, 29.8, 'inner2'); copper above 1 A/mm 3.57 mm2
-VIN5      1.12 A: worst load 59.7 mV below the source; plane loss 48.2 mW; peak current density 5.36 A/mm at (-34.1, 12.0, 'inner2'); copper above 1 A/mm 17.54 mm2
+VDD_CORE  0.40 A: worst load 6.2 mV below the source; plane loss 2.0 mW; peak current density 3.10 A/mm at (-25.5, 15.15, 'inner3'); copper above 1 A/mm 0.03 mm2
+VDD_MPU   1.00 A: worst load 26.2 mV below the source; plane loss 25.6 mW; peak current density 5.90 A/mm at (-39.0, 16.8, 'inner3'); copper above 1 A/mm 4.64 mm2
+VDDS_DDR  0.60 A: worst load 10.6 mV below the source; plane loss 5.1 mW; peak current density 2.10 A/mm at (-32.8, 7.85, 'inner2'); copper above 1 A/mm 0.01 mm2
+VDD_3V3   0.45 A: worst load 32.5 mV below the source; plane loss 7.4 mW; peak current density 1.99 A/mm at (-61.1, 27.6, 'inner2'); copper above 1 A/mm 3.12 mm2
+VDD_1V8   0.40 A: worst load 38.2 mV below the source; plane loss 8.3 mW; peak current density 1.99 A/mm at (-58.5, 29.8, 'inner2'); copper above 1 A/mm 3.54 mm2
+VIN5      1.12 A: worst load 59.1 mV below the source; plane loss 47.5 mW; peak current density 5.36 A/mm at (-34.1, 12.0, 'inner2'); copper above 1 A/mm 17.54 mm2

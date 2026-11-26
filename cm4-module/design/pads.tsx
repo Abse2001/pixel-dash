@@ -16,6 +16,7 @@ const items: Record<string, any> = {
   L2U2: <WIP201610P_2R2ML name="U" />,
   XTAL_25M: <K3A250001210 name="U" />,
   CM4_HDR: <chip name="U" footprint={cm4HeaderFootprint()} />,
+  NFET: <chip name="U" footprint="sot23" />,
   R0402: <resistor name="U" resistance="10k" footprint="0402" />,
   C0402: <capacitor name="U" capacitance="100nF" footprint="0402" />,
   C0603: <capacitor name="U" capacitance="10uF" footprint="0603" />,

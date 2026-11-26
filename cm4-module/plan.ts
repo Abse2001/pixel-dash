@@ -93,7 +93,7 @@ const FP: Record<string, { pads: { pin: string; x: number; y: number; w: number;
 }
 // parts new on this module: pad geometry as tscircuit renders them (design/pads.tsx -> design/pads.json)
 const G = (k: string) => { const p = PADS[k]; return { pads: p.pads.map((q) => ({ ...q })), body: [p.body[0] + 0.2, p.body[1] + 0.2] as [number, number] } }
-Object.assign(FP, { PMIC: G("PMIC"), PHY: G("PHY"), BUCK: G("BUCK"), IND: G("L2U2"), CM4_HDR: { ...G("CM4_HDR"), body: [22.0, 3.86] }, G0402: G("R0402"), G0603: G("C0603"), G0805: G("C0805"),
+Object.assign(FP, { PMIC: G("PMIC"), PHY: G("PHY"), BUCK: G("BUCK"), NFET: G("NFET"), IND: G("L2U2"), CM4_HDR: { ...G("CM4_HDR"), body: [22.0, 3.86] }, G0402: G("R0402"), G0603: G("C0603"), G0805: G("C0805"),
   XTAL25: { pads: [[-1.1, -0.8, 1], [1.1, -0.8, 2], [1.1, 0.8, 3], [-1.1, 0.8, 4]].map(([x, y, n]) => ({ pin: "pin" + n, x, y, w: 1.4, h: 1.15 })), body: [3.7, 3.0] } })
 /** world pads of a part (bottom side parts are mirrored, as tscircuit renders them) */
 export const padsOf = (p: { part: string; x: number; y: number; rot: number; layer: Layer }) => { const f = FP[PARTS[p.part].fp], c = Math.cos(p.rot * Math.PI / 180), s = Math.sin(p.rot * Math.PI / 180), m = p.layer === "bottom" ? -1 : 1
@@ -452,6 +452,18 @@ if (LATE) { const routes = process.env.TOPUP ? await Bun.file(import.meta.dir + 
   free("C_BULK_1V8_2", "C10U_0603", U1("D10"), "VDD_1V8", "GND", { anywhere: true, maxDist: 8, viasPerPad: 2, step: 0.15 })
   for (const [net, near, n] of [["VDD_MPU", U1("G13"), 2], ["VDD_1V8", U1("H15"), 2], ["VDD_1V8", U1("R11"), 1], ["VDD_3V3", U1("P12"), 2], ["VDD_3V3", U1("E12"), 1]] as const) for (let i = 0; i < n; i++) { const name = `C_X_${net.slice(4)}_${parts.filter((p) => p.name.startsWith("C_X_" + net.slice(4))).length + 1}`
     const p = free(name, "C100N_0402", near, net, "GND", { anywhere: true, maxDist: 10, step: 0.15 }); if (p) report.push(`top-up: ${name} (${net}) ${Math.hypot(p.x - near.x, p.y - near.y).toFixed(2)} mm from its ball`) } }
+
+// ---------- parts added after the board was routed (RUN_PG level shifter): placed last, so nothing else moves, at the
+// spots a search found next to CM4 pin 92 clear of the routed copper of every other net (the routing before this
+// change), so only their own nets were re-routed (pb/route.ts RENEG_NETS=PWRONRSTn,RUN_PG,VDDS_RTC) ----------
+{ const q = placeAt("Q_RUN_PG", -61.3369, 28.0761, 270, "top")
+  const r = near("R_RUN_PG", { x: -60.9369, y: 27.9386 }, { maxDist: 0, layers: ["bottom"], anywhere: false, ok: (s) => s.rot === 0 })
+  if (!r) report.push("!! R_RUN_PG: its spot is taken")
+  // their terminals join the router nets built above (placed only now); drop the reports written before they existed
+  for (const pp of [q, r]) if (pp) for (const t of padsOf(pp)) { const net = pp.nets[t.pin]; if (!net || PLANE.has(net)) continue
+    let n = nets.find((x) => x.name === net); if (!n) { n = { name: net, terms: [], inner: false }; nets.push(n) }
+    n.terms.push({ ref: `${pp.name}.${t.pin}`, x: r3(t.x), y: r3(t.y), layer: pp.layer, shape: t.shape, kind: "pad" }) }
+  for (let i = report.length - 1; i >= 0; i--) if (/^!! (Q_RUN_PG|R_RUN_PG) \(.*not placed$|^!! net RUN_PG has 1 terminal/.test(report[i])) report.splice(i, 1) }
 
 // ---------- checks and output ----------
 const holes = HOLES

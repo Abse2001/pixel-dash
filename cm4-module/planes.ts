@@ -44,7 +44,7 @@ if (PB) NETS.splice(0, NETS.length,
   { name: "VIN5", layers: [1], fill: { 1: (x: number, y: number) => y > NORTH } },
   // core and MPU: layer-4 islands under the processor and their feeds from the PMIC (the AM335x ball map interleaves
   // five supplies in its core; one layer cannot keep them all in one piece each); everything else on layer 3
-  { name: "VDD_MPU", layers: [2], fill: { 2: CORE_AREA } },
+  { name: "VDD_MPU", layers: [2], fill: { 2: (x: number, y: number) => CORE_AREA(x, y) || SYSBOX(x, y) } }, // also the PMIC's SYS area on layer 4 (SYS is on layer 3 only): the 1 A feed from DCDC2 runs through it
   { name: "VDD_CORE", layers: [2], fill: { 2: CORE_AREA } },
   { name: "VDD_3V3", layers: [1, 2], fill: { 1: CORE_AREA } }, // like 1.8 V: a thin link on layer 4 where layer 3 is walled in
   { name: "VDD_1V8", layers: [1, 2], fill: { 1: CORE_AREA } }) // low current (I/O, PLL, USB PHY): may link through layer 4 where layer 3 is taken
