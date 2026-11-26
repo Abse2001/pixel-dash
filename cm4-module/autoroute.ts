@@ -58,7 +58,19 @@ if (process.env.SRJ_ONLY) process.exit(0)
 // FROM_TRACES=1: convert the saved solver output (autoroute.traces.json) again without solving
 const solver: any = process.env.FROM_TRACES ? { solved: true, failed: false, getOutputSimplifiedPcbTraces: () => JSON.parse(require("node:fs").readFileSync(dir + "/autoroute.traces.json", "utf8")) } : new mod[PIPELINE](srj, process.env.EFFORT ? { effort: +process.env.EFFORT } : undefined)
 const t0 = performance.now(); let last = 0
+// VIA_AUDIT=1 (diagnostic): at each stage change, count the previous stage's vias that sit inside a layer-4 keep-out
+let auditPrev: any = null
+const keepRects = obstacles.filter((o: any) => o.layers.length === 1 && o.layers[0] === "inner1" && o.width * o.height > 20)
+const auditVias = (out: any): number => { let n = 0; const seen = new Set<string>()
+  const hit = (x: number, y: number) => { const k = `${x.toFixed(3)},${y.toFixed(3)}`; if (seen.has(k)) return; seen.add(k); if (keepRects.some((o: any) => Math.abs(x - o.center.x) < o.width / 2 && Math.abs(y - o.center.y) < o.height / 2)) n++ }
+  for (const r of Array.isArray(out) ? out : []) { for (const v of r?.vias ?? []) hit(v.x, v.y)
+    const pts = r?.route ?? []; for (let i = 0; i < pts.length; i++) { const p = pts[i]; if (p.route_type === "via") hit(p.x, p.y); else if (i && pts[i - 1].z !== undefined && p.z !== undefined && pts[i - 1].z !== p.z) hit(p.x, p.y) } }
+  return n }
 while (!solver.solved && !solver.failed) { solver.step()
+  if (process.env.VIA_AUDIT && solver.activeSubSolver !== auditPrev) { if (auditPrev) { let out: any; try { out = auditPrev.getOutput?.() } catch { out = undefined }
+      if (out === undefined && auditPrev.routes) out = auditPrev.routes
+      console.log(`  [via-audit] ${auditPrev.constructor?.name}: ${Array.isArray(out) ? auditVias(out) + " vias inside layer-4 keep-outs (" + out.length + " routes)" : "output not inspectable"}`) }
+    auditPrev = solver.activeSubSolver }
   // DUMP_STAGE=<solver class>: save that stage's constructor input (a stand-alone repro of the stage) and stop
   if (process.env.DUMP_STAGE && solver.activeSubSolver?.constructor?.name === process.env.DUMP_STAGE) { await Bun.write(process.env.DUMP_OUT ?? dir + "/stage-input.json", JSON.stringify(solver.activeSubSolver.getConstructorParams())); console.log("dumped " + process.env.DUMP_STAGE); process.exit(0) }
   const t = performance.now(); if (t - last > 30000) { last = t; console.log(`  ${((t - t0) / 1e3).toFixed(0)}s, iteration ${solver.iterations}, stage ${solver.activeSubSolver?.constructor?.name ?? solver.currentPipelineStepIndex ?? ""}${solver.activeSubSolver?.activeSubSolver ? " / " + solver.activeSubSolver.activeSubSolver.constructor?.name : ""}, rss ${(process.memoryUsage().rss / 2 ** 30).toFixed(1)} GB`) } }
