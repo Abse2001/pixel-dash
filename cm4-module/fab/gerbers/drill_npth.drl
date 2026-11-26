@@ -1,0 +1,19 @@
+M48
+; DRILL file {tscircuit} date 2026-11-26T21:12:43.932Z
+; FORMAT={-:-/ absolute / metric / decimal}
+; #@! TF.CreationDate,2026-11-26T21:12:43.932Z
+; #@! TF.GenerationSoftware,tscircuit
+; #@! TF.FileFunction,NonPlated,1,6,NPTH
+FMAT,2
+METRIC
+; #@! TA.AperFunction,NonPlated,NPTH,ComponentDrill
+T10C2.700000
+%
+G90
+G05
+T10
+X-24.0000Y16.5000
+X-24.0000Y-16.5000
+X24.0000Y16.5000
+X24.0000Y-16.5000
+M30

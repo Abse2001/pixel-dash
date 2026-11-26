@@ -192,11 +192,18 @@ function anchored(name: string, part: string, at: Pt, net1: string, net2: string
   if (!best) return null
   commitPart(best.p); if (best.nv) addVia({ name: `V_${name}_2`, x: best.nv.x, y: best.nv.y, net: net2, d: 0.3, hole: 0.1 }); return best.p }
 /** a two-pad part anywhere near a point, with its own via(s) inside the pads listed in `viaPins` */
+// Escape ring (placement test, PLACE_RING=0 turns it off): no free-placed part in the processor's outer ball rows or in
+// the 2 mm band outside them on the north, east and south sides (the west side is the fixed DDR block). Its signals
+// escape there on every layer; decoupling goes under the power core in the middle or outside the band.
+const FIELD = { x0: -52.4, y0: 7.55, x1: -37.2, y1: 22.75 }, CORE = { x0: -48.8, y0: 11.15, x1: -40.8, y1: 19.15 }, BAND = 2.0, PADM = 0.6
+const inRing = (x: number, y: number) => process.env.PLACE_RING !== "0" && x > FIELD.x0 - BAND - PADM && x < FIELD.x1 + BAND + PADM && y > FIELD.y0 - BAND - PADM && y < FIELD.y1 + BAND + PADM
+  && !(x > CORE.x0 + PADM && x < CORE.x1 - PADM && y > CORE.y0 + PADM && y < CORE.y1 - PADM) && !(x < FIELD.x0 - PADM && y > FIELD.y0 + PADM && y < FIELD.y1 - PADM)
 function free(name: string, part: string, near: Pt, net1: string, net2: string, o: { layers?: Layer[]; maxDist?: number; viasPerPad?: number; step?: number; score?: (p: Part) => number; viaPins?: string[]; ok?: (p: Part) => boolean; late?: (p: Part) => boolean; anywhere?: boolean } = {}): Part | null {
   const n = o.viasPerPad ?? 1, R = o.maxDist ?? 6, st = o.step ?? 0.1, ls = o.layers ?? (["bottom", "top"] as Layer[]), cands: { p: Part; cost: number }[] = []
   for (const layer of ls) for (let dx = -R; dx <= R + 1e-9; dx += st) for (let dy = -R; dy <= R + 1e-9; dy += st) { const d = Math.hypot(dx, dy); if (d > R) continue
     for (const rot of [0, 90]) { const p: Part = { name, part, x: r3(near.x + dx), y: r3(near.y + dy), rot, layer, nets: { pin1: net1, pin2: net2 } }
       if ((o.ok && !o.ok(p)) || (!o.anywhere && [[0, 0], [0.9, 0], [-0.9, 0], [0, 0.9], [0, -0.9]].some(([ax, ay]) => escapeZone(p.x + ax, p.y + ay)))) continue
+      if (inRing(p.x, p.y)) continue
       cands.push({ p, cost: (o.score ? o.score(p) : d) + (layer === ls[0] ? 0 : 0.5) }) } }
   cands.sort((a, b) => a.cost - b.cost); tick(`${name}: ${cands.length} candidates`)
   for (const { p } of cands) { if (partBlocked(p, 0.2) || (o.late && !o.late(p))) continue
@@ -444,7 +451,7 @@ if (LATE) { const routes = process.env.TOPUP ? await Bun.file(import.meta.dir + 
   if (!parts.some((p) => p.name === "C_VREF_CPU")) { const v = vias.find((v) => v.ball === "U1.J4")!, p = free("C_VREF_CPU", "C100N_0201", v, "DDR_VREF", "GND", { anywhere: true, maxDist: 14, step: 0.05 }) ?? free("C_VREF_CPU", "C100N_0402", v, "DDR_VREF", "GND", { anywhere: true, maxDist: 14, step: 0.15 }); if (p) report.push(`top-up: C_VREF_CPU ${Math.hypot(p.x - v.x, p.y - v.y).toFixed(2)} mm from the VREF via of U1.J4`) }
   free("C_BULK_1V8_2", "C10U_0603", U1("D10"), "VDD_1V8", "GND", { anywhere: true, maxDist: 8, viasPerPad: 2, step: 0.15 })
   for (const [net, near, n] of [["VDD_MPU", U1("G13"), 2], ["VDD_1V8", U1("H15"), 2], ["VDD_1V8", U1("R11"), 1], ["VDD_3V3", U1("P12"), 2], ["VDD_3V3", U1("E12"), 1]] as const) for (let i = 0; i < n; i++) { const name = `C_X_${net.slice(4)}_${parts.filter((p) => p.name.startsWith("C_X_" + net.slice(4))).length + 1}`
-    const p = free(name, "C100N_0402", near, net, "GND", { anywhere: true, maxDist: 6, step: 0.15 }); if (p) report.push(`top-up: ${name} (${net}) ${Math.hypot(p.x - near.x, p.y - near.y).toFixed(2)} mm from its ball`) } }
+    const p = free(name, "C100N_0402", near, net, "GND", { anywhere: true, maxDist: 10, step: 0.15 }); if (p) report.push(`top-up: ${name} (${net}) ${Math.hypot(p.x - near.x, p.y - near.y).toFixed(2)} mm from its ball`) } }
 
 // ---------- checks and output ----------
 const holes = HOLES

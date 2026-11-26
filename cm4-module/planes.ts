@@ -46,7 +46,7 @@ if (PB) NETS.splice(0, NETS.length,
   // five supplies in its core; one layer cannot keep them all in one piece each); everything else on layer 3
   { name: "VDD_MPU", layers: [2], fill: { 2: CORE_AREA } },
   { name: "VDD_CORE", layers: [2], fill: { 2: CORE_AREA } },
-  { name: "VDD_3V3", layers: [1], fill: { 1: CORE_AREA } },
+  { name: "VDD_3V3", layers: [1, 2], fill: { 1: CORE_AREA } }, // like 1.8 V: a thin link on layer 4 where layer 3 is walled in
   { name: "VDD_1V8", layers: [1, 2], fill: { 1: CORE_AREA } }) // low current (I/O, PLL, USB PHY): may link through layer 4 where layer 3 is taken
 if (PB) NETS.splice(NETS.findIndex((n) => n.name === "VDD_MPU"), 0,
   { name: "VDDS_DDR", layers: [1], fill: { 1: (x: number, y: number) => y < NORTH && ((x < XB && !SW(x, y)) || DDRBAND(x, y)) } })

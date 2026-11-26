@@ -10,7 +10,7 @@ PREPLACE=1 bun plan.ts                                            # every part, 
 ROUTES=none CORRIDORS_OUT=pb/corridors.json bun planes.ts > /dev/null  # supply islands without signals: their corridors
 bun pb/export.ts                                                  # router input: pads, fixed copper, nets
 if [ -n "$ROUTE" ]; then (cd pb && SEED=${SEED:-1} MAXIT=${MAXIT:-80} OUT=_make bun route.ts) && bun pb/import.ts pb/routes_make.json
-else bun pb/import.ts ${PB_ROUTES:-pb/routes.json}; fi              # the chosen routing -> routes.json
+else bun pb/import.ts ${PB_ROUTES:-pb/routing.json}; fi             # the chosen routing (pb/routing.json) -> routes.json
 bun planes.ts                                                     # layer 2/5 ground, layer 3 islands, layer 4 core/MPU islands
 bun build.tsx                                                     # dist/module.circuit.json
 bun check.ts                                                      # whole-board check
