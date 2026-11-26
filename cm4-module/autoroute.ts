@@ -54,6 +54,9 @@ const KEEPOUT_L4: [number, number, number, number, ("all" | undefined)?][] = [ /
   // under J1 (signal balls and parts inside a no-via strip cannot leave the top layer: port-point pathing fails).
 ]
 for (const [x0, y0, x1, y1, all] of KEEPOUT_L4.filter((_, i) => !process.env.KEEPOUTS || process.env.KEEPOUTS.split(",").includes(String(i)))) obstacles.push({ type: "rect", layers: all || TWO ? LAYERS : ["inner1"], connectedTo: [], center: { x: r4((x0 + x1) / 2), y: r4((y0 + y1) / 2) }, width: r4(x1 - x0), height: r4(y1 - y0) })
+// layer-4 supply feeds (feeds.ts): fixed copper of their net, laid out before the signals
+const FEEDS_FILE = dir + "/design/feeds.json"
+for (const f of (await Bun.file(FEEDS_FILE).exists()) ? await Bun.file(FEEDS_FILE).json() : [] as any[]) for (let i = 0; i + 1 < f.pts.length; i++) obstacle({ pts: [f.pts[i], f.pts[i + 1]], r: f.w / 2, layers: ["inner3"], net: f.net, kind: "trace" } as any)
 // the escape pass's copper is fixed in the main pass (its layer-4 sections block vias, see toSolver)
 const ESCAPE_FILE = dir + "/routes-escape.json"
 const escaped = TWO ? (await Bun.file(ESCAPE_FILE).json()).nets as Record<string, any> : {}
@@ -102,7 +105,16 @@ console.log(`${solver.solved ? "solved" : "FAILED: " + solver.error} in ${((perf
 if (!solver.solved) { // FAIL_DUMP=<file>: save the high-density node that failed (its port points and bounds) for diagnosis
   if (process.env.FAIL_DUMP) { const hd = solver.highDensityRouteSolver; const id = /Failed to solve 1 nodes, ([^.]+)\./.exec(solver.error ?? "")?.[1]; const all = [hd?.activeNode, ...(hd?.unsolvedNodePortPoints ?? []), ...(solver.highDensityNodePortPoints ?? [])].filter(Boolean); const node = all.find((n: any) => n.capacityMeshNodeId === id) ?? hd?.activeNode
     if (node) { await Bun.write(process.env.FAIL_DUMP, JSON.stringify(node)); console.log("failed node saved to " + process.env.FAIL_DUMP) }
-    console.log("high-density stats: " + JSON.stringify(hd?.stats)) }
+    console.log("high-density stats: " + JSON.stringify(hd?.stats))
+    // port-point pathing: the most re-ripped routes are the contested ones
+    const pps = solver.portPointPathingSolver
+    let pp: any = pps?.tinyPipelineSolver ?? pps?.primaryTinyPipelineSolver ?? solver.activeSubSolver ?? pps
+    for (const f of pps?.failedSubSolvers ?? []) if (f?.routeAttemptCountByRouteId) pp = f
+    for (let d = 0; pp && !pp.routeAttemptCountByRouteId && d < 6; d++) pp = pp.activeSubSolver ?? pp.failedSubSolvers?.at?.(-1) ?? pp.solver ?? Object.values(pp).find((v: any) => v && typeof v === "object" && "routeAttemptCountByRouteId" in v)
+    if (!pp?.routeAttemptCountByRouteId) console.log("pathing solver fields: " + Object.keys(pp ?? {}).join(",") + " / stats " + JSON.stringify(pps?.stats))
+    if (pp?.routeAttemptCountByRouteId) { const meta = pp.problem?.routeMetadata ?? []
+      const top = [...pp.routeAttemptCountByRouteId].map((n: number, i: number) => [n, meta[i]?.connectionName ?? meta[i]?.name ?? i]).sort((a: any, b: any) => b[0] - a[0]).slice(0, 15)
+      console.log("most re-ripped routes: " + JSON.stringify(top)); console.log("unrouted: " + JSON.stringify((pp.state?.unroutedRoutes ?? []).map((i: number) => meta[i]?.connectionName ?? i))) } }
   process.exit(1) }
 // ---------- output: routes.json ----------
 const traces: any[] = solver.getOutputSimplifiedPcbTraces()

@@ -61,6 +61,14 @@ for (const g of plan.ddrInner ?? []) { const l = 2, a = g.a, b = g.b, R = 0.051 
 // ---------- per-layer ownership ----------
 const owner = LAYERS.map(() => new Int8Array(NN)), trunk = LAYERS.map(() => new Uint8Array(NN))
 const report: string[] = []
+// ---------- supply feeds (feeds.ts): fixed layer-4 strips from the regulators into the processor core ----------
+const feeds: { net: string; w: number; pts: Pt[] }[] = (await Bun.file(dir + "/design/feeds.json").exists()) ? await Bun.file(dir + "/design/feeds.json").json() : []
+const feedNet = new Int8Array(NN) // net index + 1 of the layer-4 feed copper in a cell
+for (const f of feeds) { const k = idx.get(f.net); if (!k) throw Error("feed for a net without a plane: " + f.net)
+  for (let n = 0; n + 1 < f.pts.length; n++) { const a = f.pts[n], b = f.pts[n + 1], R = f.w / 2, dx = b.x - a.x, dy = b.y - a.y, len2 = dx * dx + dy * dy
+    for (let j = Math.max(0, cj(Math.min(a.y, b.y) - R)); j <= Math.min(NY - 1, cj(Math.max(a.y, b.y) + R)); j++) for (let i = Math.max(0, ci(Math.min(a.x, b.x) - R)); i <= Math.min(NX - 1, ci(Math.max(a.x, b.x) + R)); i++) {
+      const t = len2 ? Math.max(0, Math.min(1, ((cx(i) - a.x) * dx + (cy(j) - a.y) * dy) / len2)) : 0
+      if (Math.hypot(cx(i) - a.x - t * dx, cy(j) - a.y - t * dy) <= R) { const c = j * NX + i; if (stat[c] !== 0 && stat[c] !== k) throw Error(`feed ${f.net} crosses foreign copper at (${cx(i).toFixed(2)}, ${cy(j).toFixed(2)})`); feedNet[c] = k; owner[2][c] = k; trunk[2][c] = 1 } } } }
 /** cells where a (2k+1) square of the given predicate is all true */
 function boxAll(pred: (c: number) => boolean, k: number): Uint8Array { const S = new Int32Array((NX + 1) * (NY + 1))
   for (let j = 0; j < NY; j++) { let row = 0; for (let i = 0; i < NX; i++) { row += pred(j * NX + i) ? 0 : 1; S[(j + 1) * (NX + 1) + i + 1] = S[j * (NX + 1) + i + 1] + row } }
