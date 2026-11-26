@@ -1,2 +1,5 @@
 plan-items.json
 dist/
+pb/routes*.json
+pb/copper*.json
+pb/run_*.log
