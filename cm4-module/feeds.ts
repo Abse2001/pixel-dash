@@ -14,7 +14,7 @@ const CORE = { x0: -48.8, y0: 11.15, x1: -40.8, y1: 19.15 }
 // plane builder spreads each supply over its balls there); a second feed of a net takes a separate path.
 const FEEDS: { net: string; source: RegExp }[] = [
   { net: "VDD_CORE", source: /^V_L_DCDC3_pin2/ }, { net: "VDD_MPU", source: /^V_L_DCDC2_pin2/ }, { net: "VDD_1V8", source: /^V_L_1V8_pin2/ },
-  { net: "VDD_CORE", source: /^V_L_DCDC3_pin2/ }, { net: "VDD_MPU", source: /^V_L_DCDC2_pin2/ },
+  { net: "VDD_CORE", source: /^V_L_DCDC3_pin2/ },
 ]
 const E = plan.edge, NX = Math.round((E.x1 - E.x0) / P), NY = Math.round((E.y1 - E.y0) / P)
 const cx = (i: number) => E.x0 + (i + 0.5) * P, cy = (j: number) => E.y0 + (j + 0.5) * P, ci = (x: number) => Math.floor((x - E.x0) / P), cj = (y: number) => Math.floor((y - E.y0) / P)
@@ -28,11 +28,15 @@ const balls: Disc[] = items.filter((i) => i.kind === "ball" && i.ref.startsWith(
 const segDist = (x: number, y: number, a: Pt, b: Pt) => { const dx = b.x - a.x, dy = b.y - a.y, L2 = dx * dx + dy * dy, t = L2 ? Math.max(0, Math.min(1, ((x - a.x) * dx + (y - a.y) * dy) / L2)) : 0; return Math.hypot(x - a.x - t * dx, y - a.y - t * dy) }
 const blocked = new Uint8Array(NX * NY) // 1: no strip centre of the current net may lie here
 function blockAround(x: number, y: number, R: number) { for (let j = Math.max(0, cj(y - R) - 1); j <= Math.min(NY - 1, cj(y + R) + 1); j++) for (let i = Math.max(0, ci(x - R) - 1); i <= Math.min(NX - 1, ci(x + R) + 1); i++) if (Math.hypot(cx(i) - x, cy(j) - y) < R) blocked[j * NX + i] = 1 }
+// Feeds cross the BGA's signal rings where signal traffic is lightest: the south rings (the east and north rings carry
+// most of the escaping signals and their vias; a strip through them removes a row or column of via sites there).
+const NO_FEED = [{ x0: -52.4, y0: 19.15, x1: -36.8, y1: 23.2 }, { x0: -40.8, y0: 11.15, x1: -36.8, y1: 19.15 }]
 const out: { net: string; w: number; pts: Pt[] }[] = []
 const report: string[] = []
 for (const f of FEEDS) {
   blocked.fill(0)
   for (let j = 0; j < NY; j++) for (let i = 0; i < NX; i++) { const x = cx(i), y = cy(j); if (x < E.x0 + 0.5 || x > E.x1 - 0.5 || y < E.y0 + 0.5 || y > E.y1 - 0.5) blocked[j * NX + i] = 1 }
+  for (const z of NO_FEED) for (let j = Math.max(0, cj(z.y0)); j <= Math.min(NY - 1, cj(z.y1)); j++) for (let i = Math.max(0, ci(z.x0)); i <= Math.min(NX - 1, ci(z.x1)); i++) blocked[j * NX + i] = 1
   for (const d of discs) if (d.net !== f.net) blockAround(d.x, d.y, d.r + CLR + W / 2)
   for (const b of balls) if (b.net !== f.net) blockAround(b.x, b.y, b.r + CLR + W / 2)
   for (const s of segs) if (s.net !== f.net) { const R = s.r + CLR + W / 2
