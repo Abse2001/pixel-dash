@@ -37,7 +37,7 @@ button/jumper boots the AM3354 from USB.
 | L3 | supply islands: VDDS_DDR, VDD_3V3, VDD_1V8, SYS, VIN5, DDR_VREF, DDR_ZQ, DDR_VTP |
 | L4 | VDD_CORE and VDD_MPU islands under the processor's power core, thin 1.8 V / 3.3 V links; signals elsewhere |
 | L5 | ground (slow signals may cross it away from the BGAs' reference areas) |
-| L6 bottom | signals, decoupling, the bucks, CM4 connectors J1/J2 (Hirose DF40C-100DP-0.4V(51), LCSC C531031) |
+| L6 bottom | signals, decoupling, the bucks, CM4 connectors J1/J2 (G-Switch GT-B0403MSV11-100B1101, LCSC C42376235; a Hirose DF40C-100DP-0.4V(51) equivalent) |
 
 Through vias only: 0.1 mm holes in 0.3 mm pads, via-in-pad throughout (epoxy-filled and capped). Trace/space 0.1/0.1 mm.
 
@@ -121,12 +121,13 @@ analysis of the address/command and clock lines of the same routing: set the pro
     edge, connector centres 21.5 mm from the holes, pins 1-100 along one long edge with pin 1 (outer row) at the far
     end from those holes, pin 101 on the inner row; the frame is a rotation of the CM4's, not a mirror. Connector rows
     are 3.04 mm from the long edges (CM4IO KiCad footprint; the drawing rounds to 3).
-11. **CM4 connectors J1/J2** (Hirose DF40C-100DP-0.4V(51), LCSC C531031): LCSC showed 0 in stock on 2026-11-27, while
-    distributors (DigiKey) list thousands. Order the genuine Hirose part through JLCPCB global sourcing (or consign
-    it); no design change. In-stock fallback at LCSC: G-Switch GT-B0403MSV11-100B1101 (C42376235), a 100-pin 0.4 mm
-    plug, 1.14 mm tall, 1.5 mm mated height, whose land pattern matches this footprint (rows 2.71 mm apart, 3.37 mm
-    outer / 2.05 mm inner). Its datasheet does not state intermating with Hirose DF40C-100DS, so mate one with a CM4
-    carrier before using it. Not suitable: JMEconn 5001-BM04100-15-00 (different land pattern, 2.40 / 3.37 mm) and
-    LXWCONN LBF11-G100P-B0R01 (a receptacle).
+11. **CM4 connectors J1/J2**: fitted part G-Switch GT-B0403MSV11-100B1101 (LCSC C42376235, 874 in stock on 2026-11-27),
+    because the Hirose DF40C-100DP-0.4V(51) (C531031) was at 0. Checked against Hirose's DF40 catalogue: every published
+    header dimension is the same (A 21.52 / B 19.6 / C 3.2 mm for 100 contacts, body 2.97 x 1.85 mm, height 1.14 mm,
+    pitch 0.4 mm, contact 0.15 mm, mated height 1.5 mm, 30 cycles), and so is the recommended PCB layout (3.37 / 2.05 mm,
+    0.23 mm pads, corner pads 0.35 mm at 0.3 / 0.65 mm), which is this board's footprint (its corner pads are 0.30 mm
+    wide). G-Switch does not state intermating with Hirose and neither maker publishes the contact profile: **mate one
+    first-article module with the CM4 IO board's DF40C-100DS before a larger run.** The Hirose part remains a drop-in
+    (JLCPCB global sourcing or consigned) if it is back in stock or the mating test fails.
 12. **JLCPCB**: 6 layers, 1.0 mm, ENIG, 0.1 mm hole / 0.3 mm pad, via-in-pad (epoxy fill + cap), both sides
     assembled. Outer prepreg 1080 or 3313 (not 7628) to keep the 0.1 mm outer traces near 50-75 ohm.
