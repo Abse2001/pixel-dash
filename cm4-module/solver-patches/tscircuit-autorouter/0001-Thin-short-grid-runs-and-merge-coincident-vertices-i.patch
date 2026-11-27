@@ -1,0 +1,94 @@
+From fb421b600545c0455d7a0230f47dcc8897f95b38 Mon Sep 17 00:00:00 2001
+From: cm4-module <noreply@anthropic.com>
+Date: Thu, 26 Nov 2026 03:54:08 +0000
+Subject: [PATCH 1/7] Thin short grid runs and merge coincident vertices in
+ dense force regions
+
+The dense-region simplifier only collapsed straight runs of 64+ grid steps.
+Staircase output from A01/A03 has runs of 5-8 steps of a few microns, and the
+regional force step leaves sub-micron vertex clusters, so dense regions kept
+thousands of vertices. In the same regions, keep short-run vertices only at
+trace-width spacing and drop plain vertices within 1 um of their predecessor.
+Copper geometry is unchanged.
+---
+ .../simplifyPipeline9CollinearRoutePoints.ts  | 47 ++++++++++++++++++-
+ 1 file changed, 46 insertions(+), 1 deletion(-)
+
+diff --git a/lib/autorouter-pipelines/AutoroutingPipeline9_PreloadedTraceGraph/simplifyPipeline9CollinearRoutePoints.ts b/lib/autorouter-pipelines/AutoroutingPipeline9_PreloadedTraceGraph/simplifyPipeline9CollinearRoutePoints.ts
+index 76ba78cd..ae4d138a 100644
+--- a/lib/autorouter-pipelines/AutoroutingPipeline9_PreloadedTraceGraph/simplifyPipeline9CollinearRoutePoints.ts
++++ b/lib/autorouter-pipelines/AutoroutingPipeline9_PreloadedTraceGraph/simplifyPipeline9CollinearRoutePoints.ts
+@@ -4,6 +4,11 @@ import type { HighDensityRoute } from "lib/types/high-density-types"
+ // Only collapse the long oversampled straight runs emitted by grid routing.
+ const MIN_COLLINEAR_GRID_SEGMENTS = 64
+ const MIN_FORCE_REGION_POINT_COUNT = 4_096
++// In those regions, consecutive same-layer vertices closer than this carry no
++// copper geometry (well below any fabrication tolerance); they come from force
++// steps pulling oversampled grid vertices together, and only add segment pairs.
++const COINCIDENT_VERTEX_TOLERANCE = 1e-3
++const DEFAULT_TRACE_THICKNESS = 0.1
+ 
+ /** Reduce dense grid runs while preserving ordinary force-improvement vertices. */
+ export const simplifyPipeline9CollinearRoutePoints = (
+@@ -26,9 +31,33 @@ export const simplifyPipeline9CollinearRoutePoints = (
+       pointCountByRegion.get(hdRoute.regionId)! < MIN_FORCE_REGION_POINT_COUNT
+     )
+       return hdRoute
++    const isViaVertex = (point: HighDensityRoute["route"][number]) =>
++      hdRoute.vias.some(
++        (via) => Math.hypot(via.x - point.x, via.y - point.y) < 1e-9,
++      )
++    const isPlainVertex = (point: HighDensityRoute["route"][number]) =>
++      !Object.keys(point).some(
++        (key) => key !== "x" && key !== "y" && key !== "z",
++      )
+     const route: HighDensityRoute["route"] = []
+     const routeIndices: number[] = []
+     for (const [index, point] of hdRoute.route.entries()) {
++      // Drop a plain interior vertex that sits on its predecessor's position
++      // within COINCIDENT_VERTEX_TOLERANCE (same layer, not a via site).
++      const previousPoint = route[route.length - 1]
++      if (
++        previousPoint &&
++        route.length >= 2 &&
++        index < hdRoute.route.length - 1 &&
++        previousPoint.z === point.z &&
++        hdRoute.route[index + 1]!.z === point.z &&
++        isPlainVertex(point) &&
++        !isViaVertex(point) &&
++        Math.hypot(point.x - previousPoint.x, point.y - previousPoint.y) <
++          COINCIDENT_VERTEX_TOLERANCE
++      ) {
++        continue
++      }
+       while (route.length >= 2) {
+         const start = route[route.length - 2]!
+         const middle = route[route.length - 1]!
+@@ -71,7 +100,23 @@ export const simplifyPipeline9CollinearRoutePoints = (
+         const start = routeIndices[i - 1]!
+         const end = routeIndices[i]!
+         if (end - start < MIN_COLLINEAR_GRID_SEGMENTS) {
+-          retainedRoute.push(...hdRoute.route.slice(start + 1, end))
++          // Keep short runs' vertices as force-improvement control points,
++          // but no closer together than a trace width: grid routers emit
++          // them every few microns, which only multiplies segment pairs.
++          const spacing = hdRoute.traceThickness ?? DEFAULT_TRACE_THICKNESS
++          let lastKept = previous
++          for (const candidate of hdRoute.route.slice(start + 1, end)) {
++            if (
++              Math.hypot(candidate.x - lastKept.x, candidate.y - lastKept.y) <
++                spacing ||
++              Math.hypot(candidate.x - point.x, candidate.y - point.y) <
++                spacing
++            ) {
++              continue
++            }
++            retainedRoute.push(candidate)
++            lastKept = candidate
++          }
+         }
+       }
+       retainedRoute.push(point)
+-- 
+2.43.0
+

@@ -1,0 +1,71 @@
+From bf60f51a6afb008485136749f8365d56d2f99475 Mon Sep 17 00:00:00 2001
+From: Ahmed Alshaybani <shibosoftwaredev@gmail.com>
+Date: Sat, 21 Nov 2026 01:35:09 +0100
+Subject: [PATCH 6/8] Keep protected escape wires and vias fixed together
+ beside native copper
+
+---
+ lib/HighDensityForceImproveSolver.ts    |  3 +--
+ tests/protected-escape-clamping.test.ts | 12 +++++++-----
+ 2 files changed, 8 insertions(+), 7 deletions(-)
+
+diff --git a/lib/HighDensityForceImproveSolver.ts b/lib/HighDensityForceImproveSolver.ts
+index 4b88d3c..a9d1c36 100644
+--- a/lib/HighDensityForceImproveSolver.ts
++++ b/lib/HighDensityForceImproveSolver.ts
+@@ -421,8 +421,7 @@ const clampMutableRoutesToBounds = (
+   for (const mutableRoute of mutableRoutes) {
+     if (mutableRoute.isFixed) continue
+     for (const node of mutableRoute.nodes) {
+-      const isProtectedWire = node.fixed && node.boundaryPadding === 0
+-      if (mutableRoute.preserveFixedEscapes && isProtectedWire) continue
++      if (mutableRoute.preserveFixedEscapes && node.fixed) continue
+       clampNodeToBounds(node, bounds)
+     }
+   }
+diff --git a/tests/protected-escape-clamping.test.ts b/tests/protected-escape-clamping.test.ts
+index 8094984..17dc2df 100644
+--- a/tests/protected-escape-clamping.test.ts
++++ b/tests/protected-escape-clamping.test.ts
+@@ -2,18 +2,18 @@ import { expect, test } from "bun:test"
+ import { runForceDirectedImprovement } from "../lib/HighDensityForceImproveSolver"
+ import type { HighDensityRoute } from "../lib/types/high-density-types"
+ 
+-test("bounds clamping preserves protected escapes beside fixed copper", (): void => {
++test("bounds clamping preserves a protected escape wire and via", (): void => {
+   const route: HighDensityRoute = {
+     connectionName: "signal",
+     traceThickness: 0.1,
+     viaDiameter: 0.3,
+     route: [
+       { x: -0.5, y: 0, z: 0 },
+-      { x: -0.6, y: 0.1, z: 0 },
+-      { x: 0, y: 0.1, z: 0 },
+-      { x: 0.4, y: 0, z: 0 },
++      { x: -0.49, y: 0, z: 0 },
++      { x: -0.49, y: 0, z: 1 },
++      { x: 0.4, y: 0, z: 1 },
+     ],
+-    vias: [],
++    vias: [{ x: -0.49, y: 0 }],
+   }
+   const original = structuredClone(route)
+   const result = runForceDirectedImprovement(
+@@ -26,6 +26,7 @@ test("bounds clamping preserves protected escapes beside fixed copper", (): void
+         {
+           ...route,
+           connectionName: "completed",
++          vias: [],
+           route: [
+             { x: -0.4, y: 0.3, z: 1 },
+             { x: 0.4, y: 0.3, z: 1 },
+@@ -36,5 +37,6 @@ test("bounds clamping preserves protected escapes beside fixed copper", (): void
+   )
+ 
+   expect(result.routes[0]!.route).toEqual(original.route)
++  expect(result.routes[0]!.vias).toEqual(original.vias)
+   expect(route).toEqual(original)
+ })
+-- 
+2.43.0
+

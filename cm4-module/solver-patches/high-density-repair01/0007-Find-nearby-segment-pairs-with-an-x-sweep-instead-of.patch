@@ -1,0 +1,147 @@
+From 5c040aa4053461289d0a700ff4807e9ae9810c2c Mon Sep 17 00:00:00 2001
+From: cm4-module <noreply@anthropic.com>
+Date: Thu, 26 Nov 2026 03:02:52 +0000
+Subject: [PATCH 7/8] Find nearby segment pairs with an x sweep instead of
+ testing all pairs
+
+getRoutePairClearanceViolations and findNewProperSegmentCrossings tested every
+segment against every other one. findAlignedTopologyCandidate calls the former
+for each candidate move, so dense nodes spent minutes here. The sweep yields the
+same pairs (sorted back into loop order where order matters), so results are
+unchanged.
+---
+ .../high-density-force-improve-topology.ts    | 98 +++++++++++++++----
+ 1 file changed, 79 insertions(+), 19 deletions(-)
+
+diff --git a/lib/utils/high-density-force-improve-topology.ts b/lib/utils/high-density-force-improve-topology.ts
+index bed9fb9..e16e4c7 100644
+--- a/lib/utils/high-density-force-improve-topology.ts
++++ b/lib/utils/high-density-force-improve-topology.ts
+@@ -103,6 +103,66 @@ const findClosestAdjacentProjectionSegment = (
+   return closestSegment
+ }
+ 
++/**
++ * Returns every unordered pair of same-layer segments whose bounding boxes,
++ * widened by `margin`, overlap, as [lowerIndex, higherIndex]. With `ordered`
++ * the pairs come in ascending lexicographic order, i.e. exactly the pairs and
++ * order the nested `for left / for right > left` loops visit after rejecting
++ * pairs whose boxes are further apart than `margin`, but found with an x sweep
++ * instead of testing all n^2 pairs.
++ */
++const getNearbySameLayerSegmentPairs = (
++  segments: ProjectionSegment[],
++  margin: number,
++  ordered: boolean,
++): Array<readonly [number, number]> => {
++  const order: number[] = []
++  const minX = new Float64Array(segments.length)
++  const maxX = new Float64Array(segments.length)
++  const minY = new Float64Array(segments.length)
++  const maxY = new Float64Array(segments.length)
++  for (let index = 0; index < segments.length; index += 1) {
++    const segment = segments[index]
++    if (!segment) continue
++    minX[index] = Math.min(segment.start.x, segment.end.x)
++    maxX[index] = Math.max(segment.start.x, segment.end.x)
++    minY[index] = Math.min(segment.start.y, segment.end.y)
++    maxY[index] = Math.max(segment.start.y, segment.end.y)
++    order.push(index)
++  }
++  order.sort((left, right) => minX[left]! - minX[right]!)
++  const pairs: Array<readonly [number, number]> = []
++  for (let sortedIndex = 0; sortedIndex < order.length; sortedIndex += 1) {
++    const leftIndex = order[sortedIndex]!
++    const left = segments[leftIndex]!
++    const reach = maxX[leftIndex]! + margin
++    for (
++      let otherSortedIndex = sortedIndex + 1;
++      otherSortedIndex < order.length;
++      otherSortedIndex += 1
++    ) {
++      const rightIndex = order[otherSortedIndex]!
++      if (minX[rightIndex]! > reach) break
++      if (
++        segments[rightIndex]!.z !== left.z ||
++        maxY[leftIndex]! + margin < minY[rightIndex]! ||
++        maxY[rightIndex]! + margin < minY[leftIndex]!
++      ) {
++        continue
++      }
++      pairs.push(
++        leftIndex < rightIndex
++          ? [leftIndex, rightIndex]
++          : [rightIndex, leftIndex],
++      )
++    }
++  }
++  if (ordered) {
++    pairs.sort((left, right) => left[0] - right[0] || left[1] - right[1])
++  }
++  return pairs
++}
++
+ export const findNewProperSegmentCrossings = (
+   originalRoutes: HighDensityRoute[],
+   candidateRoutes: HighDensityRoute[],
+@@ -112,21 +172,16 @@ export const findNewProperSegmentCrossings = (
+   const originalSegmentIndex = indexProjectionSegments(originalSegments)
+   const selectors: SegmentPairSelector[] = []
+ 
+-  for (
+-    let leftIndex = 0;
+-    leftIndex < candidateSegments.length;
+-    leftIndex += 1
+-  ) {
++  for (const [leftIndex, rightIndex] of getNearbySameLayerSegmentPairs(
++    candidateSegments,
++    0,
++    true,
++  )) {
+     const left = candidateSegments[leftIndex]
+-    if (!left) continue
+-
+-    for (
+-      let rightIndex = leftIndex + 1;
+-      rightIndex < candidateSegments.length;
+-      rightIndex += 1
+-    ) {
++    {
+       const right = candidateSegments[rightIndex]
+       if (
++        !left ||
+         !right ||
+         left.z !== right.z ||
+         left.rootConnectionName === right.rootConnectionName ||
+@@ -224,16 +279,21 @@ export const findNewProperSegmentCrossings = (
+ const getRoutePairClearanceViolations = (routes: HighDensityRoute[]) => {
+   const segments = collectProjectionSegments(routes)
+   const violatingRoutePairs: RoutePair[] = []
+-  for (let leftIndex = 0; leftIndex < segments.length; leftIndex += 1) {
++  let maxTraceRadius = 0
++  for (const segment of segments) {
++    maxTraceRadius = Math.max(maxTraceRadius, segment.traceRadius)
++  }
++  for (const [leftIndex, rightIndex] of getNearbySameLayerSegmentPairs(
++    segments,
++    2 * maxTraceRadius,
++    // Only the set of violating route pairs is used, not its order.
++    false,
++  )) {
+     const left = segments[leftIndex]
+-    if (!left) continue
+-    for (
+-      let rightIndex = leftIndex + 1;
+-      rightIndex < segments.length;
+-      rightIndex += 1
+-    ) {
++    {
+       const right = segments[rightIndex]
+       if (
++        !left ||
+         !right ||
+         left.z !== right.z ||
+         left.rootConnectionName === right.rootConnectionName
+-- 
+2.43.0
+

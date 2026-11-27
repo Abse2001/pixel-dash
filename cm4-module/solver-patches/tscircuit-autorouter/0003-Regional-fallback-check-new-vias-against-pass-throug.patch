@@ -1,0 +1,198 @@
+From 174ddf5f3f4116b76cfb94f8b0f51f55e207091c Mon Sep 17 00:00:00 2001
+From: cm4-module <noreply@anthropic.com>
+Date: Thu, 26 Nov 2026 07:28:41 +0000
+Subject: [PATCH 3/7] Regional fallback: check new vias against
+ pass-through-only board obstacles
+
+The fallback opens its region to every layer and relies on board obstacles to
+limit layer transitions, but only movable preloaded vias were checked. The
+intra-node solvers see obstacles on the layers they route on, so obstacles
+that lie only on layers a via passes through (an inner keep-out) were never
+checked and vias landed inside them. Check those for every new route, count
+rejections separately, and use the obstacle margin when the SRJ gives no
+via-to-pad rule instead of skipping the check.
+---
+ .../Pipeline9HighDensitySolver.ts             |   3 +
+ .../Pipeline9RegionalFallbackSolver.ts        | 107 +++++++++++++-----
+ 2 files changed, 80 insertions(+), 30 deletions(-)
+
+diff --git a/lib/autorouter-pipelines/AutoroutingPipeline9_PreloadedTraceGraph/Pipeline9HighDensitySolver.ts b/lib/autorouter-pipelines/AutoroutingPipeline9_PreloadedTraceGraph/Pipeline9HighDensitySolver.ts
+index bd718ce8..28eb8579 100644
+--- a/lib/autorouter-pipelines/AutoroutingPipeline9_PreloadedTraceGraph/Pipeline9HighDensitySolver.ts
++++ b/lib/autorouter-pipelines/AutoroutingPipeline9_PreloadedTraceGraph/Pipeline9HighDensitySolver.ts
+@@ -1169,6 +1169,9 @@ export class Pipeline9HighDensitySolver extends BaseSolver {
+     this.stats.regionalPreloadedViaCandidateRejectionCount =
+       Number(this.stats.regionalPreloadedViaCandidateRejectionCount ?? 0) +
+       Number(regionalStats.preloadedViaCandidateRejectionCount ?? 0)
++    this.stats.regionalViaCandidateRejectionCount =
++      Number(this.stats.regionalViaCandidateRejectionCount ?? 0) +
++      Number(regionalStats.viaCandidateRejectionCount ?? 0)
+     this.stats.regionalForceImproveCandidateRejectionCount =
+       Number(this.stats.regionalForceImproveCandidateRejectionCount ?? 0) +
+       Number(regionalStats.forceImproveCandidateRejectionCount ?? 0)
+diff --git a/lib/autorouter-pipelines/AutoroutingPipeline9_PreloadedTraceGraph/Pipeline9RegionalFallbackSolver.ts b/lib/autorouter-pipelines/AutoroutingPipeline9_PreloadedTraceGraph/Pipeline9RegionalFallbackSolver.ts
+index 6c7be077..41c5047b 100644
+--- a/lib/autorouter-pipelines/AutoroutingPipeline9_PreloadedTraceGraph/Pipeline9RegionalFallbackSolver.ts
++++ b/lib/autorouter-pipelines/AutoroutingPipeline9_PreloadedTraceGraph/Pipeline9RegionalFallbackSolver.ts
+@@ -106,27 +106,32 @@ export const isPipeline9ObstacleConnectedToRoute = ({
+   })
+ }
+ 
+-const hasPreloadedViaToBoardObstacleConflict = ({
++// The regional fallback opens its node to every layer and relies on board
++// obstacles to limit where layer transitions go. A via also occupies every
++// layer it passes through; the intra-node solvers only see obstacles on the
++// layers they route on, so obstacles on pass-through layers (such as an inner
++// keep-out) were never checked for new routes. `passThroughLayersOnly` limits
++// the test to obstacles that lie only on such layers; anything that also lies
++// on the via's end layers is already seen by the solvers (and the later DRC
++// repair), as before.
++const hasViaToBoardObstacleConflict = ({
+   routes,
+-  movablePreloadedConnectionNames,
+   boardObstacles,
++  passThroughLayersOnly = false,
+   connMap,
+   layerCount,
+   viaToPadClearance,
+   allowBlindAndBuriedVias,
+ }: {
+   routes: HighDensityRoute[]
+-  movablePreloadedConnectionNames: ReadonlySet<string>
+   boardObstacles: Obstacle[]
++  passThroughLayersOnly?: boolean
+   connMap: ConnectivityMap
+   layerCount: number
+   viaToPadClearance: number
+   allowBlindAndBuriedVias?: boolean
+ }): boolean =>
+   routes.some((route) => {
+-    if (!movablePreloadedConnectionNames.has(route.connectionName)) {
+-      return false
+-    }
+     const viaSpans = getPipeline9RouteCopperGeometry(route, {
+       layerCount,
+       allowBlindAndBuriedVias,
+@@ -136,7 +141,16 @@ const hasPreloadedViaToBoardObstacleConflict = ({
+         if (isPipeline9ObstacleConnectedToRoute({ obstacle, route, connMap }))
+           return false
+         const obstacleZLayers = getObstacleZLayers(obstacle, layerCount)
+-        if (!obstacleZLayers.some((z) => z >= via.minZ && z <= via.maxZ)) {
++        const spanned = obstacleZLayers.filter(
++          (z) => z >= via.minZ && z <= via.maxZ,
++        )
++        if (spanned.length === 0) return false
++        // An obstacle that also lies on one of the via's end layers is visible
++        // to the intra-node solvers; only pass-through-only obstacles are not.
++        if (
++          passThroughLayersOnly &&
++          spanned.some((z) => z === via.minZ || z === via.maxZ)
++        ) {
+           return false
+         }
+         return (
+@@ -154,12 +168,41 @@ export class Pipeline9RegionalFallbackSolver extends BaseSolver {
+   forceImproveSolver?: RegionalForceImproveSolver
+   repairSolver?: Pipeline4HighDensityRepairSolver
+   private validatedRoutes?: HighDensityRoute[]
++  /** Board obstacles near the fallback node: the only ones a candidate via can reach. */
++  private readonly regionalBoardObstacles?: Obstacle[]
++  private readonly viaToObstacleClearance: number
+ 
+   constructor(params: Pipeline9RegionalFallbackSolverParams) {
+     super()
+     this.params = params
++    // Without an explicit via-to-pad rule a via still needs the board's
++    // obstacle margin; skipping the check would let vias into keep-outs.
++    this.viaToObstacleClearance =
++      params.viaToPadClearance ?? params.obstacleMargin
++    if (params.boardObstacles) {
++      const node = params.nodeWithPortPoints
++      const reach =
++        params.viaDiameter / 2 +
++        this.viaToObstacleClearance +
++        Math.max(params.obstacleMargin, params.traceWidth) * 2
++      const minX = node.center.x - node.width / 2 - reach
++      const maxX = node.center.x + node.width / 2 + reach
++      const minY = node.center.y - node.height / 2 - reach
++      const maxY = node.center.y + node.height / 2 + reach
++      this.regionalBoardObstacles = params.boardObstacles.filter((obstacle) => {
++        const halfExtent =
++          Math.hypot(obstacle.width, obstacle.height) / 2
++        return (
++          obstacle.center.x + halfExtent >= minX &&
++          obstacle.center.x - halfExtent <= maxX &&
++          obstacle.center.y + halfExtent >= minY &&
++          obstacle.center.y - halfExtent <= maxY
++        )
++      })
++    }
+     this.stats = {
+       preloadedViaCandidateRejectionCount: 0,
++      viaCandidateRejectionCount: 0,
+       forceImproveCandidateRejectionCount: 0,
+       repairCandidateRejectionCount: 0,
+     }
+@@ -216,32 +259,36 @@ export class Pipeline9RegionalFallbackSolver extends BaseSolver {
+         }
+       }
+     }
+-    const {
+-      boardObstacles,
+-      movablePreloadedConnectionNames,
+-      viaToPadClearance,
+-    } = this.params
+-    if (
+-      !boardObstacles ||
+-      !movablePreloadedConnectionNames ||
+-      viaToPadClearance === undefined
+-    ) {
+-      return true
+-    }
+-    const hasViaConflict = hasPreloadedViaToBoardObstacleConflict({
+-      routes,
+-      movablePreloadedConnectionNames,
+-      boardObstacles,
+-      connMap: this.params.connMap,
+-      layerCount: this.params.layerCount,
+-      allowBlindAndBuriedVias: this.params.allowBlindAndBuriedVias,
+-      viaToPadClearance,
+-    })
+-    if (hasViaConflict) {
++    const { movablePreloadedConnectionNames } = this.params
++    const viaToPadClearance = this.viaToObstacleClearance
++    const boardObstacles = this.regionalBoardObstacles
++    if (!boardObstacles) return true
++    const checkVias = (
++      candidateRoutes: HighDensityRoute[],
++      passThroughLayersOnly: boolean,
++    ) =>
++      hasViaToBoardObstacleConflict({
++        routes: candidateRoutes,
++        boardObstacles,
++        passThroughLayersOnly,
++        connMap: this.params.connMap,
++        layerCount: this.params.layerCount,
++        allowBlindAndBuriedVias: this.params.allowBlindAndBuriedVias,
++        viaToPadClearance,
++      })
++    const isPreloaded = (route: HighDensityRoute) =>
++      movablePreloadedConnectionNames?.has(route.connectionName) ?? false
++    if (checkVias(routes.filter(isPreloaded), false)) {
+       this.stats.preloadedViaCandidateRejectionCount =
+         Number(this.stats.preloadedViaCandidateRejectionCount ?? 0) + 1
++      return false
++    }
++    if (checkVias(routes.filter((route) => !isPreloaded(route)), true)) {
++      this.stats.viaCandidateRejectionCount =
++        Number(this.stats.viaCandidateRejectionCount ?? 0) + 1
++      return false
+     }
+-    return !hasViaConflict
++    return true
+   }
+ 
+   private validateCandidateWithCleanup(routes: HighDensityRoute[]): boolean {
+-- 
+2.43.0
+

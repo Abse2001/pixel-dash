@@ -1,0 +1,35 @@
+From 8f2f8b819fbce188fa1b4e4416f8bd1ccb175399 Mon Sep 17 00:00:00 2001
+From: cm4-module <noreply@anthropic.com>
+Date: Thu, 26 Nov 2026 08:02:51 +0000
+Subject: [PATCH 5/7] Effort cleanup: via removal only when repair left a
+ connection split
+
+TraceSimplificationSolver preserves endpoints per connection name and throws on
+duplicates; DRC repair can leave a connection in several pieces.
+---
+ .../Pipeline9EffortCleanupSolver.ts                      | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
+
+diff --git a/lib/autorouter-pipelines/AutoroutingPipeline9_PreloadedTraceGraph/Pipeline9EffortCleanupSolver.ts b/lib/autorouter-pipelines/AutoroutingPipeline9_PreloadedTraceGraph/Pipeline9EffortCleanupSolver.ts
+index f135a155..1f472a4c 100644
+--- a/lib/autorouter-pipelines/AutoroutingPipeline9_PreloadedTraceGraph/Pipeline9EffortCleanupSolver.ts
++++ b/lib/autorouter-pipelines/AutoroutingPipeline9_PreloadedTraceGraph/Pipeline9EffortCleanupSolver.ts
+@@ -35,7 +35,14 @@ export class Pipeline9EffortCleanupSolver extends BaseSolver {
+         ? (params.viaRemovalPasses ?? 1)
+         : Math.ceil(2 * params.effort)
+     this.MAX_ITERATIONS = 100e6 * Math.max(1, this.cleanupPasses)
+-    if (params.effort <= 1) {
++    // The simplifier preserves endpoints per connection name, so it cannot
++    // take a connection that repair left in several pieces; this cleanup is an
++    // optional improvement, so such inputs get the via-removal pass only.
++    const connectionNames = this.bestRoutes.map((route) => route.connectionName)
++    const hasSplitConnection =
++      params.config.preserveRouteEndpoints === true &&
++      new Set(connectionNames).size !== connectionNames.length
++    if (params.effort <= 1 || hasSplitConnection) {
+       // Path sampling already ran before repair. Only revisit removable vias
+       // at default effort; repeated path and crossing searches are expensive.
+       this.viaRemovalSolver = this.createViaRemovalSolver()
+-- 
+2.43.0
+

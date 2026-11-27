@@ -1,0 +1,161 @@
+From bc3b252a45691d85cf8b5d90b11fdbe2707b1059 Mon Sep 17 00:00:00 2001
+From: cm4-module <noreply@anthropic.com>
+Date: Thu, 26 Nov 2026 03:31:53 +0000
+Subject: [PATCH 8/8] Move the segment-pair sweep into the shared segment
+ helpers
+
+---
+ lib/utils/force-improve-segment-helpers.ts    | 60 ++++++++++++++++++
+ .../high-density-force-improve-topology.ts    | 61 +------------------
+ 2 files changed, 61 insertions(+), 60 deletions(-)
+
+diff --git a/lib/utils/force-improve-segment-helpers.ts b/lib/utils/force-improve-segment-helpers.ts
+index a7d9859..2fbc5d7 100644
+--- a/lib/utils/force-improve-segment-helpers.ts
++++ b/lib/utils/force-improve-segment-helpers.ts
+@@ -238,3 +238,63 @@ export const getProjectionSegmentDistanceCandidates = (
+     return aDistance - bDistance
+   })
+ }
++
++/**
++ * Returns every unordered pair of same-layer segments whose bounding boxes,
++ * widened by `margin`, overlap, as [lowerIndex, higherIndex]. With `ordered`
++ * the pairs come in ascending lexicographic order, i.e. exactly the pairs and
++ * order the nested `for left / for right > left` loops visit after rejecting
++ * pairs whose boxes are further apart than `margin`, but found with an x sweep
++ * instead of testing all n^2 pairs.
++ */
++export const getNearbySameLayerSegmentPairs = (
++  segments: ProjectionSegment[],
++  margin: number,
++  ordered: boolean,
++): Array<readonly [number, number]> => {
++  const order: number[] = []
++  const minX = new Float64Array(segments.length)
++  const maxX = new Float64Array(segments.length)
++  const minY = new Float64Array(segments.length)
++  const maxY = new Float64Array(segments.length)
++  for (let index = 0; index < segments.length; index += 1) {
++    const segment = segments[index]
++    if (!segment) continue
++    minX[index] = Math.min(segment.start.x, segment.end.x)
++    maxX[index] = Math.max(segment.start.x, segment.end.x)
++    minY[index] = Math.min(segment.start.y, segment.end.y)
++    maxY[index] = Math.max(segment.start.y, segment.end.y)
++    order.push(index)
++  }
++  order.sort((left, right) => minX[left]! - minX[right]!)
++  const pairs: Array<readonly [number, number]> = []
++  for (let sortedIndex = 0; sortedIndex < order.length; sortedIndex += 1) {
++    const leftIndex = order[sortedIndex]!
++    const left = segments[leftIndex]!
++    const reach = maxX[leftIndex]! + margin
++    for (
++      let otherSortedIndex = sortedIndex + 1;
++      otherSortedIndex < order.length;
++      otherSortedIndex += 1
++    ) {
++      const rightIndex = order[otherSortedIndex]!
++      if (minX[rightIndex]! > reach) break
++      if (
++        segments[rightIndex]!.z !== left.z ||
++        maxY[leftIndex]! + margin < minY[rightIndex]! ||
++        maxY[rightIndex]! + margin < minY[leftIndex]!
++      ) {
++        continue
++      }
++      pairs.push(
++        leftIndex < rightIndex
++          ? [leftIndex, rightIndex]
++          : [rightIndex, leftIndex],
++      )
++    }
++  }
++  if (ordered) {
++    pairs.sort((left, right) => left[0] - right[0] || left[1] - right[1])
++  }
++  return pairs
++}
+diff --git a/lib/utils/high-density-force-improve-topology.ts b/lib/utils/high-density-force-improve-topology.ts
+index e16e4c7..01200aa 100644
+--- a/lib/utils/high-density-force-improve-topology.ts
++++ b/lib/utils/high-density-force-improve-topology.ts
+@@ -5,6 +5,7 @@ import type {
+ import { deriveVias, getInsetNodeBounds } from "./force-improve-route-helpers"
+ import {
+   collectProjectionSegments,
++  getNearbySameLayerSegmentPairs,
+   getProjectionSegmentDistanceCandidates,
+   type ProjectionSegment,
+ } from "./force-improve-segment-helpers"
+@@ -103,66 +104,6 @@ const findClosestAdjacentProjectionSegment = (
+   return closestSegment
+ }
+ 
+-/**
+- * Returns every unordered pair of same-layer segments whose bounding boxes,
+- * widened by `margin`, overlap, as [lowerIndex, higherIndex]. With `ordered`
+- * the pairs come in ascending lexicographic order, i.e. exactly the pairs and
+- * order the nested `for left / for right > left` loops visit after rejecting
+- * pairs whose boxes are further apart than `margin`, but found with an x sweep
+- * instead of testing all n^2 pairs.
+- */
+-const getNearbySameLayerSegmentPairs = (
+-  segments: ProjectionSegment[],
+-  margin: number,
+-  ordered: boolean,
+-): Array<readonly [number, number]> => {
+-  const order: number[] = []
+-  const minX = new Float64Array(segments.length)
+-  const maxX = new Float64Array(segments.length)
+-  const minY = new Float64Array(segments.length)
+-  const maxY = new Float64Array(segments.length)
+-  for (let index = 0; index < segments.length; index += 1) {
+-    const segment = segments[index]
+-    if (!segment) continue
+-    minX[index] = Math.min(segment.start.x, segment.end.x)
+-    maxX[index] = Math.max(segment.start.x, segment.end.x)
+-    minY[index] = Math.min(segment.start.y, segment.end.y)
+-    maxY[index] = Math.max(segment.start.y, segment.end.y)
+-    order.push(index)
+-  }
+-  order.sort((left, right) => minX[left]! - minX[right]!)
+-  const pairs: Array<readonly [number, number]> = []
+-  for (let sortedIndex = 0; sortedIndex < order.length; sortedIndex += 1) {
+-    const leftIndex = order[sortedIndex]!
+-    const left = segments[leftIndex]!
+-    const reach = maxX[leftIndex]! + margin
+-    for (
+-      let otherSortedIndex = sortedIndex + 1;
+-      otherSortedIndex < order.length;
+-      otherSortedIndex += 1
+-    ) {
+-      const rightIndex = order[otherSortedIndex]!
+-      if (minX[rightIndex]! > reach) break
+-      if (
+-        segments[rightIndex]!.z !== left.z ||
+-        maxY[leftIndex]! + margin < minY[rightIndex]! ||
+-        maxY[rightIndex]! + margin < minY[leftIndex]!
+-      ) {
+-        continue
+-      }
+-      pairs.push(
+-        leftIndex < rightIndex
+-          ? [leftIndex, rightIndex]
+-          : [rightIndex, leftIndex],
+-      )
+-    }
+-  }
+-  if (ordered) {
+-    pairs.sort((left, right) => left[0] - right[0] || left[1] - right[1])
+-  }
+-  return pairs
+-}
+-
+ export const findNewProperSegmentCrossings = (
+   originalRoutes: HighDensityRoute[],
+   candidateRoutes: HighDensityRoute[],
+-- 
+2.43.0
+

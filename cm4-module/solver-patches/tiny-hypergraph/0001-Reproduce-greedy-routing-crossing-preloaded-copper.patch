@@ -1,0 +1,57 @@
+From 2ce042873d956d6a3a6d6888b104a988ec624b00 Mon Sep 17 00:00:00 2001
+From: Ahmed Shebani <ashebani2003@gmail.com>
+Date: Sun, 22 Nov 2026 13:28:25 +0100
+Subject: [PATCH 1/9] Reproduce greedy routing crossing preloaded copper
+
+---
+ .../getPreloadedSingleLayerCrossing.ts        | 38 +++++++++++++++++++
+ 1 file changed, 38 insertions(+)
+ create mode 100644 tests/fixtures/getPreloadedSingleLayerCrossing.ts
+
+diff --git a/tests/fixtures/getPreloadedSingleLayerCrossing.ts b/tests/fixtures/getPreloadedSingleLayerCrossing.ts
+new file mode 100644
+index 0000000..99cb1cd
+--- /dev/null
++++ b/tests/fixtures/getPreloadedSingleLayerCrossing.ts
+@@ -0,0 +1,38 @@
++import type { TinyHyperGraphProblem, TinyHyperGraphTopology } from "lib/core"
++import captured from "./preloaded-single-layer-crossing.json"
++
++// Reduced from a Pipeline9 graph capture. Coordinates, port angles, layer masks,
++// and fixed copper are preserved; IDs are renamed and coordinates translated.
++export function getPreloadedSingleLayerCrossing(): {
++  topology: TinyHyperGraphTopology
++  problem: TinyHyperGraphProblem
++} {
++  const { topology, problem } = structuredClone(captured)
++  return {
++    topology: {
++      ...topology,
++      regionWidth: Float64Array.from(topology.regionWidth),
++      regionHeight: Float64Array.from(topology.regionHeight),
++      regionCenterX: Float64Array.from(topology.regionCenterX),
++      regionCenterY: Float64Array.from(topology.regionCenterY),
++      regionAvailableZMask: Int32Array.from(topology.regionAvailableZMask),
++      regionViaAreaFraction: Float64Array.from(topology.regionViaAreaFraction),
++      portAngleForRegion1: Int32Array.from(topology.portAngleForRegion1),
++      portAngleForRegion2: Int32Array.from(topology.portAngleForRegion2),
++      portX: Float64Array.from(topology.portX),
++      portY: Float64Array.from(topology.portY),
++      portZ: Int32Array.from(topology.portZ),
++    },
++    problem: {
++      ...problem,
++      portSectionMask: Int8Array.from(problem.portSectionMask),
++      routeStartPort: Int32Array.from(problem.routeStartPort),
++      routeEndPort: Int32Array.from(problem.routeEndPort),
++      routeNet: Int32Array.from(problem.routeNet),
++      routeIsFixed: Uint8Array.from(problem.routeIsFixed),
++      regionNetId: Int32Array.from(problem.regionNetId),
++      portReservationNetId: Int32Array.from(problem.portReservationNetId),
++      portPenalty: Float64Array.from(problem.portPenalty),
++    },
++  }
++}
+-- 
+2.43.0
+

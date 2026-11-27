@@ -1,0 +1,92 @@
+From 1f8135b2fbefeef3d9289fd853c8ca4b2de35ef2 Mon Sep 17 00:00:00 2001
+From: cm4-module <noreply@anthropic.com>
+Date: Thu, 26 Nov 2026 12:36:52 +0000
+Subject: [PATCH 9/9] DuplicateCongestedPortSolver: optional minPortPitch caps
+ ports per boundary by physical width (off by default)
+
+---
+ lib/DuplicateCongestedPortSolver.ts | 47 ++++++++++++++++++++++++++++-
+ 1 file changed, 46 insertions(+), 1 deletion(-)
+
+diff --git a/lib/DuplicateCongestedPortSolver.ts b/lib/DuplicateCongestedPortSolver.ts
+index 7295967..7ef20bf 100644
+--- a/lib/DuplicateCongestedPortSolver.ts
++++ b/lib/DuplicateCongestedPortSolver.ts
+@@ -16,6 +16,14 @@ export const DUPLICATE_PORT_PROXIMITY = 0.05
+ 
+ export interface DuplicateCongestedPortSolverOptions {
+   duplicatePortProximity?: number
++  /**
++   * Centre-to-centre pitch of two traces side by side (trace width plus
++   * clearance). When set, a boundary between two regions keeps at most as
++   * many ports per layer as traces physically fit along it; demand beyond
++   * that is left to the congestion-aware routing instead of being granted as
++   * extra logical ports. Unset: no limit (previous behaviour).
++   */
++  minPortPitch?: number
+   routeSolveOptions?: TinyHyperGraphSolverOptions
+   /** Ignore serialized port penalties while estimating shared-port use. */
+   useSerializedPortPenalties?: boolean
+@@ -100,6 +108,11 @@ const groupPortsByBoundary = (ports: SerializedPort[]) => {
+ 
+ const getDistance = (a: Point, b: Point) => Math.hypot(a.x - b.x, a.y - b.y)
+ 
++const getPortZ = (port: SerializedPort) => {
++  const z = Number(port.d?.z ?? 0)
++  return Number.isFinite(z) ? z : 0
++}
++
+ const normalize = (point: Point): Point | undefined => {
+   const length = Math.hypot(point.x, point.y)
+   if (length <= EPSILON) return undefined
+@@ -421,6 +434,27 @@ export class DuplicateCongestedPortSolver extends BaseSolver {
+     )
+     const usedPortIds = new Set(ports.map((port) => port.portId))
+     const duplicatedPorts: DuplicatedPortSummary[] = []
++    // Physical capacity of each boundary per layer: traces that fit along the
++    // edge two regions share, at the given pitch.
++    const minPortPitch = this.options.minPortPitch
++    const portCountByBoundaryLayer = new Map<string, number>()
++    for (const port of ports) {
++      const key = `${getBoundaryKey(port)}\u0000${getPortZ(port)}`
++      portCountByBoundaryLayer.set(
++        key,
++        (portCountByBoundaryLayer.get(key) ?? 0) + 1,
++      )
++    }
++    const getBoundaryCapacity = (port: SerializedPort) => {
++      if (!(minPortPitch && minPortPitch > 0)) return Number.POSITIVE_INFINITY
++      const a = getRegionBounds(regionById.get(port.region1Id))
++      const b = getRegionBounds(regionById.get(port.region2Id))
++      const overlapX = Math.min(a.maxX, b.maxX) - Math.max(a.minX, b.minX)
++      const overlapY = Math.min(a.maxY, b.maxY) - Math.max(a.minY, b.minY)
++      const sharedLength = Math.max(0, Math.max(overlapX, overlapY))
++      if (!Number.isFinite(sharedLength)) return Number.POSITIVE_INFINITY
++      return Math.max(1, Math.floor(sharedLength / minPortPitch + EPSILON))
++    }
+ 
+     for (const [sourcePortId, useCount] of [...portUseCounts.entries()].sort(
+       ([leftPortId], [rightPortId]) => leftPortId.localeCompare(rightPortId),
+@@ -430,7 +464,18 @@ export class DuplicateCongestedPortSolver extends BaseSolver {
+       const sourcePort = sourcePortById.get(sourcePortId)
+       if (!sourcePort) continue
+ 
+-      const duplicateCount = useCount - 1
++      const boundaryLayerKey = `${getBoundaryKey(sourcePort)}\u0000${getPortZ(sourcePort)}`
++      const boundaryPortCount =
++        portCountByBoundaryLayer.get(boundaryLayerKey) ?? 1
++      const duplicateCount = Math.min(
++        useCount - 1,
++        Math.max(0, getBoundaryCapacity(sourcePort) - boundaryPortCount),
++      )
++      if (duplicateCount <= 0) continue
++      portCountByBoundaryLayer.set(
++        boundaryLayerKey,
++        boundaryPortCount + duplicateCount,
++      )
+       const boundaryPorts = portsByBoundary.get(getBoundaryKey(sourcePort))
+       if (!boundaryPorts) {
+         throw new Error(`No boundary ports found for "${sourcePortId}"`)
+-- 
+2.43.0
+

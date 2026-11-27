@@ -1,0 +1,42 @@
+From a893fd35fdb7c22f43a523b2b4e802a9b3ae38f2 Mon Sep 17 00:00:00 2001
+From: cm4-module <noreply@anthropic.com>
+Date: Thu, 26 Nov 2026 12:37:00 +0000
+Subject: [PATCH 7/7] Pathing: plumb an optional minPortPitch to congested-port
+ duplication (unused by default)
+
+---
+ .../PortPointPathingSolver/hgportpointpathingsolver/types.ts | 5 +++++
+ .../tinyhypergraph/TinyHypergraphPortPointPathingSolver.ts   | 1 +
+ 2 files changed, 6 insertions(+)
+
+diff --git a/lib/solvers/PortPointPathingSolver/hgportpointpathingsolver/types.ts b/lib/solvers/PortPointPathingSolver/hgportpointpathingsolver/types.ts
+index 66ba0779..9003229e 100644
+--- a/lib/solvers/PortPointPathingSolver/hgportpointpathingsolver/types.ts
++++ b/lib/solvers/PortPointPathingSolver/hgportpointpathingsolver/types.ts
+@@ -100,6 +100,11 @@ export interface HgPortPointPathingSolverParams {
+   effort: number
+   preserveTerminalPcbPortIds?: boolean
+   minViaPadDiameter?: number
++  /**
++   * Trace width plus trace-to-trace clearance. When set, congested-port
++   * duplication keeps each region boundary within the traces that fit along it.
++   */
++  minPortPitch?: number
+   flags: {
+     FORCE_CENTER_FIRST: boolean
+     RIPPING_ENABLED: boolean
+diff --git a/lib/solvers/PortPointPathingSolver/tinyhypergraph/TinyHypergraphPortPointPathingSolver.ts b/lib/solvers/PortPointPathingSolver/tinyhypergraph/TinyHypergraphPortPointPathingSolver.ts
+index 387af6c4..5b73a905 100644
+--- a/lib/solvers/PortPointPathingSolver/tinyhypergraph/TinyHypergraphPortPointPathingSolver.ts
++++ b/lib/solvers/PortPointPathingSolver/tinyhypergraph/TinyHypergraphPortPointPathingSolver.ts
+@@ -1173,6 +1173,7 @@ export class TinyHypergraphPortPointPathingSolver extends BaseSolver {
+         serializedGraph,
+         {
+           duplicatePortProximity: 0.05,
++          minPortPitch: params.minPortPitch,
+           useSerializedPortPenalties: false,
+           routeSolveOptions: {
+             ...getTinyViaSizeOptions(params.minViaPadDiameter),
+-- 
+2.43.0
+

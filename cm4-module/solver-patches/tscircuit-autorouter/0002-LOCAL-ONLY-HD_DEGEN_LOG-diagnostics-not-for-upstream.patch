@@ -1,0 +1,86 @@
+From b1cde38afdadacceac085827f97cc22085303d38 Mon Sep 17 00:00:00 2001
+From: cm4-module <noreply@anthropic.com>
+Date: Thu, 26 Nov 2026 03:54:08 +0000
+Subject: [PATCH 2/7] LOCAL ONLY: HD_DEGEN_LOG diagnostics (not for upstream)
+
+---
+ .../Pipeline9HighDensitySolver.ts                 | 11 +++++++++++
+ .../Pipeline9RegionalFallbackSolver.ts            | 13 +++++++++++++
+ .../HighDensitySolver/HighDensitySolver.ts        | 15 +++++++++++++++
+ 3 files changed, 39 insertions(+)
+
+diff --git a/lib/autorouter-pipelines/AutoroutingPipeline9_PreloadedTraceGraph/Pipeline9HighDensitySolver.ts b/lib/autorouter-pipelines/AutoroutingPipeline9_PreloadedTraceGraph/Pipeline9HighDensitySolver.ts
+index 96984144..bd718ce8 100644
+--- a/lib/autorouter-pipelines/AutoroutingPipeline9_PreloadedTraceGraph/Pipeline9HighDensitySolver.ts
++++ b/lib/autorouter-pipelines/AutoroutingPipeline9_PreloadedTraceGraph/Pipeline9HighDensitySolver.ts
+@@ -647,6 +647,17 @@ export class Pipeline9HighDensitySolver extends BaseSolver {
+   }
+ 
+   protected finishActiveNode(routes: HighDensityIntraNodeRoute[]): void {
++    if (process.env.HD_DEGEN_LOG) {
++      // LOCAL DIAGNOSTIC (not for upstream): report nodes whose routes are mostly sub-micron segments.
++      let points = 0, tiny = 0
++      for (const r of routes) {
++        points += r.route.length
++        for (let i = 1; i < r.route.length; i++)
++          if (Math.hypot(r.route[i]!.x - r.route[i - 1]!.x, r.route[i]!.y - r.route[i - 1]!.y) < 1e-3) tiny++
++      }
++      if (tiny > 100)
++        console.error(`[hd-degen] node ${this.activeNode?.capacityMeshNodeId} solver ${this.activeB01Solver ? "b01" : this.activeFallbackSolver ? "fallback:" + this.activeFallbackReason : this.activeRegularSolver ? "regular:" + ((this.activeRegularSolver as any).activeSubSolver?.constructor?.name ?? (this.activeRegularSolver as any).solvers?.at?.(-1)?.constructor?.name) : "?"} routes ${routes.length} points ${points} sub-um ${tiny}`)
++    }
+     const solvedRoutes = this.activeNode
+       ? restoreRootConnectionNames(routes, this.activeNode)
+       : routes
+diff --git a/lib/autorouter-pipelines/AutoroutingPipeline9_PreloadedTraceGraph/Pipeline9RegionalFallbackSolver.ts b/lib/autorouter-pipelines/AutoroutingPipeline9_PreloadedTraceGraph/Pipeline9RegionalFallbackSolver.ts
+index 79af538c..6c7be077 100644
+--- a/lib/autorouter-pipelines/AutoroutingPipeline9_PreloadedTraceGraph/Pipeline9RegionalFallbackSolver.ts
++++ b/lib/autorouter-pipelines/AutoroutingPipeline9_PreloadedTraceGraph/Pipeline9RegionalFallbackSolver.ts
+@@ -300,6 +300,19 @@ export class Pipeline9RegionalFallbackSolver extends BaseSolver {
+         Number(this.stats.repairCandidateRejectionCount ?? 0) + 1
+       return false
+     }
++    if (process.env.HD_DEGEN_LOG) {
++      // LOCAL DIAGNOSTIC (not for upstream): which cleanup step adds sub-micron segments.
++      const tiny = (routes: HighDensityRoute[]) => {
++        let count = 0, points = 0
++        for (const r of routes) {
++          points += r.route.length
++          for (let i = 1; i < r.route.length; i++)
++            if (r.route[i]!.z === r.route[i - 1]!.z && Math.hypot(r.route[i]!.x - r.route[i - 1]!.x, r.route[i]!.y - r.route[i - 1]!.y) < 1e-3) count++
++        }
++        return `${points}pts/${count}sub-um`
++      }
++      console.error(`[hd-degen-fallback] ${this.params.nodeWithPortPoints.capacityMeshNodeId} raw ${tiny(routes)} materialized ${tiny(routedCandidate)} forceImproved ${tiny(forceImprovedRoutes)} repaired ${tiny(repairedRoutes)}`)
++    }
+     this.forceImproveSolver = forceImproveSolver
+     this.repairSolver = repairSolver
+     this.validatedRoutes = repairedRoutes
+diff --git a/lib/solvers/HighDensitySolver/HighDensitySolver.ts b/lib/solvers/HighDensitySolver/HighDensitySolver.ts
+index d02d6069..8272066c 100644
+--- a/lib/solvers/HighDensitySolver/HighDensitySolver.ts
++++ b/lib/solvers/HighDensitySolver/HighDensitySolver.ts
+@@ -395,6 +395,21 @@ export class HighDensitySolver extends BaseSolver {
+             ? this.getSolvedRoutesWithTerminalPcbPortIds(this.activeSubSolver)
+             : this.activeSubSolver.solvedRoutes),
+         )
++        if (process.env.HD_DEGEN_LOG) {
++          // LOCAL DIAGNOSTIC (not for upstream): name the intra-node solver behind sub-micron-segment routes.
++          let tiny = 0, points = 0
++          for (const r of this.activeSubSolver.solvedRoutes) {
++            points += r.route.length
++            for (let i = 1; i < r.route.length; i++)
++              if (Math.hypot(r.route[i]!.x - r.route[i - 1]!.x, r.route[i]!.y - r.route[i - 1]!.y) < 1e-3) tiny++
++          }
++          if (tiny > 50) {
++            const names: string[] = []
++            let s: any = this.activeSubSolver
++            for (let d = 0; s && d < 5; d++) { names.push(s.constructor?.name); s = s.winningSolver }
++            console.error(`[hd-degen-intra] node ${this.activeSubSolver.nodeWithPortPoints?.capacityMeshNodeId} ${names.join(">")} routes ${this.activeSubSolver.solvedRoutes.length} points ${points} sub-um ${tiny}`)
++          }
++        }
+         this.recordNodeSolveMetadata(this.activeSubSolver, "solved")
+         this.recordSolvedNodeStats(
+           this.activeSubSolver,
+-- 
+2.43.0
+

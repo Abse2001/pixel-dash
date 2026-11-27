@@ -1,0 +1,901 @@
+From 9237598862a7a031691ff02902ba13d0bc306ba6 Mon Sep 17 00:00:00 2001
+From: Ahmed Shebani <ashebani2003@gmail.com>
+Date: Sun, 22 Nov 2026 13:28:32 +0100
+Subject: [PATCH 2/9] Add captured subcircuit and native SVG snapshot
+
+---
+ .../preloaded-single-layer-crossing.json      | 698 ++++++++++++++++++
+ ...oaded-single-layer-crossing-repro.snap.svg | 136 ++++
+ ...loaded-single-layer-crossing-repro.test.ts |  31 +
+ 3 files changed, 865 insertions(+)
+ create mode 100644 tests/fixtures/preloaded-single-layer-crossing.json
+ create mode 100644 tests/solver/__snapshots__/preloaded-single-layer-crossing-repro.snap.svg
+ create mode 100644 tests/solver/preloaded-single-layer-crossing-repro.test.ts
+
+diff --git a/tests/fixtures/preloaded-single-layer-crossing.json b/tests/fixtures/preloaded-single-layer-crossing.json
+new file mode 100644
+index 0000000..d406d3f
+--- /dev/null
++++ b/tests/fixtures/preloaded-single-layer-crossing.json
+@@ -0,0 +1,698 @@
++{
++  "topology": {
++    "portCount": 19,
++    "regionCount": 18,
++    "regionIncidentPorts": [
++      [
++        1,
++        2
++      ],
++      [
++        1,
++        3
++      ],
++      [
++        4,
++        5
++      ],
++      [
++        4,
++        6
++      ],
++      [
++        2,
++        6
++      ],
++      [
++        3,
++        7
++      ],
++      [
++        5,
++        8
++      ],
++      [
++        8,
++        9
++      ],
++      [
++        7,
++        10
++      ],
++      [
++        10,
++        11,
++        12,
++        13
++      ],
++      [
++        12,
++        13,
++        14
++      ],
++      [
++        9,
++        15,
++        18
++      ],
++      [
++        15,
++        16
++      ],
++      [
++        0,
++        14,
++        17
++      ],
++      [
++        16,
++        17
++      ],
++      [
++        0
++      ],
++      [
++        11
++      ],
++      [
++        18
++      ]
++    ],
++    "incidentPortRegion": [
++      [
++        15,
++        13
++      ],
++      [
++        0,
++        1
++      ],
++      [
++        0,
++        4
++      ],
++      [
++        1,
++        5
++      ],
++      [
++        2,
++        3
++      ],
++      [
++        2,
++        6
++      ],
++      [
++        3,
++        4
++      ],
++      [
++        5,
++        8
++      ],
++      [
++        6,
++        7
++      ],
++      [
++        7,
++        11
++      ],
++      [
++        8,
++        9
++      ],
++      [
++        9,
++        16
++      ],
++      [
++        9,
++        10
++      ],
++      [
++        9,
++        10
++      ],
++      [
++        10,
++        13
++      ],
++      [
++        11,
++        12
++      ],
++      [
++        12,
++        14
++      ],
++      [
++        13,
++        14
++      ],
++      [
++        11,
++        17
++      ]
++    ],
++    "regionMetadata": [
++      {
++        "capacityMeshNodeId": "region_0",
++        "availableZ": [
++          0,
++          1,
++          2,
++          3,
++          4,
++          5
++        ]
++      },
++      {
++        "capacityMeshNodeId": "region_1",
++        "availableZ": [
++          1
++        ]
++      },
++      {
++        "capacityMeshNodeId": "region_2",
++        "availableZ": [
++          4
++        ]
++      },
++      {
++        "capacityMeshNodeId": "region_3",
++        "availableZ": [
++          4
++        ]
++      },
++      {
++        "capacityMeshNodeId": "region_4",
++        "availableZ": [
++          4
++        ]
++      },
++      {
++        "capacityMeshNodeId": "region_5",
++        "availableZ": [
++          1
++        ]
++      },
++      {
++        "capacityMeshNodeId": "region_6",
++        "availableZ": [
++          0,
++          1,
++          2,
++          3,
++          4,
++          5
++        ]
++      },
++      {
++        "capacityMeshNodeId": "region_7",
++        "availableZ": [
++          0
++        ]
++      },
++      {
++        "capacityMeshNodeId": "region_8",
++        "availableZ": [
++          1
++        ]
++      },
++      {
++        "capacityMeshNodeId": "region_9",
++        "availableZ": [
++          1
++        ]
++      },
++      {
++        "capacityMeshNodeId": "region_10",
++        "availableZ": [
++          1
++        ]
++      },
++      {
++        "capacityMeshNodeId": "region_11",
++        "availableZ": [
++          0
++        ]
++      },
++      {
++        "capacityMeshNodeId": "region_12",
++        "availableZ": [
++          0
++        ]
++      },
++      {
++        "capacityMeshNodeId": "region_13",
++        "availableZ": [
++          1
++        ]
++      },
++      {
++        "capacityMeshNodeId": "region_14",
++        "availableZ": [
++          0,
++          1,
++          2,
++          3,
++          4,
++          5
++        ]
++      },
++      {
++        "capacityMeshNodeId": "region_15",
++        "availableZ": [
++          0,
++          1,
++          2,
++          3,
++          4,
++          5
++        ]
++      },
++      {
++        "capacityMeshNodeId": "region_16",
++        "availableZ": [
++          1
++        ]
++      },
++      {
++        "capacityMeshNodeId": "region_17",
++        "availableZ": [
++          0
++        ]
++      }
++    ],
++    "portMetadata": [
++      {
++        "portId": "port_0"
++      },
++      {
++        "portId": "port_1"
++      },
++      {
++        "portId": "port_2"
++      },
++      {
++        "portId": "port_3"
++      },
++      {
++        "portId": "port_4"
++      },
++      {
++        "portId": "port_5"
++      },
++      {
++        "portId": "port_6"
++      },
++      {
++        "portId": "port_7"
++      },
++      {
++        "portId": "port_8"
++      },
++      {
++        "portId": "port_9"
++      },
++      {
++        "portId": "port_10"
++      },
++      {
++        "portId": "port_11"
++      },
++      {
++        "portId": "port_12"
++      },
++      {
++        "portId": "port_13"
++      },
++      {
++        "portId": "port_14"
++      },
++      {
++        "portId": "port_15"
++      },
++      {
++        "portId": "port_16"
++      },
++      {
++        "portId": "port_17"
++      },
++      {
++        "portId": "port_18"
++      }
++    ],
++    "regionWidth": [
++      0.4999999999999991,
++      0.4999999999999991,
++      0.3000000000000007,
++      0.3000000000000007,
++      0.3000000000000007,
++      0.3000000000000007,
++      0.5,
++      0.5,
++      0.5,
++      0.5,
++      0.2999999999999883,
++      0.2999999999999998,
++      0.30000000000000027,
++      0.30000000000000027,
++      6.025,
++      2.049999999999979,
++      0.5,
++      1e-06
++    ],
++    "regionHeight": [
++      0.5,
++      0.3000000000000007,
++      0.5,
++      0.29999999999999893,
++      0.5,
++      0.3000000000000007,
++      0.5,
++      0.29999999999999893,
++      0.3000000000000007,
++      0.4999999999999991,
++      0.4999999999999991,
++      0.3000000000000007,
++      1.3125,
++      1.3125,
++      6.875,
++      1.7499999999999991,
++      0.3000000000000007,
++      1e-06
++    ],
++    "regionCenterX": [
++      -0.8000000000000007,
++      -0.8000000000000007,
++      -0.40000000000000036,
++      -0.40000000000000036,
++      -0.40000000000000036,
++      -0.40000000000000036,
++      0.0,
++      0.0,
++      0.0,
++      0.0,
++      0.39999999999999414,
++      0.40000000000000036,
++      0.6999999999999886,
++      0.6999999999999886,
++      3.8624999999999883,
++      -0.1750000000000007,
++      0.0,
++      0.40000000000000036
++    ],
++    "regionCenterY": [
++      -0.8000000000000007,
++      -0.40000000000000036,
++      -1.5999999999999996,
++      -1.200000000000001,
++      -0.8000000000000007,
++      -0.40000000000000036,
++      -1.5999999999999996,
++      -1.200000000000001,
++      -0.40000000000000036,
++      0.0,
++      0.0,
++      -1.1999999999999904,
++      -0.6187500000000004,
++      0.6937499999999996,
++      2.1624999999999996,
++      2.2249999999999996,
++      0.39999999999999947,
++      -1.1999999999999904
++    ],
++    "regionAvailableZMask": [
++      63,
++      2,
++      16,
++      16,
++      16,
++      2,
++      63,
++      1,
++      2,
++      2,
++      2,
++      1,
++      1,
++      2,
++      63,
++      63,
++      2,
++      1
++    ],
++    "regionViaAreaFraction": [
++      1,
++      1,
++      1,
++      1,
++      1,
++      1,
++      1,
++      1,
++      1,
++      1,
++      1,
++      1,
++      1,
++      1,
++      1,
++      1,
++      1,
++      1
++    ],
++    "portX": [
++      0.6999999999999886,
++      -0.8000000000000007,
++      -0.5500000000000007,
++      -0.5500000000000007,
++      -0.40000000000000036,
++      -0.25,
++      -0.40000000000000036,
++      -0.25,
++      0.0,
++      0.25,
++      -0.16864496731298662,
++      -0.24999999999998934,
++      0.25,
++      0.25,
++      0.5499999999999883,
++      0.5499999999999945,
++      0.8499999999999885,
++      0.8499999999999885,
++      0.40000000000000036
++    ],
++    "portY": [
++      1.3499999999999996,
++      -0.5500000000000007,
++      -0.8000000000000007,
++      -0.40000000000000036,
++      -1.3499999999999996,
++      -1.5999999999999996,
++      -1.0500000000000025,
++      -0.40000000000000036,
++      -1.3499999999999996,
++      -1.1999999999999975,
++      -0.25,
++      0.25,
++      -0.24999999999998934,
++      0.16864496731299639,
++      0.14374999999999982,
++      -1.162499999999996,
++      -1.2248584764713648,
++      0.2392499999999993,
++      -1.1999999999999904
++    ],
++    "portZ": [
++      1,
++      1,
++      4,
++      1,
++      4,
++      4,
++      4,
++      1,
++      0,
++      0,
++      1,
++      1,
++      1,
++      1,
++      1,
++      0,
++      0,
++      1,
++      0
++    ],
++    "portAngleForRegion1": [
++      35341,
++      13500,
++      4500,
++      4500,
++      13500,
++      4500,
++      13500,
++      4500,
++      13500,
++      4500,
++      16536,
++      18000,
++      0,
++      7536,
++      7087,
++      5625,
++      344,
++      1383,
++      4500
++    ],
++    "portAngleForRegion2": [
++      13500,
++      31500,
++      22500,
++      22500,
++      31500,
++      22500,
++      31500,
++      22500,
++      31500,
++      22500,
++      28464,
++      27000,
++      27000,
++      19464,
++      26271,
++      26229,
++      26934,
++      25018,
++      4500
++    ]
++  },
++  "problem": {
++    "routeCount": 2,
++    "portSectionMask": [
++      1,
++      1,
++      1,
++      1,
++      1,
++      1,
++      1,
++      1,
++      1,
++      1,
++      1,
++      1,
++      1,
++      1,
++      1,
++      1,
++      1,
++      1,
++      1
++    ],
++    "routeStartPort": [
++      0,
++      11
++    ],
++    "routeEndPort": [
++      18,
++      12
++    ],
++    "routeNet": [
++      0,
++      1
++    ],
++    "routeIsFixed": [
++      0,
++      1
++    ],
++    "regionNetId": [
++      -1,
++      -1,
++      -1,
++      -1,
++      -1,
++      -1,
++      -1,
++      -1,
++      -1,
++      -1,
++      -1,
++      0,
++      -1,
++      -1,
++      -1,
++      -2,
++      -2,
++      -2
++    ],
++    "portReservationNetId": [
++      -1,
++      -1,
++      -1,
++      -1,
++      -1,
++      -1,
++      -1,
++      -1,
++      -1,
++      -1,
++      -1,
++      1,
++      1,
++      -1,
++      -1,
++      -1,
++      -1,
++      -1,
++      -1
++    ],
++    "routeMetadata": [
++      {
++        "connectionId": "signal",
++        "mutuallyConnectedNetworkId": "net_0"
++      },
++      {
++        "connectionId": "fixed_1",
++        "mutuallyConnectedNetworkId": "net_1"
++      }
++    ],
++    "initialAssignments": [
++      {
++        "routeId": 1,
++        "regionId": 9,
++        "fromPortId": 12,
++        "toPortId": 11
++      }
++    ],
++    "portPenalty": [
++      1150,
++      0,
++      0,
++      150,
++      150,
++      0,
++      150,
++      150,
++      0,
++      0,
++      0,
++      0,
++      0,
++      0,
++      150,
++      0,
++      0,
++      0,
++      0
++    ]
++  },
++  "goalOnlyRoute": {
++    "startPort": 9,
++    "endPort": 10
++  }
++}
+diff --git a/tests/solver/__snapshots__/preloaded-single-layer-crossing-repro.snap.svg b/tests/solver/__snapshots__/preloaded-single-layer-crossing-repro.snap.svg
+new file mode 100644
+index 0000000..8233d2d
+--- /dev/null
++++ b/tests/solver/__snapshots__/preloaded-single-layer-crossing-repro.snap.svg
+@@ -0,0 +1,136 @@
++<svg width="640" height="640" viewBox="0 0 640 640" xmlns="http://www.w3.org/2000/svg"><rect width="100%" height="100%" fill="white"/><g><polyline data-points="-0.7950000000000007,-0.5450000000000007 -0.5300000000000007,-0.7800000000000007" data-type="line" data-label="route: signal
++region: region-0
++z: 1 -&gt; 4" points="176.89948892674715,402.52129471890987 227.46166950596353,447.3594548551961" fill="none" stroke="rgba(22, 160, 133, 0.95)" stroke-width="1px" stroke-dasharray="2 4 2"/></g><g><polyline data-points="-0.5450000000000007,-0.39500000000000035 -0.7950000000000007,-0.5450000000000007" data-type="line" data-label="route: signal
++region: region-1
++z: 1" points="224.59965928449844,373.90119250425903 176.89948892674715,402.52129471890987" fill="none" stroke="rgba(52, 152, 219, 0.95)" stroke-width="1px" stroke-dasharray="3 2"/></g><g><polyline data-points="-0.38000000000000034,-1.3299999999999996 -0.23,-1.5799999999999996" data-type="line" data-label="route: signal
++region: region-2
++z: 4" points="256.08177172061437,552.2998296422487 284.7018739352652,600" fill="none" stroke="rgba(52, 152, 219, 0.95)" stroke-width="1px" stroke-dasharray="3 2"/></g><g><polyline data-points="-0.38000000000000034,-1.0300000000000025 -0.38000000000000034,-1.3299999999999996" data-type="line" data-label="route: signal
++region: region-3
++z: 4" points="256.08177172061437,495.0596252129477 256.08177172061437,552.2998296422487" fill="none" stroke="rgba(52, 152, 219, 0.95)" stroke-width="1px" stroke-dasharray="3 2"/></g><g><polyline data-points="-0.5300000000000007,-0.7800000000000007 -0.38000000000000034,-1.0300000000000025" data-type="line" data-label="route: signal
++region: region-4
++z: 4" points="227.46166950596353,447.3594548551961 256.08177172061437,495.0596252129477" fill="none" stroke="rgba(52, 152, 219, 0.95)" stroke-width="1px" stroke-dasharray="3 2"/></g><g><polyline data-points="-0.245,-0.39500000000000035 -0.5450000000000007,-0.39500000000000035" data-type="line" data-label="route: signal
++region: region-5
++z: 1" points="281.8398637138001,373.90119250425903 224.59965928449844,373.90119250425903" fill="none" stroke="rgba(52, 152, 219, 0.95)" stroke-width="1px" stroke-dasharray="3 2"/></g><g><polyline data-points="-0.23,-1.5799999999999996 0,-1.3499999999999996" data-type="line" data-label="route: signal
++region: region-6
++z: 4 -&gt; 0" points="284.7018739352652,600 328.5860306643964,556.1158432708688" fill="none" stroke="rgba(22, 160, 133, 0.95)" stroke-width="1px" stroke-dasharray="2 4 2"/></g><g><polyline data-points="0,-1.3499999999999996 0.25,-1.1999999999999975" data-type="line" data-label="route: signal
++region: region-7
++z: 0" points="328.5860306643964,556.1158432708688 376.2862010221477,527.4957410562176" fill="none" stroke="hsla(218, 70%, 50%, 0.8)" stroke-width="1px"/></g><g><polyline data-points="-0.1636449673129866,-0.245 -0.245,-0.39500000000000035" data-type="line" data-label="route: signal
++region: region-8
++z: 1" points="297.362459388324,345.2810902896082 281.8398637138001,373.90119250425903" fill="none" stroke="rgba(52, 152, 219, 0.95)" stroke-width="1px" stroke-dasharray="3 2"/></g><g><polyline data-points="0.255,-0.24499999999998934 -0.24499999999998934,0.255" data-type="line" data-label="route: fixed_1
++region: region-9
++z: 1" points="377.2402044293027,345.28109028960614 281.8398637138022,249.8807495741056" fill="none" stroke="rgba(52, 152, 219, 0.95)" stroke-width="1px" stroke-dasharray="3 2"/></g><g><polyline data-points="0.255,0.1736449673129964 -0.1636449673129866,-0.245" data-type="line" data-label="route: signal
++region: region-9
++z: 1" points="377.2402044293027,265.4033452486276 297.362459388324,345.2810902896082" fill="none" stroke="rgba(52, 152, 219, 0.95)" stroke-width="1px" stroke-dasharray="3 2"/></g><g><polyline data-points="0.5549999999999883,0.14874999999999983 0.255,0.1736449673129964" data-type="line" data-label="route: signal
++region: region-10
++z: 1" points="434.480408858602,270.1533219761499 377.2402044293027,265.4033452486276" fill="none" stroke="rgba(52, 152, 219, 0.95)" stroke-width="1px" stroke-dasharray="3 2"/></g><g><polyline data-points="0.25,-1.1999999999999975 0.40000000000000036,-1.1999999999999904" data-type="line" data-label="route: signal
++region: region-11
++z: 0" points="376.2862010221477,527.4957410562176 404.9063032367985,527.4957410562163" fill="none" stroke="hsla(218, 70%, 50%, 0.8)" stroke-width="1px"/></g><g><polyline data-points="0.7049999999999886,1.3549999999999995 0.5549999999999883,0.14874999999999983" data-type="line" data-label="route: signal
++region: region-13
++z: 1" points="463.10051107325285,40 434.480408858602,270.1533219761499" fill="none" stroke="rgba(52, 152, 219, 0.95)" stroke-width="1px" stroke-dasharray="3 2"/></g><g><circle data-type="point" data-label="route: signal
++net: 0
++endpoint: start
++port: port_0
++z: 1" data-x="0.7049999999999886" data-y="1.3549999999999995" cx="463.10051107325285" cy="40" r="3" fill="hsla(218, 70%, 50%, 0.8)"/></g><g><circle data-type="point" data-label="route: signal
++net: 0
++endpoint: end
++port: port_18
++z: 0" data-x="0.40000000000000036" data-y="-1.1999999999999904" cx="404.9063032367985" cy="527.4957410562163" r="3" fill="hsla(218, 70%, 50%, 0.8)"/></g><g><circle data-type="point" data-label="route: fixed_1
++net: 1
++endpoint: start
++port: port_11
++z: 1" data-x="-0.24499999999998934" data-y="0.255" cx="281.8398637138022" cy="249.8807495741056" r="3" fill="hsla(43, 70%, 50%, 0.8)"/></g><g><circle data-type="point" data-label="route: fixed_1
++net: 1
++endpoint: end
++port: port_12
++z: 1" data-x="0.255" data-y="-0.24499999999998934" cx="377.2402044293027" cy="345.28109028960614" r="3" fill="hsla(43, 70%, 50%, 0.8)"/></g><g><circle data-type="point" data-label="route: signal
++port: port_1
++net: 0
++z: 1" data-x="-0.7950000000000007" data-y="-0.5450000000000007" cx="176.89948892674715" cy="402.52129471890987" r="3" fill="hsla(218, 70%, 50%, 1)"/></g><g><circle data-type="point" data-label="route: signal
++port: port_2
++net: 0
++z: 4" data-x="-0.5300000000000007" data-y="-0.7800000000000007" cx="227.46166950596353" cy="447.3594548551961" r="3" fill="hsla(218, 70%, 50%, 1)"/></g><g><circle data-type="point" data-label="route: signal
++port: port_3
++net: 0
++z: 1" data-x="-0.5450000000000007" data-y="-0.39500000000000035" cx="224.59965928449844" cy="373.90119250425903" r="3" fill="hsla(218, 70%, 50%, 1)"/></g><g><circle data-type="point" data-label="route: signal
++port: port_4
++net: 0
++z: 4" data-x="-0.38000000000000034" data-y="-1.3299999999999996" cx="256.08177172061437" cy="552.2998296422487" r="3" fill="hsla(218, 70%, 50%, 1)"/></g><g><circle data-type="point" data-label="route: signal
++port: port_5
++net: 0
++z: 4" data-x="-0.23" data-y="-1.5799999999999996" cx="284.7018739352652" cy="600" r="3" fill="hsla(218, 70%, 50%, 1)"/></g><g><circle data-type="point" data-label="route: signal
++port: port_6
++net: 0
++z: 4" data-x="-0.38000000000000034" data-y="-1.0300000000000025" cx="256.08177172061437" cy="495.0596252129477" r="3" fill="hsla(218, 70%, 50%, 1)"/></g><g><circle data-type="point" data-label="route: signal
++port: port_7
++net: 0
++z: 1" data-x="-0.245" data-y="-0.39500000000000035" cx="281.8398637138001" cy="373.90119250425903" r="3" fill="hsla(218, 70%, 50%, 1)"/></g><g><circle data-type="point" data-label="route: signal
++port: port_8
++net: 0
++z: 0" data-x="0" data-y="-1.3499999999999996" cx="328.5860306643964" cy="556.1158432708688" r="3" fill="hsla(218, 70%, 50%, 1)"/></g><g><circle data-type="point" data-label="route: signal
++port: port_9
++net: 0
++z: 0" data-x="0.25" data-y="-1.1999999999999975" cx="376.2862010221477" cy="527.4957410562176" r="3" fill="hsla(218, 70%, 50%, 1)"/></g><g><circle data-type="point" data-label="route: signal
++port: port_10
++net: 0
++z: 1" data-x="-0.1636449673129866" data-y="-0.245" cx="297.362459388324" cy="345.2810902896082" r="3" fill="hsla(218, 70%, 50%, 1)"/></g><g><circle data-type="point" data-label="route: fixed_1
++port: port_12
++net: 1
++z: 1" data-x="0.255" data-y="-0.24499999999998934" cx="377.2402044293027" cy="345.28109028960614" r="3" fill="hsla(43, 70%, 50%, 1)"/></g><g><circle data-type="point" data-label="route: fixed_1
++port: port_11
++net: 1
++z: 1" data-x="-0.24499999999998934" data-y="0.255" cx="281.8398637138022" cy="249.8807495741056" r="3" fill="hsla(43, 70%, 50%, 1)"/></g><g><circle data-type="point" data-label="route: signal
++port: port_13
++net: 0
++z: 1" data-x="0.255" data-y="0.1736449673129964" cx="377.2402044293027" cy="265.4033452486276" r="3" fill="hsla(218, 70%, 50%, 1)"/></g><g><circle data-type="point" data-label="route: signal
++port: port_14
++net: 0
++z: 1" data-x="0.5549999999999883" data-y="0.14874999999999983" cx="434.480408858602" cy="270.1533219761499" r="3" fill="hsla(218, 70%, 50%, 1)"/></g><g><circle data-type="point" data-label="route: signal
++port: port_18
++net: 0
++z: 0" data-x="0.40000000000000036" data-y="-1.1999999999999904" cx="404.9063032367985" cy="527.4957410562163" r="3" fill="hsla(218, 70%, 50%, 1)"/></g><g><circle data-type="point" data-label="route: signal
++port: port_0
++net: 0
++z: 1" data-x="0.7049999999999886" data-y="1.3549999999999995" cx="463.10051107325285" cy="40" r="3" fill="hsla(218, 70%, 50%, 1)"/></g><g id="crosshair" style="display: none"><line id="crosshair-h" y1="0" y2="640" stroke="#666" stroke-width="0.5"/><line id="crosshair-v" x1="0" x2="640" stroke="#666" stroke-width="0.5"/><text id="coordinates" font-family="monospace" font-size="12" fill="#666"></text></g><script><![CDATA[
++              document.currentScript.parentElement.addEventListener('mousemove', (e) => {
++                const svg = e.currentTarget;
++                const rect = svg.getBoundingClientRect();
++                const x = e.clientX - rect.left;
++                const y = e.clientY - rect.top;
++                const crosshair = svg.getElementById('crosshair');
++                const h = svg.getElementById('crosshair-h');
++                const v = svg.getElementById('crosshair-v');
++                const coords = svg.getElementById('coordinates');
++                
++                crosshair.style.display = 'block';
++                h.setAttribute('x1', '0');
++                h.setAttribute('x2', '640');
++                h.setAttribute('y1', y);
++                h.setAttribute('y2', y);
++                v.setAttribute('x1', x);
++                v.setAttribute('x2', x);
++                v.setAttribute('y1', '0');
++                v.setAttribute('y2', '640');
++
++                // Calculate real coordinates using inverse transformation
++                const matrix = {"a":190.80068143100516,"c":0,"e":328.5860306643964,"b":0,"d":-190.80068143100516,"f":298.5349233390119};
++                // Manually invert and apply the affine transform
++                // Since we only use translate and scale, we can directly compute:
++                // x' = (x - tx) / sx
++                // y' = (y - ty) / sy
++                const sx = matrix.a;
++                const sy = matrix.d;
++                const tx = matrix.e; 
++                const ty = matrix.f;
++                const realPoint = {
++                  x: (x - tx) / sx,
++                  y: (y - ty) / sy // Flip y back since we used negative scale
++                }
++                
++                coords.textContent = `(${realPoint.x.toFixed(2)}, ${realPoint.y.toFixed(2)})`;
++                coords.setAttribute('x', (x + 5).toString());
++                coords.setAttribute('y', (y - 5).toString());
++              });
++              document.currentScript.parentElement.addEventListener('mouseleave', () => {
++                document.currentScript.parentElement.getElementById('crosshair').style.display = 'none';
++              });
++            ]]></script></svg>
+\ No newline at end of file
+diff --git a/tests/solver/preloaded-single-layer-crossing-repro.test.ts b/tests/solver/preloaded-single-layer-crossing-repro.test.ts
+new file mode 100644
+index 0000000..96baefe
+--- /dev/null
++++ b/tests/solver/preloaded-single-layer-crossing-repro.test.ts
+@@ -0,0 +1,31 @@
++import "bun-match-svg"
++import { expect, test } from "bun:test"
++import { getSvgFromGraphicsObject } from "graphics-debug"
++import { TinyHyperGraphSolver } from "lib/core"
++import { getPreloadedSingleLayerCrossing } from "../fixtures/getPreloadedSingleLayerCrossing"
++
++test("replays the greedy route beside preloaded copper from a captured circuit", () => {
++  const { topology, problem } = getPreloadedSingleLayerCrossing()
++  const options = { OWNED_REGIONAL_HOP_FRONTIER: true }
++  const parent = new TinyHyperGraphSolver(topology, problem, options)
++  const solver = parent["createGreedyFinalRouteSolver"](options, 0)
++  solver.solve()
++
++  expect(solver.solved).toBe(true)
++  expect(
++    solver.state.regionIntersectionCaches.reduce(
++      (sum, cache) => sum + cache.existingSameLayerIntersections,
++      0,
++    ),
++  ).toBe(1)
++  for (const segment of problem.initialAssignments!) {
++    expect(solver.state.regionSegments[segment.regionId]).toContainEqual([
++      segment.routeId,
++      segment.fromPortId,
++      segment.toPortId,
++    ])
++  }
++  expect(
++    getSvgFromGraphicsObject(solver.preview(), { backgroundColor: "white" }),
++  ).toMatchSvgSnapshot(import.meta.path)
++})
+-- 
+2.43.0
+

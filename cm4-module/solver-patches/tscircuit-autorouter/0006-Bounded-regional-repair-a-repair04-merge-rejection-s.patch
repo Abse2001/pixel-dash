@@ -1,0 +1,70 @@
+From fe02fdb81f3342c5b5d6ed926bd9c0185cba5504 Mon Sep 17 00:00:00 2001
+From: cm4-module <noreply@anthropic.com>
+Date: Thu, 26 Nov 2026 08:07:51 +0000
+Subject: [PATCH 6/7] Bounded regional repair: a repair04 merge rejection skips
+ the candidate
+
+mergeRepairRegion throws when a repaired fragment is unsafe to merge; the
+bounded repair let that abort the whole pipeline. Treat it as a rejected
+candidate and continue with the next region.
+---
+ .../Pipeline9BoundedRegionalRepairSolver.ts   | 26 ++++++++++++++++---
+ .../applyPipeline9BoundedRegionalRepairs.ts   |  2 ++
+ 2 files changed, 24 insertions(+), 4 deletions(-)
+
+diff --git a/lib/autorouter-pipelines/AutoroutingPipeline9_PreloadedTraceGraph/Pipeline9BoundedRegionalRepairSolver.ts b/lib/autorouter-pipelines/AutoroutingPipeline9_PreloadedTraceGraph/Pipeline9BoundedRegionalRepairSolver.ts
+index 187acf16..b53e5b25 100644
+--- a/lib/autorouter-pipelines/AutoroutingPipeline9_PreloadedTraceGraph/Pipeline9BoundedRegionalRepairSolver.ts
++++ b/lib/autorouter-pipelines/AutoroutingPipeline9_PreloadedTraceGraph/Pipeline9BoundedRegionalRepairSolver.ts
+@@ -665,13 +665,31 @@ export class Pipeline9BoundedRegionalRepairSolver extends BaseSolver {
+     const { context, region } = state.negotiation
+     // Preserve repair04's fragment metadata and source validation during merge;
+     // only afterward discard approach tags copied onto interpolated cut points.
+-    const negotiatedRoutes = removeCopiedPipeline9TerminalApproaches(
+-      context.currentRoutes,
+-      mergeRepairRegion({
++    // repair04 validates the repaired fragments while merging and rejects an
++    // unsafe one by throwing ("repair04 merge rejected ..."). That rejects this
++    // candidate, not the repair: continue with the next region.
++    let mergedRoutes: ReturnType<typeof mergeRepairRegion>
++    try {
++      mergedRoutes = mergeRepairRegion({
+         routes: context.currentRoutes,
+         region,
+         repairedRoutes: state.repair.routes,
+-      }),
++      })
++    } catch (error) {
++      if (
++        !(error instanceof Error) ||
++        !error.message.startsWith("repair04 merge rejected")
++      ) {
++        throw error
++      }
++      this.result.mergeRejectionCount =
++        (this.result.mergeRejectionCount ?? 0) + 1
++      this.state = { phase: "select-region", context }
++      return
++    }
++    const negotiatedRoutes = removeCopiedPipeline9TerminalApproaches(
++      context.currentRoutes,
++      mergedRoutes,
+     )
+     if (
+       negotiatedRoutes.every(
+diff --git a/lib/autorouter-pipelines/AutoroutingPipeline9_PreloadedTraceGraph/applyPipeline9BoundedRegionalRepairs.ts b/lib/autorouter-pipelines/AutoroutingPipeline9_PreloadedTraceGraph/applyPipeline9BoundedRegionalRepairs.ts
+index 78170cae..7b9ef70f 100644
+--- a/lib/autorouter-pipelines/AutoroutingPipeline9_PreloadedTraceGraph/applyPipeline9BoundedRegionalRepairs.ts
++++ b/lib/autorouter-pipelines/AutoroutingPipeline9_PreloadedTraceGraph/applyPipeline9BoundedRegionalRepairs.ts
+@@ -8,6 +8,8 @@ export type Pipeline9BoundedRegionalRepairResult = {
+   attemptedRegionCount: number
+   acceptedRegionCount: number
+   candidateAttemptCount: number
++  /** Repaired regions repair04 refused to merge (unsafe fragment); skipped. */
++  mergeRejectionCount?: number
+   pathSearchNodeCount: number
+   referenceValidationCount: number
+   initialDrcIssueCount: number | undefined
+-- 
+2.43.0
+

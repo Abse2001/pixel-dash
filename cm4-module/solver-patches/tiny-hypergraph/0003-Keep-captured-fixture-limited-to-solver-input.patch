@@ -1,0 +1,26 @@
+From 612b82dec7e6f343ded42754f990299898c10180 Mon Sep 17 00:00:00 2001
+From: Ahmed Shebani <ashebani2003@gmail.com>
+Date: Sun, 22 Nov 2026 13:30:03 +0100
+Subject: [PATCH 3/9] Keep captured fixture limited to solver input
+
+---
+ tests/fixtures/preloaded-single-layer-crossing.json | 4 ----
+ 1 file changed, 4 deletions(-)
+
+diff --git a/tests/fixtures/preloaded-single-layer-crossing.json b/tests/fixtures/preloaded-single-layer-crossing.json
+index d406d3f..e1dd40e 100644
+--- a/tests/fixtures/preloaded-single-layer-crossing.json
++++ b/tests/fixtures/preloaded-single-layer-crossing.json
+@@ -690,9 +690,5 @@
+       0,
+       0
+     ]
+-  },
+-  "goalOnlyRoute": {
+-    "startPort": 9,
+-    "endPort": 10
+   }
+ }
+-- 
+2.43.0
+

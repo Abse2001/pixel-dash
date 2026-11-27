@@ -1,0 +1,26 @@
+From e9499f2a227ae633d43e509746d69d838e4a4f93 Mon Sep 17 00:00:00 2001
+From: cm4-module <noreply@anthropic.com>
+Date: Thu, 26 Nov 2026 07:28:41 +0000
+Subject: [PATCH 4/7] Pass the pipeline effort to port-point pathing (it was
+ capped at 1)
+
+---
+ .../getPipeline9PortPointPathingInput.ts                        | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/lib/autorouter-pipelines/AutoroutingPipeline9_PreloadedTraceGraph/getPipeline9PortPointPathingInput.ts b/lib/autorouter-pipelines/AutoroutingPipeline9_PreloadedTraceGraph/getPipeline9PortPointPathingInput.ts
+index d3cf5a42..4d8eb306 100644
+--- a/lib/autorouter-pipelines/AutoroutingPipeline9_PreloadedTraceGraph/getPipeline9PortPointPathingInput.ts
++++ b/lib/autorouter-pipelines/AutoroutingPipeline9_PreloadedTraceGraph/getPipeline9PortPointPathingInput.ts
+@@ -33,7 +33,7 @@ export function getPipeline9PortPointPathingInput(
+     graph,
+     connections,
+     layerCount: pipeline.srj.layerCount,
+-    effort: Math.min(1, pipeline.effort),
++    effort: pipeline.effort,
+     preserveTerminalPcbPortIds: true,
+     captureSearchDebug: pipeline.opts.captureSearchDebug ?? false,
+     minViaPadDiameter: pipeline.viaDiameter,
+-- 
+2.43.0
+

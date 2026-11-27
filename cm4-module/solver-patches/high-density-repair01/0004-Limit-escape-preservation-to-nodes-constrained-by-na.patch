@@ -1,0 +1,89 @@
+From 395258a2fa7b58fb18dbe028ffccbbd1a16fb104 Mon Sep 17 00:00:00 2001
+From: Ahmed Alshaybani <shibosoftwaredev@gmail.com>
+Date: Sat, 21 Nov 2026 01:03:30 +0100
+Subject: [PATCH 4/8] Limit escape preservation to nodes constrained by native
+ fixed copper
+
+---
+ lib/HighDensityForceImproveSolver.ts    |  8 +++++---
+ tests/protected-escape-clamping.test.ts | 17 +++++++++++++++--
+ 2 files changed, 20 insertions(+), 5 deletions(-)
+
+diff --git a/lib/HighDensityForceImproveSolver.ts b/lib/HighDensityForceImproveSolver.ts
+index 37adba8..352f4c4 100644
+--- a/lib/HighDensityForceImproveSolver.ts
++++ b/lib/HighDensityForceImproveSolver.ts
+@@ -52,7 +52,7 @@ type MutableNode = {
+ }
+ 
+ type MutableRoute = {
+-  preserveTopologyPortAnchors: boolean
++  preserveFixedEscapes: boolean
+   isFixed: boolean
+   route: HighDensityRoute
+   rootConnectionName: string
+@@ -422,7 +422,7 @@ const clampMutableRoutesToBounds = (
+     if (mutableRoute.isFixed) continue
+     for (const node of mutableRoute.nodes) {
+       const isProtectedWire = node.fixed && node.boundaryPadding === 0
+-      if (mutableRoute.preserveTopologyPortAnchors && isProtectedWire) continue
++      if (mutableRoute.preserveFixedEscapes && isProtectedWire) continue
+       clampNodeToBounds(node, bounds)
+     }
+   }
+@@ -483,6 +483,8 @@ const buildMutableRoutes = (
+   routes: HighDensityRoute[],
+   fixedPortPoints: ReadonlyArray<{ x: number; y: number; z: number }> = [],
+ ) => {
++  const preserveFixedEscapes =
++    fixedPortPoints.length > 0 && routes.some((route) => route.isFixed === true)
+   let nextForceIndex = 0
+   const mutableRoutes: MutableRoute[] = routes.map((inputRoute) => {
+     // An endpoint via needs a separate anchor at its topology port. The via
+@@ -582,7 +584,7 @@ const buildMutableRoutes = (
+     }
+ 
+     return {
+-      preserveTopologyPortAnchors: fixedPortPoints.length > 0,
++      preserveFixedEscapes,
+       isFixed: false,
+       route,
+       rootConnectionName: route.rootConnectionName ?? route.connectionName,
+diff --git a/tests/protected-escape-clamping.test.ts b/tests/protected-escape-clamping.test.ts
+index 41d5f79..b6eabd4 100644
+--- a/tests/protected-escape-clamping.test.ts
++++ b/tests/protected-escape-clamping.test.ts
+@@ -2,7 +2,7 @@ import { expect, test } from "bun:test"
+ import { runForceDirectedImprovement } from "../lib/HighDensityForceImproveSolver"
+ import type { HighDensityRoute } from "../lib/types/high-density-types"
+ 
+-test("bounds clamping preserves a protected topology escape segment", (): void => {
++test("bounds clamping preserves protected escapes beside fixed copper", (): void => {
+   const route: HighDensityRoute = {
+     connectionName: "signal",
+     traceThickness: 0.1,
+@@ -20,7 +20,20 @@ test("bounds clamping preserves a protected topology escape segment", (): void =
+     { minX: -0.5, maxX: 0.5, minY: -0.5, maxY: 0.5 },
+     [route],
+     0,
+-    { fixedPortPoints: [route.route[0]!, route.route.at(-1)!] },
++    {
++      fixedPortPoints: [route.route[0]!, route.route.at(-1)!],
++      fixedHdRoutes: [
++        {
++          ...route,
++          connectionName: "completed",
++          isFixed: true,
++          route: [
++            { x: -0.4, y: 0.3, z: 1 },
++            { x: 0.4, y: 0.3, z: 1 },
++          ],
++        },
++      ],
++    },
+   )
+ 
+   expect(result.routes[0]!.route).toEqual(original.route)
+-- 
+2.43.0
+
