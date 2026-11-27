@@ -136,5 +136,10 @@ analysis of the address/command and clock lines of the same routing: set the pro
     stock), checked against Hirose's DF40 catalogue: every published header dimension and the recommended PCB layout
     (this footprint) are the same, but G-Switch does not state intermating with Hirose, so mate one first-article module
     with a CM4 carrier before using it. XYECONN XY-100DP-DF40C (C53200820) is another clone, not checked.
-12. **JLCPCB**: 6 layers, 1.0 mm, ENIG, 0.1 mm hole / 0.3 mm pad, via-in-pad (epoxy fill + cap), both sides
+12. **Pick-and-place rotations** (checked, `fix-pnp.ts` from the RK3566 module, run by `make.sh`; list in
+    `fab/pnp-rotations.txt`): every part's pin 1 on this board's footprint is compared with pin 1 on JLCPCB's own
+    footprint of its LCSC part (tscircuit parts engine); 162 of 162 verified. One correction: Q_RUN_PG (SOT-23) is 90 in
+    JLC's frame, not 270. The pin-1 data is written into the circuit JSON, so tscircuit's own export applies it too.
+    Still glance at the BGAs, the QFN and the SOT-23s in JLCPCB's placement preview when ordering.
+13. **JLCPCB**: 6 layers, 1.0 mm, ENIG, 0.1 mm hole / 0.3 mm pad, via-in-pad (epoxy fill + cap), both sides
     assembled. Outer prepreg 1080 or 3313 (not 7628) to keep the 0.1 mm outer traces near 50-75 ohm.

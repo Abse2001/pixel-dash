@@ -15,4 +15,5 @@ bun planes.ts                                                     # layer 2/5 gr
 bun build.tsx                                                     # dist/module.circuit.json
 bun check.ts                                                      # whole-board check
 bun export.ts                                                     # fab: gerbers, drills, BOM, pick-and-place, CM4 pin map
+CIRCUIT=dist/module.circuit.json CPL=fab/cpl.csv bun fix-pnp.ts > fab/pnp-rotations.txt  # rotations checked against JLCPCB's footprints (exits 1 if any part is unverified)
 python3 layers.py                                                 # fab/views/*.png
