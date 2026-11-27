@@ -1,6 +1,6 @@
 // Footprints written for this module.
 
-/** CM4 plug (Hirose DF40C-100DP-0.4V(51) land pattern; fitted: G-Switch GT-B0403MSV11-100B1101, same drawing) with CM4 pin numbering (pin n of 100: odd pins on one row, even on the other,
+/** CM4 plug (Hirose DF40C-100DP-0.4V(51) land pattern; fitted: Hirose DF40C-100DP-0.4V(58), C6021443) with CM4 pin numbering (pin n of 100: odd pins on one row, even on the other,
  *  pins 1/2 at one end). Land pattern as JLCPCB/LCSC C531031 (0.2 x 0.66 mm pads at 0.4 mm pitch, rows 2.71 mm apart,
  *  0.3 x 0.66 mm fixing pads at +/-10.265 mm). Local frame: pin 1 at x = -9.8, odd row at y = +1.355.
  *  On the bottom side (mirrored in x) at rotation 0 this puts pin 1 at +9.8 and the odd row at +1.355. */

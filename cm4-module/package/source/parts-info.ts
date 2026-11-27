@@ -14,11 +14,10 @@ export const PARTS: Record<string, { fp: string; comp?: string; file?: string; v
   PMIC: { fp: "PMIC", value: "TPS65217DRSLR", lcsc: "C702315" }, BUCK: { fp: "BUCK", value: "SY8089A1AAC", lcsc: "C479074" },
   NFET: { fp: "NFET", value: "Si2302CDS-T1-GE3", lcsc: "C10488" },
   IND: { fp: "IND", value: "2.2uH WIP201610P-2R2ML", lcsc: "C315717" },
-  // CM4 connectors: G-Switch GT-B0403MSV11-100B1101 (LCSC C42376235), a DF40C-100DP-0.4V(51) equivalent: every dimension
-  // Hirose publishes for the header (21.52 / 19.6 / 3.2, body 2.97 x 1.85, height 1.14, pitch 0.4, contact 0.15) and its
-  // PCB layout (3.37 / 2.05, 0.23 pads, 0.35 / 0.3 / 0.65 corner pads) is the same; mated height 1.5 mm. The Hirose part
-  // (C531031) was out of stock at LCSC; it stays a drop-in on this footprint.
-  CM4_HDR: { fp: "CM4_HDR", value: "GT-B0403MSV11-100B1101", lcsc: "C42376235" },
+  // CM4 connectors: genuine Hirose DF40C-100DP-0.4V(58) (LCSC C6021443), the same part as DF40C-100DP-0.4V(51)
+  // (C531031, out of stock) on a different reel; fallback for volume: G-Switch GT-B0403MSV11-100B1101 (C42376235), whose
+  // drawing matches Hirose's on every published dimension (README, before ordering)
+  CM4_HDR: { fp: "CM4_HDR", value: "DF40C-100DP-0.4V(58)", lcsc: "C6021443" },
   R100K: { fp: "G0402", value: "100k", lcsc: "C25741" }, R10K: { fp: "G0402", value: "10k", lcsc: "C25744" }, R1K: { fp: "G0402", value: "1k", lcsc: "C11702" },
   R2K2: { fp: "G0402", value: "2.2k", lcsc: "C25879" }, R4K7: { fp: "G0402", value: "4.7k", lcsc: "C25900" }, R1K5: { fp: "G0402", value: "1.5k", lcsc: "C25867" },
   R12K1: { fp: "G0402", value: "12.1k 1%", lcsc: "C25852" }, R22K: { fp: "G0402", value: "22k 1%", lcsc: "C25768" }, R200K: { fp: "G0402", value: "200k 1%", lcsc: "C25764" },
