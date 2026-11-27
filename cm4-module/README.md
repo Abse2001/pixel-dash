@@ -115,8 +115,11 @@ analysis of the address/command and clock lines of the same routing: set the pro
    about 0.2 A each** (the CM4 itself allows 0.6 A).
 8. **Decoupling**: the eight optional extra 100 nF caps (C_X_*) sit 6-7.6 mm from their balls (outside the escape
    ring); the 20 DDR high-speed caps are within TI's limit (worst 9.1 mm of 10.16 mm).
-9. **Courtyards**: tscircuit reports 94 courtyard overlaps (default courtyard margins, mostly under the BGA);
-   every pad pair on a side is at least 0.206 mm apart (JLCPCB 0402 spacing passes).
+9. **Courtyards / part spacing** (checked, `bodies.py`, results in `bodies-results.txt`): tscircuit reports 94
+   courtyard overlaps (its generic outlines plus margin). Checked with every part at its MAXIMUM physical outline from
+   the manufacturers' tolerances (terminations and leads included) at its real position and rotation: no two parts
+   touch or overlap. The tightest pair is C_HS_CPU_U2 / C_HS_CPU_U3 (two 0201s placed corner to corner under the
+   processor) at 0.095 mm worst case; every other pair is at least 0.200 mm apart, and every pad pair at least 0.206 mm.
 10. **CM4 geometry** (checked against the CM4 datasheet, figure 4): 55 x 40 mm, M2.5 holes 3.5 mm in from each
     edge, connector centres 21.5 mm from the holes, pins 1-100 along one long edge with pin 1 (outer row) at the far
     end from those holes, pin 101 on the inner row; the frame is a rotation of the CM4's, not a mirror. Connector rows

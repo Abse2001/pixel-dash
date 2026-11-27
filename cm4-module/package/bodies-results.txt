@@ -1,0 +1,32 @@
+162 parts, maximum outlines from the manufacturers' tolerances (terminations and leads included)
+pairs within 0.3 mm of each other: 32; touching or overlapping: 0
+  body gap below 0.05 mm: 0
+  body gap below 0.10 mm: 1
+  body gap below 0.15 mm: 1
+  body gap below 0.20 mm: 16
+closest pairs (gap in mm, negative = overlap):
+  +0.095  bottom C_HS_CPU_U2 (C100N_0201) / C_HS_CPU_U3 (C100N_0201)
+  +0.200  bottom C_L14 (C100N_0402) / C_K13 (C100N_0402)
+  +0.200  bottom C_H13 (C100N_0402) / C_J12 (C100N_0402)
+  +0.200  bottom C_F11 (C100N_0402) / C_G10 (C100N_0402)
+  +0.200  bottom C_P10 (C100N_0402) / C_P11 (C100N_0402)
+  +0.200  bottom C_R10 (C100N_0402) / C_R11 (C100N_0402)
+  +0.200  bottom C_CAP_RTC (C1U_0402) / C_HS_CPU_T6 (C100N_0402)
+  +0.200  bottom C_HS_CPU_T5 (C100N_0402) / C_HS_CPU_T7 (C100N_0402)
+  +0.200  bottom C_HS_CPU_T8 (C100N_0402) / C_HS_CPU_T12 (C100N_0402)
+  +0.200  top    C_HS_CPU_T14 (C100N_0402) / C_HS_CPU_T20 (C100N_0402)
+  +0.200  bottom C_HS_CPU_T6 (C100N_0402) / C_HS_CPU_T10 (C100N_0402)
+  +0.200  bottom C_HS_CPU_T9 (C100N_0402) / C_HS_CPU_T13 (C100N_0402)
+  +0.200  bottom C_HS_CPU_T10 (C100N_0402) / C_HS_CPU_T16 (C100N_0402)
+  +0.200  bottom C_VREF_CA (C100N_0402) / C_HS_RAM_X10 (C100N_0402)
+  +0.200  bottom R_VREF_TOP (R1K_0402) / C_VREF_DIV (C100N_0402)
+  +0.200  bottom R_VREF_TOP (R1K_0402) / R_VREF_BOT (R1K_0402)
+  +0.200  bottom C_HS_CPU_T12 (C100N_0402) / C_HS_CPU_T15 (C100N_0402)
+  +0.200  bottom C_HS_CPU_T7 (C100N_0402) / C_HS_CPU_T8 (C100N_0402)
+  +0.200  top    C_HS_CPU_T11 (C100N_0402) / C_HS_CPU_T14 (C100N_0402)
+  +0.200  bottom C_K13 (C100N_0402) / C_K12 (C100N_0402)
+  +0.200  bottom C_F11 (C100N_0402) / C_F12 (C100N_0402)
+  +0.200  bottom C_P11 (C100N_0402) / C_N12 (C100N_0402)
+  +0.200  bottom C_M11 (C100N_0402) / C_L9 (C100N_0402)
+  +0.200  bottom C_F7 (C100N_0402) / C_G7 (C100N_0402)
+  +0.200  bottom C_F9 (C100N_0402) / C_G10 (C100N_0402)
