@@ -1,6 +1,6 @@
 {
   "name": "am3354-cm4-module",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "private": true,
   "description": "AM3354 + 1 GB DDR3L compute module in Raspberry Pi CM4 format: 6 layers, 1.0 mm, 55 x 40 mm, two 100-pin CM4 connectors, on-board TPS65217D power",
   "main": "dist/index.js"
