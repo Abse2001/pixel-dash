@@ -79,6 +79,15 @@ wide power trunks are laid around the finished routing.)
 
 Verified for this routing: all 6570 DDR trace points and 100 DDR vias of `module9` are in the built board unchanged.
 
+DDR signal integrity (`si/ddr_sim.py`, ngspice, results in `si/ddr_sim_results.txt`; generic I/O, no IBIS): DDR3L-800,
+the routed block as lossless lines (outer microstrip 56.1 ohm from the original module's field solver, vias as 45 ohm +
+0.3 pF). Data with 60 ohm ODT: eye height 810-862 mV of 1.35 V, width 1175 ps of 1250 (the rest is the edge time), for
+writes (processor 40 / 34 ohm) and reads (memory 34 ohm). Address/command unterminated (one device): overshoot 0.18 V at
+40 ohm and 0.29 V at 34 ohm (DDR3L limit 0.4 V). Pairs: CK/CKn crossing skew 0.19 ps, DQS0 and DQS1 0.01-0.05 ps (both
+members of every pair carry the same two vias on the same layers). `module/si` has the earlier coupled-line (crosstalk)
+analysis of the address/command and clock lines of the same routing: set the processor's DDR command/address drive to
+40 ohm or weaker at bring-up.
+
 ## Before ordering
 
 1. **Board thickness**: 1.0 mm (JLCPCB allows the 0.1 mm via hole only up to 1.0 mm). A real CM4 is 1.2 mm +-10 %
