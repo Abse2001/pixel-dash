@@ -24,6 +24,8 @@ const dir = import.meta.dir, E = plan.edge, CX = (E.x0 + E.x1) / 2, CY = (E.y0 +
 const routes = (await Bun.file(dir + "/routes.json").exists()) ? await Bun.file(dir + "/routes.json").json() : { nets: {} }
 const pours: any[] = (await Bun.file(dir + "/pours.json").exists()) ? await Bun.file(dir + "/pours.json").json() : []
 const xtal25 = <footprint>{[[-1.1, -0.8, 1], [1.1, -0.8, 2], [1.1, 0.8, 3], [-1.1, 0.8, 4]].map(([x, y, n]) => <smtpad key={n} portHints={[`pin${n}`]} pcbX={`${x}mm`} pcbY={`${y}mm`} width="1.4mm" height="1.15mm" shape="rect" />)}</footprint>
+// JLC/EasyEDA 3D model of the DF40C-100DP (C531031 = C6021443): centred, length along x, 21.52 x 2.97 x 1.14 mm
+const DF40_MODEL = { objUrl: "https://modelcdn.tscircuit.com/easyeda_models/assets/C531031.obj?uuid=ce99aa9c9b99479886406c51319c4718", stepUrl: "https://modelcdn.tscircuit.com/easyeda_models/assets/C531031.step?uuid=ce99aa9c9b99479886406c51319c4718", pcbRotationOffset: 0 }
 let si = 0
 function render(p: any) { const t = PARTS[p.part], common: any = { key: p.name, name: p.name, pcbX: p.x, pcbY: p.y, pcbRotation: p.rot, layer: p.layer, schX: (si % 40) * 3, schY: -Math.floor(si++ / 40) * 3 }
   if (t.comp) { const C = COMP[t.comp]; return <C {...common} {...(p.part === "XTAL_24M" ? { loadCapacitance: "12pF" } : {})} /> }
@@ -34,7 +36,7 @@ function render(p: any) { const t = PARTS[p.part], common: any = { key: p.name, 
     case "NFET": return <chip {...common} footprint="sot23" manufacturerPartNumber="Si2302CDS-T1-GE3" supplierPartNumbers={spn} pinLabels={{ pin1: "G", pin2: "S", pin3: "D" }} />
     case "IND": return <WIP201610P_2R2ML {...common} />
     case "XTAL_25M": return <chip {...common} footprint={xtal25} manufacturerPartNumber="K3A250001210" supplierPartNumbers={spn} pinLabels={{ pin1: "X1", pin2: "GND1", pin3: "X2", pin4: "GND2" }} />
-    case "CM4_HDR": return <chip {...common} footprint={cm4HeaderFootprint()} manufacturerPartNumber="DF40C-100DP-0.4V(58)" supplierPartNumbers={spn} pinLabels={Object.fromEntries(Array.from({ length: 104 }, (_, i) => [`pin${i + 1}`, `P${i + 1}`]))} />
+    case "CM4_HDR": return <chip {...common} footprint={cm4HeaderFootprint()} cadModel={DF40_MODEL} manufacturerPartNumber="DF40C-100DP-0.4V(58)" supplierPartNumbers={spn} pinLabels={Object.fromEntries(Array.from({ length: 104 }, (_, i) => [`pin${i + 1}`, `P${i + 1}`]))} />
   }
   const fp = { G0402: "0402", G0603: "0603", G0805: "0805" }[t.fp as "G0402"]
   return p.part.startsWith("R") ? <resistor {...common} resistance={t.value!.split(" ")[0]} footprint={fp} supplierPartNumbers={spn} /> : <capacitor {...common} capacitance={t.value!.split(" ")[0]} footprint={fp} supplierPartNumbers={spn} /> }
