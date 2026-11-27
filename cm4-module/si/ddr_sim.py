@@ -88,35 +88,36 @@ def eye(t, v, bits, d, ref):
     return best, sum(1 for h in hs.values() if h > 0.1) / 100 * UI
 def crossings(t, x, th):
     return [t[k - 1] + (th - x[k - 1]) / (x[k] - x[k - 1]) * (t[k] - t[k - 1]) for k in range(1, len(x)) if (x[k - 1] - th) * (x[k] - th) < 0]
-out = []
-def say(s): print(s); out.append(s)
-say(f"DDR3L {RATE:.0f} MT/s (UI {UI:.0f} ps), VDDQ {VDD} V, VTT {VTT} V, 250 ps edges; generic I/O, no IBIS")
-say(f"outer trace {PS_OUT:.3f} ps/mm, 56.1 ohm (neck-down {Z_NECK:.1f} ohm); via {BARREL * PS_IN * 1.2:.1f} ps, 45 ohm + 0.3 pF")
-bits = prbs7(127)
-DQ = [f"DDR_D{i}" for i in range(16)] + ["DDR_DQM0", "DDR_DQM1"]
-worst = sorted(DQ, key=delay, reverse=True)[:2] + sorted(DQ, key=delay)[:1]
-say("-- data, PRBS7, 60 ohm ODT to VTT + 1.5 pF at the receiver")
-for n in worst:
-    for name, rs, rev in (("write, CPU 40 ohm", 40, False), ("write, CPU 34 ohm", 34, False), ("read, RAM 34 ohm", 34, True)):
-        t, v = run([n], bits, rs, 60, 1.5, reverse=rev); h, w = eye(t, v[0], bits, delay(n), VTT)
-        say(f"  {n:9s} {length(n):5.2f} mm {delay(n):6.1f} ps {sum(1 for p in pieces(n) if p[2] == 'via')} vias  {name}: eye height {h * 1000:4.0f} mV, width {w:4.0f} ps of {UI:.0f}; swing {min(v[0]):.3f}..{max(v[0]):.3f} V")
-say("-- address/command, unterminated (one device), PRBS7 at 400 MT/s (1T commands), 1.5 + 0.5 pF at the memory")
-ADDR = [f"DDR_A{i}" for i in range(16)] + ["DDR_BA0", "DDR_BA1", "DDR_BA2", "DDR_RASn", "DDR_CASn", "DDR_WEn", "DDR_CSn0", "DDR_CKE", "DDR_ODT"]
-ADDR = [a for a in ADDR if a in INV]
-for n in sorted(ADDR, key=delay, reverse=True)[:2]:
-    for rs in (40, 34):
-        cb = [b for b in bits[:64] for _ in (0, 1)]  # 1T: each command bit lasts one clock = two data UIs
-        t, v = run([n], cb, rs, None, 2.0); vv = v[0]; h, w = eye(t, vv, cb, delay(n), VDD / 2)
-        say(f"  {n:9s} {length(n):5.2f} mm, CPU {rs} ohm: overshoot {max(vv) - VDD:+.3f} V, undershoot {-min(vv):+.3f} V (DDR3L limit 0.4 V); levels open {h * 1000:4.0f} mV")
-say("-- pairs: complementary drive, crossing skew at the receiver and differential eye")
-for p, q, rs, term, rev, label in (("DDR_CK", "DDR_CKn", 40, None, False, "clock, CPU 40 ohm, unterminated"),
-                                   ("DDR_DQS0", "DDR_DQSn0", 40, 60, False, "write strobe, CPU 40 ohm, ODT 60"), ("DDR_DQS0", "DDR_DQSn0", 34, 60, True, "read strobe, RAM 34 ohm"),
-                                   ("DDR_DQS1", "DDR_DQSn1", 40, 60, False, "write strobe, CPU 40 ohm, ODT 60"), ("DDR_DQS1", "DDR_DQSn1", 34, 60, True, "read strobe, RAM 34 ohm")):
-    ck = [k % 2 for k in range(100)]
-    t, v = run([p, q], ck, rs, term, 2.0 if term is None else 1.5, invert=(q,), reverse=rev)
-    th = (max(v[0][len(v[0]) // 3:]) + min(v[0][len(v[0]) // 3:])) / 2
-    cp, cn = crossings(t, v[0], th), crossings(t, v[1], th)
-    sk = [min(abs(a - b) for b in cn) for a in cp[10:80]] if cn else [float("nan")]
-    dif = [a - b for a, b in zip(v[0], v[1])]; settle = [abs(x) for ti, x in zip(t, dif) if ti > 20 * UI]
-    say(f"  {p}/{q} {label}: delay {delay(p):.1f} / {delay(q):.1f} ps, P/N crossing skew {sum(sk) / len(sk):.2f} ps (worst {max(sk):.2f}); differential peak {max(dif):.3f} / {min(dif):.3f} V")
-open(D + "/ddr_sim_results.txt", "w").write("\n".join(out) + "\n")
+if __name__ == "__main__":
+    out = []
+    def say(s): print(s); out.append(s)
+    say(f"DDR3L {RATE:.0f} MT/s (UI {UI:.0f} ps), VDDQ {VDD} V, VTT {VTT} V, 250 ps edges; generic I/O, no IBIS")
+    say(f"outer trace {PS_OUT:.3f} ps/mm, 56.1 ohm (neck-down {Z_NECK:.1f} ohm); via {BARREL * PS_IN * 1.2:.1f} ps, 45 ohm + 0.3 pF")
+    bits = prbs7(127)
+    DQ = [f"DDR_D{i}" for i in range(16)] + ["DDR_DQM0", "DDR_DQM1"]
+    worst = sorted(DQ, key=delay, reverse=True)[:2] + sorted(DQ, key=delay)[:1]
+    say("-- data, PRBS7, 60 ohm ODT to VTT + 1.5 pF at the receiver")
+    for n in worst:
+        for name, rs, rev in (("write, CPU 40 ohm", 40, False), ("write, CPU 34 ohm", 34, False), ("read, RAM 34 ohm", 34, True)):
+            t, v = run([n], bits, rs, 60, 1.5, reverse=rev); h, w = eye(t, v[0], bits, delay(n), VTT)
+            say(f"  {n:9s} {length(n):5.2f} mm {delay(n):6.1f} ps {sum(1 for p in pieces(n) if p[2] == 'via')} vias  {name}: eye height {h * 1000:4.0f} mV, width {w:4.0f} ps of {UI:.0f}; swing {min(v[0]):.3f}..{max(v[0]):.3f} V")
+    say("-- address/command, unterminated (one device), PRBS7 at 400 MT/s (1T commands), 1.5 + 0.5 pF at the memory")
+    ADDR = [f"DDR_A{i}" for i in range(16)] + ["DDR_BA0", "DDR_BA1", "DDR_BA2", "DDR_RASn", "DDR_CASn", "DDR_WEn", "DDR_CSn0", "DDR_CKE", "DDR_ODT"]
+    ADDR = [a for a in ADDR if a in INV]
+    for n in sorted(ADDR, key=delay, reverse=True)[:2]:
+        for rs in (40, 34):
+            cb = [b for b in bits[:64] for _ in (0, 1)]  # 1T: each command bit lasts one clock = two data UIs
+            t, v = run([n], cb, rs, None, 2.0); vv = v[0]; h, w = eye(t, vv, cb, delay(n), VDD / 2)
+            say(f"  {n:9s} {length(n):5.2f} mm, CPU {rs} ohm: overshoot {max(vv) - VDD:+.3f} V, undershoot {-min(vv):+.3f} V (DDR3L limit 0.4 V); levels open {h * 1000:4.0f} mV")
+    say("-- pairs: complementary drive, crossing skew at the receiver and differential eye")
+    for p, q, rs, term, rev, label in (("DDR_CK", "DDR_CKn", 40, None, False, "clock, CPU 40 ohm, unterminated"),
+                                       ("DDR_DQS0", "DDR_DQSn0", 40, 60, False, "write strobe, CPU 40 ohm, ODT 60"), ("DDR_DQS0", "DDR_DQSn0", 34, 60, True, "read strobe, RAM 34 ohm"),
+                                       ("DDR_DQS1", "DDR_DQSn1", 40, 60, False, "write strobe, CPU 40 ohm, ODT 60"), ("DDR_DQS1", "DDR_DQSn1", 34, 60, True, "read strobe, RAM 34 ohm")):
+        ck = [k % 2 for k in range(100)]
+        t, v = run([p, q], ck, rs, term, 2.0 if term is None else 1.5, invert=(q,), reverse=rev)
+        th = (max(v[0][len(v[0]) // 3:]) + min(v[0][len(v[0]) // 3:])) / 2
+        cp, cn = crossings(t, v[0], th), crossings(t, v[1], th)
+        sk = [min(abs(a - b) for b in cn) for a in cp[10:80]] if cn else [float("nan")]
+        dif = [a - b for a, b in zip(v[0], v[1])]; settle = [abs(x) for ti, x in zip(t, dif) if ti > 20 * UI]
+        say(f"  {p}/{q} {label}: delay {delay(p):.1f} / {delay(q):.1f} ps, P/N crossing skew {sum(sk) / len(sk):.2f} ps (worst {max(sk):.2f}); differential peak {max(dif):.3f} / {min(dif):.3f} V")
+    open(D + "/ddr_sim_results.txt", "w").write("\n".join(out) + "\n")
