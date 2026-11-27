@@ -1,0 +1,23 @@
+DDR3L 800 MT/s (UI 1250 ps), VDDQ 1.35 V, VTT 0.675 V, 250 ps edges; generic I/O, no IBIS
+outer trace 5.787 ps/mm, 56.1 ohm (neck-down 59.9 ohm); via 7.4 ps, 45 ohm + 0.3 pF
+-- data, PRBS7, 60 ohm ODT to VTT + 1.5 pF at the receiver
+  DDR_D6    24.37 mm  155.8 ps 2 vias  write, CPU 40 ohm: eye height  810 mV, width 1175 ps of 1250; swing 0.253..1.097 V
+  DDR_D6    24.37 mm  155.8 ps 2 vias  write, CPU 34 ohm: eye height  862 mV, width 1175 ps of 1250; swing 0.215..1.135 V
+  DDR_D6    24.37 mm  155.8 ps 2 vias  read, RAM 34 ohm: eye height  862 mV, width 1175 ps of 1250; swing 0.218..1.132 V
+  DDR_D0    24.27 mm  155.2 ps 2 vias  write, CPU 40 ohm: eye height  810 mV, width 1175 ps of 1250; swing 0.252..1.098 V
+  DDR_D0    24.27 mm  155.2 ps 2 vias  write, CPU 34 ohm: eye height  862 mV, width 1175 ps of 1250; swing 0.215..1.135 V
+  DDR_D0    24.27 mm  155.2 ps 2 vias  read, RAM 34 ohm: eye height  862 mV, width 1175 ps of 1250; swing 0.219..1.131 V
+  DDR_D10   17.86 mm  118.2 ps 2 vias  write, CPU 40 ohm: eye height  810 mV, width 1175 ps of 1250; swing 0.257..1.093 V
+  DDR_D10   17.86 mm  118.2 ps 2 vias  write, CPU 34 ohm: eye height  862 mV, width 1175 ps of 1250; swing 0.222..1.128 V
+  DDR_D10   17.86 mm  118.2 ps 2 vias  read, RAM 34 ohm: eye height  862 mV, width 1175 ps of 1250; swing 0.214..1.136 V
+-- address/command, unterminated (one device), PRBS7 at 400 MT/s (1T commands), 1.5 + 0.5 pF at the memory
+  DDR_A3    42.31 mm, CPU 40 ohm: overshoot +0.184 V, undershoot +0.184 V (DDR3L limit 0.4 V); levels open 1350 mV
+  DDR_A3    42.31 mm, CPU 34 ohm: overshoot +0.294 V, undershoot +0.294 V (DDR3L limit 0.4 V); levels open 1350 mV
+  DDR_A4    41.93 mm, CPU 40 ohm: overshoot +0.185 V, undershoot +0.185 V (DDR3L limit 0.4 V); levels open 1350 mV
+  DDR_A4    41.93 mm, CPU 34 ohm: overshoot +0.294 V, undershoot +0.294 V (DDR3L limit 0.4 V); levels open 1350 mV
+-- pairs: complementary drive, crossing skew at the receiver and differential eye
+  DDR_CK/DDR_CKn clock, CPU 40 ohm, unterminated: delay 257.4 / 257.4 ps, P/N crossing skew 0.19 ps (worst 0.19); differential peak 1.726 / -1.724 V
+  DDR_DQS0/DDR_DQSn0 write strobe, CPU 40 ohm, ODT 60: delay 155.2 / 155.2 ps, P/N crossing skew 0.01 ps (worst 0.01); differential peak 0.847 / -0.847 V
+  DDR_DQS0/DDR_DQSn0 read strobe, RAM 34 ohm: delay 155.2 / 155.2 ps, P/N crossing skew 0.05 ps (worst 0.05); differential peak 0.922 / -0.922 V
+  DDR_DQS1/DDR_DQSn1 write strobe, CPU 40 ohm, ODT 60: delay 118.2 / 118.2 ps, P/N crossing skew 0.05 ps (worst 0.05); differential peak 0.843 / -0.843 V
+  DDR_DQS1/DDR_DQSn1 read strobe, RAM 34 ohm: delay 118.2 / 118.2 ps, P/N crossing skew 0.02 ps (worst 0.02); differential peak 0.916 / -0.916 V
